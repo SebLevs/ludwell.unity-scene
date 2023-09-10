@@ -1,9 +1,9 @@
 {
-  "name": "com.ludwell.<specification>",
+  "name": "com.ludwell.scene",
   "organizationName": "ludwell",
   "version": "0.0.1",
-  "displayName": "Ludwell <Specification>",
-  "description": "Ludwell package for <specification>",
+  "displayName": "Ludwell Scene",
+  "description": "Ludwell package for scene",
   "unity": "2022.2",
   "unityRelease": "0b5",
   "documentationUrl": "https://example.com/",
@@ -16,8 +16,7 @@
   },
   "keywords": [
     "Ludwell",
-    "keyword2",
-    "keyword3"
+    "Scene"
   ],
   "author": {
     "name": "Ludwell",
