@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public class SceneData : ScriptableObject
+namespace Ludwell.Scene
 {
+    public class SceneData : ScriptableObject
+    {
 #if UNITY_EDITOR
-    public UnityEditor.SceneAsset SceneAsset;
+        public UnityEditor.SceneAsset EditorSceneAsset;
 #endif
+    }
 }
