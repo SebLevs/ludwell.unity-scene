@@ -1,0 +1,41 @@
+.background {
+    flex-grow: 1;
+    background-color: rgb(60, 60, 60);
+    border-left-color: rgb(35, 35, 35);
+    border-right-color: rgb(35, 35, 35);
+    border-bottom-color: rgb(35, 35, 35);
+    flex-basis: 22.5px;
+    flex-direction: column;
+    border-bottom-width: 1px;
+    visibility: visible;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    -unity-text-align: middle-center;
+}
+
+.background:hover {
+    flex-grow: 1;
+    background-color: rgb(70, 70, 70);
+    border-left-color: rgb(35, 35, 35);
+    border-right-color: rgb(35, 35, 35);
+    border-bottom-color: rgb(35, 35, 35);
+    flex-basis: 22.5px;
+    flex-direction: column;
+    border-bottom-width: 1px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.between {
+    border-left-color: rgba(40, 40, 40, 0);
+    border-right-color: rgba(40, 40, 40, 0);
+    border-top-color: rgba(40, 40, 40, 0);
+    border-bottom-color: rgba(40, 40, 40, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+}

@@ -1,6 +1,6 @@
 {
     "name": "Editor",
-    "rootNamespace": "",
+    "rootNamespace": "Ludwell.Scene",
     "references": [
         "GUID:3ff281a81af69b744bec0f07c01af33f"
     ],

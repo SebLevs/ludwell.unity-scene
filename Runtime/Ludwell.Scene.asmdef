@@ -1,6 +1,6 @@
 {
     "name": "ludwell.scene",
-    "rootNamespace": "",
+    "rootNamespace": "Ludwell.Scene",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
