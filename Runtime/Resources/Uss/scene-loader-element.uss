@@ -1,0 +1,63 @@
+#root__foldout > Toggle {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-basis: 22.5px;
+    background-color: rgb(56, 56, 56);
+}
+
+#root__foldout > Toggle > VisualElement > VisualElement {
+    margin-left: 8px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-basis: 22.5px;
+}
+
+#root__foldout > Toggle > VisualElement > Label {
+    margin-left: 8px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+}
+
+#root__foldout > Toggle > VisualElement > Label:hover {
+    margin-left: 8px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    color: rgb(255, 255, 255);
+}
+
+#unity-content {
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#main-scene {
+    flex-direction: column;
+    align-self: stretch;
+    -unity-text-align: middle-center;
+}
+
+#main-scene > Label {
+    display: flex;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 2px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#required-scenes > ScrollView > VisualElement > VisualElement > Label {
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}
