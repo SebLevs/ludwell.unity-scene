@@ -1,9 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-element.uss?fileID=7433441132597879392&amp;guid=bd93788d9e440a24cb492b378a5f6ae4&amp;type=3#scene-loader-element" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-text-field.uss?fileID=7433441132597879392&amp;guid=4bfd3b37c0e4b8740bb5e59e00ba37c7&amp;type=3#scene-loader-text-field" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
-        <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px;">
-            <ui:Foldout text="Foldout" name="root__foldout" value="true" focusable="true">
-                <ui:VisualElement name="content" style="background-color: rgb(63, 63, 63); flex-basis: 200px; padding-top: 8px; flex-grow: 1; align-self: stretch; padding-bottom: 8px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+        <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+            <ui:Foldout name="root__foldout" value="true" focusable="true">
+                <ui:VisualElement name="content" style="background-color: rgb(63, 63, 63); flex-basis: 200px; padding-top: 8px; flex-grow: 1; align-self: stretch; padding-bottom: 8px; border-left-width: 1px; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
                     <ui:VisualElement name="container__main-scene" style="background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); padding-bottom: 8px;">
                         <uie:ObjectField label="Main scene" type="Ludwell.Scene.SceneData, ludwell.scene" name="main-scene" style="width: 80%; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
                     </ui:VisualElement>
@@ -13,7 +14,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:Foldout>
-            <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(56, 56, 56);" />
+            <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(56, 56, 56); border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
         <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(71, 71, 71);" />
     </ui:VisualElement>

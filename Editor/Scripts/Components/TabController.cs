@@ -13,7 +13,7 @@ namespace Ludwell.Scene
         private const string TabSettingsName = "tab__settings";
         private const string ViewSettingsName = "view__settings";
         
-        public void Init(VisualElement queryFrom)
+        public TabController(VisualElement queryFrom)
         {
             InitManager(queryFrom);
             InitLoader(queryFrom);
