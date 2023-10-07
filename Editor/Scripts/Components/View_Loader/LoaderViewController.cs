@@ -9,24 +9,18 @@ namespace Ludwell.Scene
         private const string MainMenuButtonName = "button__main-menu";
         private const string CloseAllButtonName = "button__close-all";
         
-        private ScenesListView _scenesListView;
+        private ScenesListViewController _scenesListViewController;
 
-        public void Init(VisualElement queryFrom)
+        public LoaderViewController(VisualElement queryFrom)
         {
-            InitScenesListView(queryFrom);
+            _scenesListViewController = new ScenesListViewController(queryFrom);
             InitMainMenuButton(queryFrom);
             InitCloseAllButton(queryFrom);
         }
 
-        private void InitScenesListView(VisualElement queryFrom)
-        {
-            _scenesListView = new ScenesListView();
-            _scenesListView.Init(queryFrom);
-        }
-
         private void InitMainMenuButton(VisualElement queryFrom)
         {
-            queryFrom.Q<Button>(MainMenuButtonName).clicked += () =>
+            queryFrom.Q(MainMenuButtonName).Q<Button>().clicked += () =>
             {
                 Debug.LogError("todo: load scene from here");
             };
@@ -36,8 +30,7 @@ namespace Ludwell.Scene
         {
             queryFrom.Q<ToolbarButton>(CloseAllButtonName).clicked += () =>
             {
-                Debug.LogError("todo: close all elements from listview");
-                _scenesListView.CloseAll();
+                _scenesListViewController.CloseAll();
             };
         }
     }

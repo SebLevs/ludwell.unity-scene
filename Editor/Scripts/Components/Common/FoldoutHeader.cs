@@ -1,3 +1,4 @@
+using Ludwell.Scene;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,12 +28,11 @@ public class FoldoutHeader : Foldout
         InitUnityCheckMark();
         InitUnityContent();
     }
-
-    protected const string UnityCheckmarkName = "unity-checkmark";
-    protected const string UnityContentName = "unity-content";
-    protected const string HeaderName = "header-text";
-    protected TextElement HeaderTextElement;
-    protected Toggle HeaderElement;
+    
+    private const string HeaderName = "header-text";
+    
+    private TextElement _headerTextElement;
+    private Toggle _headerElement;
     private string _headerText;
     private Color _headerColor;
 
@@ -42,7 +42,7 @@ public class FoldoutHeader : Foldout
         set
         {
             _headerText = value;
-            HeaderTextElement.text = _headerText;
+            _headerTextElement.text = _headerText;
         }
     }
 
@@ -52,24 +52,24 @@ public class FoldoutHeader : Foldout
         set
         {
             _headerColor = value;
-            HeaderElement.style.backgroundColor = new StyleColor(_headerColor);
+            _headerElement.style.backgroundColor = new StyleColor(_headerColor);
         }
     }
 
     private void InitToggle()
     {
-        HeaderElement = this.Q<Toggle>();
-        HeaderElement.style.marginTop = 0;
-        HeaderElement.style.marginBottom = 0;
-        HeaderElement.style.marginLeft = 0;
-        HeaderElement.style.marginRight = 0;
+        _headerElement = this.Q<Toggle>();
+        _headerElement.style.marginTop = 0;
+        _headerElement.style.marginBottom = 0;
+        _headerElement.style.marginLeft = 0;
+        _headerElement.style.marginRight = 0;
 
-        HeaderElement.style.flexBasis = 22.5f;
+        _headerElement.style.flexBasis = 22.5f;
     }
 
     private void InitUnityCheckMark()
     {
-        var unityCheckMarkElement = this.Q<VisualElement>(UnityCheckmarkName);
+        var unityCheckMarkElement = this.Q<VisualElement>(UiToolkitNames.UnityCheckmarkName);
         unityCheckMarkElement.style.marginTop = 0;
         unityCheckMarkElement.style.marginBottom = 0;
         unityCheckMarkElement.style.marginLeft = 8;
@@ -78,18 +78,18 @@ public class FoldoutHeader : Foldout
 
     private void InitUnityContent()
     {
-        this.Q<VisualElement>(UnityContentName).style.marginLeft = 0;
+        this.Q<VisualElement>(UiToolkitNames.UnityContentName).style.marginLeft = 0;
     }
 
     private void AddHeaderText()
     {
-        HeaderTextElement = new TextElement
+        _headerTextElement = new TextElement
         {
             name = HeaderName,
             text = _headerText,
             style = { unityTextAlign = TextAnchor.MiddleLeft}
         };
 
-        this.Q(UnityCheckmarkName).parent.Add(HeaderTextElement);
+        this.Q(UiToolkitNames.UnityCheckmarkName).parent.Add(_headerTextElement);
     }
 }

@@ -10,6 +10,7 @@ namespace Ludwell.Scene
         [SerializeField] private VisualTreeAsset visualTreeAsset;
         [SerializeField] private SceneDataEditorSettings editorSettings;
         private TabController _tabController;
+        private LoaderViewController _loaderViewController;
 
         [MenuItem("Tool/Scene Data Manager")]
         public static void OpenWindow()
@@ -24,20 +25,8 @@ namespace Ludwell.Scene
         }
         private void Init()
         {
-            InitializeTabController();
-            InitializeLoaderViewController();
-        }
-
-        private void InitializeTabController()
-        {
-            _tabController = new TabController();
-            _tabController.Init(rootVisualElement);
-        }
-
-        private void InitializeLoaderViewController()
-        {
-            var loadView = new LoaderViewController();
-            loadView.Init(rootVisualElement);
+            _tabController = new TabController(rootVisualElement);
+            _loaderViewController = new LoaderViewController(rootVisualElement);
         }
         
         public void Dispose()

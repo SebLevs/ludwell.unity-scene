@@ -1,0 +1,52 @@
+#foldout-text-field > #unity-text-input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    align-self: flex-end;
+    height: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom-width: 0;
+}
+
+#foldout-text-field > #unity-text-input > TextElement {
+    -unity-text-align: middle-center;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 12px;
+}
+
+#button__play > #button {
+    width: 20px;
+    height: 20px;
+    margin-left: 0;
+    margin-right: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#button__play > #button > #icon {
+    margin-left: 0;
+    -unity-background-image-tint-color: rgb(0, 195, 12);
+}
+
+#button__load > #button {
+    width: 20px;
+    height: 20px;
+    margin-left: 4px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#button__load > #button > #icon {
+    margin-left: 0;
+    -unity-background-image-tint-color: rgb(0, 193, 195);
+}
