@@ -15,10 +15,10 @@ namespace Ludwell.Scene
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
             SetReferences();
-            InitRequiredScenesListView();
-            InitFoldoutTextField();
+            InitAndReferenceFoldoutTextField();
             PreventFoldoutToggleFromKeyPress();
             RegisterButtonsClickEventCallback();
+            InitRequiredScenesListView();
         }
 
         private const string UxmlPath = "Uxml/scene-loader-element";
@@ -32,70 +32,77 @@ namespace Ludwell.Scene
         private const string RequiredScenesListViewName = "required-scenes";
         private const string PlayButtonName = "button__play";
         private const string LoadButtonName = "button__load";
+        
+        private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
-        public List<RequiredSceneElement> RequiredSceneElements { get; private set; } = new();
+        private readonly List<RequiredSceneElement> _requiredSceneElements = new();
         
         private Foldout _foldoutElement;
         private VisualElement _headerContent;
         private TextField _foldoutTextField;
+        private ObjectField _mainSceneField;
 
         private ListView _listViewRequiredElements;
+        
+        private LoaderSceneData _loaderSceneData;
 
+        public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
+        
+        public void InitDataValues(LoaderListViewElementData data)
+        {
+            data.IsOpen = _foldoutElement.value;
+            data.Name = _foldoutTextField.value;
+            data.MainScene = _mainSceneField.value as SceneData;
+            data.RequiredScenes = _listViewRequiredElements.itemsSource as List<SceneData>;
+        }
+        
         public void BindElementToData(LoaderListViewElementData data)
         {
-            _foldoutTextField.RegisterValueChangedCallback((evt) =>
-            {
-                data.Name = evt.newValue;
-            });
+            _foldoutElement.RegisterValueChangedCallback(evt =>
+                data.IsOpen = evt.newValue);
             
-            this.Q<ObjectField>(MainSceneName).RegisterValueChangedCallback((evt) =>
-            {
-                data.MainScene = evt.newValue as SceneData;
-            });
+            _foldoutTextField.RegisterValueChangedCallback(evt => 
+                data.Name = evt.newValue);
+            
+            _mainSceneField.RegisterValueChangedCallback(evt => 
+                data.MainScene = evt.newValue as SceneData);
 
-            _listViewRequiredElements.RegisterCallback<AttachToPanelEvent>((evt) =>
-            {
-                Debug.LogError("attached to panel event");
-            });
+            _listViewRequiredElements.RegisterCallback<AttachToPanelEvent>(evt =>
+                Debug.LogError("attached to panel event"));
         }
 
         public void SetElementFromData(LoaderListViewElementData data)
         {
             this.Q<TextField>(FoldoutTextFieldName).value = data.Name;
             _foldoutElement.value = data.IsOpen;
-
-            Debug.LogError(
-                "todo: create data holding class for both this and RequiredSceneElement & replace LoaderSceneData element with it");
-            foreach (var requiredScene in data.RequiredScenes)
-            {
-                // todo: add required scene elements & bind them
-            }
+            
+            // for (var i = 0; i < data.RequiredScenes.Count; i++)
+            // {
+            //     var requiredSceneField = (_listViewRequiredElements.ElementAt(i) as RequiredSceneElement)?.SceneField;
+            //     if (requiredSceneField == null)
+            //     {
+            //         return;
+            //     }
+            //     
+            //     var requiredSceneValue = data.RequiredScenes[i].Value;
+            //     requiredSceneField.value = requiredSceneValue;
+            // }
         }
 
         private void SetReferences()
         {
             _foldoutElement = this.Q<Foldout>(FoldoutName);
-            _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
+            _mainSceneField = this.Q<ObjectField>(MainSceneName);
+            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
         }
-
-        private void InitRequiredScenesListView()
-        {
-            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
-            _listViewRequiredElements.itemsSource = RequiredSceneElements;
-            _listViewRequiredElements.makeItem = AddElement;
-            _listViewRequiredElements.bindItem = OnElementScrollIntoView;
-
-            foreach (var element in RequiredSceneElements)
-            {
-                Debug.LogError("DELETE WHEN COMPLETE | " + element);
-            }
-        }
-
-        private void InitFoldoutTextField()
+        
+        private void InitAndReferenceFoldoutTextField()
         {
             _headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
             this.Q<Toggle>().Q<VisualElement>().Add(_headerContent);
             _headerContent.AddStyleFromUss(HeaderContentUssPath);
+            _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
+
         }
 
         private void RegisterButtonsClickEventCallback()
@@ -125,16 +132,21 @@ namespace Ludwell.Scene
             foldoutTextField.RegisterCallback<KeyDownEvent>((evt) =>
             {
                 evt.StopPropagation();
-                if (evt.currentTarget == foldoutTextField)
-                {
-                    if (evt.keyCode == KeyCode.Return || evt.keyCode == KeyCode.Space)
-                    {
-                        _foldoutElement.value = !_foldoutElement.value;
-                    }
-                }
+                if (evt.currentTarget != foldoutTextField) return;
+                if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
+                _foldoutElement.value = !_foldoutElement.value;
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>((evt) => { evt.StopPropagation(); });
+        }
+        
+        private void InitRequiredScenesListView()
+        {
+            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
+            // _listViewRequiredElements.itemsSource = _loaderSceneData.Elements[indexedAt].RequiredScenes;
+            _listViewRequiredElements.itemsSource = _requiredSceneElements;
+            _listViewRequiredElements.makeItem = AddElement;
+            _listViewRequiredElements.bindItem = OnElementScrollIntoView;
         }
 
         private RequiredSceneElement AddElement()
@@ -144,13 +156,18 @@ namespace Ludwell.Scene
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            if (RequiredSceneElements[index] == null)
-            {
-                RequiredSceneElements[index] = new RequiredSceneElement();
-            }
-
-            (element as IBindableListViewElement<RequiredSceneElement>)?.SetElementFromData(
-                RequiredSceneElements[index]);
+            // var ElementAsDataType = element as IBindableListViewElement<SceneData>;
+            // Debug.LogError(_loaderSceneData.Elements[index]);
+            // var sceneData = 
+            // if (_requiredSceneElements Elements[index] == null)
+            // {
+            //     Debug.LogError("scene data is null");
+            //     ElementAsDataType?.InitDataValues(_loaderSceneData.Elements[index]);
+            //     ElementAsDataType?.BindElementToData(_loaderSceneData.Elements[index]);
+            //     return;
+            // }
+            //
+            // ElementAsDataType?.SetElementFromData(_loaderSceneData.Elements[index]);
         }
     }
 }

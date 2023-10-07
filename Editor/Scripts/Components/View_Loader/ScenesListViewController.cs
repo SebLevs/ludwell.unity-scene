@@ -24,10 +24,10 @@ namespace Ludwell.Scene
         
         public void CloseAll()
         {
-            foreach (var item in _listView.Children())
+            var contentContainerName = UiToolkitNames.UnityContentContainerName;
+            foreach (var item in _listView.Q<VisualElement>(contentContainerName).Children())
             {
-                Debug.LogError(item);
-                (item as Foldout).value = false;
+                (item as LoaderListViewElement).SetFoldoutValue(false);
             }
         }
         
@@ -38,14 +38,16 @@ namespace Ludwell.Scene
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
+            var elementAsDataType = element as IBindableListViewElement<LoaderListViewElementData>;
             if (_loaderSceneData.Elements[index] == null)
             {
                 _loaderSceneData.Elements[index] = new LoaderListViewElementData();
-                (element as LoaderListViewElement)?.BindElementToData(_loaderSceneData.Elements[index]);
+                elementAsDataType?.InitDataValues(_loaderSceneData.Elements[index]);
+                elementAsDataType?.BindElementToData(_loaderSceneData.Elements[index]);
                 return;
             }
 
-            (element as LoaderListViewElement)?.SetElementFromData(_loaderSceneData.Elements[index]);
+            elementAsDataType?.SetElementFromData(_loaderSceneData.Elements[index]);
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Ludwell.Scene
         {
             queryFrom.Q<ToolbarButton>(CloseAllButtonName).clicked += () =>
             {
-                Debug.LogError("todo: close all elements from listview");
                 _scenesListViewController.CloseAll();
             };
         }

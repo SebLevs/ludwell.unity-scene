@@ -26,6 +26,10 @@
 #button__play > #button {
     width: 20px;
     height: 20px;
+    margin-left: 0;
+    margin-right: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #button__play > #button > #icon {
@@ -36,6 +40,10 @@
 #button__load > #button {
     width: 20px;
     height: 20px;
+    margin-left: 4px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #button__load > #button > #icon {
