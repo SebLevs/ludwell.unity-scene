@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/required-scene-element.uss?fileID=7433441132597879392&amp;guid=76a1fdaa803c8f444a114fe6abffed0e&amp;type=3#required-scene-element" />
-    <ui:VisualElement name="required-scene" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: 22.5px; flex-direction: row; align-self: center; width: 65%; display: flex;">
+    <ui:VisualElement name="required-scene" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: 22.5px; flex-direction: row; width: 65%; display: flex; align-self: center; justify-content: center; align-items: center;">
         <uie:ObjectField label="Object Field" type="Ludwell.Scene.SceneData, ludwell.scene" name="scene-data" class="hide-object-field-label" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; -unity-text-align: middle-center; align-self: center; flex-shrink: 1;" />
     </ui:VisualElement>
 </ui:UXML>
