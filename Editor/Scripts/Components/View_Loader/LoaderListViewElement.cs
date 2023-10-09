@@ -32,6 +32,7 @@ namespace Ludwell.Scene
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
+        private const string ToggleBottomName = "toggle-bottom";
         private const string MainSceneName = "main-scene";
         private const string RequiredScenesListViewName = "required-scenes";
         private const string PlayButtonName = "button__play";
@@ -111,7 +112,7 @@ namespace Ludwell.Scene
             _foldoutElement.RegisterValueChangedCallback(evt =>
             {
                 var borderTopWidth = evt.newValue ? 1 : 0;
-                this.Q("toggle-bottom").style.borderTopWidth = borderTopWidth;
+                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
             });
         }
 
