@@ -16,6 +16,7 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
             SetReferences();
             InitAndReferenceFoldoutTextField();
+            SetStyleEvents();
             PreventFoldoutToggleFromKeyPress();
             RegisterButtonsClickEventCallback();
             InitRequiredScenesListView();
@@ -103,6 +104,15 @@ namespace Ludwell.Scene
             _headerContent.AddStyleFromUss(HeaderContentUssPath);
             _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
 
+        }
+
+        private void SetStyleEvents()
+        {
+            _foldoutElement.RegisterValueChangedCallback(evt =>
+            {
+                var borderTopWidth = evt.newValue ? 1 : 0;
+                this.Q("toggle-bottom").style.borderTopWidth = borderTopWidth;
+            });
         }
 
         private void RegisterButtonsClickEventCallback()
