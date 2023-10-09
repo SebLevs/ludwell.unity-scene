@@ -10,7 +10,7 @@
                     </ui:VisualElement>
                     <ui:VisualElement name="container__required-scenes" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-basis: auto; align-self: stretch; margin-top: 8px;">
                         <ui:Label tabindex="-1" text="Required scenes" display-tooltip-when-elided="true" name="label__required-scenes" style="margin-bottom: 4px; -unity-text-align: middle-center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
-                        <ui:ListView focusable="true" show-border="true" reorderable="true" show-foldout-header="false" show-add-remove-footer="true" name="required-scenes" show-alternating-row-backgrounds="All" reorder-mode="Animated" style="flex-grow: 1; width: 80%; align-self: center;" />
+                        <ui:ListView focusable="true" show-border="true" reorderable="true" show-foldout-header="false" show-add-remove-footer="true" name="required-scenes" reorder-mode="Animated" fixed-item-height="21" style="flex-grow: 1; width: 80%; align-self: center;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:Foldout>

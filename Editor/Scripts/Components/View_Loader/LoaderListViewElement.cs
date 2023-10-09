@@ -19,7 +19,7 @@ namespace Ludwell.Scene
             PreventFoldoutToggleFromKeyPress();
             RegisterButtonsClickEventCallback();
             InitRequiredScenesListView();
-            PreventRequiredElementScrollBubbleUp();
+            PreventRequiredElementWheelCallbackPropagation();
 
             //parent.ElementAt(0).style.position = Position.Absolute;
         }
@@ -149,20 +149,19 @@ namespace Ludwell.Scene
             _listViewRequiredElements.bindItem = OnElementScrollIntoView;
         }
         
-        private void PreventRequiredElementScrollBubbleUp()
+        private void PreventRequiredElementWheelCallbackPropagation()
         {
-            Debug.LogError("FINISH IMPLEMENTATION");
-            // todo: check OnElementScrollIntoView if the element at index is 0 or last, then stop propagation if scrolling up or down respectively
-            
+            var scroller = _listViewRequiredElements.Q<Scroller>();
             _listViewRequiredElements.RegisterCallback<WheelEvent>(evt =>
             {
-                if (evt.delta.y < 0)
+                if (scroller.style.display == DisplayStyle.None) return;
+                if (evt.delta.y < 0 && Mathf.Approximately(scroller.value, scroller.lowValue))
                 {
-                    Debug.LogError("Scrolling up");
+                    evt.StopPropagation();
                 }
-                else if (evt.delta.y > 0)
+                else if (evt.delta.y > 0 && Mathf.Approximately(scroller.value, scroller.highValue))
                 {
-                    Debug.LogError("Scrolling down");
+                    evt.StopPropagation();
                 }
             });
         }
