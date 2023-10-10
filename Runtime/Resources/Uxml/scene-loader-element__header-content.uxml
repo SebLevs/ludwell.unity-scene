@@ -1,10 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Template name="button__play" src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uxml/button__play-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__play-load" />
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-element__header-content.uss?fileID=7433441132597879392&amp;guid=4bfd3b37c0e4b8740bb5e59e00ba37c7&amp;type=3#scene-loader-element__header-content" />
-    <ui:VisualElement name="scene-loader-element__header-content" style="flex-grow: 1; align-items: center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; flex-direction: column; margin-left: -16px;">
+    <ui:VisualElement name="scene-loader-element__header-content" style="flex-grow: 1; align-items: center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: center; flex-direction: column; margin-left: -32px;">
         <ui:VisualElement name="buttons" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; width: 100%; align-items: center; justify-content: center;">
-            <ui:Instance template="button__play" name="button__play" tabindex="1" class="small-button" />
-            <ui:Instance template="button__play" name="button__load" tabindex="1" class="small-button" />
+            <ui:Instance template="button__play" name="button__play" class="small-button" />
+            <ui:Instance template="button__play" name="button__load" class="small-button" />
         </ui:VisualElement>
         <ui:TextField value="Scene Loader Element" name="foldout-text-field" style="-unity-text-align: middle-center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-overflow: ellipsis; height: 22.5px; width: 40%;" />
     </ui:VisualElement>

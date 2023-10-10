@@ -7,33 +7,42 @@ namespace Ludwell.Scene
     [Serializable]
     public class ScenesListViewController
     {
-        private const string ListViewName = "scenes__list";
-        private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
-        private ListView _listView;
-
-        private LoaderSceneData _loaderSceneData;
-        
         public ScenesListViewController(VisualElement queryFrom)
         {
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
+            InitLoaderListView(queryFrom);
+        }
+        
+        private const string ListViewName = "scenes__list";
+        public const string ListViewElementName = "loader-list-view-element";
+        private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
+        
+        private ListView _listView;
+        private LoaderSceneData _loaderSceneData;
+
+        private void InitLoaderListView(VisualElement queryFrom)
+        {
             _listView = queryFrom.Q<ListView>(ListViewName);
             _listView.itemsSource = _loaderSceneData.Elements;
             _listView.makeItem = AddElement;
             _listView.bindItem = OnElementScrollIntoView;
         }
-        
+
         public void CloseAll()
         {
-            var contentContainerName = UiToolkitNames.UnityContentContainerName;
-            foreach (var item in _listView.Q<VisualElement>(contentContainerName).Children())
+            foreach (var item in _listView.Query(ListViewElementName).ToList())
             {
-                (item as LoaderListViewElement).SetFoldoutValue(false);
+                (item as LoaderListViewElement)?.SetFoldoutValue(false);
             }
         }
         
         private LoaderListViewElement AddElement()
         {
-            return new LoaderListViewElement();
+            var element = new LoaderListViewElement
+            {
+                name = ListViewElementName
+            };
+            return element;
         }
 
         private void OnElementScrollIntoView(VisualElement element, int index)

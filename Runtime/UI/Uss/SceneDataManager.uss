@@ -107,7 +107,17 @@
     width: 32px;
 }
 
+#unity-list-view__reorderable-item {
+}
+
 #unity-list-view__reorderable-handle {
+    -unity-text-align: middle-center;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-width: 1px;
+    border-bottom-width: 1px;
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -117,6 +127,8 @@
     padding-top: 0;
     padding-bottom: 0;
     justify-content: center;
+    align-items: center;
+    display: none;
 }
 
 #unity-list-view__reorderable-handle-bar {
