@@ -17,9 +17,9 @@ namespace Ludwell.Scene
             SetReferences();
             InitAndReferenceFoldoutTextField();
             SetStyleEvents();
-            PreventFoldoutToggleFromKeyPress();
             RegisterButtonsClickEventCallback();
             InitRequiredScenesListView();
+            PreventFoldoutToggleFromKeyPress();
             PreventRequiredElementWheelCallbackPropagation();
 
             //parent.ElementAt(0).style.position = Position.Absolute;
@@ -137,6 +137,15 @@ namespace Ludwell.Scene
             });
         }
         
+        private void InitRequiredScenesListView()
+        {
+            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
+            // _listViewRequiredElements.itemsSource = _loaderSceneData.Elements[indexedAt].RequiredScenes;
+            _listViewRequiredElements.itemsSource = _requiredSceneElements;
+            _listViewRequiredElements.makeItem = AddElement;
+            _listViewRequiredElements.bindItem = OnElementScrollIntoView;
+        }
+        
         private void PreventFoldoutToggleFromKeyPress()
         {
             var foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
@@ -148,16 +157,8 @@ namespace Ludwell.Scene
                 _foldoutElement.value = !_foldoutElement.value;
             });
 
+            Debug.LogError("boop");
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-        }
-        
-        private void InitRequiredScenesListView()
-        {
-            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
-            // _listViewRequiredElements.itemsSource = _loaderSceneData.Elements[indexedAt].RequiredScenes;
-            _listViewRequiredElements.itemsSource = _requiredSceneElements;
-            _listViewRequiredElements.makeItem = AddElement;
-            _listViewRequiredElements.bindItem = OnElementScrollIntoView;
         }
         
         private void PreventRequiredElementWheelCallbackPropagation()

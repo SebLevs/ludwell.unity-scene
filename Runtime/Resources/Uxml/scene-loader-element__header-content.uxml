@@ -6,6 +6,6 @@
             <ui:Instance template="button__play" name="button__play" class="small-button" />
             <ui:Instance template="button__play" name="button__load" class="small-button" />
         </ui:VisualElement>
-        <ui:TextField value="Scene Loader Element" name="foldout-text-field" style="-unity-text-align: middle-center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-overflow: ellipsis; height: 22.5px; width: 40%;" />
+        <ui:TextField value="Scene Loader Element" name="foldout-text-field" style="-unity-text-align: middle-center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-overflow: ellipsis; height: 20px; width: 40%;" />
     </ui:VisualElement>
 </ui:UXML>
