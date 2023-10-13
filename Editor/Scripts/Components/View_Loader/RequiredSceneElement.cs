@@ -23,8 +23,7 @@ namespace Ludwell.Scene
 
         public void InitDataValues(SceneData data)
         {
-            Debug.LogError($"InitDataValues: {data}");
-            data = SceneField.value as SceneData;
+            
         }
 
         public void BindElementToData(SceneData data)
