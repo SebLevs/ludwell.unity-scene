@@ -2,6 +2,7 @@
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-element.uss?fileID=7433441132597879392&amp;guid=bd93788d9e440a24cb492b378a5f6ae4&amp;type=3#scene-loader-element" />
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-element__header-content.uss?fileID=7433441132597879392&amp;guid=4bfd3b37c0e4b8740bb5e59e00ba37c7&amp;type=3#scene-loader-element__header-content" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
+        <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgba(71, 71, 71, 0); display: flex;" />
         <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
             <ui:Foldout name="root__foldout" value="true" focusable="true">
                 <ui:VisualElement name="content" style="background-color: rgb(63, 63, 63); flex-basis: 200px; padding-top: 8px; flex-grow: 1; align-self: stretch; padding-bottom: 8px; border-left-width: 1px; border-right-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
@@ -10,12 +11,12 @@
                     </ui:VisualElement>
                     <ui:VisualElement name="container__required-scenes" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-basis: auto; align-self: stretch; margin-top: 8px;">
                         <ui:Label tabindex="-1" text="Required scenes" display-tooltip-when-elided="true" name="label__required-scenes" style="margin-bottom: 4px; -unity-text-align: middle-center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
-                        <ui:ListView focusable="true" show-border="true" reorderable="true" show-foldout-header="false" show-add-remove-footer="true" name="required-scenes" show-alternating-row-backgrounds="All" reorder-mode="Animated" style="flex-grow: 1; width: 80%; align-self: center;" />
+                        <ui:ListView focusable="true" show-border="true" reorderable="true" show-foldout-header="false" show-add-remove-footer="true" name="required-scenes" reorder-mode="Animated" fixed-item-height="21" selection-type="Multiple" style="flex-grow: 1; width: 80%; align-self: center;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:Foldout>
-            <uie:ToolbarSpacer name="ToolbarSpacer" style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(56, 56, 56); border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
+            <uie:ToolbarSpacer name="toggle-bottom" style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(56, 56, 56); border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
-        <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(71, 71, 71);" />
+        <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgba(71, 71, 71, 0); display: flex;" />
     </ui:VisualElement>
 </ui:UXML>

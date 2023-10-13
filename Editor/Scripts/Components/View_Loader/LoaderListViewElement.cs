@@ -16,9 +16,13 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
             SetReferences();
             InitAndReferenceFoldoutTextField();
-            PreventFoldoutToggleFromKeyPress();
+            SetStyleEvents();
             RegisterButtonsClickEventCallback();
             InitRequiredScenesListView();
+            PreventFoldoutToggleFromKeyPress();
+            PreventRequiredElementWheelCallbackPropagation();
+
+            //parent.ElementAt(0).style.position = Position.Absolute;
         }
 
         private const string UxmlPath = "Uxml/scene-loader-element";
@@ -28,6 +32,7 @@ namespace Ludwell.Scene
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
+        private const string ToggleBottomName = "toggle-bottom";
         private const string MainSceneName = "main-scene";
         private const string RequiredScenesListViewName = "required-scenes";
         private const string PlayButtonName = "button__play";
@@ -66,9 +71,6 @@ namespace Ludwell.Scene
             
             _mainSceneField.RegisterValueChangedCallback(evt => 
                 data.MainScene = evt.newValue as SceneData);
-
-            _listViewRequiredElements.RegisterCallback<AttachToPanelEvent>(evt =>
-                Debug.LogError("attached to panel event"));
         }
 
         public void SetElementFromData(LoaderListViewElementData data)
@@ -105,10 +107,19 @@ namespace Ludwell.Scene
 
         }
 
+        private void SetStyleEvents()
+        {
+            _foldoutElement.RegisterValueChangedCallback(evt =>
+            {
+                var borderTopWidth = evt.newValue ? 1 : 0;
+                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
+            });
+        }
+
         private void RegisterButtonsClickEventCallback()
         {
             var playButton = this.Q(PlayButtonName).Q<Button>();
-            playButton.RegisterCallback<ClickEvent>((evt) =>
+            playButton.RegisterCallback<ClickEvent>(evt =>
             {
                 if (evt.currentTarget == playButton)
                 {
@@ -117,27 +128,13 @@ namespace Ludwell.Scene
             });
 
             var loadButton = this.Q(LoadButtonName).Q<Button>();
-            loadButton.RegisterCallback<ClickEvent>((evt) =>
+            loadButton.RegisterCallback<ClickEvent>(evt =>
             {
                 if (evt.currentTarget == loadButton)
                 {
                     Debug.LogError("todo: load scene from here");
                 }
             });
-        }
-        
-        private void PreventFoldoutToggleFromKeyPress()
-        {
-            var foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
-            foldoutTextField.RegisterCallback<KeyDownEvent>((evt) =>
-            {
-                evt.StopPropagation();
-                if (evt.currentTarget != foldoutTextField) return;
-                if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
-                _foldoutElement.value = !_foldoutElement.value;
-            });
-
-            foldoutTextField.RegisterCallback<ClickEvent>((evt) => { evt.StopPropagation(); });
         }
         
         private void InitRequiredScenesListView()
@@ -147,6 +144,38 @@ namespace Ludwell.Scene
             _listViewRequiredElements.itemsSource = _requiredSceneElements;
             _listViewRequiredElements.makeItem = AddElement;
             _listViewRequiredElements.bindItem = OnElementScrollIntoView;
+        }
+        
+        private void PreventFoldoutToggleFromKeyPress()
+        {
+            var foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
+            foldoutTextField.RegisterCallback<KeyDownEvent>(evt =>
+            {
+                evt.StopPropagation();
+                if (evt.currentTarget != foldoutTextField) return;
+                if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
+                _foldoutElement.value = !_foldoutElement.value;
+            });
+
+            Debug.LogError("boop");
+            foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+        }
+        
+        private void PreventRequiredElementWheelCallbackPropagation()
+        {
+            var scroller = _listViewRequiredElements.Q<Scroller>();
+            _listViewRequiredElements.RegisterCallback<WheelEvent>(evt =>
+            {
+                if (scroller.style.display == DisplayStyle.None) return;
+                if (evt.delta.y < 0 && Mathf.Approximately(scroller.value, scroller.lowValue))
+                {
+                    evt.StopPropagation();
+                }
+                else if (evt.delta.y > 0 && Mathf.Approximately(scroller.value, scroller.highValue))
+                {
+                    evt.StopPropagation();
+                }
+            });
         }
 
         private RequiredSceneElement AddElement()
