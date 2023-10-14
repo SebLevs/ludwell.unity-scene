@@ -47,6 +47,7 @@ namespace Ludwell.Scene
         {
             _foldoutElement = this.Q<Foldout>(FoldoutName);
             _mainSceneField = this.Q<ObjectField>(MainSceneName);
+            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
         }
 
         private void InitAndReferenceFoldoutTextField()
@@ -88,10 +89,10 @@ namespace Ludwell.Scene
 
         public void SetElementFromData(LoaderListViewElementData data)
         {
-            HandleRequiredSceneListView(data);
             _foldoutTextField.value = data.Name;
             _foldoutElement.value = data.IsOpen;
             _mainSceneField.value = data.MainScene;
+            HandleRequiredSceneListView(data);
         }
 
         private void HandleRequiredSceneListView(LoaderListViewElementData data)
@@ -150,7 +151,6 @@ namespace Ludwell.Scene
 
         private void InitRequiredScenesListView()
         {
-            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
             _listViewRequiredElements.itemsSource = _data.RequiredScenes;
             _listViewRequiredElements.makeItem = AddElement;
             _listViewRequiredElements.bindItem = OnElementScrollIntoView;
@@ -175,20 +175,22 @@ namespace Ludwell.Scene
 
         private RequiredSceneElement AddElement()
         {
-            return new RequiredSceneElement();
+            var element = new RequiredSceneElement();
+            element.SetReferences();
+            return element;
         }
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            var elementAsDataType = element as IBindableListViewElement<SceneData>;
+            var elementAsType = element as RequiredSceneElement;
             if (_data.RequiredScenes[index] == null)
             {
-                elementAsDataType?.InitDataValues(_data.RequiredScenes[index]);
-                elementAsDataType?.BindElementToData(_data.RequiredScenes[index]);
+                elementAsType.Q<ObjectField>().RegisterValueChangedCallback(evt =>
+                    _data.RequiredScenes[index] = evt.newValue as SceneData);
                 return;
             }
 
-            elementAsDataType?.SetElementFromData(_data.RequiredScenes[index]);
+            elementAsType.Q<ObjectField>().value = _data.RequiredScenes[index];
         }
     }
 }

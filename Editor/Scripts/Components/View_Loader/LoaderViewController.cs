@@ -8,7 +8,7 @@ namespace Ludwell.Scene
     {
         private const string MainMenuButtonName = "button__main-menu";
         private const string CloseAllButtonName = "button__close-all";
-        
+
         private ScenesListViewController _scenesListViewController;
 
         public LoaderViewController(VisualElement queryFrom)
@@ -28,10 +28,7 @@ namespace Ludwell.Scene
 
         private void InitCloseAllButton(VisualElement queryFrom)
         {
-            queryFrom.Q<ToolbarButton>(CloseAllButtonName).clicked += () =>
-            {
-                _scenesListViewController.CloseAll();
-            };
+            queryFrom.Q<ToolbarButton>(CloseAllButtonName).clicked += () => { _scenesListViewController.CloseAll(); };
         }
     }
 }

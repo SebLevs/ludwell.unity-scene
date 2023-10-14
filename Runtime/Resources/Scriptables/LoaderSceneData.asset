@@ -15,3 +15,5 @@ MonoBehaviour:
   <Elements>k__BackingField:
   - <RequiredScenes>k__BackingField:
     - {fileID: 11400000, guid: ec1fb5b2ca34c574995345b8e1a5db6c, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
