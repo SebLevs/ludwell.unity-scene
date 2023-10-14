@@ -183,14 +183,16 @@ namespace Ludwell.Scene
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
             var elementAsType = element as RequiredSceneElement;
+            var objectField = elementAsType.Q<ObjectField>();
             if (_data.RequiredScenes[index] == null)
             {
-                elementAsType.Q<ObjectField>().RegisterValueChangedCallback(evt =>
+                _data.RequiredScenes[index] = null;
+                objectField.RegisterValueChangedCallback(evt =>
                     _data.RequiredScenes[index] = evt.newValue as SceneData);
                 return;
             }
 
-            elementAsType.Q<ObjectField>().value = _data.RequiredScenes[index];
+            objectField.value = _data.RequiredScenes[index];
         }
     }
 }
