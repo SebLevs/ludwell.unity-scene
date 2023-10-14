@@ -1,4 +1,5 @@
 using UnityEditor.Search;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -19,17 +20,23 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/required-scene-element";
         private const string UssPath = "Uss/required-scene-element";
 
-        private readonly ObjectField _sceneField;
+        private ObjectField _sceneField;
 
-        public void InitDataValues(SceneData data) { }
+        public void InitDataValues(SceneData data)
+        {
+        }
 
         public void BindElementToData(SceneData data)
         {
-            _sceneField.RegisterValueChangedCallback(evt => { data = evt.newValue as SceneData; });
+            _sceneField.RegisterValueChangedCallback(evt =>
+            {
+                data = evt.newValue as SceneData;
+            });
         }
 
         public void SetElementFromData(SceneData data)
         {
+            _sceneField = this.Q<ObjectField>();
             _sceneField.value = data;
         }
     }

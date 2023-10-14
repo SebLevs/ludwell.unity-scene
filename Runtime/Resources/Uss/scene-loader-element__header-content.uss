@@ -23,7 +23,7 @@
     font-size: 12px;
 }
 
-#button__play > #button {
+#button__load > #button {
     width: 20px;
     height: 20px;
     margin-left: 0;
@@ -32,12 +32,12 @@
     margin-bottom: 0;
 }
 
-#button__play > #button > #icon {
+#button__load > #button > #icon {
     margin-left: 0;
     -unity-background-image-tint-color: rgb(0, 195, 12);
 }
 
-#button__load > #button {
+#button__open > #button {
     width: 20px;
     height: 20px;
     margin-left: 4px;
@@ -46,7 +46,7 @@
     margin-bottom: 0;
 }
 
-#button__load > #button > #icon {
+#button__open > #button > #icon {
     margin-left: 0;
     -unity-background-image-tint-color: rgb(0, 193, 195);
 }

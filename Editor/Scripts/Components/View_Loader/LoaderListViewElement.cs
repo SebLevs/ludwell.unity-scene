@@ -16,7 +16,7 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
             SetReferences();
             InitAndReferenceFoldoutTextField();
-            SetStyleEvents();
+            RegisterStyleEvents();
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
         }
@@ -31,16 +31,40 @@ namespace Ludwell.Scene
         private const string ToggleBottomName = "toggle-bottom";
         private const string MainSceneName = "main-scene";
         private const string RequiredScenesListViewName = "required-scenes";
-        private const string PlayButtonName = "button__play";
         private const string LoadButtonName = "button__load";
+        private const string OpenButtonName = "button__open";
 
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
 
+        private LoaderListViewElementData _data;
         private ListView _listViewRequiredElements;
 
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
+
+        private void SetReferences()
+        {
+            _foldoutElement = this.Q<Foldout>(FoldoutName);
+            _mainSceneField = this.Q<ObjectField>(MainSceneName);
+        }
+
+        private void InitAndReferenceFoldoutTextField()
+        {
+            var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
+            this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
+            headerContent.AddStyleFromUss(HeaderContentUssPath);
+            _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
+        }
+
+        private void RegisterStyleEvents()
+        {
+            _foldoutElement.RegisterValueChangedCallback(evt =>
+            {
+                var borderTopWidth = evt.newValue ? 1 : 0;
+                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
+            });
+        }
 
         public void InitDataValues(LoaderListViewElementData data)
         {
@@ -58,11 +82,9 @@ namespace Ludwell.Scene
             _foldoutTextField.RegisterValueChangedCallback(evt =>
                 data.Name = evt.newValue);
 
-            _mainSceneField.RegisterValueChangedCallback(evt => 
+            _mainSceneField.RegisterValueChangedCallback(evt =>
                 data.MainScene = evt.newValue as SceneData);
         }
-
-        private LoaderListViewElementData _data;
 
         public void SetElementFromData(LoaderListViewElementData data)
         {
@@ -79,44 +101,33 @@ namespace Ludwell.Scene
             PreventRequiredElementWheelCallbackPropagation();
         }
 
-        private void SetReferences()
-        {
-            _foldoutElement = this.Q<Foldout>(FoldoutName);
-            _mainSceneField = this.Q<ObjectField>(MainSceneName);
-        }
-
-        private void InitAndReferenceFoldoutTextField()
-        {
-            var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
-            this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
-            headerContent.AddStyleFromUss(HeaderContentUssPath);
-            _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
-        }
-
-        private void SetStyleEvents()
-        {
-            _foldoutElement.RegisterValueChangedCallback(evt =>
-            {
-                var borderTopWidth = evt.newValue ? 1 : 0;
-                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
-            });
-        }
-
         private void RegisterButtonsClickEventCallback()
         {
-            var playButton = this.Q(PlayButtonName).Q<Button>();
-            playButton.RegisterCallback<ClickEvent>(evt =>
+            var loadButton = this.Q(LoadButtonName).Q<Button>();
+            loadButton.RegisterCallback<ClickEvent>(evt =>
             {
-                if (evt.currentTarget == playButton)
+                if (_mainSceneField.value == null)
+                {
+                    Debug.LogError("Cannot load without a main scene.");
+                    return;
+                }
+
+                if (evt.currentTarget == loadButton)
                 {
                     Debug.LogError("todo: play scene from here");
                 }
             });
 
-            var loadButton = this.Q(LoadButtonName).Q<Button>();
-            loadButton.RegisterCallback<ClickEvent>(evt =>
+            var openButton = this.Q(OpenButtonName).Q<Button>();
+            openButton.RegisterCallback<ClickEvent>(evt =>
             {
-                if (evt.currentTarget == loadButton)
+                if (_mainSceneField.value == null)
+                {
+                    Debug.LogError("Cannot open without a main scene.");
+                    return;
+                }
+
+                if (evt.currentTarget == openButton)
                 {
                     Debug.LogError("todo: load scene from here");
                 }
@@ -136,7 +147,6 @@ namespace Ludwell.Scene
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
         }
-
 
         private void InitRequiredScenesListView()
         {
@@ -170,11 +180,9 @@ namespace Ludwell.Scene
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            Debug.LogError($"count: {_data.RequiredScenes.Count} | at index {index}: {_data.RequiredScenes[index]}");
             var elementAsDataType = element as IBindableListViewElement<SceneData>;
             if (_data.RequiredScenes[index] == null)
             {
-                Debug.LogError("is null");
                 elementAsDataType?.InitDataValues(_data.RequiredScenes[index]);
                 elementAsDataType?.BindElementToData(_data.RequiredScenes[index]);
                 return;
