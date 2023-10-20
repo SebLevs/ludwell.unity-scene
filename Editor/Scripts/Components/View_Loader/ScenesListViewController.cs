@@ -30,9 +30,9 @@ namespace Ludwell.Scene
 
         public void CloseAll()
         {
-            foreach (var item in _listView.Query(ListViewElementName).ToList())
+            foreach (var item in _listView.Query<LoaderListViewElement>().ToList())
             {
-                (item as LoaderListViewElement)?.SetFoldoutValue(false);
+                item.SetFoldoutValue(false);
             }
 
             foreach (var element in _loaderSceneData.Elements)
