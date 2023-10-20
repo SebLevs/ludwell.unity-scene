@@ -1,45 +1,50 @@
-using UnityEditor.Search;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneData>
+    public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneDataReference>
     {
-        public new class UxmlFactory : UxmlFactory<RequiredSceneElement, UxmlTraits> { }
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-        
         public RequiredSceneElement()
         {
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
-            SceneField = this.Q<ObjectField>();
+            SetReferences();
         }
-        
+
         private const string UxmlPath = "Uxml/required-scene-element";
         private const string UssPath = "Uss/required-scene-element";
-        
-        public ObjectField SceneField { get; set; }
 
-        public void InitDataValues(SceneData data)
+        private const string ObjectFieldName = "scene-data";
+
+        private ObjectField _requiredSceneField;
+
+        public SceneDataReference Cache { get; set; }
+
+        private void SetReferences()
         {
-            Debug.LogError($"InitDataValues: {data}");
-            data = SceneField.value as SceneData;
+            _requiredSceneField = this.Q<ObjectField>(ObjectFieldName);
         }
 
-        public void BindElementToData(SceneData data)
+        public void CacheData(SceneDataReference data)
         {
-            SceneField.RegisterValueChangedCallback(evt =>
-            {
-                Debug.LogError($"BindElementToData: {evt.newValue}");
-                data = evt.newValue as SceneData;
-            });
+            Cache = data;
         }
 
-        public void SetElementFromData(SceneData data)
+        public void BindElementToCachedData()
         {
-            Debug.LogError($"SetElementFromData: {data}");
-            SceneField.value = data;
+            _requiredSceneField.RegisterValueChangedCallback(BindObjectField);
+        }
+
+        private void BindObjectField(ChangeEvent<Object> evt)
+        {
+            Cache.SceneData = evt.newValue as SceneData;
+        }
+
+        public void SetElementFromCachedData()
+        {
+            _requiredSceneField.value = Cache.SceneData;
         }
     }
 }

@@ -2,10 +2,12 @@ namespace Ludwell.Scene
 {
     public interface IBindableListViewElement<T>
     {
-        public void InitDataValues(T data);
-        
-        public void BindElementToData(T data);
-        
-        public void SetElementFromData(T data);
+        public T Cache { get; set; }
+
+        public void CacheData(T data);
+
+        public void BindElementToCachedData();
+
+        public void SetElementFromCachedData();
     }
 }

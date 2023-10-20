@@ -24,9 +24,9 @@ public class FoldoutHeader : Foldout
     public FoldoutHeader()
     {
         AddHeaderText();
-        InitToggle();
-        InitUnityCheckMark();
-        InitUnityContent();
+        InitToggle(); // todo: replace with uss in uxml file
+        InitUnityCheckMark(); // todo: replace with uss in uxml file
+        InitUnityContent(); // todo: replace with uss in uxml file
     }
     
     private const string HeaderName = "header-text";
