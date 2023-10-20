@@ -34,12 +34,15 @@ namespace Ludwell.Scene
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
 
+        static public readonly string DefaultHeaderTextValue = "Scene Loader Element";
+
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
 
-        private LoaderListViewElementData _data;
         private ListView _listViewRequiredElements;
+
+        public LoaderListViewElementData Cache { get; set; }
 
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
 
@@ -53,8 +56,8 @@ namespace Ludwell.Scene
         private void InitAndReferenceFoldoutTextField()
         {
             var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
-            this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             headerContent.AddStyleFromUss(HeaderContentUssPath);
+            this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
         }
 
@@ -67,37 +70,43 @@ namespace Ludwell.Scene
             });
         }
 
-        public void InitDataValues(LoaderListViewElementData data)
+        public void CacheData(LoaderListViewElementData data)
         {
-            data.IsOpen = _foldoutElement.value;
-            data.Name = _foldoutTextField.value;
-            data.MainScene = _mainSceneField.value as SceneData;
-            HandleRequiredSceneListView(data);
+            Cache = data;
         }
 
-        public void BindElementToData(LoaderListViewElementData data)
+        public void BindElementToCachedData()
         {
-            _foldoutElement.RegisterValueChangedCallback(evt =>
-                data.IsOpen = evt.newValue);
-
-            _foldoutTextField.RegisterValueChangedCallback(evt =>
-                data.Name = evt.newValue);
-
-            _mainSceneField.RegisterValueChangedCallback(evt =>
-                data.MainScene = evt.newValue as SceneData);
+            _foldoutElement.RegisterValueChangedCallback(BindFoldoutValue);
+            _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
+            _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
         }
 
-        public void SetElementFromData(LoaderListViewElementData data)
+        private void BindFoldoutValue(ChangeEvent<bool> evt)
         {
-            _foldoutTextField.value = data.Name;
-            _foldoutElement.value = data.IsOpen;
-            _mainSceneField.value = data.MainScene;
-            HandleRequiredSceneListView(data);
+            Cache.IsOpen = evt.newValue;
         }
 
-        private void HandleRequiredSceneListView(LoaderListViewElementData data)
+        private void BindFoldoutTextField(ChangeEvent<string> evt)
         {
-            _data = data;
+            Cache.Name = evt.newValue;
+        }
+
+        private void BindMainSceneField(ChangeEvent<Object> evt)
+        {
+            Cache.MainScene = evt.newValue as SceneData;
+        }
+
+        public void SetElementFromCachedData()
+        {
+            _foldoutTextField.value = Cache.Name;
+            _foldoutElement.value = Cache.IsOpen;
+            _mainSceneField.value = Cache.MainScene;
+            HandleRequiredSceneListView();
+        }
+
+        private void HandleRequiredSceneListView()
+        {
             InitRequiredScenesListView();
             PreventRequiredElementWheelCallbackPropagation();
         }
@@ -151,7 +160,7 @@ namespace Ludwell.Scene
 
         private void InitRequiredScenesListView()
         {
-            _listViewRequiredElements.itemsSource = _data.RequiredScenes;
+            _listViewRequiredElements.itemsSource = Cache.RequiredScenes;
             _listViewRequiredElements.makeItem = AddElement;
             _listViewRequiredElements.bindItem = OnElementScrollIntoView;
         }
@@ -175,24 +184,18 @@ namespace Ludwell.Scene
 
         private RequiredSceneElement AddElement()
         {
-            var element = new RequiredSceneElement();
-            element.SetReferences();
-            return element;
+            return new RequiredSceneElement();
         }
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            var elementAsType = element as RequiredSceneElement;
-            var objectField = elementAsType.Q<ObjectField>();
-            if (_data.RequiredScenes[index] == null)
-            {
-                _data.RequiredScenes[index] = null;
-                objectField.RegisterValueChangedCallback(evt =>
-                    _data.RequiredScenes[index] = evt.newValue as SceneData);
-                return;
-            }
+            var elementAsDataType = element as IBindableListViewElement<SceneDataReference>;
 
-            objectField.value = _data.RequiredScenes[index];
+            Cache.RequiredScenes[index] ??= new();
+
+            elementAsDataType?.CacheData(Cache.RequiredScenes[index]);
+            elementAsDataType?.BindElementToCachedData();
+            elementAsDataType?.SetElementFromCachedData();
         }
     }
 }

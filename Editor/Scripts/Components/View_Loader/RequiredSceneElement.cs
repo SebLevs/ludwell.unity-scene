@@ -1,16 +1,11 @@
-using UnityEditor.Search;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    // todo: inquire about systemic null ref on _requiredSceneField
-    public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneData>
+    public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneDataReference>
     {
-        public new class UxmlFactory : UxmlFactory<RequiredSceneElement, UxmlTraits> { }
-
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-
         public RequiredSceneElement()
         {
             this.SetHierarchyFromUxml(UxmlPath);
@@ -20,27 +15,36 @@ namespace Ludwell.Scene
 
         private const string UxmlPath = "Uxml/required-scene-element";
         private const string UssPath = "Uss/required-scene-element";
-        
+
         private const string ObjectFieldName = "scene-data";
 
         private ObjectField _requiredSceneField;
 
-        public void SetReferences()
+        public SceneDataReference Cache { get; set; }
+
+        private void SetReferences()
         {
             _requiredSceneField = this.Q<ObjectField>(ObjectFieldName);
         }
 
-        public void InitDataValues(SceneData data) { }
-
-        public void BindElementToData(SceneData data)
+        public void CacheData(SceneDataReference data)
         {
-            _requiredSceneField.RegisterValueChangedCallback(evt =>
-                data = evt.newValue as SceneData);
+            Cache = data;
         }
 
-        public void SetElementFromData(SceneData data)
+        public void BindElementToCachedData()
         {
-            _requiredSceneField.value = data;
+            _requiredSceneField.RegisterValueChangedCallback(BindObjectField);
+        }
+
+        private void BindObjectField(ChangeEvent<Object> evt)
+        {
+            Cache.SceneData = evt.newValue as SceneData;
+        }
+
+        public void SetElementFromCachedData()
+        {
+            _requiredSceneField.value = Cache.SceneData;
         }
     }
 }

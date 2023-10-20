@@ -34,29 +34,27 @@ namespace Ludwell.Scene
             {
                 (item as LoaderListViewElement)?.SetFoldoutValue(false);
             }
+
+            foreach (var element in _loaderSceneData.Elements)
+            {
+                element.IsOpen = false;
+            }
         }
 
         private LoaderListViewElement AddElement()
         {
-            var element = new LoaderListViewElement
-            {
-                name = ListViewElementName
-            };
-            return element;
+            return new LoaderListViewElement();
         }
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
             var elementAsDataType = element as IBindableListViewElement<LoaderListViewElementData>;
-            if (_loaderSceneData.Elements[index] == null)
-            {
-                _loaderSceneData.Elements[index] = new LoaderListViewElementData();
-                elementAsDataType?.InitDataValues(_loaderSceneData.Elements[index]);
-                elementAsDataType?.BindElementToData(_loaderSceneData.Elements[index]);
-                return;
-            }
 
-            elementAsDataType?.SetElementFromData(_loaderSceneData.Elements[index]);
+            _loaderSceneData.Elements[index] ??= new();
+
+            elementAsDataType?.CacheData(_loaderSceneData.Elements[index]);
+            elementAsDataType?.BindElementToCachedData();
+            elementAsDataType?.SetElementFromCachedData();
         }
     }
 }

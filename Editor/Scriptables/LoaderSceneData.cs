@@ -11,9 +11,14 @@ namespace Ludwell.Scene
 
     public class LoaderListViewElementData
     {
-        public string Name { get; set; }
-        public bool IsOpen { get; set; }
+        public string Name { get; set; } = LoaderListViewElement.DefaultHeaderTextValue;
+        public bool IsOpen { get; set; } = true;
         public SceneData MainScene { get; set; }
-        public List<SceneData> RequiredScenes { get; set; } = new();
+        public List<SceneDataReference> RequiredScenes { get; set; } = new();
+    }
+
+    public class SceneDataReference
+    {
+        public SceneData SceneData { get; set; }
     }
 }

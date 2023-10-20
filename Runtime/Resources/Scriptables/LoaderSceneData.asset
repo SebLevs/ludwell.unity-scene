@@ -12,8 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be9c8f6f376f8245a5159bf7a5b7f39, type: 3}
   m_Name: LoaderSceneData
   m_EditorClassIdentifier: 
-  <Elements>k__BackingField:
-  - <RequiredScenes>k__BackingField:
-    - {fileID: 11400000, guid: ec1fb5b2ca34c574995345b8e1a5db6c, type: 2}
-    - {fileID: 0}
-    - {fileID: 0}
+  <Elements>k__BackingField: []
