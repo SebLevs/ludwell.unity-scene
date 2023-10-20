@@ -14,7 +14,6 @@ namespace Ludwell.Scene
         }
 
         private const string ListViewName = "scenes__list";
-        public const string ListViewElementName = "loader-list-view-element";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
         private ListView _listView;
@@ -30,14 +29,14 @@ namespace Ludwell.Scene
 
         public void CloseAll()
         {
-            foreach (var item in _listView.Query<LoaderListViewElement>().ToList())
-            {
-                item.SetFoldoutValue(false);
-            }
-
             foreach (var element in _loaderSceneData.Elements)
             {
                 element.IsOpen = false;
+            }
+            
+            foreach (var item in _listView.Query<LoaderListViewElement>().ToList())
+            {
+                item.SetFoldoutValue(false);
             }
         }
 
