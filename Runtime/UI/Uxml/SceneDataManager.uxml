@@ -37,7 +37,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="view__loader" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; display: flex;">
                 <FoldoutHeader color="#252525FF" name="foldout-header__main-menu" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Main menu" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0; border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80); border-top-width: 1px;">
-                    <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; margin-left: 0; margin-right: 0; margin-top: 4px; margin-bottom: 4px; align-self: stretch; align-items: center;">
+                    <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 4px; margin-bottom: 4px; align-self: stretch; align-items: center;">
                         <uie:ObjectField type="Ludwell.Scene.SceneData, ludwell.scene" name="scene-selection" style="-unity-text-align: middle-center; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 4px;" />
                         <ui:Instance template="button__play" name="button__main-menu" />
                     </ui:VisualElement>
