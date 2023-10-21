@@ -2,8 +2,8 @@
     <ui:Template name="button__play" src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uxml/button__play-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__play-load" />
     <ui:Template name="core-scene" src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uxml/core-scene.uxml?fileID=9197481963319205126&amp;guid=5f9b25b9ce92eb54596cf40af535b054&amp;type=3#core-scene" />
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uss/SceneDataManager.uss?fileID=7433441132597879392&amp;guid=084f846459e63874ab1c3bd6f0a92815&amp;type=3#SceneDataManager" />
-    <ui:VisualElement name="mainitem" style="flex-grow: 1; background-color: rgb(56, 56, 56); flex-direction: column; overflow: visible;">
-        <ui:VisualElement name="tabs" style="flex-grow: 1; flex-basis: 22.5px; flex-direction: row; border-left-color: rgba(26, 26, 26, 0); border-right-color: rgba(26, 26, 26, 0); border-top-color: rgba(26, 26, 26, 0); border-bottom-color: rgb(40, 40, 40); height: 22px; display: flex; border-bottom-width: 1px;">
+    <ui:VisualElement name="mainitem" style="flex-grow: 1; flex-direction: column; overflow: visible;">
+        <ui:VisualElement name="tabs" style="flex-grow: 1; flex-basis: 22.5px; flex-direction: row; height: 22px; display: flex;">
             <uie:ToolbarButton text="Manager" display-tooltip-when-elided="true" name="tab__manager" focusable="true" style="flex-shrink: 0; flex-grow: 1; border-left-width: 0; border-right-width: 0; -unity-text-align: middle-center; flex-direction: column;" />
             <uie:ToolbarButton text="Loader" display-tooltip-when-elided="true" name="tab__loader" focusable="false" style="flex-shrink: 0; flex-grow: 1; -unity-text-align: middle-center; flex-direction: row;" />
             <uie:ToolbarButton text="Settings" display-tooltip-when-elided="true" name="tab__settings" focusable="false" style="flex-shrink: 0; flex-grow: 1; border-left-width: 0; border-right-width: 0; -unity-text-align: middle-center; flex-direction: row;" />
@@ -36,21 +36,21 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="view__loader" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; display: flex;">
-                <FoldoutHeader color="#252525FF" name="foldout-header__core" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Main menu" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0;">
+                <FoldoutHeader color="#252525FF" name="foldout-header__main-menu" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Main menu" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0; border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80); border-top-width: 1px;">
                     <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; margin-left: 0; margin-right: 0; margin-top: 4px; margin-bottom: 4px; align-self: stretch; align-items: center;">
                         <uie:ObjectField type="Ludwell.Scene.SceneData, ludwell.scene" name="scene-selection" style="-unity-text-align: middle-center; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 4px;" />
                         <ui:Instance template="button__play" name="button__main-menu" />
                     </ui:VisualElement>
                 </FoldoutHeader>
-                <FoldoutHeader color="#252525FF" name="foldout-header__core" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Core scenes" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0;">
+                <FoldoutHeader color="#252525FF" name="foldout-header__core" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Core scenes" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0; border-top-width: 1px; border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80);">
                     <ui:Instance template="core-scene" name="core-scene__persistent" class="core-scene__above" />
                     <ui:Instance template="core-scene" name="core-scene__loading">
                         <AttributeOverrides element-name="scene-selection" label="Loading scene" />
                     </ui:Instance>
                 </FoldoutHeader>
-                <ui:VisualElement name="bottom__content" style="flex-shrink: 0; flex-grow: 0; flex-direction: column;">
-                    <ui:VisualElement name="header__load" style="background-color: rgb(37, 37, 37); flex-basis: 22.5px; flex-grow: 0; flex-shrink: 1; border-right-color: rgb(89, 89, 89); border-bottom-width: 1px; border-bottom-color: rgb(35, 35, 35); border-top-width: 1px; border-top-color: rgb(89, 89, 89);">
-                        <ui:Label tabindex="-1" text="Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1;" />
+                <ui:VisualElement name="bottom__content" style="flex-shrink: 0; flex-grow: 0; flex-direction: column; border-left-color: rgb(79, 79, 79); border-right-color: rgb(79, 79, 79); border-top-color: rgb(79, 79, 79); border-bottom-color: rgb(79, 79, 79); border-top-width: 1px;">
+                    <ui:VisualElement name="header__load" style="flex-basis: 22.5px; flex-grow: 0; flex-shrink: 1;">
+                        <ui:Label tabindex="-1" text="Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="load-headers" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: 22.5px; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(35, 35, 35); justify-content: center;">
                         <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" style="-unity-text-align: middle-center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgb(56, 56, 56); margin-left: 12px; background-image: resource(&apos;Sprites/icon_close-all&apos;); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 4px; margin-bottom: 4px; display: flex; -unity-background-scale-mode: stretch-to-fill; width: 24px; -unity-background-image-tint-color: rgb(88, 88, 88); position: absolute; height: 15px;" />

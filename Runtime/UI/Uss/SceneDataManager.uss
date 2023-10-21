@@ -1,9 +1,8 @@
 .core-scene__above {
 }
 
-#foldout-header__core > Toggle {
-    flex-basis: 22.5px;
-    background-color: rgb(37, 37, 37);
+#scene-selection {
+    width: 80%;
 }
 
 #scenes__list > ScrollView > VisualElement > VisualElement > Label {
@@ -107,8 +106,4 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-}
-
-#scene-selection {
-    width: 80%;
 }
