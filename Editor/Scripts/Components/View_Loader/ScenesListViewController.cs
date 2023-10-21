@@ -10,21 +10,20 @@ namespace Ludwell.Scene
         public ScenesListViewController(VisualElement queryFrom)
         {
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
-            InitLoaderListView(queryFrom);
+            InitLoaderListView(queryFrom, _loaderSceneData);
         }
 
         private const string ListViewName = "scenes__list";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
-        private ListView _listView;
         private LoaderSceneData _loaderSceneData;
+        private ListView _listView;
+        private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
 
-        private void InitLoaderListView(VisualElement queryFrom)
+        private void InitLoaderListView(VisualElement queryFrom, LoaderSceneData data)
         {
             _listView = queryFrom.Q<ListView>(ListViewName);
-            _listView.itemsSource = _loaderSceneData.Elements;
-            _listView.makeItem = AddElement;
-            _listView.bindItem = OnElementScrollIntoView;
+            _listViewInitializer = new (_listView, data.Elements);
         }
 
         public void CloseAll()
@@ -33,27 +32,11 @@ namespace Ludwell.Scene
             {
                 element.IsOpen = false;
             }
-            
+
             foreach (var item in _listView.Query<LoaderListViewElement>().ToList())
             {
                 item.SetFoldoutValue(false);
             }
-        }
-
-        private LoaderListViewElement AddElement()
-        {
-            return new LoaderListViewElement();
-        }
-
-        private void OnElementScrollIntoView(VisualElement element, int index)
-        {
-            var elementAsDataType = element as IBindableListViewElement<LoaderListViewElementData>;
-
-            _loaderSceneData.Elements[index] ??= new();
-
-            elementAsDataType?.CacheData(_loaderSceneData.Elements[index]);
-            elementAsDataType?.BindElementToCachedData();
-            elementAsDataType?.SetElementFromCachedData();
         }
     }
 }
