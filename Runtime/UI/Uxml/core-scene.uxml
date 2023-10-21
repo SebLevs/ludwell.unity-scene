@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uss/core-scene.uss?fileID=7433441132597879392&amp;guid=5b3d394756a7fd147b118f53cd682e3a&amp;type=3#core-scene" />
+    <ui:VisualElement name="core-scene__container" class="core-scene" style="flex-grow: 1; border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40);">
+        <uie:ObjectField type="Ludwell.Scene.SceneData, ludwell.scene" name="scene-selection" label="Persistent scene" style="-unity-text-align: middle-center; align-self: center; flex-direction: column; border-bottom-width: 1px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-top: 8px; padding-bottom: 8px; width: 80%;" />
+    </ui:VisualElement>
+</ui:UXML>
