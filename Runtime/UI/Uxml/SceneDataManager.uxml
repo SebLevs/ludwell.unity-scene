@@ -43,7 +43,7 @@
                     </ui:VisualElement>
                 </FoldoutHeader>
                 <FoldoutHeader color="#252525FF" name="foldout-header__core" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Core scenes" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0;">
-                    <ui:Instance template="core-scene" name="core-scene__persistent" />
+                    <ui:Instance template="core-scene" name="core-scene__persistent" class="core-scene__above" />
                     <ui:Instance template="core-scene" name="core-scene__loading">
                         <AttributeOverrides element-name="scene-selection" label="Loading scene" />
                     </ui:Instance>
