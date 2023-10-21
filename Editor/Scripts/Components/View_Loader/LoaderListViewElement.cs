@@ -6,10 +6,6 @@ namespace Ludwell.Scene
 {
     public class LoaderListViewElement : VisualElement, IBindableListViewElement<LoaderListViewElementData>
     {
-        public new class UxmlFactory : UxmlFactory<LoaderListViewElement, UxmlTraits> { }
-
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-
         public LoaderListViewElement()
         {
             this.SetHierarchyFromUxml(UxmlPath);
@@ -34,13 +30,14 @@ namespace Ludwell.Scene
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
 
-        static public readonly string DefaultHeaderTextValue = "Scene Loader Element";
+        public const string DefaultHeaderTextValue = "Scene Loader Element";
 
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
 
         private ListView _listViewRequiredElements;
+        private ListViewInitializer<RequiredSceneElement, SceneDataReference> _listViewInitializer;
 
         public LoaderListViewElementData Cache { get; set; }
 
@@ -160,9 +157,7 @@ namespace Ludwell.Scene
 
         private void InitRequiredScenesListView()
         {
-            _listViewRequiredElements.itemsSource = Cache.RequiredScenes;
-            _listViewRequiredElements.makeItem = AddElement;
-            _listViewRequiredElements.bindItem = OnElementScrollIntoView;
+            _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
         }
 
         private void PreventRequiredElementWheelCallbackPropagation()
@@ -180,22 +175,6 @@ namespace Ludwell.Scene
                     evt.StopPropagation();
                 }
             });
-        }
-
-        private RequiredSceneElement AddElement()
-        {
-            return new RequiredSceneElement();
-        }
-
-        private void OnElementScrollIntoView(VisualElement element, int index)
-        {
-            var elementAsDataType = element as IBindableListViewElement<SceneDataReference>;
-
-            Cache.RequiredScenes[index] ??= new();
-
-            elementAsDataType?.CacheData(Cache.RequiredScenes[index]);
-            elementAsDataType?.BindElementToCachedData();
-            elementAsDataType?.SetElementFromCachedData();
         }
     }
 }
