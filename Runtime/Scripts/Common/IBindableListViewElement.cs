@@ -4,7 +4,10 @@ namespace Ludwell.Scene
     {
         public T Cache { get; set; }
 
-        public void CacheData(T data);
+        public void CacheData(T data)
+        {
+            Cache = data;
+        }
 
         public void BindElementToCachedData();
 

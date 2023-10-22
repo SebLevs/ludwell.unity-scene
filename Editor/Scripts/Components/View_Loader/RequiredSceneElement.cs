@@ -27,11 +27,6 @@ namespace Ludwell.Scene
             _requiredSceneField = this.Q<ObjectField>(ObjectFieldName);
         }
 
-        public void CacheData(SceneDataReference data)
-        {
-            Cache = data;
-        }
-
         public void BindElementToCachedData()
         {
             _requiredSceneField.RegisterValueChangedCallback(BindObjectField);

@@ -7,17 +7,17 @@ namespace Ludwell.Scene
         where TVisualElement : VisualElement, new()
         where TListElement : new()
     {
-        private readonly List<TListElement> m_Data;
+        private readonly List<TListElement> _data;
 
         public ListViewInitializer(ListView listView, List<TListElement> data)
         {
-            m_Data = data;
+            _data = data;
             listView.makeItem = CreateElement;
             listView.bindItem = OnElementScrollIntoView;
             listView.itemsSource = data;
         }
 
-        public TVisualElement CreateElement()
+        private TVisualElement CreateElement()
         {
             return new TVisualElement();
         }
@@ -26,9 +26,9 @@ namespace Ludwell.Scene
         {
             var elementAsDataType = element as IBindableListViewElement<TListElement>;
 
-            m_Data[index] ??= new();
+            _data[index] ??= new();
 
-            elementAsDataType?.CacheData(m_Data[index]);
+            elementAsDataType?.CacheData(_data[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
         }
