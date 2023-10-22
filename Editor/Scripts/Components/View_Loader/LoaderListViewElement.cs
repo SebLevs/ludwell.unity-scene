@@ -13,6 +13,7 @@ namespace Ludwell.Scene
             SetReferences();
             InitAndReferenceFoldoutTextField();
             RegisterStyleEvents();
+
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
         }
@@ -21,6 +22,8 @@ namespace Ludwell.Scene
         private const string UssPath = "Uss/scene-loader-element";
         private const string HeaderContentUxmlPath = "Uxml/scene-loader-element__header-content";
         private const string HeaderContentUssPath = "Uss/scene-loader-element__header-content";
+        
+
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
@@ -28,6 +31,7 @@ namespace Ludwell.Scene
         private const string MainSceneName = "main-scene";
         private const string RequiredScenesListViewName = "required-scenes";
         private const string LoadButtonName = "button__load";
+        private const string HeaderLoadButtonName = "button__load-header";
         private const string OpenButtonName = "button__open";
 
         public const string DefaultHeaderTextValue = "Scene Loader Element";
@@ -65,11 +69,6 @@ namespace Ludwell.Scene
                 var borderTopWidth = evt.newValue ? 1 : 0;
                 this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
             });
-        }
-
-        public void CacheData(LoaderListViewElementData data)
-        {
-            Cache = data;
         }
 
         public void BindElementToCachedData()
@@ -121,7 +120,7 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == loadButton)
                 {
-                    Debug.LogError("todo: play scene from here");
+                    Debug.LogError("todo: load scene from here");
                 }
             });
 
@@ -136,7 +135,7 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == openButton)
                 {
-                    Debug.LogError("todo: load scene from here");
+                    Debug.LogError("todo: open scene from here");
                 }
             });
         }
