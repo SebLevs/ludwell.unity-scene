@@ -22,8 +22,6 @@ namespace Ludwell.Scene
         private const string UssPath = "Uss/scene-loader-element";
         private const string HeaderContentUxmlPath = "Uxml/scene-loader-element__header-content";
         private const string HeaderContentUssPath = "Uss/scene-loader-element__header-content";
-        
-
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
