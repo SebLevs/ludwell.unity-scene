@@ -7,23 +7,20 @@ namespace Ludwell.Scene
     [Serializable]
     public class ScenesListViewController
     {
-        public ScenesListViewController(VisualElement queryFrom)
-        {
-            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
-            InitLoaderListView(queryFrom, _loaderSceneData);
-        }
-
         private const string ListViewName = "scenes__list";
+        private const string ToolbarSearchFieldName = "search__scene-loader-element";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
         private LoaderSceneData _loaderSceneData;
         private ListView _listView;
         private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
+        private DropdownSearchField _dropdownSearchField;
 
-        private void InitLoaderListView(VisualElement queryFrom, LoaderSceneData data)
+        public ScenesListViewController(VisualElement queryFrom)
         {
-            _listView = queryFrom.Q<ListView>(ListViewName);
-            _listViewInitializer = new (_listView, data.Elements);
+            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
+            InitLoaderListView(queryFrom, _loaderSceneData);
+            InitSearchField(queryFrom);
         }
 
         public void CloseAll()
@@ -37,6 +34,30 @@ namespace Ludwell.Scene
             {
                 item.SetFoldoutValue(false);
             }
+        }
+
+        private void InitLoaderListView(VisualElement queryFrom, LoaderSceneData data)
+        {
+            _listView = queryFrom.Q<ListView>(ListViewName);
+            _listViewInitializer = new(_listView, data.Elements);
+        }
+
+        private void InitSearchField(VisualElement queryFrom)
+        {
+            _dropdownSearchField = queryFrom.Q<DropdownSearchField>(ToolbarSearchFieldName);
+            _dropdownSearchField.InitDropdownElementBehaviour(_listView, _listView.ScrollToItem);
+
+            queryFrom.RegisterCallback<MouseUpEvent>(evt =>
+            {
+                if (evt.currentTarget == _dropdownSearchField) return;
+                HideDropdown();
+                _dropdownSearchField.ClearDropdownData();
+            });
+        }
+
+        private void HideDropdown()
+        {
+            _dropdownSearchField.HideDropdown();
         }
     }
 }

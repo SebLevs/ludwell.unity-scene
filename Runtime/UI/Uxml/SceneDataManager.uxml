@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="button__play" src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uxml/button__play-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__play-load" />
+    <ui:Template name="button__play" src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uxml/button__play-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__play-load" />
     <ui:Template name="core-scene" src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uxml/core-scene.uxml?fileID=9197481963319205126&amp;guid=5f9b25b9ce92eb54596cf40af535b054&amp;type=3#core-scene" />
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uss/SceneDataManager.uss?fileID=7433441132597879392&amp;guid=084f846459e63874ab1c3bd6f0a92815&amp;type=3#SceneDataManager" />
     <ui:VisualElement name="mainitem" style="flex-grow: 1; flex-direction: column; overflow: visible;">
@@ -48,16 +48,20 @@
                         <AttributeOverrides element-name="scene-selection" label="Loading scene" />
                     </ui:Instance>
                 </FoldoutHeader>
-                <ui:VisualElement name="bottom__content" style="flex-shrink: 0; flex-grow: 0; flex-direction: column; border-left-color: rgb(79, 79, 79); border-right-color: rgb(79, 79, 79); border-top-color: rgb(79, 79, 79); border-bottom-color: rgb(79, 79, 79); border-top-width: 1px;">
-                    <ui:VisualElement name="header__load" style="flex-basis: 22.5px; flex-grow: 0; flex-shrink: 1;">
-                        <ui:Label tabindex="-1" text="Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="load-headers" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: 22.5px; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(35, 35, 35); justify-content: center;">
-                        <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" style="-unity-text-align: middle-center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgb(56, 56, 56); margin-left: 12px; background-image: resource(&apos;Sprites/icon_close-all&apos;); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 4px; margin-bottom: 4px; display: flex; -unity-background-scale-mode: stretch-to-fill; width: 24px; -unity-background-image-tint-color: rgb(88, 88, 88); position: absolute; height: 15px;" />
-                        <uie:ToolbarSearchField focusable="true" name="search__scene-loader-element" style="width: 40%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; flex-direction: row;" />
+                <ui:VisualElement name="bottom__content" style="flex-shrink: 0; flex-direction: column; border-left-color: rgb(79, 79, 79); border-right-color: rgb(79, 79, 79); border-top-color: rgb(79, 79, 79); border-bottom-color: rgb(79, 79, 79); border-top-width: 1px;">
+                    <ui:VisualElement style="background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="header__load" style="flex-basis: 22.5px; flex-grow: 0; flex-shrink: 1;">
+                            <ui:Label tabindex="-1" text="Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="load-headers" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: 22.5px; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(35, 35, 35); justify-content: center;">
+                            <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" style="-unity-text-align: middle-center; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-color: rgb(56, 56, 56); margin-left: 12px; background-image: resource(&apos;Sprites/icon_close-all&apos;); padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 4px; margin-bottom: 4px; display: flex; -unity-background-scale-mode: stretch-to-fill; width: 24px; -unity-background-image-tint-color: rgb(88, 88, 88); position: absolute; height: 15px;" />
+                            <uie:ToolbarSearchField focusable="true" name="search__scene-loader-element2" style="width: 40%; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; flex-direction: row; display: none;" />
+                            <uie:ToolbarPopupSearchField focusable="true" name="search__scene-loader-element3" style="width: 40%; display: none;" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:ListView reorderable="true" show-border="false" show-add-remove-footer="true" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" reorder-mode="Animated" class="header__dropdown" style="display: flex; height: initial; max-height: initial; overflow: hidden; flex-grow: 1; flex-wrap: wrap;" />
+                <ui:ListView reorderable="true" show-border="false" show-add-remove-footer="true" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" reorder-mode="Animated" class="header__dropdown" style="display: flex; flex-grow: 1;" />
+                <Ludwell.Scene.DropdownSearchField name="search__scene-loader-element" style="width: 40%; justify-content: center; position: absolute; left: 30%; top: 246px;" />
             </ui:VisualElement>
             <ui:VisualElement name="view__settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; display: none;">
                 <ui:Label tabindex="-1" text="settings" display-tooltip-when-elided="true" style="flex-shrink: 1; flex-grow: 1; -unity-text-align: middle-center; font-size: 100px;" />
