@@ -69,7 +69,7 @@ public class FoldoutHeader : Foldout
 
     private void InitUnityCheckMark()
     {
-        var unityCheckMarkElement = this.Q<VisualElement>(UiToolkitNames.UnityCheckmarkName);
+        var unityCheckMarkElement = this.Q<VisualElement>(UiToolkitNames.UnityCheckmark);
         unityCheckMarkElement.style.marginTop = 0;
         unityCheckMarkElement.style.marginBottom = 0;
         unityCheckMarkElement.style.marginLeft = 8;
@@ -78,7 +78,7 @@ public class FoldoutHeader : Foldout
 
     private void InitUnityContent()
     {
-        this.Q<VisualElement>(UiToolkitNames.UnityContentName).style.marginLeft = 0;
+        this.Q<VisualElement>(UiToolkitNames.UnityContent).style.marginLeft = 0;
     }
 
     private void AddHeaderText()
@@ -90,6 +90,6 @@ public class FoldoutHeader : Foldout
             style = { unityTextAlign = TextAnchor.MiddleLeft}
         };
 
-        this.Q(UiToolkitNames.UnityCheckmarkName).parent.Add(_headerTextElement);
+        this.Q(UiToolkitNames.UnityCheckmark).parent.Add(_headerTextElement);
     }
 }

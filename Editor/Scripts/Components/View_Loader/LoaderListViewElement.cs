@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -85,8 +84,6 @@ namespace Ludwell.Scene
         {
             _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
             _reorderableHandle.style.display = DisplayStyle.None;
-            
-            UnityEngine.Debug.LogError("DEBUG REMOVE ALL ELEMENTS THEN ADD A NEW ONE");
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)

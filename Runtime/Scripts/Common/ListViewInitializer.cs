@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -15,6 +16,8 @@ namespace Ludwell.Scene
             listView.makeItem = CreateElement;
             listView.bindItem = OnElementScrollIntoView;
             listView.itemsSource = data;
+
+            OnFirstElementAddedRebuild(listView);
         }
 
         private TVisualElement CreateElement()
@@ -31,6 +34,16 @@ namespace Ludwell.Scene
             elementAsDataType?.CacheData(_data[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
+        }
+
+        private void OnFirstElementAddedRebuild(ListView listView)
+        {
+            var contentContainer = listView.Q(UiToolkitNames.UnityContentContainer);
+            contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                if (_data.Count != 1) return;
+                listView.Rebuild();
+            });
         }
     }
 }
