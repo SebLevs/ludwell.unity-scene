@@ -71,9 +71,16 @@ namespace Ludwell.Scene
 
         public void BindElementToCachedData()
         {
+            CleanupStyle();
             _foldoutElement.RegisterValueChangedCallback(BindFoldoutValue);
             _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
+        }
+
+        private void CleanupStyle() // todo: investigate for the reason why this is needed
+        {
+            var reorderableHandle = parent.parent.Q<VisualElement>("unity-list-view__reorderable-handle");
+            reorderableHandle.style.display = DisplayStyle.None;
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)
