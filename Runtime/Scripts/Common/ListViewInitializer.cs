@@ -24,8 +24,6 @@ namespace Ludwell.Scene
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            if (_data.Count <= index) return;
-
             var elementAsDataType = element as IBindableListViewElement<TListElement>;
 
             _data[index] ??= new();
