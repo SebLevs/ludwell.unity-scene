@@ -21,6 +21,7 @@ namespace Ludwell.Scene
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
             InitLoaderListView(queryFrom, _loaderSceneData);
             InitSearchField(queryFrom);
+            HandleSearchFieldAbsolutePosition(queryFrom);
         }
 
         public void CloseAll()
@@ -53,8 +54,6 @@ namespace Ludwell.Scene
                 HideDropdown();
                 _dropdownSearchField.ClearDropdownData();
             });
-
-            HandleSearchFieldAbsolutePosition(queryFrom);
         }
 
         private void HideDropdown()

@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,9 +32,11 @@ namespace Ludwell.Scene
         private const string LoadButtonName = "button__load";
         private const string HeaderLoadButtonName = "button__load-header";
         private const string OpenButtonName = "button__open";
+        private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
 
         public const string DefaultHeaderTextValue = "Scene Loader Element";
 
+        private VisualElement _reorderableHandle;
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
@@ -77,10 +80,13 @@ namespace Ludwell.Scene
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
         }
 
-        private void CleanupStyle() // todo: investigate for the reason why this is needed
+        // todo: investigate for the reason why this is needed
+        private void CleanupStyle()
         {
-            var reorderableHandle = parent.parent.Q<VisualElement>("unity-list-view__reorderable-handle");
-            reorderableHandle.style.display = DisplayStyle.None;
+            _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
+            _reorderableHandle.style.display = DisplayStyle.None;
+            
+            UnityEngine.Debug.LogError("DEBUG REMOVE ALL ELEMENTS THEN ADD A NEW ONE");
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)
