@@ -13,7 +13,7 @@ namespace Ludwell.Scene
             InitLoaderListView(queryFrom, _loaderSceneData);
             InitSearchField(queryFrom);
         }
-        
+
         private const string ListViewName = "scenes__list";
         private const string ToolbarSearchFieldName = "search__scene-loader-element";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
@@ -35,17 +35,17 @@ namespace Ludwell.Scene
                 item.SetFoldoutValue(false);
             }
         }
-        
+
         private void InitLoaderListView(VisualElement queryFrom, LoaderSceneData data)
         {
             _listView = queryFrom.Q<ListView>(ListViewName);
-            _listViewInitializer = new (_listView, data.Elements);
+            _listViewInitializer = new(_listView, data.Elements);
         }
-        
+
         private void InitSearchField(VisualElement queryFrom)
         {
             _dropdownSearchField = queryFrom.Q<DropdownSearchField>(ToolbarSearchFieldName);
-            _dropdownSearchField.BindToListView(_listView, _listView.ScrollToItem);
+            _dropdownSearchField.InitDropdownElementBehaviour(_listView, _listView.ScrollToItem);
         }
     }
 }

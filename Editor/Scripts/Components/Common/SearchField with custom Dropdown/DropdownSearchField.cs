@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -31,8 +32,10 @@ namespace Ludwell.Scene
             HideDropdown();
         }
 
-        public void BindToListView(ListView listView, Action<int> action)
+        public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
         {
+            var itemsSource = populateFrom.itemsSource;
+
             _searchField.RegisterValueChangedCallback(evt =>
             {
                 _dropdown.Clear();
@@ -43,16 +46,15 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                var itemsSource = listView.itemsSource;
-                for (int i = 0; i < itemsSource.Count; i++)
+                for (var i = 0; i < itemsSource.Count; i++)
                 {
                     var dataName = (itemsSource[i] as LoaderListViewElementData).Name;
                     if (dataName.ToLower().Contains(evt.newValue.ToLower()))
                     {
-                        var i1 = i;
+                        var index = i;
                         _dropdown.Add(
-                            i + ". " + dataName,
-                            () => { listView.ScrollToItem(i1); });
+                            dataName,
+                            () => actionAtIndex.Invoke(index));
                     }
                 }
 
@@ -82,6 +84,11 @@ namespace Ludwell.Scene
         {
             SetBottomBorderRadii(BorderRadius);
             _dropdown.Hide();
+        }
+
+        public List<DropdownElement> GetDropdownElements()
+        {
+            return _dropdown.GetElements();
         }
 
         private void SetBottomBorderRadii(float radius)

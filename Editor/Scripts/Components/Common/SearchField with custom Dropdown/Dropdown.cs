@@ -49,13 +49,13 @@ namespace Ludwell.Scene
 
         public void Clear()
         {
-            // foreach (var datum in _data)
-            // {
-            //     datum.Element.RemoveFromHierarchy();
-            // }
-
             _data.Clear();
             Rebuild();
+        }
+
+        public List<DropdownElement> GetElements()
+        {
+            return this.Query<DropdownElement>().ToList();
         }
     }
 }
