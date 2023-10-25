@@ -11,6 +11,6 @@
     border-right-width: 1px;
     border-top-width: 0;
     border-bottom-width: 1px;
-    height: 200px;
     background-color: rgb(88, 88, 88);
+    max-height: 200px;
 }
