@@ -7,13 +7,6 @@ namespace Ludwell.Scene
     [Serializable]
     public class ScenesListViewController
     {
-        public ScenesListViewController(VisualElement queryFrom)
-        {
-            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
-            InitLoaderListView(queryFrom, _loaderSceneData);
-            InitSearchField(queryFrom);
-        }
-
         private const string ListViewName = "scenes__list";
         private const string ToolbarSearchFieldName = "search__scene-loader-element";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
@@ -22,6 +15,13 @@ namespace Ludwell.Scene
         private ListView _listView;
         private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
+
+        public ScenesListViewController(VisualElement queryFrom)
+        {
+            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
+            InitLoaderListView(queryFrom, _loaderSceneData);
+            InitSearchField(queryFrom);
+        }
 
         public void CloseAll()
         {
@@ -46,6 +46,18 @@ namespace Ludwell.Scene
         {
             _dropdownSearchField = queryFrom.Q<DropdownSearchField>(ToolbarSearchFieldName);
             _dropdownSearchField.InitDropdownElementBehaviour(_listView, _listView.ScrollToItem);
+
+            queryFrom.RegisterCallback<MouseUpEvent>(evt =>
+            {
+                if (evt.currentTarget == _dropdownSearchField) return;
+                HideDropdown();
+                _dropdownSearchField.ClearDropdownData();
+            });
+        }
+
+        private void HideDropdown()
+        {
+            _dropdownSearchField.HideDropdown();
         }
     }
 }

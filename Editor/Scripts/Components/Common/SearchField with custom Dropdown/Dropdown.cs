@@ -26,6 +26,8 @@ namespace Ludwell.Scene
         }
 
         public int Count => itemsSource.Count;
+        
+        public bool IsHidden => style.display == DisplayStyle.None;
 
         public void Show()
         {
@@ -47,7 +49,7 @@ namespace Ludwell.Scene
             Rebuild();
         }
 
-        public void Clear()
+        public void ClearData()
         {
             _data.Clear();
             Rebuild();

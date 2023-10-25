@@ -5,6 +5,11 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
+    /// <summary>
+    /// InitDropdownElementBehaviour() must be called to initialize the dropdown behaviour.<br/>
+    /// 1 - Will automatically populate the dropdown from a Listview.<br/>
+    /// 2 - Will invoke an action when an element is clicked at a specific index.
+    /// </summary>
     public class DropdownSearchField : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<DropdownSearchField, UxmlTraits> { }
@@ -28,8 +33,38 @@ namespace Ludwell.Scene
 
             InitDropdown();
             InitSearchField();
+            InitCallbacks();
 
             HideDropdown();
+        }
+
+        private void InitDropdown()
+        {
+            _dropdown = new();
+            Add(_dropdown);
+        }
+
+        private void InitSearchField()
+        {
+            _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
+        }
+
+        private void InitCallbacks()
+        {
+            OnClickedSearchFieldRefreshDropdown();
+        }
+
+        private void OnClickedSearchFieldRefreshDropdown()
+        {
+            RegisterCallback<MouseUpEvent>(evt =>
+            {
+                if (!_dropdown.IsHidden) return;
+                if (_searchField.value == string.Empty) return;
+
+                var value = _searchField.value;
+                _searchField.value = string.Empty;
+                _searchField.value = value;
+            });
         }
 
         public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
@@ -38,7 +73,7 @@ namespace Ludwell.Scene
 
             _searchField.RegisterValueChangedCallback(evt =>
             {
-                _dropdown.Clear();
+                _dropdown.ClearData();
 
                 if (evt.newValue == string.Empty)
                 {
@@ -63,17 +98,6 @@ namespace Ludwell.Scene
             });
         }
 
-        private void InitDropdown()
-        {
-            _dropdown = new();
-            Add(_dropdown);
-        }
-
-        private void InitSearchField()
-        {
-            _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
-        }
-
         public void ShowDropdown()
         {
             SetBottomBorderRadii(0f);
@@ -89,6 +113,11 @@ namespace Ludwell.Scene
         public List<DropdownElement> GetDropdownElements()
         {
             return _dropdown.GetElements();
+        }
+
+        public void ClearDropdownData()
+        {
+            _dropdown.ClearData();
         }
 
         private void SetBottomBorderRadii(float radius)
