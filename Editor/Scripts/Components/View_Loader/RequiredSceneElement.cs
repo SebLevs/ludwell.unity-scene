@@ -6,13 +6,6 @@ namespace Ludwell.Scene
 {
     public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneDataReference>
     {
-        public RequiredSceneElement()
-        {
-            this.SetHierarchyFromUxml(UxmlPath);
-            this.AddStyleFromUss(UssPath);
-            SetReferences();
-        }
-
         private const string UxmlPath = "Uxml/required-scene-element";
         private const string UssPath = "Uss/required-scene-element";
 
@@ -21,6 +14,13 @@ namespace Ludwell.Scene
         private ObjectField _requiredSceneField;
 
         public SceneDataReference Cache { get; set; }
+
+        public RequiredSceneElement()
+        {
+            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
+            SetReferences();
+        }
 
         private void SetReferences()
         {

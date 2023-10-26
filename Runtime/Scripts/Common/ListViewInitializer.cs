@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -13,9 +12,9 @@ namespace Ludwell.Scene
         public ListViewInitializer(ListView listView, List<TListElement> data)
         {
             _data = data;
+            listView.itemsSource = _data;
             listView.makeItem = CreateElement;
             listView.bindItem = OnElementScrollIntoView;
-            listView.itemsSource = data;
 
             OnFirstElementAddedRebuild(listView);
         }

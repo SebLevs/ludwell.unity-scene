@@ -46,7 +46,11 @@ namespace Ludwell.Scene
         private void InitSearchField(VisualElement queryFrom)
         {
             _dropdownSearchField = queryFrom.Q<DropdownSearchField>(ToolbarSearchFieldName);
-            _dropdownSearchField.InitDropdownElementBehaviour(_listView, _listView.ScrollToItem);
+            _dropdownSearchField.InitDropdownElementBehaviour(_listView, (index) =>
+            {
+                _dropdownSearchField.HideDropdown();
+                _listView.ScrollToItem(index);
+            });
 
             queryFrom.RegisterCallback<MouseUpEvent>(evt =>
             {
