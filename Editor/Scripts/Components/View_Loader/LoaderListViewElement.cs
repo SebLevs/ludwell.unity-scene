@@ -6,18 +6,6 @@ namespace Ludwell.Scene
 {
     public class LoaderListViewElement : VisualElement, IBindableListViewElement<LoaderListViewElementData>
     {
-        public LoaderListViewElement()
-        {
-            this.SetHierarchyFromUxml(UxmlPath);
-            this.AddStyleFromUss(UssPath);
-            SetReferences();
-            InitAndReferenceFoldoutTextField();
-            RegisterStyleEvents();
-
-            RegisterButtonsClickEventCallback();
-            PreventFoldoutToggleFromKeyPress();
-        }
-
         private const string UxmlPath = "Uxml/scene-loader-element";
         private const string UssPath = "Uss/scene-loader-element";
         private const string HeaderContentUxmlPath = "Uxml/scene-loader-element__header-content";
@@ -29,11 +17,12 @@ namespace Ludwell.Scene
         private const string MainSceneName = "main-scene";
         private const string RequiredScenesListViewName = "required-scenes";
         private const string LoadButtonName = "button__load";
-        private const string HeaderLoadButtonName = "button__load-header";
         private const string OpenButtonName = "button__open";
+        private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
 
         public const string DefaultHeaderTextValue = "Scene Loader Element";
 
+        private VisualElement _reorderableHandle;
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
@@ -43,6 +32,18 @@ namespace Ludwell.Scene
 
         public LoaderListViewElementData Cache { get; set; }
 
+        public LoaderListViewElement()
+        {
+            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
+            SetReferences();
+            InitAndReferenceFoldoutTextField();
+            RegisterStyleEvents();
+
+            RegisterButtonsClickEventCallback();
+            PreventFoldoutToggleFromKeyPress();
+        }
+        
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
 
         private void SetReferences()
@@ -71,9 +72,18 @@ namespace Ludwell.Scene
 
         public void BindElementToCachedData()
         {
+            CleanupStyle();
             _foldoutElement.RegisterValueChangedCallback(BindFoldoutValue);
             _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
+        }
+
+        // todo: investigate for the reason why this is needed
+        private void CleanupStyle()
+        {
+            _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
+            _reorderableHandle.style.display = DisplayStyle.None;
+            _listViewRequiredElements.Rebuild();
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)
@@ -103,6 +113,28 @@ namespace Ludwell.Scene
         {
             InitRequiredScenesListView();
             PreventRequiredElementWheelCallbackPropagation();
+        }
+        
+        private void InitRequiredScenesListView()
+        {
+            _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
+        }
+
+        private void PreventRequiredElementWheelCallbackPropagation()
+        {
+            var scroller = _listViewRequiredElements.Q<Scroller>();
+            _listViewRequiredElements.RegisterCallback<WheelEvent>(evt =>
+            {
+                if (scroller.style.display == DisplayStyle.None) return;
+                if (evt.delta.y < 0 && Mathf.Approximately(scroller.value, scroller.lowValue))
+                {
+                    evt.StopPropagation();
+                }
+                else if (evt.delta.y > 0 && Mathf.Approximately(scroller.value, scroller.highValue))
+                {
+                    evt.StopPropagation();
+                }
+            });
         }
 
         private void RegisterButtonsClickEventCallback()
@@ -150,28 +182,6 @@ namespace Ludwell.Scene
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-        }
-
-        private void InitRequiredScenesListView()
-        {
-            _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
-        }
-
-        private void PreventRequiredElementWheelCallbackPropagation()
-        {
-            var scroller = _listViewRequiredElements.Q<Scroller>();
-            _listViewRequiredElements.RegisterCallback<WheelEvent>(evt =>
-            {
-                if (scroller.style.display == DisplayStyle.None) return;
-                if (evt.delta.y < 0 && Mathf.Approximately(scroller.value, scroller.lowValue))
-                {
-                    evt.StopPropagation();
-                }
-                else if (evt.delta.y > 0 && Mathf.Approximately(scroller.value, scroller.highValue))
-                {
-                    evt.StopPropagation();
-                }
-            });
         }
     }
 }

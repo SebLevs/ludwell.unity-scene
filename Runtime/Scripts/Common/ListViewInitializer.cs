@@ -12,9 +12,11 @@ namespace Ludwell.Scene
         public ListViewInitializer(ListView listView, List<TListElement> data)
         {
             _data = data;
+            listView.itemsSource = _data;
             listView.makeItem = CreateElement;
             listView.bindItem = OnElementScrollIntoView;
-            listView.itemsSource = data;
+
+            OnFirstElementAddedRebuild(listView);
         }
 
         private TVisualElement CreateElement()
@@ -31,6 +33,16 @@ namespace Ludwell.Scene
             elementAsDataType?.CacheData(_data[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
+        }
+
+        private void OnFirstElementAddedRebuild(ListView listView)
+        {
+            var contentContainer = listView.Q(UiToolkitNames.UnityContentContainer);
+            contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                if (_data.Count != 1) return;
+                listView.Rebuild();
+            });
         }
     }
 }

@@ -18,5 +18,18 @@ namespace Ludwell.Scene
             var styleSheet = Resources.Load<StyleSheet>(ussPath);
             element.styleSheets.Add(styleSheet);
         }
+        
+        public static VisualElement Root(this VisualElement element)
+        {
+            if (element.parent == null) return element;
+            return element.parent.Root();
+        }
+        
+        public static VisualElement GetParentByName(this VisualElement element, string name)
+        {
+            if (element.parent == null) return null;
+            if (element.parent.name == name) return element.parent;
+            return element.parent.Root();
+        }
     }
 }

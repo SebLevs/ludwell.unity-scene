@@ -107,3 +107,6 @@
     padding-top: 0;
     padding-bottom: 0;
 }
+
+#scenes__list > ScrollView > VisualElement > VisualElement > VisualElement {
+}
