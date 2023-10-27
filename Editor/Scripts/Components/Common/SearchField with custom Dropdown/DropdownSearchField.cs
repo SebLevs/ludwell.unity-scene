@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 namespace Ludwell.Scene
 {
     /// <summary>
-    /// InitDropdownElementBehaviour() must be called to initialize the dropdown behaviour.<br/>
-    /// 1 - Will automatically populate the dropdown from a Listview.<br/>
-    /// 2 - Will invoke an action when an element is clicked at a specific index.
+    /// InitDropdownElementBehaviour() must be called to initialize the dropdown elements' action.<br/>
+    /// 1 - Will automatically populate the dropdown from the specified Listview elements.<br/>
+    /// 2 - Will invoke the action of the clicked element on mouse up.
     /// </summary>
     public class DropdownSearchField : VisualElement
     {
@@ -20,6 +20,12 @@ namespace Ludwell.Scene
         private const string UssPath = "Uss/search-field-dropdown";
 
         private const string SearchFieldName = "toolbar-search-field";
+
+        private const string UnitySearchName = "unity-search";
+        private const string UnityTextInputName = "unity-text-input";
+        private const string UnityHighButtonName = "unity-high-button";
+        private const string UnityLowButtonName = "unity-low-button";
+        private const string UnityDragContainerName = "unity-drag-container";
 
         private ToolbarSearchField _searchField;
         private Dropdown _dropdown;
@@ -33,7 +39,7 @@ namespace Ludwell.Scene
 
             InitDropdown();
             InitSearchField();
-            InitCallbacks();
+            OnClickedSearchFieldRefreshDropdown();
 
             HideDropdown();
         }
@@ -49,11 +55,6 @@ namespace Ludwell.Scene
             _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
         }
 
-        private void InitCallbacks()
-        {
-            OnClickedSearchFieldRefreshDropdown();
-        }
-
         private void OnClickedSearchFieldRefreshDropdown()
         {
             RegisterCallback<MouseUpEvent>(evt =>
@@ -64,6 +65,42 @@ namespace Ludwell.Scene
                 var value = _searchField.value;
                 _searchField.value = string.Empty;
                 _searchField.value = value;
+            });
+        }
+
+        // todo: remove parameter when z-index is implemented to instead use .Root() & place in constructor instead
+        public void InitMouseEvents(VisualElement registerFrom)
+        {
+            OnMouseUpHideDropdown(registerFrom);
+            OnEventCaptureHideDropdown(registerFrom);
+        }
+
+        private void OnMouseUpHideDropdown(VisualElement registerFrom)
+        {
+            registerFrom.RegisterCallback<MouseUpEvent>(evt =>
+            {
+                if (_dropdown.IsHidden) return;
+
+                HideDropdown();
+            });
+        }
+
+        // todo: investigate better solution to replace this hack & remove line 124 "if (itemsSource[i] == null) break;"
+        // note: issue stems from buttons consuming events, so the OnMouseUpHideDropdown is never called (signals instead?)
+        private void OnEventCaptureHideDropdown(VisualElement registerFrom)
+        {
+            registerFrom.RegisterCallback<MouseCaptureEvent>(evt =>
+            {
+                if (_dropdown.IsHidden) return;
+
+                if (evt.target == _searchField.Q(UnitySearchName)) return;
+                if (evt.target == _searchField.Q(UnityTextInputName).ElementAt(0)) return;
+                if (evt.target == _dropdown.Q(UnityDragContainerName)) return;
+                if (evt.target == _dropdown.Q(UnityLowButtonName)) return;
+                if (evt.target == _dropdown.Q(UnityHighButtonName)) return;
+
+                HideDropdown();
+                _dropdown.ClearData();
             });
         }
 
@@ -83,6 +120,7 @@ namespace Ludwell.Scene
 
                 for (var i = 0; i < itemsSource.Count; i++)
                 {
+                    if (itemsSource[i] == null) break;
                     var dataName = (itemsSource[i] as LoaderListViewElementData).Name;
                     if (dataName.ToLower().Contains(evt.newValue.ToLower()))
                     {
