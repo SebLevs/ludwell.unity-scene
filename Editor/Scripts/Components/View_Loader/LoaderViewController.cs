@@ -6,7 +6,7 @@ namespace Ludwell.Scene
 {
     public class LoaderViewController
     {
-        public static readonly string Name = "view__loader"; 
+        public const string Name = "view__loader"; 
         private const string MainMenuButtonName = "button__main-menu";
         private const string CloseAllButtonName = "button__close-all";
 

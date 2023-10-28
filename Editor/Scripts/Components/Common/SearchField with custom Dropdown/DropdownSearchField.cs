@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -9,24 +8,16 @@ namespace Ludwell.Scene
     /// <summary>
     /// InitDropdownElementBehaviour() must be called to initialize the dropdown elements' action.<br/>
     /// 1 - Will automatically populate the dropdown from the specified Listview elements.<br/>
-    /// 2 - Will invoke the action of the clicked element on mouse up.
+    /// 2 - Will invoke the specified action on mouse up of the dropdown element.
     /// </summary>
     public class DropdownSearchField : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<DropdownSearchField, UxmlTraits> { }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-
         private const string UxmlPath = "Uxml/search-field-dropdown";
         private const string UssPath = "Uss/search-field-dropdown";
 
         private const string SearchFieldName = "toolbar-search-field";
-
-        private const string UnitySearchName = "unity-search";
-        private const string UnityTextInputName = "unity-text-input";
-        private const string UnityHighButtonName = "unity-high-button";
-        private const string UnityLowButtonName = "unity-low-button";
-        private const string UnityDragContainerName = "unity-drag-container";
 
         private ToolbarSearchField _searchField;
         private Dropdown _dropdown;
@@ -44,7 +35,7 @@ namespace Ludwell.Scene
 
             HideDropdown();
         }
-        
+
         public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
         {
             var itemsSource = populateFrom.itemsSource;
@@ -79,13 +70,13 @@ namespace Ludwell.Scene
 
         public void ShowDropdown()
         {
-            SetBottomBorderRadii(0f);
+            SetBottomBorderRadius(0f);
             _dropdown.Show();
         }
 
         public void HideDropdown()
         {
-            SetBottomBorderRadii(BorderRadius);
+            SetBottomBorderRadius(BorderRadius);
             _dropdown.Hide();
         }
 
@@ -140,8 +131,8 @@ namespace Ludwell.Scene
             });
         }
 
-        // todo: investigate better solution to replace this hack & remove line 124 "if (itemsSource[i] == null) break;"
-        // note: issue stems from buttons consuming events, so the OnMouseUpHideDropdown is never called (signals instead?)
+        // todo: investigate better solution & remove line ~61 "if (itemsSource[i] == null) break;"
+        // note: issue stems from buttons consuming events, so the OnMouseUpHideDropdown is never called
         private void OnEventCaptureHideDropdown(VisualElement registerFrom)
         {
             registerFrom.RegisterCallback<MouseCaptureEvent>(evt =>
@@ -150,27 +141,27 @@ namespace Ludwell.Scene
 
                 if (IsTargetFromSelf(evt)) return;
                 if (IsTargetFromDropdown(evt)) return;
-            
+
                 HideDropdown();
             });
         }
-        
+
         private bool IsTargetFromSelf(MouseCaptureEvent evt)
         {
-            return evt.target == _searchField.Q(UnitySearchName) ||
-                   evt.target == _searchField.Q(UnityTextInputName).ElementAt(0);
+            return evt.target == _searchField.Q(UiToolkitNames.UnitySearch) ||
+                   evt.target == _searchField.Q(UiToolkitNames.UnityTextInput).ElementAt(0) ||
+                   evt.target == _searchField.Q(UiToolkitNames.UnityTextInput).ElementAt(0);
         }
-        
+
         private bool IsTargetFromDropdown(MouseCaptureEvent evt)
         {
             return (evt.target as VisualElement)?.name == DropdownElement.Name ||
-                   evt.target == _searchField.Q(UnityTextInputName).ElementAt(0) ||
-                   evt.target == _dropdown.Q(UnityDragContainerName) ||
-                   evt.target == _dropdown.Q(UnityLowButtonName) ||
-                   evt.target == _dropdown.Q(UnityHighButtonName);
+                   evt.target == _dropdown.Q(UiToolkitNames.UnityDragContainer) ||
+                   evt.target == _dropdown.Q(UiToolkitNames.UnityLowButton) ||
+                   evt.target == _dropdown.Q(UiToolkitNames.UnityHighButton);
         }
 
-        private void SetBottomBorderRadii(float radius)
+        private void SetBottomBorderRadius(float radius)
         {
             _searchField.style.borderBottomLeftRadius = radius;
             _searchField.style.borderBottomRightRadius = radius;

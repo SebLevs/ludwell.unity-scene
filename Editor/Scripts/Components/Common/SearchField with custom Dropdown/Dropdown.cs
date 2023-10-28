@@ -8,13 +8,11 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<Dropdown, UxmlTraits> { }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits { }
-
         private const string DropdownListViewName = "dropdown-list-view";
         private const string UssPath = "Uss/" + DropdownListViewName;
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
-        private readonly List<DropdownData> _data = new();
+        private List<DropdownData> _data = new();
 
         public Dropdown()
         {

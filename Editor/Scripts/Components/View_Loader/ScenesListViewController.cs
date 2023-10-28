@@ -58,22 +58,22 @@ namespace Ludwell.Scene
         // todo: delete this atrocity and refactor absolute styling when Unity implements z-index or a better idea appears
         private const string MainMenuFoldoutName = "foldout-header__main-menu";
         private const string CoreScenesFoldoutName = "foldout-header__core";
-        private const string UnityContentName = "unity-content";
-        
+
         private float _mainMenuFoldoutContentHeight;
         private float _coreScenesFoldoutContentHeight;
 
         private void HandleSearchFieldAbsolutePosition(VisualElement queryFrom)
         {
+            var unityContent = UiToolkitNames.UnityContent;
             var mainMenuFoldout = queryFrom.Q<FoldoutHeader>(MainMenuFoldoutName);
-            
+
             mainMenuFoldout.RegisterValueChangedCallback(evt =>
             {
                 var currentTopValue = _dropdownSearchField.resolvedStyle.top;
-                
+
                 if (!evt.newValue)
                 {
-                    _mainMenuFoldoutContentHeight = mainMenuFoldout.Q<VisualElement>(UnityContentName).resolvedStyle.height;
+                    _mainMenuFoldoutContentHeight = mainMenuFoldout.Q<VisualElement>(unityContent).resolvedStyle.height;
                     var newValue = currentTopValue - _mainMenuFoldoutContentHeight;
                     _dropdownSearchField.style.top = newValue;
                 }
@@ -91,7 +91,8 @@ namespace Ludwell.Scene
 
                 if (!evt.newValue)
                 {
-                    _coreScenesFoldoutContentHeight = coreScenesFoldout.Q<VisualElement>(UnityContentName).resolvedStyle.height;
+                    _coreScenesFoldoutContentHeight =
+                        coreScenesFoldout.Q<VisualElement>(unityContent).resolvedStyle.height;
                     var newValue = currentTopValue - _coreScenesFoldoutContentHeight;
                     _dropdownSearchField.style.top = newValue;
                 }
