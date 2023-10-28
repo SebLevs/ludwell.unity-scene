@@ -14,7 +14,7 @@ namespace Ludwell.Scene
         private const string UssPath = "Uss/" + DropdownListViewName;
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
-        public List<DropdownData> _data = new();
+        private readonly List<DropdownData> _data = new();
 
         public Dropdown()
         {
