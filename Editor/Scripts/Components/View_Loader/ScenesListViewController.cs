@@ -52,20 +52,10 @@ namespace Ludwell.Scene
                 _listView.ScrollToItem(index);
             });
 
-            queryFrom.RegisterCallback<MouseUpEvent>(evt =>
-            {
-                if (evt.currentTarget == _dropdownSearchField) return;
-                HideDropdown();
-                _dropdownSearchField.ClearDropdownData();
-            });
+            _dropdownSearchField.InitMouseEvents(queryFrom.Root());
         }
 
-        private void HideDropdown()
-        {
-            _dropdownSearchField.HideDropdown();
-        }
-
-        // todo: delete this atrocity and refactor absolute bullshit when Unity implements z-index or a better idea appears
+        // todo: delete this atrocity and refactor absolute styling when Unity implements z-index or a better idea appears
         private const string MainMenuFoldoutName = "foldout-header__main-menu";
         private const string CoreScenesFoldoutName = "foldout-header__core";
         private const string UnityContentName = "unity-content";

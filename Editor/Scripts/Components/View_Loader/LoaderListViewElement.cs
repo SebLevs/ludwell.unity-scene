@@ -78,7 +78,6 @@ namespace Ludwell.Scene
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
         }
 
-        // todo: investigate for the reason why this is needed
         private void CleanupStyle()
         {
             _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
