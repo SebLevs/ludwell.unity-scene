@@ -150,9 +150,8 @@ namespace Ludwell.Scene
 
                 if (IsTargetFromSelf(evt)) return;
                 if (IsTargetFromDropdown(evt)) return;
-
+            
                 HideDropdown();
-                _dropdown.ClearData();
             });
         }
         
@@ -164,7 +163,8 @@ namespace Ludwell.Scene
         
         private bool IsTargetFromDropdown(MouseCaptureEvent evt)
         {
-            return evt.target == _searchField.Q(UnityTextInputName).ElementAt(0) ||
+            return (evt.target as VisualElement)?.name == DropdownElement.Name ||
+                   evt.target == _searchField.Q(UnityTextInputName).ElementAt(0) ||
                    evt.target == _dropdown.Q(UnityDragContainerName) ||
                    evt.target == _dropdown.Q(UnityLowButtonName) ||
                    evt.target == _dropdown.Q(UnityHighButtonName);
