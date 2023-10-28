@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -43,67 +44,7 @@ namespace Ludwell.Scene
 
             HideDropdown();
         }
-
-        private void InitDropdown()
-        {
-            _dropdown = new();
-            Add(_dropdown);
-        }
-
-        private void InitSearchField()
-        {
-            _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
-        }
-
-        private void OnClickedSearchFieldRefreshDropdown()
-        {
-            RegisterCallback<MouseUpEvent>(evt =>
-            {
-                if (!_dropdown.IsHidden) return;
-                if (_searchField.value == string.Empty) return;
-
-                var value = _searchField.value;
-                _searchField.value = string.Empty;
-                _searchField.value = value;
-            });
-        }
-
-        // todo: remove parameter when z-index is implemented to instead use .Root() & place in constructor instead
-        public void InitMouseEvents(VisualElement registerFrom)
-        {
-            OnMouseUpHideDropdown(registerFrom);
-            OnEventCaptureHideDropdown(registerFrom);
-        }
-
-        private void OnMouseUpHideDropdown(VisualElement registerFrom)
-        {
-            registerFrom.RegisterCallback<MouseUpEvent>(evt =>
-            {
-                if (_dropdown.IsHidden) return;
-
-                HideDropdown();
-            });
-        }
-
-        // todo: investigate better solution to replace this hack & remove line 124 "if (itemsSource[i] == null) break;"
-        // note: issue stems from buttons consuming events, so the OnMouseUpHideDropdown is never called (signals instead?)
-        private void OnEventCaptureHideDropdown(VisualElement registerFrom)
-        {
-            registerFrom.RegisterCallback<MouseCaptureEvent>(evt =>
-            {
-                if (_dropdown.IsHidden) return;
-
-                if (evt.target == _searchField.Q(UnitySearchName)) return;
-                if (evt.target == _searchField.Q(UnityTextInputName).ElementAt(0)) return;
-                if (evt.target == _dropdown.Q(UnityDragContainerName)) return;
-                if (evt.target == _dropdown.Q(UnityLowButtonName)) return;
-                if (evt.target == _dropdown.Q(UnityHighButtonName)) return;
-
-                HideDropdown();
-                _dropdown.ClearData();
-            });
-        }
-
+        
         public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
         {
             var itemsSource = populateFrom.itemsSource;
@@ -156,6 +97,77 @@ namespace Ludwell.Scene
         public void ClearDropdownData()
         {
             _dropdown.ClearData();
+        }
+
+        private void InitDropdown()
+        {
+            _dropdown = new();
+            Add(_dropdown);
+        }
+
+        private void InitSearchField()
+        {
+            _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
+        }
+
+        private void OnClickedSearchFieldRefreshDropdown()
+        {
+            RegisterCallback<MouseUpEvent>(evt =>
+            {
+                if (!_dropdown.IsHidden) return;
+                if (_searchField.value == string.Empty) return;
+
+                var value = _searchField.value;
+                _searchField.value = string.Empty;
+                _searchField.value = value;
+            });
+        }
+
+        // todo: remove parameter when z-index is implemented to instead use .Root() & place in constructor instead
+        public void InitMouseEvents(VisualElement registerFrom)
+        {
+            OnMouseUpHideDropdown(registerFrom);
+            OnEventCaptureHideDropdown(registerFrom);
+        }
+
+        private void OnMouseUpHideDropdown(VisualElement registerFrom)
+        {
+            registerFrom.RegisterCallback<MouseUpEvent>(evt =>
+            {
+                if (_dropdown.IsHidden) return;
+
+                HideDropdown();
+            });
+        }
+
+        // todo: investigate better solution to replace this hack & remove line 124 "if (itemsSource[i] == null) break;"
+        // note: issue stems from buttons consuming events, so the OnMouseUpHideDropdown is never called (signals instead?)
+        private void OnEventCaptureHideDropdown(VisualElement registerFrom)
+        {
+            registerFrom.RegisterCallback<MouseCaptureEvent>(evt =>
+            {
+                if (_dropdown.IsHidden) return;
+
+                if (IsTargetFromSelf(evt)) return;
+                if (IsTargetFromDropdown(evt)) return;
+
+                HideDropdown();
+                _dropdown.ClearData();
+            });
+        }
+        
+        private bool IsTargetFromSelf(MouseCaptureEvent evt)
+        {
+            return evt.target == _searchField.Q(UnitySearchName) ||
+                   evt.target == _searchField.Q(UnityTextInputName).ElementAt(0);
+        }
+        
+        private bool IsTargetFromDropdown(MouseCaptureEvent evt)
+        {
+            return evt.target == _searchField.Q(UnityTextInputName).ElementAt(0) ||
+                   evt.target == _dropdown.Q(UnityDragContainerName) ||
+                   evt.target == _dropdown.Q(UnityLowButtonName) ||
+                   evt.target == _dropdown.Q(UnityHighButtonName);
         }
 
         private void SetBottomBorderRadii(float radius)
