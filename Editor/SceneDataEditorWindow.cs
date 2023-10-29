@@ -25,7 +25,7 @@ namespace Ludwell.Scene
         
         private void Init()
         {
-            _tabController = new TabController(rootVisualElement);
+            _tabController = rootVisualElement.Q<TabController>();
             _viewLoaderController = rootVisualElement.Q<ViewLoaderController>();
         }
     }

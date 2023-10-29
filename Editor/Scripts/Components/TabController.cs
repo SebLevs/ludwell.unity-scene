@@ -1,10 +1,16 @@
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using UnityEditor.UIElements;
+using UnityEngine;
 
 namespace Ludwell.Scene
 {
-    public class TabController
+    public class TabController: VisualElement
     {
+        public new class UxmlFactory : UxmlFactory<TabController, UxmlTraits> { }
+        
+        private const string UxmlPath = "Uxml/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
+        private const string UssPath = "Uss/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
+        
         private VisualElement _currentElement;
         private const string TabManagerName = "tab__manager";
         private const string ViewManagerName = "view__manager";
@@ -12,38 +18,51 @@ namespace Ludwell.Scene
         private const string ViewLoaderName = "view__loader";
         private const string TabSettingsName = "tab__settings";
         private const string ViewSettingsName = "view__settings";
-        
-        public TabController(VisualElement queryFrom)
+
+        public TabController()
         {
-            InitManager(queryFrom);
-            InitLoader(queryFrom);
-            InitSettings(queryFrom);
+            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
+            
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                var root = this.Root();
+                BindTabToManagerView(root);
+                var view = BindTabToLoaderView(root);
+                BindTabToSettingsView(root);
+
+                if (view == null) return;
+                SetStartingView(view);
+            });
         }
 
-        private void InitManager(VisualElement queryFrom)
+        private VisualElement BindTabToManagerView(VisualElement queryFrom)
         {
             var view = queryFrom.Q<VisualElement>(ViewManagerName);
-            // todo: set up load view class
-            var tab = queryFrom.Q<ToolbarButton>(TabManagerName);
-            tab.RegisterCallback<ClickEvent>(_ => { SwitchView(view); });
+            var tab = this.Q<ToolbarButton>(TabManagerName);
+            tab.clicked += () => { SwitchView(view); };
+            return view;
         }
         
-        private void InitLoader(VisualElement queryFrom)
+        private VisualElement BindTabToLoaderView(VisualElement queryFrom)
         {
             var view = queryFrom.Q<VisualElement>(ViewLoaderName);
-            // todo: set up load view class
-            var tab = queryFrom.Q<ToolbarButton>(TabLoaderName);
-            tab.RegisterCallback<ClickEvent>(_ => { SwitchView(view); });
-            
-            SwitchView(view);
+            var tab = this.Q<ToolbarButton>(TabLoaderName);
+            tab.clicked += () => { SwitchView(view); };
+            return view;
         }
         
-        private void InitSettings(VisualElement queryFrom)
+        private VisualElement BindTabToSettingsView(VisualElement queryFrom)
         {
             var view = queryFrom.Q<VisualElement>(ViewSettingsName);
-            // todo: set up settings view class
-            var tab = queryFrom.Q<ToolbarButton>(TabSettingsName);
-            tab.RegisterCallback<ClickEvent>(_ => { SwitchView(view); });
+            var tab = this.Q<ToolbarButton>(TabSettingsName);
+            tab.clicked += () => { SwitchView(view); };
+            return view;
+        }
+
+        private void SetStartingView(VisualElement view)
+        {
+            SwitchView(view);
         }
 
         private void SwitchView(VisualElement view)
@@ -53,12 +72,10 @@ namespace Ludwell.Scene
             if (_currentElement != null)
             {
                 _currentElement.style.display = DisplayStyle.None;
-                // todo: cleanup old view class here
             }
 
             _currentElement = view;
             _currentElement.style.display = DisplayStyle.Flex;
-            // todo: set up new view class here
         }
     }
 }

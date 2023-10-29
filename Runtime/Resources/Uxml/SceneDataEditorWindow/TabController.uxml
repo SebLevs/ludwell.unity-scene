@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/SceneDataEditorWindow/TabController.uss?fileID=7433441132597879392&amp;guid=d2ce06e267b8aff45803b0438d65a729&amp;type=3#TabController" />
+    <ui:VisualElement name="tabs" style="flex-grow: 1; background-color: rgb(40, 40, 40); flex-basis: 22.5px; flex-direction: row; border-left-color: rgba(26, 26, 26, 0); border-right-color: rgba(26, 26, 26, 0); border-top-color: rgba(26, 26, 26, 0); border-bottom-color: rgba(26, 26, 26, 0); height: 22px;">
+        <uie:ToolbarButton text="Manager" display-tooltip-when-elided="true" name="tab__manager" focusable="false" class="tab" />
+        <uie:ToolbarButton text="Loader" display-tooltip-when-elided="true" name="tab__loader" focusable="false" class="tab" style="border-left-width: 1px; border-right-width: 1px;" />
+        <uie:ToolbarButton text="Settings" display-tooltip-when-elided="true" name="tab__settings" focusable="false" class="tab" />
+    </ui:VisualElement>
+</ui:UXML>
