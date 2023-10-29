@@ -1,14 +1,16 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    [Serializable]
-    public class ScenesListViewController
+    public class SceneLoaderListController: VisualElement
     {
+        public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits> { }
+
+        private const string UxmlPath = "Uxml/scene-loader-list";
+        private const string UssPath = "Uss/scene-loader-list";
+        
         private const string ListViewName = "scenes__list";
-        private const string ToolbarSearchFieldName = "search__scene-loader-element";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
         private LoaderSceneData _loaderSceneData;
@@ -16,12 +18,15 @@ namespace Ludwell.Scene
         private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
 
-        public ScenesListViewController(VisualElement queryFrom)
+        public SceneLoaderListController()
         {
+            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
+            
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
-            InitLoaderListView(queryFrom, _loaderSceneData);
-            InitSearchField(queryFrom);
-            HandleSearchFieldAbsolutePosition(queryFrom);
+            InitLoaderListView();
+            InitSearchField();
+            HandleSearchFieldAbsolutePosition();
         }
 
         public void CloseAll()
@@ -37,22 +42,22 @@ namespace Ludwell.Scene
             }
         }
 
-        private void InitLoaderListView(VisualElement queryFrom, LoaderSceneData data)
+        private void InitLoaderListView()
         {
-            _listView = queryFrom.Q<ListView>(ListViewName);
-            _listViewInitializer = new(_listView, data.Elements);
+            _listView = this.Q<ListView>(ListViewName);
+            _listViewInitializer = new(_listView, _loaderSceneData.Elements);
         }
 
-        private void InitSearchField(VisualElement queryFrom)
+        private void InitSearchField()
         {
-            _dropdownSearchField = queryFrom.Q<DropdownSearchField>(ToolbarSearchFieldName);
+            _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.InitDropdownElementBehaviour(_listView, (index) =>
             {
                 _dropdownSearchField.HideDropdown();
                 _listView.ScrollToItem(index);
             });
 
-            _dropdownSearchField.InitMouseEvents(queryFrom.Root());
+            _dropdownSearchField.InitMouseEvents(this.Root());
         }
 
         // todo: delete this atrocity and refactor absolute styling when Unity implements z-index or a better idea appears
@@ -62,10 +67,10 @@ namespace Ludwell.Scene
         private float _mainMenuFoldoutContentHeight;
         private float _coreScenesFoldoutContentHeight;
 
-        private void HandleSearchFieldAbsolutePosition(VisualElement queryFrom)
+        private void HandleSearchFieldAbsolutePosition()
         {
             var unityContent = UiToolkitNames.UnityContent;
-            var mainMenuFoldout = queryFrom.Q<FoldoutHeader>(MainMenuFoldoutName);
+            var mainMenuFoldout = this.Root().Q<FoldoutHeader>(MainMenuFoldoutName);
 
             mainMenuFoldout.RegisterValueChangedCallback(evt =>
             {
@@ -84,7 +89,7 @@ namespace Ludwell.Scene
                 }
             });
 
-            var coreScenesFoldout = queryFrom.Q<FoldoutHeader>(CoreScenesFoldoutName);
+            var coreScenesFoldout = this.Root().Q<FoldoutHeader>(CoreScenesFoldoutName);
             coreScenesFoldout.RegisterValueChangedCallback(evt =>
             {
                 var currentTopValue = _dropdownSearchField.resolvedStyle.top;
