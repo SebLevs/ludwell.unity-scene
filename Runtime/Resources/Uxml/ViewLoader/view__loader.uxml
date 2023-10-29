@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Template name="button__play" src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uxml/button__play-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__play-load" />
+    <ui:Template name="button__play" src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uxml/Common/button__play-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__play-load" />
     <ui:Template name="core-scene" src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uxml/core-scene.uxml?fileID=9197481963319205126&amp;guid=5f9b25b9ce92eb54596cf40af535b054&amp;type=3#core-scene" />
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/view__loader.uss?fileID=7433441132597879392&amp;guid=6d52c786db684094a8788aa48687b6b4&amp;type=3#view__loader" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/ViewLoader/view__loader.uss?fileID=7433441132597879392&amp;guid=6d52c786db684094a8788aa48687b6b4&amp;type=3#view__loader" />
     <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; display: flex;">
         <FoldoutHeader color="#252525FF" name="foldout-header__main-menu" text="Main menu &amp; Core scenes" Header-color="#252525FF" Header-text="aaa" Header-Text="aaaa" Header-Color="#FF0000FF" header-text="sdssdf" header-color="#FF0000FF" focusable="false" headerText="Main menu" headerColor="#252525FF" style="flex-direction: column; -unity-text-align: middle-left; flex-shrink: 0; border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80); border-top-width: 1px;">
             <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 4px; margin-bottom: 4px; align-self: stretch; align-items: center;">
@@ -15,6 +15,6 @@
                 <AttributeOverrides element-name="scene-selection" label="Loading scene" />
             </ui:Instance>
         </FoldoutHeader>
-        <Ludwell.Scene.SceneLoaderListController style="flex-grow: 1;" />
+        <Ludwell.Scene.SceneLoaderListController name="scene-loader-list-controller" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>
