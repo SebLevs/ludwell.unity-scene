@@ -11,7 +11,6 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/scene-loader-list";
         private const string UssPath = "Uss/scene-loader-list";
         
-        private const string CloseAllButtonName = "button__close-all";
         private const string ListViewName = "scenes__list";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
         
@@ -34,12 +33,11 @@ namespace Ludwell.Scene
 
         private void InitButtonCloseAll()
         {
-            this.Q<ToolbarButton>(CloseAllButtonName).clicked += CloseAll;
+            this.Q<ToolbarButton>().clicked += CloseAll;
         }
 
         private void CloseAll()
         {
-            Debug.LogError("cakked");
             foreach (var element in _loaderSceneData.Elements)
             {
                 element.IsOpen = false;
