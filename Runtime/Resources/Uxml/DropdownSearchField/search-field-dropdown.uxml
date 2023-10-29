@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/search-field-dropdown.uss?fileID=7433441132597879392&amp;guid=35cca6b5f33d478489bdad7c654c9780&amp;type=3#search-field-dropdown" />
-    <ui:VisualElement name="search-field" style="background-color: rgba(0, 0, 0, 0); align-self: center; justify-content: center; align-items: center;">
-        <uie:ToolbarSearchField focusable="true" name="toolbar-search-field" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 1; width: auto; flex-shrink: 1;" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/DropdownSearchField/search-field-dropdown.uss?fileID=7433441132597879392&amp;guid=35cca6b5f33d478489bdad7c654c9780&amp;type=3#search-field-dropdown" />
+    <ui:VisualElement name="search-field" class="search-field">
+        <uie:ToolbarSearchField focusable="true" name="toolbar-search-field" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 1; width: auto; flex-shrink: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
     </ui:VisualElement>
 </ui:UXML>

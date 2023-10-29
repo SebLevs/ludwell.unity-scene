@@ -1,29 +1,33 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class Dropdown : ListView
+    public class Dropdown : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<Dropdown, UxmlTraits> { }
 
         private const string DropdownListViewName = "dropdown-list-view";
+        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + DropdownListViewName;
         private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + DropdownListViewName;
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
-        private List<DropdownData> _data = new();
+        private readonly List<DropdownData> _data = new();
+
+        private readonly ListView _listView;
 
         public Dropdown()
         {
-            virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+            this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
-            AddToClassList(DropdownListViewName);
 
-            _listViewInitializer = new(this, _data);
+            _listView = this.Q<ListView>();
+            _listViewInitializer = new(_listView, _data);
         }
 
-        public int Count => itemsSource.Count;
+        public int Count => _listView.itemsSource.Count;
         
         public bool IsHidden => style.display == DisplayStyle.None;
 
@@ -44,18 +48,25 @@ namespace Ludwell.Scene
                 Name = actionName,
                 Action = action
             });
-            Rebuild();
+            _listView.Rebuild();
         }
 
         public void ClearData()
         {
             _data.Clear();
-            Rebuild();
+            _listView.Rebuild();
         }
 
         public List<DropdownElement> GetElements()
         {
             return this.Query<DropdownElement>().ToList();
+        }
+        
+        public void PlaceUnder(VisualElement sibling)
+        {
+            var absolutePosition = sibling.LocalToWorld(Vector2.zero);
+            style.left = absolutePosition.x;
+            style.top = absolutePosition.y + sibling.resolvedStyle.height;
         }
     }
 }

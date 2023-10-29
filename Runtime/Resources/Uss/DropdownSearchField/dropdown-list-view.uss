@@ -1,8 +1,8 @@
-.dropdown-list-view {
-    border-left-color: rgb(33, 33, 33);
-    border-right-color: rgb(33, 33, 33);
-    border-top-color: rgb(33, 33, 33);
-    border-bottom-color: rgb(33, 33, 33);
+#dropdown {
+    border-left-color: rgb(95, 95, 95);
+    border-right-color: rgb(95, 95, 95);
+    border-top-color: rgb(95, 95, 95);
+    border-bottom-color: rgb(95, 95, 95);
     border-bottom-left-radius: 3px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -13,4 +13,7 @@
     border-bottom-width: 1px;
     background-color: rgb(88, 88, 88);
     max-height: 200px;
+    position: absolute;
+    width: 40%;
+    display: flex;
 }

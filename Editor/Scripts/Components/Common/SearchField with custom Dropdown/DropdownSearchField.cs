@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
     /// <summary>
     /// InitDropdownElementBehaviour() must be called to initialize the dropdown elements' action.<br/>
-    /// 1 - Will automatically populate the dropdown from the specified Listview elements.<br/>
-    /// 2 - Will invoke the specified action on mouse up of the dropdown element.
+    /// <list type="number">
+    /// <item>The dropdown will be populated from the specified Listview elements.</item>
+    /// <item>The specified action will be invoked on mouse up of the dropdown element.</item>
+    /// </list>
     /// </summary>
     public class DropdownSearchField : VisualElement
     {
@@ -29,15 +32,15 @@ namespace Ludwell.Scene
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
-            InitDropdown();
+            InitDropDown();
             InitSearchField();
             OnClickedSearchFieldRefreshDropdown();
-
-            HideDropdown();
         }
 
         public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
         {
+            InitPlaceDropdown();
+
             var itemsSource = populateFrom.itemsSource;
 
             _searchField.RegisterValueChangedCallback(evt =>
@@ -71,6 +74,7 @@ namespace Ludwell.Scene
         public void ShowDropdown()
         {
             SetBottomBorderRadius(0f);
+            _dropdown.PlaceUnder(this);
             _dropdown.Show();
         }
 
@@ -90,12 +94,6 @@ namespace Ludwell.Scene
             _dropdown.ClearData();
         }
 
-        private void InitDropdown()
-        {
-            _dropdown = new();
-            Add(_dropdown);
-        }
-
         private void InitSearchField()
         {
             _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
@@ -111,6 +109,25 @@ namespace Ludwell.Scene
                 var value = _searchField.value;
                 _searchField.value = string.Empty;
                 _searchField.value = value;
+            });
+        }
+
+        private void InitDropDown()
+        {
+            RegisterCallback<AttachToPanelEvent>(evt =>
+            {
+                _dropdown = new();
+                _dropdown.Hide();
+                this.Root().Add(_dropdown);
+                // this.parent.parent.parent.parent.Add(_dropdown);
+            });
+        }
+        
+        private void InitPlaceDropdown()
+        {
+            this.Root().RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                _dropdown.PlaceUnder(this);
             });
         }
 

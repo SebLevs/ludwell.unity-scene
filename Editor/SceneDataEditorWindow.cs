@@ -22,6 +22,7 @@ namespace Ludwell.Scene
             visualTreeAsset.CloneTree(rootVisualElement);
             Init();
         }
+        
         private void Init()
         {
             _tabController = new TabController(rootVisualElement);
