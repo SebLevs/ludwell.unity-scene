@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-element.uss?fileID=7433441132597879392&amp;guid=bd93788d9e440a24cb492b378a5f6ae4&amp;type=3#scene-loader-element" />
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/scene-loader-element__header-content.uss?fileID=7433441132597879392&amp;guid=4bfd3b37c0e4b8740bb5e59e00ba37c7&amp;type=3#scene-loader-element__header-content" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/ViewLoader/scene-loader-element.uss?fileID=7433441132597879392&amp;guid=bd93788d9e440a24cb492b378a5f6ae4&amp;type=3#scene-loader-element" />
     <ui:VisualElement name="root" style="flex-grow: 1;">
         <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgba(71, 71, 71, 0); display: flex;" />
         <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">

@@ -114,18 +114,17 @@ namespace Ludwell.Scene
 
         private void InitDropDown()
         {
-            RegisterCallback<AttachToPanelEvent>(evt =>
+            RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                _dropdown = new();
-                _dropdown.Hide();
+                _dropdown = new Dropdown();
                 this.Root().Add(_dropdown);
-                // this.parent.parent.parent.parent.Add(_dropdown);
+                _dropdown.Hide();
             });
         }
         
         private void InitPlaceDropdown()
         {
-            this.Root().RegisterCallback<GeometryChangedEvent>(evt =>
+            this.Root().RegisterCallback<GeometryChangedEvent>(_ =>
             {
                 _dropdown.PlaceUnder(this);
             });
@@ -140,7 +139,7 @@ namespace Ludwell.Scene
 
         private void OnMouseUpHideDropdown(VisualElement registerFrom)
         {
-            registerFrom.RegisterCallback<MouseUpEvent>(evt =>
+            registerFrom.RegisterCallback<MouseUpEvent>(_ =>
             {
                 if (_dropdown.IsHidden) return;
 
