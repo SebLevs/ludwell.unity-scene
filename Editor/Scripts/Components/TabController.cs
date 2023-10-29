@@ -1,16 +1,15 @@
-using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TabController: VisualElement
+    public class TabController : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<TabController, UxmlTraits> { }
-        
+
         private const string UxmlPath = "Uxml/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
         private const string UssPath = "Uss/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
-        
+
         private VisualElement _currentElement;
         private const string TabManagerName = "tab__manager";
         private const string ViewManagerName = "view__manager";
@@ -23,7 +22,7 @@ namespace Ludwell.Scene
         {
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
-            
+
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 var root = this.Root();
@@ -43,7 +42,7 @@ namespace Ludwell.Scene
             tab.clicked += () => { SwitchView(view); };
             return view;
         }
-        
+
         private VisualElement BindTabToLoaderView(VisualElement queryFrom)
         {
             var view = queryFrom.Q<VisualElement>(ViewLoaderName);
@@ -51,7 +50,7 @@ namespace Ludwell.Scene
             tab.clicked += () => { SwitchView(view); };
             return view;
         }
-        
+
         private VisualElement BindTabToSettingsView(VisualElement queryFrom)
         {
             var view = queryFrom.Q<VisualElement>(ViewSettingsName);
