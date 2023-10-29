@@ -1,6 +1,3 @@
-.core-scene__above {
-}
-
 #scene-selection {
     width: 80%;
 }
@@ -109,4 +106,8 @@
 }
 
 #scenes__list > ScrollView > VisualElement > VisualElement > VisualElement {
+}
+
+#header-text {
+    flex-grow: 1;
 }

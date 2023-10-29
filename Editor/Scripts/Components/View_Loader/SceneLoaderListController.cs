@@ -1,3 +1,4 @@
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,9 +11,10 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/scene-loader-list";
         private const string UssPath = "Uss/scene-loader-list";
         
+        private const string CloseAllButtonName = "button__close-all";
         private const string ListViewName = "scenes__list";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
-
+        
         private LoaderSceneData _loaderSceneData;
         private ListView _listView;
         private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
@@ -24,13 +26,20 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
             
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
+            InitButtonCloseAll();
             InitLoaderListView();
             InitSearchField();
             HandleSearchFieldAbsolutePosition();
         }
 
-        public void CloseAll()
+        private void InitButtonCloseAll()
         {
+            this.Q<ToolbarButton>(CloseAllButtonName).clicked += CloseAll;
+        }
+
+        private void CloseAll()
+        {
+            Debug.LogError("cakked");
             foreach (var element in _loaderSceneData.Elements)
             {
                 element.IsOpen = false;

@@ -87,7 +87,6 @@ public class FoldoutHeader : Foldout
         {
             name = HeaderName,
             text = _headerText,
-            style = { unityTextAlign = TextAnchor.MiddleLeft}
         };
 
         this.Q(UiToolkitNames.UnityCheckmark).parent.Add(_headerTextElement);
