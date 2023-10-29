@@ -14,8 +14,8 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<DropdownSearchField, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/search-field-dropdown";
-        private const string UssPath = "Uss/search-field-dropdown";
+        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/search-field-dropdown";
+        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/search-field-dropdown";
 
         private const string SearchFieldName = "toolbar-search-field";
 

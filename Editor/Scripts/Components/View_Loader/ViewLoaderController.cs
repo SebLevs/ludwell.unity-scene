@@ -1,4 +1,3 @@
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,10 +28,7 @@ namespace Ludwell.Scene
 
         private void InitMainMenuButton()
         {
-            this.Q(MainMenuButtonName).Q<Button>().clicked += () =>
-            {
-                Debug.LogError("todo: load scene from here");
-            };
+            this.Q(MainMenuButtonName).Q<Button>().clicked += () => { Debug.LogError("todo: load scene from here"); };
         }
     }
 }
