@@ -10,8 +10,8 @@ namespace Ludwell.Scene
         public const string Name = "view__loader";
         public const string ContentName = "content";
 
-        private const string UxmlPath = "Uxml/" + Name;
-        private const string UssPath = "Uss/" + Name;
+        private const string UxmlPath = "Uxml/ViewLoader" + Name;
+        private const string UssPath = "Uss/ViewLoader" + Name;
 
         private const string MainMenuButtonName = "button__main-menu";
 

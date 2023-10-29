@@ -8,8 +8,8 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/scene-loader-list";
-        private const string UssPath = "Uss/scene-loader-list";
+        private const string UxmlPath = "Uxml/ViewLoader/scene-loader-list";
+        private const string UssPath = "Uss/ViewLoader/scene-loader-list";
         
         private const string ListViewName = "scenes__list";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
