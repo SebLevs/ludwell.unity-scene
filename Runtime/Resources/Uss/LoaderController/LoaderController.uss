@@ -1,0 +1,7 @@
+#scene-selection {
+    width: 80%;
+}
+
+#header-text {
+    flex-grow: 1;
+}

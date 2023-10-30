@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/dropdown-list-view.uss?fileID=7433441132597879392&amp;guid=fe565d054037e984c84cffbe4bdf3fb4&amp;type=3#dropdown-list-view" />
-    <ui:VisualElement name="dropdown" style="position: absolute; width: 100%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;" />
-</ui:UXML>

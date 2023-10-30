@@ -4,13 +4,16 @@ namespace Ludwell.Scene
 {
     public class DropdownElement : VisualElement, IBindableListViewElement<DropdownData>
     {
-        private const string UxmlPath = "Uxml/dropdown__element";
+        public const string Name = "dropdown__element";
+        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownElement);
+        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownElement);
 
         private readonly Button _button;
 
         public DropdownElement()
         {
             this.SetHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
             _button = this.Q<Button>();
         }
 

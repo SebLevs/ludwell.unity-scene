@@ -6,10 +6,10 @@ namespace Ludwell.Scene
 {
     public class LoaderListViewElement : VisualElement, IBindableListViewElement<LoaderListViewElementData>
     {
-        private const string UxmlPath = "Uxml/scene-loader-element";
-        private const string UssPath = "Uss/scene-loader-element";
-        private const string HeaderContentUxmlPath = "Uxml/scene-loader-element__header-content";
-        private const string HeaderContentUssPath = "Uss/scene-loader-element__header-content";
+        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
+        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
+        private const string HeaderContentUxmlPath = "Uxml/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+        private const string HeaderContentUssPath = "Uss/" + nameof(LoaderController) + "/scene-loader-element__header-content";
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
