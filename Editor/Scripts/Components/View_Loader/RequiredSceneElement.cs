@@ -6,8 +6,8 @@ namespace Ludwell.Scene
 {
     public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneDataReference>
     {
-        private const string UxmlPath = "Uxml/ViewLoader/required-scene-element";
-        private const string UssPath = "Uss/ViewLoader/required-scene-element";
+        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(RequiredSceneElement);
+        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(RequiredSceneElement);
 
         private const string ObjectFieldName = "scene-data";
 

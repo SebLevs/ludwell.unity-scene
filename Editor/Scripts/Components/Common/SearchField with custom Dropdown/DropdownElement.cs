@@ -5,8 +5,8 @@ namespace Ludwell.Scene
     public class DropdownElement : VisualElement, IBindableListViewElement<DropdownData>
     {
         public const string Name = "dropdown__element";
-        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + Name;
-        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + Name;
+        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownElement);
+        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownElement);
 
         private readonly Button _button;
 

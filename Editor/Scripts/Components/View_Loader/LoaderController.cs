@@ -3,21 +3,21 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class ViewLoaderController : VisualElement
+    public class LoaderController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<ViewLoaderController, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits> { }
 
         public const string Name = "view__loader";
         public const string ContentName = "content";
 
-        private const string UxmlPath = "Uxml/ViewLoader" + Name;
-        private const string UssPath = "Uss/ViewLoader" + Name;
+        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + Name;
+        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + Name;
 
         private const string MainMenuButtonName = "button__main-menu";
 
         private SceneLoaderListController _sceneLoaderListController;
 
-        public ViewLoaderController()
+        public LoaderController()
         {
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);

@@ -17,13 +17,13 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<DropdownSearchField, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/search-field-dropdown";
-        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/search-field-dropdown";
+        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
+        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
 
         private const string SearchFieldName = "toolbar-search-field";
 
         private ToolbarSearchField _searchField;
-        private Dropdown _dropdown;
+        private DropdownListView _dropdownListView;
 
         private const float BorderRadius = 3;
 
@@ -35,6 +35,12 @@ namespace Ludwell.Scene
             InitDropDown();
             InitSearchField();
             OnClickedSearchFieldRefreshDropdown();
+            
+            RegisterCallback<MouseLeaveWindowEvent>(_ =>
+            {
+                Debug.LogError("leave window");
+                HideDropdown();
+            });
         }
 
         public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
@@ -45,7 +51,7 @@ namespace Ludwell.Scene
 
             _searchField.RegisterValueChangedCallback(evt =>
             {
-                _dropdown.ClearData();
+                _dropdownListView.ClearData();
 
                 if (evt.newValue == string.Empty)
                 {
@@ -60,13 +66,13 @@ namespace Ludwell.Scene
                     if (dataName.ToLower().Contains(evt.newValue.ToLower()))
                     {
                         var index = i;
-                        _dropdown.Add(
+                        _dropdownListView.Add(
                             dataName,
                             () => actionAtIndex.Invoke(index));
                     }
                 }
 
-                if (_dropdown.Count == 0) return;
+                if (_dropdownListView.Count == 0) return;
                 ShowDropdown();
             });
         }
@@ -74,24 +80,24 @@ namespace Ludwell.Scene
         public void ShowDropdown()
         {
             SetBottomBorderRadius(0f);
-            _dropdown.PlaceUnder(this);
-            _dropdown.Show();
+            _dropdownListView.PlaceUnder(this);
+            _dropdownListView.Show();
         }
 
         public void HideDropdown()
         {
             SetBottomBorderRadius(BorderRadius);
-            _dropdown.Hide();
+            _dropdownListView.Hide();
         }
 
         public List<DropdownElement> GetDropdownElements()
         {
-            return _dropdown.GetElements();
+            return _dropdownListView.GetElements();
         }
 
         public void ClearDropdownData()
         {
-            _dropdown.ClearData();
+            _dropdownListView.ClearData();
         }
 
         private void InitSearchField()
@@ -103,7 +109,7 @@ namespace Ludwell.Scene
         {
             RegisterCallback<MouseUpEvent>(evt =>
             {
-                if (!_dropdown.IsHidden) return;
+                if (!_dropdownListView.IsHidden) return;
                 if (_searchField.value == string.Empty) return;
 
                 var value = _searchField.value;
@@ -116,18 +122,15 @@ namespace Ludwell.Scene
         {
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                _dropdown = new Dropdown();
-                this.Root().Add(_dropdown);
-                _dropdown.Hide();
+                _dropdownListView = new DropdownListView();
+                this.Root().Add(_dropdownListView);
+                _dropdownListView.Hide();
             });
         }
-        
+
         private void InitPlaceDropdown()
         {
-            this.Root().RegisterCallback<GeometryChangedEvent>(_ =>
-            {
-                _dropdown.PlaceUnder(this);
-            });
+            this.Root().RegisterCallback<GeometryChangedEvent>(_ => { _dropdownListView.PlaceUnder(this); });
         }
 
         // todo: remove parameter when z-index is implemented to instead use .Root() & place in constructor instead
@@ -141,7 +144,7 @@ namespace Ludwell.Scene
         {
             registerFrom.RegisterCallback<MouseUpEvent>(_ =>
             {
-                if (_dropdown.IsHidden) return;
+                if (_dropdownListView.IsHidden) return;
 
                 HideDropdown();
             });
@@ -153,7 +156,7 @@ namespace Ludwell.Scene
         {
             registerFrom.RegisterCallback<MouseCaptureEvent>(evt =>
             {
-                if (_dropdown.IsHidden) return;
+                if (_dropdownListView.IsHidden) return;
 
                 if (IsTargetFromSelf(evt)) return;
                 if (IsTargetFromDropdown(evt)) return;
@@ -172,9 +175,9 @@ namespace Ludwell.Scene
         private bool IsTargetFromDropdown(MouseCaptureEvent evt)
         {
             return (evt.target as VisualElement)?.name == DropdownElement.Name ||
-                   evt.target == _dropdown.Q(UiToolkitNames.UnityDragContainer) ||
-                   evt.target == _dropdown.Q(UiToolkitNames.UnityLowButton) ||
-                   evt.target == _dropdown.Q(UiToolkitNames.UnityHighButton);
+                   evt.target == _dropdownListView.Q(UiToolkitNames.UnityDragContainer) ||
+                   evt.target == _dropdownListView.Q(UiToolkitNames.UnityLowButton) ||
+                   evt.target == _dropdownListView.Q(UiToolkitNames.UnityHighButton);
         }
 
         private void SetBottomBorderRadius(float radius)

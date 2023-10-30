@@ -4,16 +4,19 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneLoaderListController: VisualElement
+    public class SceneLoaderListController : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/ViewLoader/scene-loader-list";
-        private const string UssPath = "Uss/ViewLoader/scene-loader-list";
-        
+        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
+        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
+
         private const string ListViewName = "scenes__list";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
-        
+
+        private const string _buttonCloseAll = "button__close-all";
+        private const string _buttonCloseAllClicked = "button__close-all-clicked";
+
         private LoaderSceneData _loaderSceneData;
         private ListView _listView;
         private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
@@ -23,7 +26,7 @@ namespace Ludwell.Scene
         {
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
-            
+
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
             InitButtonCloseAll();
             InitLoaderListView();
@@ -32,11 +35,26 @@ namespace Ludwell.Scene
 
         private void InitButtonCloseAll()
         {
-            this.Q<ToolbarButton>().clicked += CloseAll;
+            var closeAllButton = this.Q<ToolbarButton>();
+
+            closeAllButton.RegisterCallback<MouseDownEvent>(_ =>
+            {
+                closeAllButton.RemoveFromClassList(_buttonCloseAll);
+                closeAllButton.AddToClassList(_buttonCloseAllClicked);
+            }, TrickleDown.TrickleDown);
+
+            closeAllButton.RegisterCallback<MouseUpEvent>(_ =>
+            {
+                CloseAll();
+                closeAllButton.RemoveFromClassList(_buttonCloseAllClicked);
+                closeAllButton.AddToClassList(_buttonCloseAll);
+            });
         }
 
         private void CloseAll()
         {
+            if (_loaderSceneData == null || _loaderSceneData.Elements == null) return;
+
             foreach (var element in _loaderSceneData.Elements)
             {
                 element.IsOpen = false;

@@ -5,20 +5,19 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class Dropdown : VisualElement
+    public class DropdownListView : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<Dropdown, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<DropdownListView, UxmlTraits> { }
 
-        private const string DropdownListViewName = "dropdown-list-view";
-        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + DropdownListViewName;
-        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + DropdownListViewName;
+        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownListView);
+        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownListView);
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
         private readonly List<DropdownData> _data = new();
 
         private readonly ListView _listView;
 
-        public Dropdown()
+        public DropdownListView()
         {
             this.SetHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
