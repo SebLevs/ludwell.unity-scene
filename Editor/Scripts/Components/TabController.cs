@@ -12,11 +12,11 @@ namespace Ludwell.Scene
 
         private VisualElement _currentElement;
         private const string TabManagerName = "tab__manager";
-        private const string ViewManagerName = "view__manager";
+        // private const string ViewManagerName = "view__manager";
         private const string TabLoaderName = "tab__loader";
-        private const string ViewLoaderName = "view__loader";
+        // private const string ViewLoaderName = "view__loader";
         private const string TabSettingsName = "tab__settings";
-        private const string ViewSettingsName = "view__settings";
+        // private const string ViewSettingsName = "view__settings";
 
         public TabController()
         {
@@ -27,17 +27,17 @@ namespace Ludwell.Scene
             {
                 var root = this.Root();
                 BindTabToManagerView(root);
-                var view = BindTabToLoaderView(root);
+                _currentElement = BindTabToLoaderView(root);
                 BindTabToSettingsView(root);
 
-                if (view == null) return;
-                SetStartingView(view);
+                if (_currentElement == null) return;
+                SetStartingView(_currentElement);
             });
         }
 
         private VisualElement BindTabToManagerView(VisualElement queryFrom)
         {
-            var view = queryFrom.Q<VisualElement>(ViewManagerName);
+            var view = queryFrom.Q<ManagerController>(nameof(ManagerController));
             var tab = this.Q<ToolbarButton>(TabManagerName);
             tab.clicked += () => { SwitchView(view); };
             return view;
@@ -45,7 +45,7 @@ namespace Ludwell.Scene
 
         private VisualElement BindTabToLoaderView(VisualElement queryFrom)
         {
-            var view = queryFrom.Q<VisualElement>(ViewLoaderName);
+            var view = queryFrom.Q<LoaderController>();
             var tab = this.Q<ToolbarButton>(TabLoaderName);
             tab.clicked += () => { SwitchView(view); };
             return view;
@@ -53,7 +53,7 @@ namespace Ludwell.Scene
 
         private VisualElement BindTabToSettingsView(VisualElement queryFrom)
         {
-            var view = queryFrom.Q<VisualElement>(ViewSettingsName);
+            var view = queryFrom.Q<SettingsController>();
             var tab = this.Q<ToolbarButton>(TabSettingsName);
             tab.clicked += () => { SwitchView(view); };
             return view;
