@@ -5,28 +5,34 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class DropdownListView : VisualElement
+    public class DropdownListView : ListView
     {
         public new class UxmlFactory : UxmlFactory<DropdownListView, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownListView);
         private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownListView);
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
         private readonly List<DropdownData> _data = new();
 
-        private readonly ListView _listView;
-
         public DropdownListView()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            // this.AddStyleFromUss(UssPath);
+            style.flexGrow = 0.4f;
+            
+            this.Q<ListView>();
             this.AddStyleFromUss(UssPath);
-
-            _listView = this.Q<ListView>();
-            _listViewInitializer = new(_listView, _data);
+            RemoveFromClassList("unity-list-view");
+            RemoveFromClassList("unity-collection-view");
+            AddToClassList("dropdown-list-view");
+            
+            // style.position = Position.Absolute;
+            // style.width = new(40, LengthUnit.Percent);
+            // style.flexGrow = 1f;
+            // style.maxHeight = 200;
+            _listViewInitializer = new(this, _data);
         }
 
-        public int Count => _listView.itemsSource.Count;
+        public int Count => itemsSource.Count;
         
         public bool IsHidden => style.display == DisplayStyle.None;
 
@@ -47,13 +53,13 @@ namespace Ludwell.Scene
                 Name = actionName,
                 Action = action
             });
-            _listView.Rebuild();
+            Rebuild();
         }
 
         public void ClearData()
         {
             _data.Clear();
-            _listView.Rebuild();
+            Rebuild();
         }
 
         public List<DropdownElement> GetElements()
@@ -63,9 +69,17 @@ namespace Ludwell.Scene
         
         public void PlaceUnder(VisualElement sibling)
         {
+            float rootTotalHeight = 0.0f;
+
+            var rootHeight = sibling.Root().resolvedStyle.height;
+            var rootVisualElementHeight = sibling.Root()
+                .FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer).resolvedStyle.height;
+            var difference = rootHeight - rootVisualElementHeight;
+            
+            // WORKING SOLUTION
             var absolutePosition = sibling.LocalToWorld(Vector2.zero);
             style.left = absolutePosition.x;
-            style.top = absolutePosition.y + sibling.resolvedStyle.height;
+            style.top = absolutePosition.y + sibling.resolvedStyle.height - difference;
         }
     }
 }

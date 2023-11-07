@@ -12,8 +12,8 @@
     border-top-width: 0;
     border-bottom-width: 1px;
     background-color: rgb(88, 88, 88);
-    max-height: 200px;
-    position: absolute;
-    width: 40%;
+    max-height: 500px;
+    width: 100%;
     display: flex;
+    position: absolute;
 }

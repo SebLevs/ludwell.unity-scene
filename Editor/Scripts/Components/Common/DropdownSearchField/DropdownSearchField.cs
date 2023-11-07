@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -124,7 +125,10 @@ namespace Ludwell.Scene
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _dropdownListView = new DropdownListView();
-                this.Root().Add(_dropdownListView);
+
+                var rootVisualContainer = this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
+                rootVisualContainer.Add(_dropdownListView);
+                
                 _dropdownListView.Hide();
             });
         }
