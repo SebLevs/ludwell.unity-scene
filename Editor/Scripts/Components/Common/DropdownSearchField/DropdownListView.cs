@@ -13,22 +13,15 @@ namespace Ludwell.Scene
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
         private readonly List<DropdownData> _data = new();
+        
+        private float _heightDifference = -1;
 
         public DropdownListView()
         {
-            // this.AddStyleFromUss(UssPath);
-            style.flexGrow = 0.4f;
-            
-            this.Q<ListView>();
             this.AddStyleFromUss(UssPath);
-            RemoveFromClassList("unity-list-view");
-            RemoveFromClassList("unity-collection-view");
             AddToClassList("dropdown-list-view");
-            
-            // style.position = Position.Absolute;
-            // style.width = new(40, LengthUnit.Percent);
-            // style.flexGrow = 1f;
-            // style.maxHeight = 200;
+            SetStyle();
+
             _listViewInitializer = new(this, _data);
         }
 
@@ -66,20 +59,34 @@ namespace Ludwell.Scene
         {
             return this.Query<DropdownElement>().ToList();
         }
-        
-        public void PlaceUnder(VisualElement sibling)
-        {
-            float rootTotalHeight = 0.0f;
 
-            var rootHeight = sibling.Root().resolvedStyle.height;
-            var rootVisualElementHeight = sibling.Root()
-                .FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer).resolvedStyle.height;
-            var difference = rootHeight - rootVisualElementHeight;
+        public void PlaceUnder(VisualElement target)
+        {
+            TryCacheHeightDifference(target);
             
-            // WORKING SOLUTION
-            var absolutePosition = sibling.LocalToWorld(Vector2.zero);
+            var absolutePosition = target.LocalToWorld(Vector2.zero);
             style.left = absolutePosition.x;
-            style.top = absolutePosition.y + sibling.resolvedStyle.height - difference;
+            style.top = absolutePosition.y + target.resolvedStyle.height - _heightDifference;
+        }
+
+        private void TryCacheHeightDifference(VisualElement target)
+        {
+            if (_heightDifference <= -1)
+            {
+                var rootHeight = target.Root().resolvedStyle.height;
+                var rootVisualElement = target.Root()
+                    .FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
+                var rootVisualElementHeight = rootVisualElement.resolvedStyle.height;
+                _heightDifference = rootHeight - rootVisualElementHeight;
+            }
+        }
+
+        private void SetStyle()
+        {
+            style.width = Length.Percent(40);
+            style.maxHeight = 200;
+            style.position = Position.Absolute;
+            this.Q<Scroller>().style.backgroundColor = new StyleColor(new Color(0.2627451f, 0.2627451f, 0.2627451f, 1f));
         }
     }
 }

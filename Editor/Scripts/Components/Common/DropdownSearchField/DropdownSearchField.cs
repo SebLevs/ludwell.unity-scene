@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,7 +11,7 @@ namespace Ludwell.Scene
     /// must be called to initialize the dropdown elements' action.<br/>
     /// <list type="number">
     /// <item>The dropdown will be populated from the specified Listview elements.</item>
-    /// <item>The action will be invoked on mouse up of any drop .</item>
+    /// <item>The action will be invoked on mouse up from any drop down element.</item>
     /// </list>
     /// </summary>
     public class DropdownSearchField : VisualElement
@@ -125,7 +124,6 @@ namespace Ludwell.Scene
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _dropdownListView = new DropdownListView();
-
                 var rootVisualContainer = this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
                 rootVisualContainer.Add(_dropdownListView);
                 
@@ -135,10 +133,9 @@ namespace Ludwell.Scene
 
         private void InitPlaceDropdown()
         {
-            this.Root().RegisterCallback<GeometryChangedEvent>(_ => { _dropdownListView.PlaceUnder(this); });
+            this.Root().RegisterCallback<GeometryChangedEvent>(_ => _dropdownListView.PlaceUnder(this));
         }
 
-        // todo: remove parameter when z-index is implemented to instead use .Root() & place in constructor instead
         public void InitMouseEvents(VisualElement registerFrom)
         {
             OnMouseUpHideDropdown(registerFrom);
