@@ -7,10 +7,11 @@ using UnityEngine.UIElements;
 namespace Ludwell.Scene
 {
     /// <summary>
-    /// InitDropdownElementBehaviour() must be called to initialize the dropdown elements' action.<br/>
+    /// InitDropdownElementBehaviour()
+    /// must be called to initialize the dropdown elements' action.<br/>
     /// <list type="number">
     /// <item>The dropdown will be populated from the specified Listview elements.</item>
-    /// <item>The specified action will be invoked on mouse up of the dropdown element.</item>
+    /// <item>The action will be invoked on mouse up from any drop down element.</item>
     /// </list>
     /// </summary>
     public class DropdownSearchField : VisualElement
@@ -79,14 +80,14 @@ namespace Ludwell.Scene
 
         public void ShowDropdown()
         {
-            SetBottomBorderRadius(0f);
+            SetBottomBorderRadii(0f);
             _dropdownListView.PlaceUnder(this);
             _dropdownListView.Show();
         }
 
         public void HideDropdown()
         {
-            SetBottomBorderRadius(BorderRadius);
+            SetBottomBorderRadii(BorderRadius);
             _dropdownListView.Hide();
         }
 
@@ -123,17 +124,18 @@ namespace Ludwell.Scene
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _dropdownListView = new DropdownListView();
-                this.Root().Add(_dropdownListView);
+                var rootVisualContainer = this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
+                rootVisualContainer.Add(_dropdownListView);
+                
                 _dropdownListView.Hide();
             });
         }
 
         private void InitPlaceDropdown()
         {
-            this.Root().RegisterCallback<GeometryChangedEvent>(_ => { _dropdownListView.PlaceUnder(this); });
+            this.Root().RegisterCallback<GeometryChangedEvent>(_ => _dropdownListView.PlaceUnder(this));
         }
 
-        // todo: remove parameter when z-index is implemented to instead use .Root() & place in constructor instead
         public void InitMouseEvents(VisualElement registerFrom)
         {
             OnMouseUpHideDropdown(registerFrom);
@@ -174,13 +176,13 @@ namespace Ludwell.Scene
 
         private bool IsTargetFromDropdown(MouseCaptureEvent evt)
         {
-            return (evt.target as VisualElement)?.name == DropdownElement.Name ||
+            return evt.target is DropdownElement ||
                    evt.target == _dropdownListView.Q(UiToolkitNames.UnityDragContainer) ||
                    evt.target == _dropdownListView.Q(UiToolkitNames.UnityLowButton) ||
                    evt.target == _dropdownListView.Q(UiToolkitNames.UnityHighButton);
         }
 
-        private void SetBottomBorderRadius(float radius)
+        private void SetBottomBorderRadii(float radius)
         {
             _searchField.style.borderBottomLeftRadius = radius;
             _searchField.style.borderBottomRightRadius = radius;

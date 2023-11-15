@@ -7,9 +7,6 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits> { }
 
-        public const string Name = "view__loader";
-        public const string ContentName = "content";
-
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderController);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderController);
 
