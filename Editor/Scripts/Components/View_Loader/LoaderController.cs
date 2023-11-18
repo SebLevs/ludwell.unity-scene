@@ -26,16 +26,15 @@ namespace Ludwell.Scene
         private void InitMainMenuButtons()
         {
             _mainMenuButtons = this.Q<EditorSceneDataButtons>(MainMenuButtonsName);
+            var objectField = this.Q("launcher__main-menu").Q<ObjectField>();
             _mainMenuButtons.AddAction(ButtonType.Load, () =>
             {
-                var objectField = this.Q("launcher__main-menu").Q<ObjectField>();
                 if (objectField.value == null) return;
                 SceneDataManager.LoadScene(objectField.value as SceneData);
             });
 
             _mainMenuButtons.AddAction(ButtonType.Open, () =>
             {
-                var objectField = this.Q("launcher__main-menu").Q<ObjectField>();
                 if (objectField.value == null) return;
                 SceneDataManager.OpenScene(objectField.value as SceneData);
             });

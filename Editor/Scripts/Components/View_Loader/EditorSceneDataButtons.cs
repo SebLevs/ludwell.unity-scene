@@ -17,8 +17,8 @@ namespace Ludwell.Scene
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
             UxmlIntAttributeDescription m_buttonSize = new() { name = "buttonSize", defaultValue = 32};
-            UxmlColorAttributeDescription m_loadButtonColor = new() { name = "loadIconColor" };
-            UxmlColorAttributeDescription m_openButtonColor = new() { name = "openIconColor" };
+            UxmlColorAttributeDescription m_loadIconColor = new() { name = "loadIconColor" };
+            UxmlColorAttributeDescription m_openIconColor = new() { name = "openIconColor" };
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
@@ -26,8 +26,8 @@ namespace Ludwell.Scene
                 var self = ve as EditorSceneDataButtons;
 
                 self.ButtonSize = m_buttonSize.GetValueFromBag(bag, cc);
-                self.LoadButtonColor = m_loadButtonColor.GetValueFromBag(bag, cc);
-                self.OpenButtonColor = m_openButtonColor.GetValueFromBag(bag, cc);
+                self.LoadIconColor = m_loadIconColor.GetValueFromBag(bag, cc);
+                self.OpenIconColor = m_openIconColor.GetValueFromBag(bag, cc);
             }
         }
 
@@ -38,8 +38,8 @@ namespace Ludwell.Scene
         private readonly Button _openButton;
 
         private int _buttonSize;
-        private Color _loadButtonColor;
-        private Color _openButtonColor;
+        private Color _loadIconColor;
+        private Color _openIconColor;
 
         public int ButtonSize
         {
@@ -54,22 +54,22 @@ namespace Ludwell.Scene
             }
         }
 
-        public Color LoadButtonColor
+        public Color LoadIconColor
         {
-            get => _loadButtonColor;
+            get => _loadIconColor;
             set
             {
-                _loadButtonColor = value;
+                _loadIconColor = value;
                 _loadButton.Q<VisualElement>("icon").style.unityBackgroundImageTintColor = new StyleColor(value);
             }
         }
 
-        public Color OpenButtonColor
+        public Color OpenIconColor
         {
-            get => _openButtonColor;
+            get => _openIconColor;
             set
             {
-                _openButtonColor = value;
+                _openIconColor = value;
                 _openButton.Q<VisualElement>("icon").style.unityBackgroundImageTintColor = new StyleColor(value);
             }
         }
