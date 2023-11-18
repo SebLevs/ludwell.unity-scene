@@ -30,7 +30,7 @@ namespace Ludwell.Scene
 
         public DropdownSearchField()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
             InitDropDown();

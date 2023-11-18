@@ -24,7 +24,7 @@ namespace Ludwell.Scene
 
         public SceneLoaderListController()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);

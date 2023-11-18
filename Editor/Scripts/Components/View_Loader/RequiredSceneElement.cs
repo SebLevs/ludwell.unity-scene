@@ -17,7 +17,7 @@ namespace Ludwell.Scene
 
         public RequiredSceneElement()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
             SetReferences();
         }

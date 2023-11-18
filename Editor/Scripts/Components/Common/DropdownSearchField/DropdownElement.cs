@@ -11,7 +11,7 @@ namespace Ludwell.Scene
 
         public DropdownElement()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
             _button = this.Q<Button>();
         }

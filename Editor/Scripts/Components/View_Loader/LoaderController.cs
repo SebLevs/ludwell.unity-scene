@@ -1,5 +1,4 @@
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -11,38 +10,35 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderController);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderController);
 
-        private const string MainMenuButtonName = "button__main-menu__";
-        private const string MainMenuButtonLoadName = MainMenuButtonName + "load";
-        private const string MainMenuButtonOpenName = MainMenuButtonName + "open";
+        private const string MainMenuButtonsName = "main-menu__buttons";
 
         private SceneLoaderListController _sceneLoaderListController;
+        private EditorSceneDataButtons _mainMenuButtons;
 
         public LoaderController()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
-
             _sceneLoaderListController = this.Q<SceneLoaderListController>();
             InitMainMenuButtons();
         }
 
         private void InitMainMenuButtons()
         {
-            this.Q(MainMenuButtonLoadName).Q<Button>().clicked += () =>
+            _mainMenuButtons = this.Q<EditorSceneDataButtons>(MainMenuButtonsName);
+            _mainMenuButtons.AddAction(ButtonType.Load, () =>
             {
-                Debug.LogError("todo: load scene from here");
                 var objectField = this.Q("launcher__main-menu").Q<ObjectField>();
                 if (objectField.value == null) return;
                 SceneDataManager.LoadScene(objectField.value as SceneData);
-            };
+            });
 
-            this.Q(MainMenuButtonOpenName).Q<Button>().clicked += () =>
+            _mainMenuButtons.AddAction(ButtonType.Open, () =>
             {
-                Debug.LogError("todo: open scene from here");
                 var objectField = this.Q("launcher__main-menu").Q<ObjectField>();
                 if (objectField.value == null) return;
                 SceneDataManager.OpenScene(objectField.value as SceneData);
-            };
+            });
         }
     }
 }
