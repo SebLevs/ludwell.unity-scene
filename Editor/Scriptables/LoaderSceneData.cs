@@ -1,24 +1,31 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ludwell.Scene
 {
     // [CreateAssetMenu(fileName = "LoaderSceneData", menuName = "SceneDataManager/LoaderSceneData")]
+    [Serializable]
     public class LoaderSceneData : ScriptableObject
     {
-        public List<LoaderListViewElementData> Elements { get; set; } = new();
+        public SceneData MainMenuScene;
+        public SceneData PersistentScene;
+        public SceneData LoadingScene;
+        [field:SerializeField] public List<LoaderListViewElementData> Elements { get; set; } = new();
     }
 
+    [Serializable]
     public class LoaderListViewElementData
     {
-        public string Name { get; set; } = LoaderListViewElement.DefaultHeaderTextValue;
-        public bool IsOpen { get; set; } = true;
-        public SceneData MainScene { get; set; }
-        public List<SceneDataReference> RequiredScenes { get; set; } = new();
+        [field:SerializeField] public string Name { get; set; } = LoaderListViewElement.DefaultHeaderTextValue;
+        [field:SerializeField] public bool IsOpen { get; set; } = true;
+        [field:SerializeField] public SceneData MainScene { get; set; }
+        [field:SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
     }
 
+    [Serializable]
     public class SceneDataReference
     {
-        public SceneData SceneData { get; set; }
+        [field:SerializeField] public SceneData SceneData { get; set; }
     }
 }

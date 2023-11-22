@@ -9,24 +9,40 @@ namespace Ludwell.Scene
         public static void OpenScene(SceneData sceneData)
         {
             var path = AssetDatabase.GetAssetPath(sceneData.EditorSceneAsset);
-            Debug.LogError(path);
             EditorSceneManager.OpenScene(path);
         }
 
         public static void LoadScene(SceneData sceneData)
         {
-            bool wasIsBuildSettings = true;
-            if (!SceneIsInBuildSettings(sceneData.EditorSceneAsset))
-            {
-                AddSceneToBuildSettings(sceneData.EditorSceneAsset);
-                wasIsBuildSettings = false;
-            }
+            var wasIsBuildSettings = TryAddSceneToBuildSettings(sceneData);
 
             OpenScene(sceneData);
             EditorApplication.isPlaying = true;
 
             if (wasIsBuildSettings) return;
             RemoveSceneFromBuildSettings(sceneData.EditorSceneAsset);
+        }
+        
+        public static void LoadSceneAsync(SceneData sceneData)
+        {
+            var wasInBuildSettings = TryAddSceneToBuildSettings(sceneData);
+
+            OpenScene(sceneData);
+            EditorApplication.isPlaying = true;
+
+            if (wasInBuildSettings) return;
+            RemoveSceneFromBuildSettings(sceneData.EditorSceneAsset);
+        }
+
+        private static bool TryAddSceneToBuildSettings(SceneData sceneData)
+        {
+            if (!SceneIsInBuildSettings(sceneData.EditorSceneAsset))
+            {
+                AddSceneToBuildSettings(sceneData.EditorSceneAsset);
+                return false;
+            }
+
+            return true;
         }
 
         private static bool SceneIsInBuildSettings(Object sceneAsset)
