@@ -12,30 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be9c8f6f376f8245a5159bf7a5b7f39, type: 3}
   m_Name: LoaderSceneData
   m_EditorClassIdentifier: 
-  MainMenuScene: {fileID: 11400000, guid: 75e883f76cc03f245a929395c2a0cebd, type: 2}
-  PersistentScene: {fileID: 11400000, guid: 01af2c13d48dfdc47a9bccbbfcd75b8e, type: 2}
+  MainMenuScene: {fileID: 0}
+  PersistentScene: {fileID: 0}
   LoadingScene: {fileID: 0}
-  <Elements>k__BackingField:
-  - <Name>k__BackingField: Test
-    <IsOpen>k__BackingField: 0
-    <MainScene>k__BackingField: {fileID: 11400000, guid: ec1fb5b2ca34c574995345b8e1a5db6c, type: 2}
-    <RequiredScenes>k__BackingField:
-    - <SceneData>k__BackingField: {fileID: 0}
-    - <SceneData>k__BackingField: {fileID: 0}
-    - <SceneData>k__BackingField: {fileID: 0}
-  - <Name>k__BackingField: Scene Loader Element
-    <IsOpen>k__BackingField: 0
-    <MainScene>k__BackingField: {fileID: 0}
-    <RequiredScenes>k__BackingField: []
-  - <Name>k__BackingField: Scene Loader Element
-    <IsOpen>k__BackingField: 0
-    <MainScene>k__BackingField: {fileID: 0}
-    <RequiredScenes>k__BackingField: []
-  - <Name>k__BackingField: Scene Loader Element
-    <IsOpen>k__BackingField: 0
-    <MainScene>k__BackingField: {fileID: 0}
-    <RequiredScenes>k__BackingField: []
-  - <Name>k__BackingField: Scene Loader Element
-    <IsOpen>k__BackingField: 0
-    <MainScene>k__BackingField: {fileID: 0}
-    <RequiredScenes>k__BackingField: []
+  <Elements>k__BackingField: []
