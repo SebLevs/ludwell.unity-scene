@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Ludwell.Scene
@@ -8,24 +9,114 @@ namespace Ludwell.Scene
     [Serializable]
     public class LoaderSceneData : ScriptableObject
     {
-        public SceneData MainMenuScene;
-        public SceneData PersistentScene;
-        public SceneData LoadingScene;
-        [field:SerializeField] public List<LoaderListViewElementData> Elements { get; set; } = new();
+        [HideInInspector] [SerializeField] private SceneData mainMenuScene;
+        [HideInInspector] [SerializeField] private SceneData persistentScene;
+        [HideInInspector] [SerializeField] private SceneData loadingScene;
+
+        [field: HideInInspector]
+        [field: SerializeField]
+        public List<LoaderListViewElementData> Elements { get; set; } = new();
+
+        public SceneData MainMenuScene
+        {
+            get => mainMenuScene;
+            set
+            {
+                mainMenuScene = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
+
+        public SceneData PersistentScene
+        {
+            get => persistentScene;
+            set
+            {
+                persistentScene = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
+
+        public SceneData LoadingScene
+        {
+            get => loadingScene;
+            set
+            {
+                loadingScene = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
     }
 
     [Serializable]
     public class LoaderListViewElementData
     {
-        [field:SerializeField] public string Name { get; set; } = LoaderListViewElement.DefaultHeaderTextValue;
-        [field:SerializeField] public bool IsOpen { get; set; } = true;
-        [field:SerializeField] public SceneData MainScene { get; set; }
-        [field:SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
+        [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
+        [SerializeField] private bool isOpen = true;
+        [SerializeField] private SceneData mainScene;
+
+        [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
+
+        public string Name
+        {
+            get => name;
+            set
+            {
+                name = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
+
+        public bool IsOpen
+        {
+            get => isOpen;
+            set
+            {
+                isOpen = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
+
+        public SceneData MainScene
+        {
+            get => mainScene;
+            set
+            {
+                mainScene = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
     }
 
     [Serializable]
     public class SceneDataReference
     {
-        [field:SerializeField] public SceneData SceneData { get; set; }
+        private SceneData sceneData;
+
+        public SceneData SceneData
+        {
+            get => sceneData;
+            set
+            {
+                sceneData = value;
+                LoaderSceneDataHelper.SaveChange();
+            }
+        }
+    }
+
+    public static class LoaderSceneDataHelper
+    {
+        private static LoaderSceneData _loaderSceneData;
+
+        public static void SaveChange()
+        {
+            if (!_loaderSceneData)
+            {
+                _loaderSceneData = Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData));
+            }
+
+            EditorUtility.SetDirty(_loaderSceneData);
+            AssetDatabase.SaveAssets();
+        }
     }
 }

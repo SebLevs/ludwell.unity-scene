@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,12 +18,6 @@ namespace Ludwell.Scene
         public void CreateGUI()
         {
             visualTreeAsset.CloneTree(rootVisualElement);
-        }
-        
-        private void OnDestroy()
-        {
-            EditorUtility.SetDirty(Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData)));
-            AssetDatabase.SaveAssets();
         }
     }
 }

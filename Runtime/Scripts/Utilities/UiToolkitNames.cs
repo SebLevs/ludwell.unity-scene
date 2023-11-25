@@ -13,5 +13,7 @@ namespace Ludwell.Scene
         public const string UnityHighButton = "unity-high-button";
         public const string UnityLowButton = "unity-low-button";
         public const string UnityDragContainer = "unity-drag-container";
+        
+        public const string ListViewRemoveButtonName = "unity-list-view__remove-button";
     }
 }

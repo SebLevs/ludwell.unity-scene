@@ -8,8 +8,12 @@ namespace Ludwell.Scene
     {
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
-        private const string HeaderContentUxmlPath = "Uxml/" + nameof(LoaderController) + "/scene-loader-element__header-content";
-        private const string HeaderContentUssPath = "Uss/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+
+        private const string HeaderContentUxmlPath =
+            "Uxml/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+
+        private const string HeaderContentUssPath =
+            "Uss/" + nameof(LoaderController) + "/scene-loader-element__header-content";
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
@@ -42,8 +46,10 @@ namespace Ludwell.Scene
 
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
+
+            InitButtonAssetSave();
         }
-        
+
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
 
         private void SetReferences()
@@ -113,7 +119,7 @@ namespace Ludwell.Scene
             InitRequiredScenesListView();
             PreventRequiredElementWheelCallbackPropagation();
         }
-        
+
         private void InitRequiredScenesListView()
         {
             _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
@@ -181,6 +187,11 @@ namespace Ludwell.Scene
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+        }
+
+        private void InitButtonAssetSave()
+        {
+            this.Q<Button>(UiToolkitNames.ListViewRemoveButtonName).clicked += LoaderSceneDataHelper.SaveChange;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Ludwell.Scene
 
             OnFirstElementAddedRebuild(listView);
         }
-
+        
         private TVisualElement CreateElement()
         {
             return new TVisualElement();
