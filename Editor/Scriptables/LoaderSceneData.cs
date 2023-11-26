@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Ludwell.Scene.Editor;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Ludwell.Scene
 {
@@ -66,7 +68,7 @@ namespace Ludwell.Scene
             {
                 if (name == value) return;
                 name = value;
-                LoaderSceneDataHelper.DelayedSaveChange();
+                LoaderSceneDataHelper.SaveChangeDelayed();
             }
         }
 
@@ -77,7 +79,7 @@ namespace Ludwell.Scene
             {
                 if (isOpen == value) return;
                 isOpen = value;
-                LoaderSceneDataHelper.SaveChange();
+                LoaderSceneDataHelper.SaveChangeDelayed();
             }
         }
 
@@ -124,7 +126,7 @@ namespace Ludwell.Scene
             AssetDatabase.SaveAssetIfDirty(_loaderSceneData);
         }
 
-        public static void DelayedSaveChange()
+        public static void SaveChangeDelayed()
         {
             _delayedEditorUpdateAction ??= new DelayedEditorUpdateAction(0.5f, SaveChange);
             _delayedEditorUpdateAction.StartOrRefresh();
