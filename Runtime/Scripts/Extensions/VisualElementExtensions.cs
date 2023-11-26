@@ -5,12 +5,13 @@ namespace Ludwell.Scene
 {
     public static class VisualElementExtensions
     {
-        public static void SetHierarchyFromUxml(this VisualElement element, string uxmlPath)
+        public static VisualElement AddHierarchyFromUxml(this VisualElement element, string uxmlPath)
         {
             var visualTreeAsset = Resources.Load<VisualTreeAsset>(uxmlPath);
             var clone = visualTreeAsset.CloneTree();
             var rootElement = clone.ElementAt(0);
             element.hierarchy.Add(rootElement);
+            return rootElement;
         }
 
         public static void AddStyleFromUss(this VisualElement element, string ussPath)

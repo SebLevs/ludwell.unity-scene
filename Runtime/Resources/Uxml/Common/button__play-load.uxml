@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/UI/Uss/button__play-load.uss?fileID=7433441132597879392&amp;guid=47946aca46de3d941bc99a18c18e4381&amp;type=3#button__play-load" />
-    <ui:Button name="button" class="button__play-load">
-        <ui:VisualElement name="icon" picking-mode="Ignore" class="icon" />
-    </ui:Button>
-</ui:UXML>

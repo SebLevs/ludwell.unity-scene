@@ -1,3 +1,4 @@
+using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,7 +18,7 @@ namespace Ludwell.Scene
 
         public RequiredSceneElement()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
             SetReferences();
         }

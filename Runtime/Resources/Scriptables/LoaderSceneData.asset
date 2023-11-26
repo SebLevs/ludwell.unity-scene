@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be9c8f6f376f8245a5159bf7a5b7f39, type: 3}
   m_Name: LoaderSceneData
   m_EditorClassIdentifier: 
+  MainMenuScene: {fileID: 0}
+  PersistentScene: {fileID: 0}
+  LoadingScene: {fileID: 0}
+  <Elements>k__BackingField: []

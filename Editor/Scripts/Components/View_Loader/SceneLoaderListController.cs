@@ -1,3 +1,4 @@
+using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,7 +25,7 @@ namespace Ludwell.Scene
 
         public SceneLoaderListController()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
@@ -70,6 +71,7 @@ namespace Ludwell.Scene
         {
             _listView = this.Q<ListView>(ListViewName);
             _listViewInitializer = new(_listView, _loaderSceneData.Elements);
+            _listView.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
         private void InitSearchField()

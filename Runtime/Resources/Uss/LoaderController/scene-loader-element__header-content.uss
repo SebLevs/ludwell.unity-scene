@@ -23,30 +23,10 @@
     font-size: 12px;
 }
 
-#button__load > #button {
-    width: 20px;
-    height: 20px;
-    margin-left: 0;
-    margin-right: 4px;
-    margin-top: 0;
-    margin-bottom: 0;
+#button__load {
+    margin-right: 2px;
 }
 
-#button__load > #button > #icon {
-    margin-left: 0;
-    -unity-background-image-tint-color: rgb(0, 195, 12);
-}
-
-#button__open > #button {
-    width: 20px;
-    height: 20px;
-    margin-left: 4px;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-#button__open > #button > #icon {
-    margin-left: 0;
-    -unity-background-image-tint-color: rgb(0, 193, 195);
+#button__open {
+    margin-left: 2px;
 }

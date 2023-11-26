@@ -1,3 +1,4 @@
+using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,8 +9,12 @@ namespace Ludwell.Scene
     {
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
-        private const string HeaderContentUxmlPath = "Uxml/" + nameof(LoaderController) + "/scene-loader-element__header-content";
-        private const string HeaderContentUssPath = "Uss/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+
+        private const string HeaderContentUxmlPath =
+            "Uxml/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+
+        private const string HeaderContentUssPath =
+            "Uss/" + nameof(LoaderController) + "/scene-loader-element__header-content";
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
@@ -34,7 +39,7 @@ namespace Ludwell.Scene
 
         public LoaderListViewElement()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
             SetReferences();
             InitAndReferenceFoldoutTextField();
@@ -43,7 +48,7 @@ namespace Ludwell.Scene
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
         }
-        
+
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
 
         private void SetReferences()
@@ -113,10 +118,11 @@ namespace Ludwell.Scene
             InitRequiredScenesListView();
             PreventRequiredElementWheelCallbackPropagation();
         }
-        
+
         private void InitRequiredScenesListView()
         {
             _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
+            _listViewRequiredElements.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
         private void PreventRequiredElementWheelCallbackPropagation()
@@ -149,7 +155,9 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == loadButton)
                 {
-                    Debug.LogError("todo: load scene from here");
+                    SceneDataManagerEditorApplication.LoadScene(_mainSceneField.value as SceneData);
+
+                    Debug.LogError("LOAD REQUIRED SCENE ASYNC FROM HERE");
                 }
             });
 
@@ -164,7 +172,9 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == openButton)
                 {
-                    Debug.LogError("todo: open scene from here");
+                    SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
+
+                    Debug.LogError("OPEN REQUIRED SCENE ASYNC FROM HERE");
                 }
             });
         }

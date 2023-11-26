@@ -1,5 +1,3 @@
-using UnityEngine.UIElements;
-
 namespace Ludwell.Scene
 {
     public class UiToolkitNames
@@ -16,6 +14,6 @@ namespace Ludwell.Scene
         public const string UnityLowButton = "unity-low-button";
         public const string UnityDragContainer = "unity-drag-container";
         
-        
+        public const string ListViewRemoveButtonName = "unity-list-view__remove-button";
     }
 }

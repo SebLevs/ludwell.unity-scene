@@ -15,8 +15,8 @@ namespace Ludwell.Scene
             listView.itemsSource = _data;
             listView.makeItem = CreateElement;
             listView.bindItem = OnElementScrollIntoView;
-
-            OnFirstElementAddedRebuild(listView);
+            listView.itemsAdded += _ => ForceRebuild(listView);
+            listView.itemsRemoved += _ => ForceRebuild(listView);
         }
 
         private TVisualElement CreateElement()
@@ -35,14 +35,10 @@ namespace Ludwell.Scene
             elementAsDataType?.SetElementFromCachedData();
         }
 
-        private void OnFirstElementAddedRebuild(ListView listView)
+        /// <summary> Workaround for a ListView visual bug concerning dynamically sized element rendering. </summary>
+        private void ForceRebuild(ListView listView)
         {
-            var contentContainer = listView.Q(UiToolkitNames.UnityContentContainer);
-            contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                if (_data.Count != 1) return;
-                listView.Rebuild();
-            });
+            listView.Rebuild();
         }
     }
 }

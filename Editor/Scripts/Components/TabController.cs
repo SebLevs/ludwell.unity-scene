@@ -20,7 +20,7 @@ namespace Ludwell.Scene
 
         public TabController()
         {
-            this.SetHierarchyFromUxml(UxmlPath);
+            this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
             RegisterCallback<AttachToPanelEvent>(_ =>
