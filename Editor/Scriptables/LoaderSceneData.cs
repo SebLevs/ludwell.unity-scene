@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Ludwell.Scene.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -51,19 +52,21 @@ namespace Ludwell.Scene
     [Serializable]
     public class LoaderListViewElementData
     {
+        
         [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
-
+        
         [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
-
+        
         public string Name
         {
             get => name;
             set
             {
+                if (name == value) return;
                 name = value;
-                LoaderSceneDataHelper.SaveChange();
+                LoaderSceneDataHelper.DelayedSaveChange();
             }
         }
 
@@ -72,6 +75,7 @@ namespace Ludwell.Scene
             get => isOpen;
             set
             {
+                if (isOpen == value) return;
                 isOpen = value;
                 LoaderSceneDataHelper.SaveChange();
             }
@@ -91,14 +95,14 @@ namespace Ludwell.Scene
     [Serializable]
     public class SceneDataReference
     {
-        private SceneData sceneData;
+        private SceneData _sceneData;
 
         public SceneData SceneData
         {
-            get => sceneData;
+            get => _sceneData;
             set
             {
-                sceneData = value;
+                _sceneData = value;
                 LoaderSceneDataHelper.SaveChange();
             }
         }
@@ -107,6 +111,7 @@ namespace Ludwell.Scene
     public static class LoaderSceneDataHelper
     {
         private static LoaderSceneData _loaderSceneData;
+        private static DelayedEditorUpdateAction _delayedEditorUpdateAction =  new(0.5f, SaveChange);
 
         public static void SaveChange()
         {
@@ -114,9 +119,20 @@ namespace Ludwell.Scene
             {
                 _loaderSceneData = Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData));
             }
+            
+            if (EditorApplication.isUpdating || EditorApplication.isCompiling)
+            {
+                Debug.Log("Serialization or Compilation is in progress");
+                return;
+            }
 
             EditorUtility.SetDirty(_loaderSceneData);
-            AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssetIfDirty(_loaderSceneData);
+        }
+
+        public static void DelayedSaveChange()
+        {
+            _delayedEditorUpdateAction.StartOrRefresh();
         }
     }
 }
