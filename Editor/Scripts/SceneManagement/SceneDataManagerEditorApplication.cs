@@ -4,44 +4,35 @@ using UnityEngine;
 
 namespace Ludwell.Scene
 {
-    public class SceneDataManager
+    public class SceneDataManagerEditorApplication
     {
         public static void OpenScene(SceneData sceneData)
         {
+            if (EditorApplication.isPlaying) return;
             var path = AssetDatabase.GetAssetPath(sceneData.EditorSceneAsset);
             EditorSceneManager.OpenScene(path);
         }
 
         public static void LoadScene(SceneData sceneData)
         {
-            var wasIsBuildSettings = TryAddSceneToBuildSettings(sceneData);
+            if (EditorApplication.isPlaying)
+            {
+                EditorApplication.isPlaying = false;
+            }
 
-            OpenScene(sceneData);
-            EditorApplication.isPlaying = true;
-
-            if (wasIsBuildSettings) return;
-            RemoveSceneFromBuildSettings(sceneData.EditorSceneAsset);
-        }
-
-        public static void LoadSceneAsync(SceneData sceneData)
-        {
-            var wasInBuildSettings = TryAddSceneToBuildSettings(sceneData);
-
-            OpenScene(sceneData);
-
-            if (wasInBuildSettings) return;
-            RemoveSceneFromBuildSettings(sceneData.EditorSceneAsset);
+            EditorApplication.delayCall += () =>
+            {
+                OpenScene(sceneData);
+                EditorApplication.isPlaying = true;
+            };
         }
 
         private static bool TryAddSceneToBuildSettings(SceneData sceneData)
         {
-            if (!SceneIsInBuildSettings(sceneData.EditorSceneAsset))
-            {
-                AddSceneToBuildSettings(sceneData.EditorSceneAsset);
-                return false;
-            }
+            if (SceneIsInBuildSettings(sceneData.EditorSceneAsset)) return true;
+            AddSceneToBuildSettings(sceneData.EditorSceneAsset);
+            return false;
 
-            return true;
         }
 
         private static bool SceneIsInBuildSettings(Object sceneAsset)

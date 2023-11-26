@@ -72,13 +72,13 @@ namespace Ludwell.Scene
             mainMenuButtons.AddAction(ButtonType.Load, () =>
             {
                 if (objectField.value == null) return;
-                SceneDataManager.LoadScene(objectField.value as SceneData);
+                SceneDataManagerEditorApplication.LoadScene(objectField.value as SceneData);
             });
 
             mainMenuButtons.AddAction(ButtonType.Open, () =>
             {
                 if (objectField.value == null) return;
-                SceneDataManager.OpenScene(objectField.value as SceneData);
+                SceneDataManagerEditorApplication.OpenScene(objectField.value as SceneData);
             });
         }
     }

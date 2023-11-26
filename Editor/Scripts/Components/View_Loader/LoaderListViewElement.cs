@@ -155,7 +155,7 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == loadButton)
                 {
-                    SceneDataManager.LoadScene(_mainSceneField.value as SceneData);
+                    SceneDataManagerEditorApplication.LoadScene(_mainSceneField.value as SceneData);
 
                     Debug.LogError("LOAD REQUIRED SCENE ASYNC FROM HERE");
                 }
@@ -172,7 +172,7 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == openButton)
                 {
-                    SceneDataManager.OpenScene(_mainSceneField.value as SceneData);
+                    SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
 
                     Debug.LogError("OPEN REQUIRED SCENE ASYNC FROM HERE");
                 }
