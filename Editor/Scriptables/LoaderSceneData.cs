@@ -111,19 +111,13 @@ namespace Ludwell.Scene
     public static class LoaderSceneDataHelper
     {
         private static LoaderSceneData _loaderSceneData;
-        private static DelayedEditorUpdateAction _delayedEditorUpdateAction =  new(0.5f, SaveChange);
+        private static DelayedEditorUpdateAction _delayedEditorUpdateAction;
 
         public static void SaveChange()
         {
             if (!_loaderSceneData)
             {
                 _loaderSceneData = Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData));
-            }
-            
-            if (EditorApplication.isUpdating || EditorApplication.isCompiling)
-            {
-                Debug.Log("Serialization or Compilation is in progress");
-                return;
             }
 
             EditorUtility.SetDirty(_loaderSceneData);
@@ -132,6 +126,7 @@ namespace Ludwell.Scene
 
         public static void DelayedSaveChange()
         {
+            _delayedEditorUpdateAction ??= new DelayedEditorUpdateAction(0.5f, SaveChange);
             _delayedEditorUpdateAction.StartOrRefresh();
         }
     }
