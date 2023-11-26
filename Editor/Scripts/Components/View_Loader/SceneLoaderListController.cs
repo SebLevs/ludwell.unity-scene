@@ -55,15 +55,8 @@ namespace Ludwell.Scene
         {
             if (_loaderSceneData == null || _loaderSceneData.Elements == null) return;
 
-            for (var index = 0; index < _loaderSceneData.Elements.Count; index++)
+            foreach (var element in _loaderSceneData.Elements)
             {
-                if (_loaderSceneData.Elements[index] == null)
-                {
-                    Debug.LogError("ERROR: Index was out of range");
-                    continue;
-                }
-
-                var element = _loaderSceneData.Elements[index];
                 element.IsOpen = false;
             }
 
