@@ -62,6 +62,7 @@ namespace Ludwell.Scene
                     Debug.LogError("ERROR: Index was out of range");
                     continue;
                 }
+
                 var element = _loaderSceneData.Elements[index];
                 element.IsOpen = false;
             }
@@ -76,6 +77,7 @@ namespace Ludwell.Scene
         {
             _listView = this.Q<ListView>(ListViewName);
             _listViewInitializer = new(_listView, _loaderSceneData.Elements);
+            _listView.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
         private void InitSearchField()

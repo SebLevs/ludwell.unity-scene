@@ -46,8 +46,6 @@ namespace Ludwell.Scene
 
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
-
-            InitButtonAssetSave();
         }
 
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
@@ -123,6 +121,7 @@ namespace Ludwell.Scene
         private void InitRequiredScenesListView()
         {
             _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
+            _listViewRequiredElements.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
         private void PreventRequiredElementWheelCallbackPropagation()
@@ -155,7 +154,9 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == loadButton)
                 {
-                    Debug.LogError("todo: load scene from here");
+                    SceneDataManager.LoadScene(_mainSceneField.value as SceneData);
+
+                    Debug.LogError("LOAD REQUIRED SCENE ASYNC FROM HERE");
                 }
             });
 
@@ -170,7 +171,9 @@ namespace Ludwell.Scene
 
                 if (evt.currentTarget == openButton)
                 {
-                    Debug.LogError("todo: open scene from here");
+                    SceneDataManager.OpenScene(_mainSceneField.value as SceneData);
+
+                    Debug.LogError("OPEN REQUIRED SCENE ASYNC FROM HERE");
                 }
             });
         }
@@ -187,11 +190,6 @@ namespace Ludwell.Scene
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-        }
-
-        private void InitButtonAssetSave()
-        {
-            this.Q<Button>(UiToolkitNames.ListViewRemoveButtonName).clicked += LoaderSceneDataHelper.SaveChange;
         }
     }
 }

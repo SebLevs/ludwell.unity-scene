@@ -22,13 +22,12 @@ namespace Ludwell.Scene
             if (wasIsBuildSettings) return;
             RemoveSceneFromBuildSettings(sceneData.EditorSceneAsset);
         }
-        
+
         public static void LoadSceneAsync(SceneData sceneData)
         {
             var wasInBuildSettings = TryAddSceneToBuildSettings(sceneData);
 
             OpenScene(sceneData);
-            EditorApplication.isPlaying = true;
 
             if (wasInBuildSettings) return;
             RemoveSceneFromBuildSettings(sceneData.EditorSceneAsset);

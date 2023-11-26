@@ -66,7 +66,8 @@ namespace Ludwell.Scene
         private void InitMainMenuButtons()
         {
             var mainMenuButtons = this.Q<EditorSceneDataButtons>(MainMenuButtonsName);
-            var objectField = this.Q("launcher__main-menu").Q<ObjectField>();
+            var objectField = this.Q(MainMenuObjectFieldName).Q<ObjectField>();
+
             mainMenuButtons.AddAction(ButtonType.Load, () =>
             {
                 if (objectField.value == null) return;
