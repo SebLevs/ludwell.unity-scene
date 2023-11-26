@@ -13,3 +13,7 @@
 #main-menu__buttons > #button__open {
     margin-left: 2px;
 }
+
+#button__open > #icon {
+    background-image: resource('Sprites/icon_open');
+}
