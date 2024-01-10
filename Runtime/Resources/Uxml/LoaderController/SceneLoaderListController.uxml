@@ -3,7 +3,7 @@
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement name="header-content" style="background-color: rgba(0, 0, 0, 0);">
             <ui:VisualElement name="header__load" style="flex-basis: 22.5px; flex-grow: 0; flex-shrink: 1; border-top-width: 1px; border-left-color: rgb(80, 80, 80); border-right-color: rgb(80, 80, 80); border-top-color: rgb(80, 80, 80); border-bottom-color: rgb(80, 80, 80);">
-                <ui:Label tabindex="-1" text="Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
+                <ui:Label tabindex="-1" text="Quick Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
             </ui:VisualElement>
             <ui:VisualElement name="header__actions" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-basis: 22.5px; flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(35, 35, 35); justify-content: center;">
                 <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" class="button__close-all" />

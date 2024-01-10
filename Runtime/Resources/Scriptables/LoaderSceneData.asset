@@ -13,18 +13,6 @@ MonoBehaviour:
   m_Name: LoaderSceneData
   m_EditorClassIdentifier: 
   mainMenuScene: {fileID: 0}
-  persistentScene: {fileID: 11400000, guid: 75e883f76cc03f245a929395c2a0cebd, type: 2}
+  persistentScene: {fileID: 0}
   loadingScene: {fileID: 0}
-  <Elements>k__BackingField:
-  - name: holla
-    isOpen: 1
-    mainScene: {fileID: 11400000, guid: 352082d483d32ce4fbc2111428c7e991, type: 2}
-    <RequiredScenes>k__BackingField: []
-  - name: Scene Loader Element
-    isOpen: 1
-    mainScene: {fileID: 11400000, guid: 01af2c13d48dfdc47a9bccbbfcd75b8e, type: 2}
-    <RequiredScenes>k__BackingField: []
-  - name: Scene Loader Element
-    isOpen: 1
-    mainScene: {fileID: 0}
-    <RequiredScenes>k__BackingField: []
+  <Elements>k__BackingField: []
