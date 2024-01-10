@@ -173,10 +173,10 @@ namespace Ludwell.Scene
                 if (evt.currentTarget != loadButton) return;
                 SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
 
-                var loaderSceneData = LoaderSceneDataHelper.GetLoaderSceneData();
-                if (loaderSceneData)
+                var persistentScene = LoaderSceneDataHelper.GetLoaderSceneData().PersistentScene;
+                if (persistentScene)
                 {
-                    var cache = AssetDatabase.GetAssetPath(loaderSceneData.PersistentScene.EditorSceneAsset);
+                    var cache = AssetDatabase.GetAssetPath(persistentScene.EditorSceneAsset);
                     EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
                 }
 
