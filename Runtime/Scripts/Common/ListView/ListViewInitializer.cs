@@ -17,6 +17,12 @@ namespace Ludwell.Scene
             listView.bindItem = OnElementScrollIntoView;
             listView.itemsAdded += _ => ForceRebuild(listView);
             listView.itemsRemoved += _ => ForceRebuild(listView);
+            
+            // todo: replace workaround for the ListView visual bug concerning dynamically sized element rendering.
+            listView.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                listView.Rebuild();
+            });
         }
 
         private TVisualElement CreateElement()

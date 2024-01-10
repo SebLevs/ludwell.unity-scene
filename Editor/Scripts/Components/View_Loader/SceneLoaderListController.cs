@@ -32,6 +32,8 @@ namespace Ludwell.Scene
             InitButtonCloseAll();
             InitLoaderListView();
             InitSearchField();
+            
+
         }
 
         private void InitButtonCloseAll()
