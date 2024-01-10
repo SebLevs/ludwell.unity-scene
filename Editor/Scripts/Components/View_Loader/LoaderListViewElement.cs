@@ -1,4 +1,6 @@
 using Ludwell.Scene.Editor;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -144,23 +146,52 @@ namespace Ludwell.Scene
 
         private void RegisterButtonsClickEventCallback()
         {
+            RegisterLoadButtonEvents();
+            RegisterOpenButtonEvents();
+        }
+
+        private void RegisterLoadButtonEvents()
+        {
             var loadButton = this.Q(LoadButtonName).Q<Button>();
             loadButton.RegisterCallback<ClickEvent>(evt =>
             {
                 if (_mainSceneField.value == null)
                 {
-                    Debug.LogError("Cannot load without a main scene.");
+                    Debug.LogError($"{_foldoutTextField.value} | Cannot load without a main scene.");
                     return;
                 }
 
-                if (evt.currentTarget == loadButton)
+                foreach (var requiredScene in Cache.RequiredScenes)
                 {
-                    SceneDataManagerEditorApplication.LoadScene(_mainSceneField.value as SceneData);
-
-                    Debug.LogError("LOAD REQUIRED SCENE ASYNC FROM HERE");
+                    if (requiredScene.SceneData == null)
+                    {
+                        Debug.LogError($" {_foldoutTextField.value} | Cannot load a null required scene.");
+                        return;
+                    }
                 }
-            });
 
+                if (evt.currentTarget != loadButton) return;
+                SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
+
+                var loaderSceneData = LoaderSceneDataHelper.GetLoaderSceneData();
+                if (loaderSceneData)
+                {
+                    var cache = AssetDatabase.GetAssetPath(loaderSceneData.PersistentScene.EditorSceneAsset);
+                    EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
+                }
+
+                foreach (var requiredScene in Cache.RequiredScenes)
+                {
+                    var cache = AssetDatabase.GetAssetPath(requiredScene.SceneData.EditorSceneAsset);
+                    EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
+                }
+
+                EditorApplication.isPlaying = true;
+            });
+        }
+
+        private void RegisterOpenButtonEvents()
+        {
             var openButton = this.Q(OpenButtonName).Q<Button>();
             openButton.RegisterCallback<ClickEvent>(evt =>
             {
@@ -170,12 +201,8 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                if (evt.currentTarget == openButton)
-                {
-                    SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
-
-                    Debug.LogError("OPEN REQUIRED SCENE ASYNC FROM HERE");
-                }
+                if (evt.currentTarget != openButton) return;
+                SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
             });
         }
 

@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be9c8f6f376f8245a5159bf7a5b7f39, type: 3}
   m_Name: LoaderSceneData
   m_EditorClassIdentifier: 
-  MainMenuScene: {fileID: 0}
-  PersistentScene: {fileID: 0}
-  LoadingScene: {fileID: 0}
-  <Elements>k__BackingField: []
+  mainMenuScene: {fileID: 0}
+  persistentScene: {fileID: 11400000, guid: 75e883f76cc03f245a929395c2a0cebd, type: 2}
+  loadingScene: {fileID: 0}
+  <Elements>k__BackingField:
+  - name: holla
+    isOpen: 1
+    mainScene: {fileID: 11400000, guid: 352082d483d32ce4fbc2111428c7e991, type: 2}
+    <RequiredScenes>k__BackingField: []
+  - name: Scene Loader Element
+    isOpen: 1
+    mainScene: {fileID: 11400000, guid: 01af2c13d48dfdc47a9bccbbfcd75b8e, type: 2}
+    <RequiredScenes>k__BackingField: []
+  - name: Scene Loader Element
+    isOpen: 1
+    mainScene: {fileID: 0}
+    <RequiredScenes>k__BackingField: []
