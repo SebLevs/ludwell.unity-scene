@@ -7,6 +7,13 @@ namespace Ludwell.Scene.Editor
     {
         private static LoaderSceneData _loaderSceneData;
         private static DelayedEditorUpdateAction _delayedEditorUpdateAction;
+        
+        public static LoaderSceneData GetLoaderSceneData()
+        {
+            CacheLoaderSceneData();
+
+            return _loaderSceneData;
+        }
 
         public static void SaveChange()
         {
@@ -23,6 +30,14 @@ namespace Ludwell.Scene.Editor
         {
             _delayedEditorUpdateAction ??= new DelayedEditorUpdateAction(0.5f, SaveChange);
             _delayedEditorUpdateAction.StartOrRefresh();
+        }
+        
+        private static void CacheLoaderSceneData()
+        {
+            if (!_loaderSceneData)
+            {
+                _loaderSceneData = Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData));
+            }
         }
     }
 }
