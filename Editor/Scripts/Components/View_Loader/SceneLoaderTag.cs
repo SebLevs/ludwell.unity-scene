@@ -5,7 +5,7 @@ namespace Ludwell.Scene
     public class SceneLoaderTag : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<SceneLoaderTag, UxmlTraits> { }
-        
+
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderTag);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderTag);
 
@@ -14,7 +14,7 @@ namespace Ludwell.Scene
         private const string SearchButtonName = "button-search";
 
         private static SceneLoaderTag _currentSelection;
-        
+
         private Button _removeButton;
         private Button _mainButton;
         private Button _searchButton;
@@ -25,14 +25,15 @@ namespace Ludwell.Scene
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
-            
+
             SetReferences();
             SetButtonEvents();
-            
+
             ToggleBehaviourButtons(DisplayStyle.None);
         }
 
         public string GetTagName => _mainButton.text;
+
         public void SetTagName(string value)
         {
             _mainButton.text = value;
@@ -52,29 +53,30 @@ namespace Ludwell.Scene
 
         private void SetButtonEvents()
         {
-            _mainButton.RegisterCallback<ClickEvent>(_ =>
-            {
-                SelectTag(this);
-            });
-            
-            _removeButton.RegisterCallback<ClickEvent>(_ =>
-            {
-                _tagController.Remove(this);
-            });
-            
-            _searchButton.RegisterCallback<ClickEvent>(_ =>
-            {
-                _tagController.ShowElementsWithTag(this);
-            });
+            _mainButton.RegisterCallback<ClickEvent>(_ => { SelectTag(this); });
+
+            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagController.Remove(this); });
+
+            _searchButton.RegisterCallback<ClickEvent>(_ => { _tagController.ShowElementsWithTag(this); });
         }
 
         private static void SelectTag(SceneLoaderTag tag)
         {
-            _currentSelection?.ToggleBehaviourButtons(DisplayStyle.None);
+            if (_currentSelection == tag)
+            {
+                var reverseDisplay = GetReverseDisplayStyle();
+                _currentSelection.ToggleBehaviourButtons(reverseDisplay);
+                return;
+            }
 
-            if (_currentSelection == tag) return;
+            _currentSelection?.ToggleBehaviourButtons(DisplayStyle.None);
             _currentSelection = tag;
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
+        }
+
+        private static DisplayStyle GetReverseDisplayStyle()
+        {
+            return _currentSelection._removeButton.style.display == DisplayStyle.None ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private void ToggleBehaviourButtons(DisplayStyle displayStyle)
