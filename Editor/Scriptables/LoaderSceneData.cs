@@ -50,13 +50,14 @@ namespace Ludwell.Scene.Editor
     [Serializable]
     public class LoaderListViewElementData
     {
-        
+
         [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
         
         [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
-        
+        [field: SerializeField] public List<string> Tags { get; set; } = new();
+
         public string Name
         {
             get => name;

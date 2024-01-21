@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/LoaderController/SceneLoaderTagController.uss?fileID=7433441132597879392&amp;guid=14eab15702865374c8b6e134688e38ed&amp;type=3#SceneLoaderTagController" />
+    <ui:VisualElement name="tags" style="flex-grow: 1; padding-top: 8px; padding-bottom: 8px;">
+        <ui:Label tabindex="-1" text="Tags" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; margin-bottom: 2px; padding-left: 0; padding-right: 0;" />
+        <ui:Button text="+" display-tooltip-when-elided="true" name="tags__button-add" />
+        <ui:VisualElement name="tags-container" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-wrap: wrap; justify-content: center;">
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0; display: flex;" />
+            <Ludwell.Scene.SceneLoaderTag style="flex-grow: 0; display: flex;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
