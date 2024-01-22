@@ -54,11 +54,6 @@
     padding-bottom: 0;
 }
 
-#required-scenes > ScrollView > VisualElement > VisualElement > Label {
-    -unity-text-align: middle-center;
-    flex-grow: 1;
-}
-
 #unity-list-view__reorderable-handle {
     -unity-text-align: middle-center;
     margin-left: 0;

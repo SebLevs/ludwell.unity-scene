@@ -1,0 +1,92 @@
+#listview-container {
+    background-color: rgba(0, 0, 0, 0);
+    flex-grow: 1;
+    margin-bottom: 2px;
+    min-height: 100px;
+}
+
+#listview-container > ListView > ScrollView {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#listview-container > ListView > #unity-list-view__footer {
+    flex-grow: 0;
+    flex-direction: row-reverse;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-basis: 22.5px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+#listview-container > ListView > #unity-list-view__footer > #unity-list-view__add-button {
+    margin-right: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 32px;
+    bottom: 0.5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#listview-container > ListView > #unity-list-view__footer > #unity-list-view__remove-button {
+    margin-left: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    bottom: 0.5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    width: 32px;
+}
+
+.tag-manager__header {
+    align-self: stretch;
+    -unity-text-align: middle-center;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#tags-container {
+    margin-bottom: 2px;
+}
+
+#button__return > #button {
+    width: 16px;
+    height: 16px;
+}
+
+#button__return > #button > #icon {
+    height: 16px;
+}

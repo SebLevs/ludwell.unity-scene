@@ -1,14 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneLoaderTagController : VisualElement
+    public class TagsController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<SceneLoaderTagController, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<TagsController, UxmlTraits> { }
         
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderTagController);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderTagController);
+        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(TagsController);
+        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(TagsController);
 
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";
@@ -16,9 +17,9 @@ namespace Ludwell.Scene
         private LoaderListViewElement _loaderListViewElement;
 
         private Button _addButton;
-        private VisualElement _tagContainer;
+        private VisualElement _tagsContainer;
 
-        public SceneLoaderTagController()
+        public TagsController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -27,25 +28,26 @@ namespace Ludwell.Scene
             SetButtonEvents();
         }
 
+        public IEnumerable<VisualElement> GetChildren => _tagsContainer.Children();
+        
         public void Add(string value)
         {
             Debug.LogError(nameof(Add));
             
-            var newTag = new SceneLoaderTag();
+            var newTag = new TagElement();
             newTag.SetTagName(value);
-            _tagContainer.Add(newTag);
-            _loaderListViewElement.Cache.Tags.Add(value);
+            _tagsContainer.Add(newTag);
         }
         
-        public void Remove(SceneLoaderTag tag)
+        public void Remove(TagElement tagElement)
         {
             Debug.LogError(nameof(Remove));
             
-            _loaderListViewElement.Cache.Tags.Remove(tag.GetTagName);
-            _tagContainer.Remove(tag);
+            _loaderListViewElement.Cache.Tags.Remove(tagElement.GetTagName);
+            _tagsContainer.Remove(tagElement);
         }
 
-        public void ShowElementsWithTag(SceneLoaderTag tag)
+        public void ShowElementsWithTag(TagElement tagElement)
         {
             Debug.LogError(nameof(ShowElementsWithTag));
         }
@@ -53,11 +55,12 @@ namespace Ludwell.Scene
         private void SetReferences()
         {
             _addButton = this.Q<Button>(AddButtonName);
-            _tagContainer = this.Q<VisualElement>(TagsContainerName);
+            _tagsContainer = this.Q<VisualElement>(TagsContainerName);
             
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _loaderListViewElement = GetFirstAncestorOfType<LoaderListViewElement>();
+                
             });
         }
         
@@ -65,7 +68,7 @@ namespace Ludwell.Scene
         {
             _addButton.RegisterCallback<ClickEvent>(_ =>
             {
-                Add("Button TEST");
+                this.Root().Q<TagsManager>().Show(this);
             });
         }
     }

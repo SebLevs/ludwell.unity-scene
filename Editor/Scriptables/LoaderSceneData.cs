@@ -16,6 +16,10 @@ namespace Ludwell.Scene.Editor
         [field: SerializeField]
         public List<LoaderListViewElementData> Elements { get; set; } = new();
 
+        [field: HideInInspector]
+        [field: SerializeField]
+        public List<Tag> Tags { get; set; } = new();
+
         public SceneData MainMenuScene
         {
             get => mainMenuScene;
@@ -50,11 +54,10 @@ namespace Ludwell.Scene.Editor
     [Serializable]
     public class LoaderListViewElementData
     {
-
         [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
-        
+
         [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
         [field: SerializeField] public List<string> Tags { get; set; } = new();
 
@@ -105,5 +108,11 @@ namespace Ludwell.Scene.Editor
                 LoaderSceneDataHelper.SaveChange();
             }
         }
+    }
+    
+    [Serializable]
+    public class Tag
+    {
+        public string value;
     }
 }

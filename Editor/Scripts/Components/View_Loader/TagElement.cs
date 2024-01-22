@@ -2,26 +2,26 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneLoaderTag : VisualElement
+    public class TagElement : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<SceneLoaderTag, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<TagElement, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderTag);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderTag);
+        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(TagElement);
+        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(TagElement);
 
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
         private const string SearchButtonName = "button-search";
 
-        private static SceneLoaderTag _currentSelection;
+        private static TagElement _currentSelection;
 
         private Button _removeButton;
         private Button _mainButton;
         private Button _searchButton;
 
-        private SceneLoaderTagController _tagController;
+        private TagsController _tagsController;
 
-        public SceneLoaderTag()
+        public TagElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -38,6 +38,11 @@ namespace Ludwell.Scene
         {
             _mainButton.text = value;
         }
+        
+        public void SetTagController(TagsController tagsController)
+        {
+            _tagsController = tagsController;
+        }
 
         private void SetReferences()
         {
@@ -47,7 +52,7 @@ namespace Ludwell.Scene
 
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                _tagController = GetFirstAncestorOfType<SceneLoaderTagController>();
+                _tagsController = GetFirstAncestorOfType<TagsController>();
             });
         }
 
@@ -55,14 +60,14 @@ namespace Ludwell.Scene
         {
             _mainButton.RegisterCallback<ClickEvent>(_ => { SelectTag(this); });
 
-            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagController.Remove(this); });
+            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(this); });
 
-            _searchButton.RegisterCallback<ClickEvent>(_ => { _tagController.ShowElementsWithTag(this); });
+            _searchButton.RegisterCallback<ClickEvent>(_ => { _tagsController.ShowElementsWithTag(this); });
         }
 
-        private static void SelectTag(SceneLoaderTag tag)
+        private static void SelectTag(TagElement tagElement)
         {
-            if (_currentSelection == tag)
+            if (_currentSelection == tagElement)
             {
                 var reverseDisplay = GetReverseDisplayStyle();
                 _currentSelection.ToggleBehaviourButtons(reverseDisplay);
@@ -70,7 +75,7 @@ namespace Ludwell.Scene
             }
 
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.None);
-            _currentSelection = tag;
+            _currentSelection = tagElement;
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
         }
 

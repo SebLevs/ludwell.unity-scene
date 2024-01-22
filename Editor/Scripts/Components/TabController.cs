@@ -10,7 +10,9 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
         private const string UssPath = "Uss/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
 
+        private VisualElement _previous;
         private VisualElement _currentElement;
+        
         private const string TabManagerName = "tab__manager";
         // private const string ViewManagerName = "view__manager";
         private const string TabLoaderName = "tab__loader";
@@ -33,6 +35,29 @@ namespace Ludwell.Scene
                 if (_currentElement == null) return;
                 SetStartingView(_currentElement);
             });
+        }
+        
+        public void SwitchView(VisualElement view)
+        {
+            if (_currentElement == view) return;
+
+            _previous = _currentElement;
+
+            if (_currentElement != null)
+            {
+                _currentElement.style.display = DisplayStyle.None;
+            }
+
+            _currentElement = view;
+            _currentElement.style.display = DisplayStyle.Flex;
+        }
+
+        public void ReturnToPreviousView()
+        {
+            if (_previous == null) return;
+            
+            SwitchView(_previous);
+            _previous = null;
         }
 
         private VisualElement BindTabToManagerView(VisualElement queryFrom)
@@ -62,19 +87,6 @@ namespace Ludwell.Scene
         private void SetStartingView(VisualElement view)
         {
             SwitchView(view);
-        }
-
-        private void SwitchView(VisualElement view)
-        {
-            if (_currentElement == view) return;
-
-            if (_currentElement != null)
-            {
-                _currentElement.style.display = DisplayStyle.None;
-            }
-
-            _currentElement = view;
-            _currentElement.style.display = DisplayStyle.Flex;
         }
     }
 }
