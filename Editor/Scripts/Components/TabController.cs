@@ -10,8 +10,8 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
         private const string UssPath = "Uss/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
 
-        private VisualElement _previous;
-        private VisualElement _currentElement;
+        private VisualElement _previousView;
+        private VisualElement _currentView;
         
         private const string TabManagerName = "tab__manager";
         // private const string ViewManagerName = "view__manager";
@@ -19,7 +19,7 @@ namespace Ludwell.Scene
         // private const string ViewLoaderName = "view__loader";
         private const string TabSettingsName = "tab__settings";
         // private const string ViewSettingsName = "view__settings";
-
+        
         public TabController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -29,35 +29,35 @@ namespace Ludwell.Scene
             {
                 var root = this.Root();
                 BindTabToManagerView(root);
-                _currentElement = BindTabToLoaderView(root);
+                _currentView = BindTabToLoaderView(root);
                 BindTabToSettingsView(root);
 
-                if (_currentElement == null) return;
-                SetStartingView(_currentElement);
+                if (_currentView == null) return;
+                SetStartingView(_currentView);
             });
         }
         
         public void SwitchView(VisualElement view)
         {
-            if (_currentElement == view) return;
+            if (_currentView == view) return;
 
-            _previous = _currentElement;
+            _previousView = _currentView;
 
-            if (_currentElement != null)
+            if (_currentView != null)
             {
-                _currentElement.style.display = DisplayStyle.None;
+                _currentView.style.display = DisplayStyle.None;
             }
 
-            _currentElement = view;
-            _currentElement.style.display = DisplayStyle.Flex;
+            _currentView = view;
+            _currentView.style.display = DisplayStyle.Flex;
         }
 
         public void ReturnToPreviousView()
         {
-            if (_previous == null) return;
+            if (_previousView == null) return;
             
-            SwitchView(_previous);
-            _previous = null;
+            SwitchView(_previousView);
+            _previousView = null;
         }
 
         private VisualElement BindTabToManagerView(VisualElement queryFrom)
@@ -83,7 +83,7 @@ namespace Ludwell.Scene
             tab.clicked += () => { SwitchView(view); };
             return view;
         }
-
+        
         private void SetStartingView(VisualElement view)
         {
             SwitchView(view);
