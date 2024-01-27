@@ -8,8 +8,8 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<TagsManager, UxmlTraits> { }
         
-        private const string UxmlPath = "Uxml/" + "Common" + "/" + nameof(TagsManager);
-        private const string UssPath = "Uss/" + "Common" + "/" + nameof(TagsManager);
+        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManager);
+        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManager);
 
         private const string ReturnButtonName = "button__return";
         private const string TagsContainerName = "tags-container";
@@ -21,7 +21,7 @@ namespace Ludwell.Scene
 
         private LoaderSceneData _loaderSceneData;
 
-        private ListViewInitializer<Label, Tag> _listViewInitializer;
+        private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
 
         private TagsController _currentTagsController;
 
@@ -47,7 +47,11 @@ namespace Ludwell.Scene
             _tagsContainer.Clear();
             foreach (var child in tagsController.GetChildren)
             {
-                _tagsContainer.Add(new Label("A"));
+                // todo: list the tags here
+                // _tagsContainer.Add(new Label("A"));
+                var foo = new TagElement();
+                foo.SetTagsController(tagsController);
+                _tagsContainer.Add(foo);
             }
         }
 

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/TagsManager/TagsManagerElement.uss?fileID=7433441132597879392&amp;guid=a71a92132e69d0346bcd31e554e4c360&amp;type=3#TagsManagerElement" />
+    <ui:VisualElement name="tags-manager__element" style="padding-top: 4px; padding-bottom: 4px; flex-direction: row; align-self: center; justify-content: center; align-items: center; padding-left: 4px; padding-right: 4px; width: 100%;">
+        <ui:Button text="-" display-tooltip-when-elided="true" name="button__add" class="button-size" />
+        <ui:TextField picking-mode="Ignore" label="Tag" value="Tag" name="tag" />
+        <ui:Button text="+" display-tooltip-when-elided="true" name="button__remove" class="button-size" />
+    </ui:VisualElement>
+</ui:UXML>

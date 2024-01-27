@@ -39,7 +39,7 @@ namespace Ludwell.Scene
             _mainButton.text = value;
         }
         
-        public void SetTagController(TagsController tagsController)
+        public void SetTagsController(TagsController tagsController)
         {
             _tagsController = tagsController;
         }

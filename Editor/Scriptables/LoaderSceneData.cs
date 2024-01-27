@@ -109,10 +109,10 @@ namespace Ludwell.Scene.Editor
             }
         }
     }
-    
+
     [Serializable]
     public class Tag
     {
-        public string value;
+        public string Value;
     }
 }

@@ -60,7 +60,6 @@ namespace Ludwell.Scene
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _loaderListViewElement = GetFirstAncestorOfType<LoaderListViewElement>();
-                
             });
         }
         
