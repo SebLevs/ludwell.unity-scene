@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,8 +5,10 @@ namespace Ludwell.Scene
 {
     public class TagsController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TagsController, UxmlTraits> { }
-        
+        public new class UxmlFactory : UxmlFactory<TagsController, UxmlTraits>
+        {
+        }
+
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(TagsController);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(TagsController);
 
@@ -16,7 +17,7 @@ namespace Ludwell.Scene
 
         private LoaderListViewElement _loaderListViewElement;
 
-        private Button _addButton;
+        private Button _manageTagsButton;
         private VisualElement _tagsContainer;
 
         public TagsController()
@@ -28,21 +29,8 @@ namespace Ludwell.Scene
             SetButtonEvents();
         }
 
-        public IEnumerable<VisualElement> GetChildren => _tagsContainer.Children();
-        
-        public void Add(string value)
-        {
-            Debug.LogError(nameof(Add));
-            
-            var newTag = new TagElement();
-            newTag.SetTagName(value);
-            _tagsContainer.Add(newTag);
-        }
-        
         public void Remove(TagElement tagElement)
         {
-            Debug.LogError(nameof(Remove));
-            
             _loaderListViewElement.Cache.Tags.Remove(tagElement.GetTagName);
             _tagsContainer.Remove(tagElement);
         }
@@ -50,25 +38,44 @@ namespace Ludwell.Scene
         public void ShowElementsWithTag(TagElement tagElement)
         {
             Debug.LogError(nameof(ShowElementsWithTag));
+            // todo: change what list the listview reference 
         }
-        
+
+        public void Refresh()
+        {
+            Debug.LogError(nameof(Refresh));
+            _tagsContainer.Clear();
+            foreach (var tag in _loaderListViewElement.Cache.Tags)
+            {
+                CreateTagElement(tag);
+            }
+        }
+
         private void SetReferences()
         {
-            _addButton = this.Q<Button>(AddButtonName);
+            _manageTagsButton = this.Q<Button>(AddButtonName);
             _tagsContainer = this.Q<VisualElement>(TagsContainerName);
-            
+
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _loaderListViewElement = GetFirstAncestorOfType<LoaderListViewElement>();
             });
         }
-        
+
         private void SetButtonEvents()
         {
-            _addButton.RegisterCallback<ClickEvent>(_ =>
+            // _manageTagsButton.RegisterCallback<ClickEvent>(_ => { this.Root().Q<TagsManager>().Show(this); });
+            _manageTagsButton.RegisterCallback<ClickEvent>(_ =>
             {
-                this.Root().Q<TagsManager>().Show(this);
+                this.Root().Q<TagsManager>().Show(_loaderListViewElement.Cache.Tags);
             });
+        }
+
+        private TagElement CreateTagElement(string value)
+        {
+            TagElement tagElement = new();
+            tagElement.SetTagName(value);
+            return tagElement;
         }
     }
 }

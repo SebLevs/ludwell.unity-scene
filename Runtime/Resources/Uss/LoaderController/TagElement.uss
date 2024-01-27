@@ -1,7 +1,9 @@
 .button-left {
     margin-right: -3px;
+    margin-left: 2px;
 }
 
 .button-right {
     margin-left: -3px;
+    margin-right: 2px;
 }

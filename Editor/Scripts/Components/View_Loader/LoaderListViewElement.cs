@@ -33,6 +33,7 @@ namespace Ludwell.Scene
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
+        private TagsController _tagsController;
 
         private ListView _listViewRequiredElements;
         private ListViewInitializer<RequiredSceneElement, SceneDataReference> _listViewInitializer;
@@ -58,6 +59,7 @@ namespace Ludwell.Scene
             _foldoutElement = this.Q<Foldout>(FoldoutName);
             _mainSceneField = this.Q<ObjectField>(MainSceneName);
             _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
+            _tagsController = this.Q<TagsController>();
         }
 
         private void InitAndReferenceFoldoutTextField()
@@ -84,6 +86,7 @@ namespace Ludwell.Scene
             _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
             // todo: tag section here
+            Debug.LogError("BIND");
         }
 
         private void CleanupStyle()
@@ -114,6 +117,8 @@ namespace Ludwell.Scene
             _foldoutElement.value = Cache.IsOpen;
             _mainSceneField.value = Cache.MainScene;
             // todo: set tags from database here
+            Debug.LogError("SET");
+            _tagsController.Refresh();
             HandleRequiredSceneListView();
         }
 

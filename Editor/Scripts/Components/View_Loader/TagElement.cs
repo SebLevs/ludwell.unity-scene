@@ -4,7 +4,9 @@ namespace Ludwell.Scene
 {
     public class TagElement : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TagElement, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<TagElement, UxmlTraits>
+        {
+        }
 
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(TagElement);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(TagElement);
@@ -38,7 +40,7 @@ namespace Ludwell.Scene
         {
             _mainButton.text = value;
         }
-        
+
         public void SetTagsController(TagsController tagsController)
         {
             _tagsController = tagsController;
@@ -81,7 +83,9 @@ namespace Ludwell.Scene
 
         private static DisplayStyle GetReverseDisplayStyle()
         {
-            return _currentSelection._removeButton.style.display == DisplayStyle.None ? DisplayStyle.Flex : DisplayStyle.None;
+            return _currentSelection._removeButton.style.display == DisplayStyle.None
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
         }
 
         private void ToggleBehaviourButtons(DisplayStyle displayStyle)

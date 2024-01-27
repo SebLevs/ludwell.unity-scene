@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,14 +7,16 @@ namespace Ludwell.Scene
 {
     public class TagsManager : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TagsManager, UxmlTraits> { }
-        
+        public new class UxmlFactory : UxmlFactory<TagsManager, UxmlTraits>
+        {
+        }
+
         private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManager);
         private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManager);
 
         private const string ReturnButtonName = "button__return";
         private const string TagsContainerName = "tags-container";
-        
+
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
         private Button _returnButton;
@@ -22,8 +25,7 @@ namespace Ludwell.Scene
         private LoaderSceneData _loaderSceneData;
 
         private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
-
-        private TagsController _currentTagsController;
+        private List<string> _cachedTags = new();
 
         public TagsManager()
         {
@@ -33,25 +35,49 @@ namespace Ludwell.Scene
             SetReferences();
             RegisterButtonEvents();
         }
-        
-        public void Show(TagsController tagsController)
-        {
-            this.Root().Q<TabController>().SwitchView(this);
-            _currentTagsController = tagsController;
 
-            InitializeTags(_currentTagsController);
+        public void AddTag(string tag)
+        {
+            if (_cachedTags.Contains(tag))
+            {
+                Debug.LogWarning($"{tag} is already present.");
+                return;
+            }
+
+            Debug.LogError(nameof(AddTag));
+            _tagsContainer.Add(new Label(tag));
+            _cachedTags.Add(tag);
         }
 
-        private void InitializeTags(TagsController tagsController)
+        public void RemoveTag(string tag)
         {
-            _tagsContainer.Clear();
-            foreach (var child in tagsController.GetChildren)
+            if (!_cachedTags.Contains(tag))
             {
-                // todo: list the tags here
-                // _tagsContainer.Add(new Label("A"));
-                var foo = new TagElement();
-                foo.SetTagsController(tagsController);
-                _tagsContainer.Add(foo);
+                Debug.LogWarning($"{tag} was not present.");
+                return;
+            }
+
+            Debug.LogError(nameof(RemoveTag));
+            _tagsContainer.RemoveAt(_cachedTags.IndexOf(tag));
+            _cachedTags.Remove(tag);
+        }
+
+        public void Show(List<string> tags)
+        {
+            this.Root().Q<TabController>().SwitchView(this);
+
+            _cachedTags = tags;
+            InitializeTags(_cachedTags);
+        }
+
+        private void InitializeTags(List<string> tags)
+        {
+            _cachedTags = tags;
+            _tagsContainer.Clear();
+            foreach (var tag in _cachedTags)
+            {
+                _tagsContainer.Add(new Label(tag));
+                // var foo = new TagElement();
             }
         }
 
@@ -70,6 +96,7 @@ namespace Ludwell.Scene
 
         private void Return()
         {
+            Debug.LogError(nameof(Return));
             this.Root().Q<TabController>().ReturnToPreviousView();
         }
     }

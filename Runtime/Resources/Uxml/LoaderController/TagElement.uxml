@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/LoaderController/SceneLoaderTag.uss?fileID=7433441132597879392&amp;guid=799b1208613bc83458c83830f1a9c838&amp;type=3#SceneLoaderTag" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/LoaderController/TagElement.uss?fileID=7433441132597879392&amp;guid=799b1208613bc83458c83830f1a9c838&amp;type=3#TagElement" />
     <ui:VisualElement name="scene-loader__tag" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-        <ui:Button display-tooltip-when-elided="true" text="-" name="button-remove" class="button-left" />
+        <ui:Button display-tooltip-when-elided="true" name="button-search" text="S" class="button-left" />
         <ui:Button display-tooltip-when-elided="true" text="Button" name="button-main" />
-        <ui:Button display-tooltip-when-elided="true" name="button-search" text="S" class="button-right" />
+        <ui:Button display-tooltip-when-elided="true" text="-" name="button-remove" class="button-right" />
     </ui:VisualElement>
 </ui:UXML>
