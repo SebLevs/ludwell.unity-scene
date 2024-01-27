@@ -85,8 +85,6 @@ namespace Ludwell.Scene
             _foldoutElement.RegisterValueChangedCallback(BindFoldoutValue);
             _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
-            // todo: tag section here
-            Debug.LogError("BIND");
         }
 
         private void CleanupStyle()
@@ -116,8 +114,6 @@ namespace Ludwell.Scene
             _foldoutTextField.value = Cache.Name;
             _foldoutElement.value = Cache.IsOpen;
             _mainSceneField.value = Cache.MainScene;
-            // todo: set tags from database here
-            Debug.LogError("SET");
             _tagsController.Refresh();
             HandleRequiredSceneListView();
         }

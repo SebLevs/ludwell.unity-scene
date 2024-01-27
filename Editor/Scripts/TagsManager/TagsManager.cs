@@ -44,7 +44,6 @@ namespace Ludwell.Scene
                 return;
             }
 
-            Debug.LogError(nameof(AddTag));
             _tagsContainer.Add(new Label(tag));
             _cachedTags.Add(tag);
         }
@@ -57,7 +56,6 @@ namespace Ludwell.Scene
                 return;
             }
 
-            Debug.LogError(nameof(RemoveTag));
             _tagsContainer.RemoveAt(_cachedTags.IndexOf(tag));
             _cachedTags.Remove(tag);
         }

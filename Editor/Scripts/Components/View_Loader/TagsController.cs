@@ -43,11 +43,10 @@ namespace Ludwell.Scene
 
         public void Refresh()
         {
-            Debug.LogError(nameof(Refresh));
             _tagsContainer.Clear();
             foreach (var tag in _loaderListViewElement.Cache.Tags)
             {
-                CreateTagElement(tag);
+                _tagsContainer.Add(CreateTagElement(tag));
             }
         }
 
