@@ -46,7 +46,6 @@ namespace Ludwell.Scene
             this.Root().Q<TabController>().SwitchView(this);
 
             _cachedTags = tags;
-            InitializeTags(_cachedTags);
             BuildTagsController(tags);
         }
 
@@ -54,13 +53,8 @@ namespace Ludwell.Scene
         {
             _tagsController
                 .WithTagList(tags)
-                .WithOptionButtonEvent(Return);
-        }
-
-        private void InitializeTags(List<string> tags)
-        {
-            _cachedTags = tags;
-            _tagsController.Refresh();
+                .WithOptionButtonEvent(Return)
+                .Refresh();
         }
 
         private void SetReferences()
