@@ -16,7 +16,6 @@
     padding-right: 4px;
     width: 100%;
     padding-top: 4px;
-    min-height: 22px;
 }
 
 #button__return > #button {

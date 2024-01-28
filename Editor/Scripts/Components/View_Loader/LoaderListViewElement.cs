@@ -38,7 +38,7 @@ namespace Ludwell.Scene
         private ListView _listViewRequiredElements;
         private ListViewInitializer<RequiredSceneElement, SceneDataReference> _listViewInitializer;
 
-        public LoaderListViewElementData Cache { get; set; }
+        public LoaderListViewElementData Cache { get; set; } = new();
 
         public LoaderListViewElement()
         {
@@ -50,6 +50,8 @@ namespace Ludwell.Scene
 
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
+
+            BuildTagsController();
         }
 
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
@@ -114,6 +116,7 @@ namespace Ludwell.Scene
             _foldoutTextField.value = Cache.Name;
             _foldoutElement.value = Cache.IsOpen;
             _mainSceneField.value = Cache.MainScene;
+            _tagsController.WithTagList(Cache.Tags);
             _tagsController.Refresh();
             HandleRequiredSceneListView();
         }
@@ -221,6 +224,11 @@ namespace Ludwell.Scene
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+        }
+
+        private void BuildTagsController()
+        {
+            _tagsController.WithOptionButtonEvent(() => { this.Root().Q<TagsManager>().Show(Cache.Tags); });
         }
     }
 }

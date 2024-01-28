@@ -1,13 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Template name="button__open-load" src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uxml/Common/button__open-load.uxml?fileID=9197481963319205126&amp;guid=ee5ab41f80737f94a99b7cf175df6d60&amp;type=3#button__open-load" />
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/TagsManager/TagsManager.uss?fileID=7433441132597879392&amp;guid=ef63c7d559ab5e742a5b0cc03b5fade7&amp;type=3#TagsManager" />
     <ui:VisualElement name="TagsManager" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-        <ui:VisualElement name="main-container" class="main-container">
-            <ui:Label tabindex="-1" text="Tags" display-tooltip-when-elided="true" name="title" class="tag-manager__header" style="align-self: center; justify-content: space-around;">
-                <ui:Instance template="button__open-load" name="button__return" style="left: -32px;" />
-            </ui:Label>
-            <ui:VisualElement name="tags-container" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-wrap: wrap; justify-content: center; display: flex;" />
-        </ui:VisualElement>
+        <Ludwell.Scene.TagsController name="TagsController" />
         <ui:VisualElement name="listview-container" class="listview-container">
             <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" reorderable="true" style="flex-grow: 1;" />
         </ui:VisualElement>

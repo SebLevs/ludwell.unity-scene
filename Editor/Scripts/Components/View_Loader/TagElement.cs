@@ -57,9 +57,9 @@ namespace Ludwell.Scene
         {
             _mainButton.RegisterCallback<ClickEvent>(_ => { SelectTag(this); });
 
-            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(this); });
+            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(Value); });
 
-            _searchButton.RegisterCallback<ClickEvent>(_ => { _tagsController.ShowElementsWithTag(this); });
+            _searchButton.RegisterCallback<ClickEvent>(_ => { _tagsController.ShowElementsWithTag(Value); });
         }
 
         private static void SelectTag(TagElement tagElement)
