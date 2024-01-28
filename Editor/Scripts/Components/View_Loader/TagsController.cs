@@ -31,7 +31,7 @@ namespace Ludwell.Scene
 
         public void Remove(TagElement tagElement)
         {
-            _loaderListViewElement.Cache.Tags.Remove(tagElement.GetTagName);
+            _loaderListViewElement.Cache.Tags.Remove(tagElement.Value);
             _tagsContainer.Remove(tagElement);
         }
 
@@ -63,7 +63,6 @@ namespace Ludwell.Scene
 
         private void SetButtonEvents()
         {
-            // _manageTagsButton.RegisterCallback<ClickEvent>(_ => { this.Root().Q<TagsManager>().Show(this); });
             _manageTagsButton.RegisterCallback<ClickEvent>(_ =>
             {
                 this.Root().Q<TagsManager>().Show(_loaderListViewElement.Cache.Tags);

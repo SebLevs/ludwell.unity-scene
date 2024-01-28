@@ -5,12 +5,18 @@
     padding-right: 0;
 }
 
+#main-container {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
 #tags-container {
     align-self: center;
     padding-left: 4px;
     padding-right: 4px;
     width: 100%;
     padding-top: 4px;
+    min-height: 22px;
 }
 
 #button__return > #button {

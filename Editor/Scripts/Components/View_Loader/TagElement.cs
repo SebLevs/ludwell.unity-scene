@@ -34,16 +34,11 @@ namespace Ludwell.Scene
             ToggleBehaviourButtons(DisplayStyle.None);
         }
 
-        public string GetTagName => _mainButton.text;
+        public string Value => _mainButton.text;
 
         public void SetTagName(string value)
         {
             _mainButton.text = value;
-        }
-
-        public void SetTagsController(TagsController tagsController)
-        {
-            _tagsController = tagsController;
         }
 
         private void SetReferences()
