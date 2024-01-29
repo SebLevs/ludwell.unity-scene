@@ -9,20 +9,20 @@ namespace Ludwell.Scene
     {
         private readonly List<TListElement> _data;
 
+        public ListView ListView { get; private set; }
+
         public ListViewInitializer(ListView listView, List<TListElement> data)
         {
             _data = data;
-            listView.itemsSource = _data;
-            listView.makeItem = CreateElement;
-            listView.bindItem = OnElementScrollIntoView;
-            listView.itemsAdded += _ => ForceRebuild(listView);
-            listView.itemsRemoved += _ => ForceRebuild(listView);
-            
+            ListView = listView;
+            ListView.itemsSource = _data;
+            ListView.makeItem = CreateElement;
+            ListView.bindItem = OnElementScrollIntoView;
+            ListView.itemsAdded += _ => ForceRebuild(ListView);
+            ListView.itemsRemoved += _ => ForceRebuild(ListView);
+
             // todo: replace workaround for the ListView visual bug concerning dynamically sized element rendering.
-            listView.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                listView.Rebuild();
-            });
+            listView.RegisterCallback<GeometryChangedEvent>(_ => { ListView.Rebuild(); });
         }
 
         private TVisualElement CreateElement()

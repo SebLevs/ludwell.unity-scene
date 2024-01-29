@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Ludwell.Scene.Editor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,7 +22,8 @@ namespace Ludwell.Scene
         private LoaderSceneData _loaderSceneData;
 
         private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
-        private List<string> _cachedTags = new();
+
+        private VisualElement _contentContainer;
 
         public TagsManager()
         {
@@ -29,24 +31,44 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
 
             SetReferences();
-        }
 
-        public void AddTag(string tag)
-        {
-            _tagsController.Add(tag);
-        }
-
-        public void RemoveTag(string tag)
-        {
-            _tagsController.Remove(tag);
+            InitializeListViewBehaviours();
         }
 
         public void Show(List<string> tags)
         {
             this.Root().Q<TabController>().SwitchView(this);
-
-            _cachedTags = tags;
             BuildTagsController(tags);
+        }
+
+        public void AddTagToController(string tag)
+        {
+            _tagsController.Add(tag);
+        }
+
+        public void RemoveTagFromController(string tag)
+        {
+            _tagsController.Remove(tag);
+        }
+
+        public void RemoveTag(VisualElement tagElement)
+        {
+            var index = _contentContainer.IndexOf(tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
+            _contentContainer.RemoveAt(index);
+            _loaderSceneData.Tags.RemoveAt(index);
+            LoaderSceneDataHelper.SaveChange();
+        }
+
+        public bool IsTagDuplicate(VisualElement tagElement, string tag)
+        {
+            var index = _contentContainer.IndexOf(tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
+            for (var i = 0; i < _loaderSceneData.Tags.Count; i++)
+            {
+                if (i == index) continue;
+                if (_loaderSceneData.Tags[i].Value == tag) return true;
+            }
+
+            return false;
         }
 
         private void BuildTagsController(List<string> tags)
@@ -62,6 +84,20 @@ namespace Ludwell.Scene
             _tagsController = this.Q<TagsController>();
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
             _listViewInitializer = new(this.Q<ListView>(), _loaderSceneData.Tags);
+            _contentContainer = this.Q(UiToolkitNames.UnityContentContainer);
+        }
+        
+        private void InitializeListViewBehaviours()
+        {
+            _listViewInitializer.ListView.itemsAdded += _ =>
+            {
+                var last = _contentContainer.Children().Last().Q<TagsManagerElement>();
+                last.FocusTextField();
+            };
+            _listViewInitializer.ListView.itemsRemoved += _ =>
+            {
+                LoaderSceneDataHelper.SaveChange();
+            };
         }
 
         private void Return()

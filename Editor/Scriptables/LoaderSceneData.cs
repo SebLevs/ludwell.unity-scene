@@ -113,6 +113,17 @@ namespace Ludwell.Scene.Editor
     [Serializable]
     public class Tag
     {
-        public string Value;
+        [SerializeField] private string _value;
+
+        public string Value
+        {
+            get => _value;
+            set
+            {
+                if (_value == value) return;
+                _value = value;
+                LoaderSceneDataHelper.SaveChangeDelayed();
+            }
+        }
     }
 }

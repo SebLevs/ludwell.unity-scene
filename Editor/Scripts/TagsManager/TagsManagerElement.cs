@@ -1,3 +1,5 @@
+using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -32,6 +34,23 @@ namespace Ludwell.Scene.Editor
 
             SetReferences();
             InitializeButtons();
+            AutomateTagValidityManagement();
+        }
+
+        private void AutomateTagValidityManagement()
+        {
+            _tagTextField.RegisterCallback<BlurEvent>(_ =>
+            {
+                if (String.IsNullOrEmpty(_tagTextField.value))
+                {
+                    _tagsManager.RemoveTag(this);
+                }
+                else if (_tagsManager.IsTagDuplicate(this, _tagTextField.value))
+                {
+                    Debug.LogError($"{_tagTextField.value} already exists, duplicate tag has been removed.");
+                    _tagsManager.RemoveTag(this);
+                }
+            });
         }
 
         public void BindElementToCachedData()
@@ -44,6 +63,11 @@ namespace Ludwell.Scene.Editor
             _tagTextField.value = Cache.Value;
         }
 
+        public void FocusTextField()
+        {
+            _tagTextField.Focus();
+        }
+
         private void SetReferences()
         {
             _addButton = this.Q<Button>(AddButtonName);
@@ -51,23 +75,26 @@ namespace Ludwell.Scene.Editor
 
             _tagTextField = this.Q<TextField>(TagTextFieldName);
 
-            RegisterCallback<AttachToPanelEvent>(_ => { _tagsManager = GetFirstAncestorOfType<TagsManager>(); });
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                _tagsManager = GetFirstAncestorOfType<TagsManager>();
+            });
         }
 
         private void InitializeButtons()
         {
-            _addButton.RegisterCallback<ClickEvent>(_ => Add());
-            _removeButton.RegisterCallback<ClickEvent>(_ => Remove());
+            _addButton.RegisterCallback<ClickEvent>(_ => AddToController());
+            _removeButton.RegisterCallback<ClickEvent>(_ => RemoveFromController());
         }
 
-        private void Add()
+        private void AddToController()
         {
-            _tagsManager.AddTag(_tagTextField.value);
+            _tagsManager.AddTagToController(_tagTextField.value);
         }
 
-        private void Remove()
+        private void RemoveFromController()
         {
-            _tagsManager.RemoveTag(_tagTextField.value);
+            _tagsManager.RemoveTagFromController(_tagTextField.value);
         }
 
         private void BindTextField(ChangeEvent<string> evt)

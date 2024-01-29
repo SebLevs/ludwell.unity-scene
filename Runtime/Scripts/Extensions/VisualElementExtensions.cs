@@ -26,6 +26,16 @@ namespace Ludwell.Scene
             return element.parent.Root();
         }
 
+        public static VisualElement FindFirstParentWithName(this VisualElement element, string name)
+        {
+            if (element.parent == null)
+            {
+                throw new MissingReferenceException($"No parent containing the name \"{name}\" was found");
+            }
+            if (element.parent.name == name) return element.parent;
+            return element.parent.FindFirstParentWithName(name);
+        }
+        
         public static VisualElement FindFirstChildWhereNameContains(this VisualElement element, string name)
         {
             foreach (VisualElement child in element.Children())
