@@ -47,7 +47,7 @@ namespace Ludwell.Scene.Editor
                 }
                 else if (_tagsManager.IsTagDuplicate(this, _tagTextField.value))
                 {
-                    Debug.LogError($"{_tagTextField.value} already exists, duplicate tag has been removed.");
+                    Debug.LogError($"Duplicate tag | \"{_tagTextField.value}\" already exists. New entry has been removed.");
                     _tagsManager.RemoveTag(this);
                 }
             });
