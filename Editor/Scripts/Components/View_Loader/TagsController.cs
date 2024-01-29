@@ -12,8 +12,8 @@ namespace Ludwell.Scene
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(TagsController);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(TagsController);
+        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsController);
+        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsController);
 
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";

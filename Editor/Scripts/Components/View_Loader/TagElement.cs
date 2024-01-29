@@ -8,8 +8,8 @@ namespace Ludwell.Scene
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(TagElement);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(TagElement);
+        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagElement);
+        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagElement);
 
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
