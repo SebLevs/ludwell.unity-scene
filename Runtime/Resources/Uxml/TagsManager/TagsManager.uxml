@@ -2,6 +2,9 @@
     <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/TagsManager/TagsManager.uss?fileID=7433441132597879392&amp;guid=ef63c7d559ab5e742a5b0cc03b5fade7&amp;type=3#TagsManager" />
     <ui:VisualElement name="TagsManager" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <Ludwell.Scene.TagsController name="TagsController" />
+        <ui:VisualElement name="search-field__background" style="border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); background-color: rgb(70, 70, 70);">
+            <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" class="DropdownSearchField" style="align-items: flex-start;" />
+        </ui:VisualElement>
         <ui:VisualElement name="listview-container" class="listview-container">
             <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" reorderable="true" style="flex-grow: 1;" />
         </ui:VisualElement>

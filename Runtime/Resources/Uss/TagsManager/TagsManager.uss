@@ -29,9 +29,9 @@
 
 #listview-container {
     background-color: rgba(0, 0, 0, 0);
-    flex-grow: 1;
     margin-bottom: 2px;
     min-height: 100px;
+    flex-grow: 1;
 }
 
 #listview-container > ListView > ScrollView {
@@ -45,6 +45,7 @@
     padding-right: 0;
     padding-top: 4px;
     padding-bottom: 4px;
+    border-top-width: 0;
 }
 
 #listview-container > ListView > #unity-list-view__footer {
@@ -143,4 +144,15 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
+}
+
+#DropdownSearchField {
+    width: 80%;
+    align-self: center;
+}
+
+#DropdownSearchField > #search-field > #toolbar-search-field {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-width: 0;
 }
