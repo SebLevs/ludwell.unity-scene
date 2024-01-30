@@ -64,7 +64,7 @@ namespace Ludwell.Scene
                 for (var i = 0; i < itemsSource.Count; i++)
                 {
                     if (itemsSource[i] == null) break;
-                    var dataName = (itemsSource[i] as LoaderListViewElementData).Name;
+                    var dataName = (itemsSource[i] as IDropdownSearchFieldListable).GetName();
                     if (dataName.ToLower().Contains(evt.newValue.ToLower()))
                     {
                         var index = i;
@@ -109,8 +109,10 @@ namespace Ludwell.Scene
 
         private void OnClickedSearchFieldRefreshDropdown()
         {
+            // _searchField.Q<TextField>().RegisterCallback<BlurEvent>(evt =>
             RegisterCallback<MouseUpEvent>(evt =>
             {
+                Debug.LogError("BLUR");
                 if (!_dropdownListView.IsHidden) return;
                 if (_searchField.value == string.Empty) return;
 
@@ -125,6 +127,7 @@ namespace Ludwell.Scene
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _dropdownListView = new DropdownListView();
+                _dropdownListView.SetOwner(this);
                 var rootVisualContainer = this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
                 rootVisualContainer.Add(_dropdownListView);
                 

@@ -22,6 +22,7 @@ namespace Ludwell.Scene
         private LoaderSceneData _loaderSceneData;
 
         private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
+        private DropdownSearchField _dropdownSearchField;
 
         private VisualElement _contentContainer;
 
@@ -33,6 +34,15 @@ namespace Ludwell.Scene
             SetReferences();
 
             InitializeListViewBehaviours();
+            InitializeDropdownSearchField();
+        }
+
+        private void InitializeDropdownSearchField()
+        {
+            _dropdownSearchField.InitDropdownElementBehaviour(_listViewInitializer.ListView, itemIndex =>
+            {
+                _listViewInitializer.ListView.ScrollToItem(itemIndex);
+            });
         }
 
         public void Show(List<string> tags)
@@ -84,6 +94,7 @@ namespace Ludwell.Scene
             _tagsController = this.Q<TagsController>();
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
             _listViewInitializer = new(this.Q<ListView>(), _loaderSceneData.Tags);
+            _dropdownSearchField = this.Q<DropdownSearchField>();
             _contentContainer = this.Q(UiToolkitNames.UnityContentContainer);
         }
         

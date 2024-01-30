@@ -101,5 +101,10 @@ namespace Ludwell.Scene.Editor
         {
             Cache.Value = evt.newValue;
         }
+
+        public string GetName()
+        {
+            return Cache.Value;
+        }
     }
 }
