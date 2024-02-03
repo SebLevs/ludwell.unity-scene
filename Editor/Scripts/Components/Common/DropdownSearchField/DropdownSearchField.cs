@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -27,10 +26,14 @@ namespace Ludwell.Scene
 
         private const string SearchFieldName = "toolbar-search-field";
 
+        private const float BorderRadius = 3;
+
         private ToolbarSearchField _searchField;
         private DropdownListView _dropdownListView;
 
-        private const float BorderRadius = 3;
+        private ListView _boundListView;
+        private IList _boundItemsSource;
+        private List<LoaderListViewElementData> _filteredList = new();
 
         public DropdownSearchField()
         {
@@ -40,14 +43,10 @@ namespace Ludwell.Scene
             InitDropDown();
             InitSearchField();
             InitializeSearchListing();
-            
+
             KeepDropdownUnderSelf(this);
         }
 
-        private ListView _boundListView;
-        private IList _boundItemsSource;
-        private List<LoaderListViewElementData> _filteredList = new();
-        
         public void BindToListView(ListView listView)
         {
             _boundListView = listView;
@@ -59,7 +58,7 @@ namespace Ludwell.Scene
             UnregisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
             KeepDropdownUnderSelf(resizableParent);
         }
-        
+
         public void WithDropdownBehaviour(Action<int> actionAtIndex)
         {
             _searchField.RegisterValueChangedCallback(evt =>
@@ -70,7 +69,7 @@ namespace Ludwell.Scene
                     HideDropdown();
                     return;
                 }
-                
+
                 for (var i = 0; i < _boundItemsSource.Count; i++)
                 {
                     if (_boundItemsSource[i] == null) break;
@@ -83,7 +82,7 @@ namespace Ludwell.Scene
                             () => actionAtIndex.Invoke(index));
                     }
                 }
-                
+
                 if (_dropdownListView.Count == 0) return;
                 ShowDropdown();
             });
@@ -100,16 +99,6 @@ namespace Ludwell.Scene
         {
             SetBottomBorderRadii(BorderRadius);
             _dropdownListView.Hide();
-        }
-
-        public List<DropdownElement> GetDropdownElements()
-        {
-            return _dropdownListView.GetElements();
-        }
-
-        public void ClearDropdownData()
-        {
-            _dropdownListView.ClearData();
         }
 
         private void InitSearchField()
@@ -130,7 +119,7 @@ namespace Ludwell.Scene
                 _dropdownListView.Hide();
             });
         }
-        
+
         private void InitializeSearchListing()
         {
             _searchField.RegisterValueChangedCallback(evt =>
@@ -154,7 +143,7 @@ namespace Ludwell.Scene
                 _boundListView.Rebuild();
             });
         }
-        
+
         private void KeepDropdownUnderSelf(VisualElement resizableElement)
         {
             resizableElement.RegisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
@@ -171,6 +160,4 @@ namespace Ludwell.Scene
             _searchField.style.borderBottomRightRadius = radius;
         }
     }
-    
-    
 }
