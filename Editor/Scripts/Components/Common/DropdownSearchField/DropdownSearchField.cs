@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -43,6 +44,7 @@ namespace Ludwell.Scene
             InitDropDown();
             InitSearchField();
             InitializeSearchListing();
+            InitializeFocusAndBlur();
 
             KeepDropdownUnderSelf(this);
         }
@@ -63,8 +65,9 @@ namespace Ludwell.Scene
         {
             _searchField.RegisterValueChangedCallback(evt =>
             {
+                Debug.LogError("value changed");
                 _dropdownListView.ClearData();
-                if (evt.newValue == string.Empty)
+                if (string.IsNullOrEmpty(evt.newValue))
                 {
                     HideDropdown();
                     return;
@@ -83,8 +86,9 @@ namespace Ludwell.Scene
                     }
                 }
 
-                if (_dropdownListView.Count == 0) return;
-                ShowDropdown();
+                // todo: uncomment when InitializeFocusAndBlur() bug is fixed
+                // if (_dropdownListView.Count == 0) return;
+                // ShowDropdown();
             });
         }
 
@@ -142,6 +146,24 @@ namespace Ludwell.Scene
 
                 _boundListView.Rebuild();
             });
+        }
+
+        private void InitializeFocusAndBlur()
+        {
+            // todo: find out why the focus and blur are both called after selecting an element from the dropdown and then clicking on the search bar
+            // _searchField.RegisterCallback<FocusEvent>(_ =>
+            // {
+            //     if (string.IsNullOrEmpty(_searchField.value)) return;
+            //     Debug.LogError("FOCUS");
+            //     ShowDropdown();
+            // });
+            //
+            // _searchField.RegisterCallback<BlurEvent>(_ =>
+            // {
+            //     if (string.IsNullOrEmpty(_searchField.value)) return;
+            //     Debug.LogError("Blur");
+            //     HideDropdown();
+            // });
         }
 
         private void KeepDropdownUnderSelf(VisualElement resizableElement)
