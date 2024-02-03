@@ -39,23 +39,28 @@ namespace Ludwell.Scene
 
             InitDropDown();
             InitSearchField();
-            InitializeSearchBehaviour();
+            InitializeSearchListing();
             
-            // KeepDropdownUnderSelf();
+            KeepDropdownUnderSelf(this);
         }
 
         private ListView _boundListView;
         private IList _boundItemsSource;
         private List<LoaderListViewElementData> _filteredList = new();
-
+        
         public void BindToListView(ListView listView)
         {
-            KeepDropdownUnderSelf();
             _boundListView = listView;
             _boundItemsSource = listView.itemsSource;
         }
+
+        public void WithResizableParent(VisualElement resizableParent)
+        {
+            UnregisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+            KeepDropdownUnderSelf(resizableParent);
+        }
         
-        public void InitDropdownElementBehaviour(Action<int> actionAtIndex)
+        public void WithDropdownBehaviour(Action<int> actionAtIndex)
         {
             _searchField.RegisterValueChangedCallback(evt =>
             {
@@ -126,7 +131,7 @@ namespace Ludwell.Scene
             });
         }
         
-        private void InitializeSearchBehaviour()
+        private void InitializeSearchListing()
         {
             _searchField.RegisterValueChangedCallback(evt =>
             {
@@ -149,15 +154,15 @@ namespace Ludwell.Scene
                 _boundListView.Rebuild();
             });
         }
-
-        private void KeepDropdownUnderSelf()
+        
+        private void KeepDropdownUnderSelf(VisualElement resizableElement)
         {
-            // RegisterCallback<AttachToPanelEvent>(_ =>
-            // {
-            Debug.LogError(this.Root());
-                this.Root().RegisterCallback<GeometryChangedEvent>(_ => _dropdownListView.PlaceUnder(this));
-            // });
+            resizableElement.RegisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+        }
 
+        private void PlaceUnder()
+        {
+            _dropdownListView.PlaceUnder(this);
         }
 
         private void SetBottomBorderRadii(float radius)
@@ -166,4 +171,6 @@ namespace Ludwell.Scene
             _searchField.style.borderBottomRightRadius = radius;
         }
     }
+    
+    
 }

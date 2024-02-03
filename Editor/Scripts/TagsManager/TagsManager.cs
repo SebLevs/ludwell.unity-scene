@@ -40,7 +40,7 @@ namespace Ludwell.Scene
         private void InitializeDropdownSearchField()
         {
             _dropdownSearchField.BindToListView(_listViewInitializer.ListView);
-            _dropdownSearchField.InitDropdownElementBehaviour(itemIndex =>
+            _dropdownSearchField.WithDropdownBehaviour(itemIndex =>
             {
                 _listViewInitializer.ListView.ScrollToItem(itemIndex);
             });

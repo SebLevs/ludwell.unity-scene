@@ -78,7 +78,8 @@ namespace Ludwell.Scene
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.BindToListView(_listView);
-            _dropdownSearchField.InitDropdownElementBehaviour(index =>
+            _dropdownSearchField.WithResizableParent(this);
+            _dropdownSearchField.WithDropdownBehaviour(index =>
             {
                 _dropdownSearchField.HideDropdown();
                 _listView.ScrollToItem(index);
