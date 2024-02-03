@@ -52,7 +52,7 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class LoaderListViewElementData : IDropdownSearchFieldListable
+    public class LoaderListViewElementData : ISearchFieldListable
     {
         [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
@@ -116,7 +116,7 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class Tag: IDropdownSearchFieldListable
+    public class Tag: ISearchFieldListable
     {
         [SerializeField] private string _value;
 

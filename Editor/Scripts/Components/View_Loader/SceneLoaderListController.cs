@@ -29,12 +29,12 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
 
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
-            InitButtonCloseAll();
-            InitLoaderListView();
-            InitSearchField();
+            InitializeButtonCloseAll();
+            InitializeLoaderListView();
+            InitializeSearchField();
         }
 
-        private void InitButtonCloseAll()
+        private void InitializeButtonCloseAll()
         {
             var closeAllButton = this.Q<ToolbarButton>();
 
@@ -67,23 +67,22 @@ namespace Ludwell.Scene
             }
         }
 
-        private void InitLoaderListView()
+        private void InitializeLoaderListView()
         {
             _listView = this.Q<ListView>(ListViewName);
             _listViewInitializer = new(_listView, _loaderSceneData.Elements);
             _listView.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
-        private void InitSearchField()
+        private void InitializeSearchField()
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
-            _dropdownSearchField.InitDropdownElementBehaviour(_listView, (index) =>
+            _dropdownSearchField.BindToListView(_listView);
+            _dropdownSearchField.InitDropdownElementBehaviour(index =>
             {
                 _dropdownSearchField.HideDropdown();
                 _listView.ScrollToItem(index);
             });
-
-            _dropdownSearchField.InitMouseEvents(this.Root());
         }
     }
 }

@@ -39,7 +39,8 @@ namespace Ludwell.Scene
 
         private void InitializeDropdownSearchField()
         {
-            _dropdownSearchField.InitDropdownElementBehaviour(_listViewInitializer.ListView, itemIndex =>
+            _dropdownSearchField.BindToListView(_listViewInitializer.ListView);
+            _dropdownSearchField.InitDropdownElementBehaviour(itemIndex =>
             {
                 _listViewInitializer.ListView.ScrollToItem(itemIndex);
             });
@@ -67,6 +68,7 @@ namespace Ludwell.Scene
             _contentContainer.RemoveAt(index);
             _loaderSceneData.Tags.RemoveAt(index);
             LoaderSceneDataHelper.SaveChange();
+            _listViewInitializer.ForceRebuild();
         }
 
         public bool IsTagDuplicate(VisualElement tagElement, string tag)
