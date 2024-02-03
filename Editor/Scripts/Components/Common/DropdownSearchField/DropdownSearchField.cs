@@ -46,6 +46,8 @@ namespace Ludwell.Scene
             InitializeSearchListing();
             InitializeFocusAndBlur();
 
+            InitializeSearchState();
+
             KeepDropdownUnderSelf(this);
         }
 
@@ -129,22 +131,75 @@ namespace Ludwell.Scene
             {
                 if (string.IsNullOrEmpty(evt.newValue))
                 {
+                    Debug.LogError(nameof(InitializeSearchListing));
                     _boundListView.itemsSource = _boundItemsSource;
                     _boundListView.Rebuild();
                     return;
                 }
 
-                _filteredList = new();
-                _boundListView.itemsSource = _filteredList;
-                foreach (var element in _boundItemsSource)
-                {
-                    var dataName = (element as ISearchFieldListable).GetName();
-                    if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
-                    _filteredList.Add(element as LoaderListViewElementData);
-                }
-
+                _searchBehaviour.Invoke(evt.newValue);
                 _boundListView.Rebuild();
             });
+        }
+        
+        private void InitializeSearchState()
+        {
+            _searchBehaviour = DefaultSearchBehaviour;
+            this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
+            {
+                HideDropdown();
+
+                if (_searchState == SearchState.Default)
+                {
+                    _searchState = SearchState.Tag;
+                    _searchBehaviour = TagSearchBehaviour;
+                    if (string.IsNullOrEmpty(_searchField.value)) return;
+                    _searchBehaviour.Invoke(_searchField.value);
+                    return;
+                }
+
+                _searchState = SearchState.Default;
+                _searchBehaviour = DefaultSearchBehaviour;
+                if (string.IsNullOrEmpty(_searchField.value)) return;
+                _searchBehaviour.Invoke(_searchField.value);
+            });
+        }
+
+        private enum SearchState
+        {
+            Default,
+            Tag
+        }
+
+        private SearchState _searchState;
+        private Action<string> _searchBehaviour;
+
+        private void DefaultSearchBehaviour(string newValue)
+        {
+            Debug.LogError(nameof(DefaultSearchBehaviour));
+            _filteredList = new();
+            _boundListView.itemsSource = _filteredList;
+            
+            foreach (var element in _boundItemsSource)
+            {
+                var dataName = (element as ISearchFieldListable).GetName();
+                if (!dataName.ToLower().Contains(newValue.ToLower())) continue;
+                _filteredList.Add(element as LoaderListViewElementData);
+            }
+            
+            _boundListView.Rebuild();
+
+            // if (_filteredList.Count == 0) return;
+            // ShowDropdown();
+        }
+
+        private void TagSearchBehaviour(string newValue)
+        {
+            Debug.LogError(nameof(TagSearchBehaviour));
+            
+            _boundListView.Rebuild();
+            // if (_filteredList.Count == 0) return;
+            // ShowDropdown();
         }
 
         private void InitializeFocusAndBlur()
