@@ -65,7 +65,6 @@ namespace Ludwell.Scene
         {
             _searchField.RegisterValueChangedCallback(evt =>
             {
-                Debug.LogError("value changed");
                 _dropdownListView.ClearData();
                 if (string.IsNullOrEmpty(evt.newValue))
                 {
