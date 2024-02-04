@@ -12,3 +12,9 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+#unity-search:hover {
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    scale: 1.5 1.4;
+}
