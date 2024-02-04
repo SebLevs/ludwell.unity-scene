@@ -18,8 +18,10 @@ namespace Ludwell.Scene
         private const string ListViewName = "scenes__list";
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
-        private const string _buttonCloseAll = "button__close-all";
-        private const string _buttonCloseAllClicked = "button__close-all-clicked";
+        private const string ButtonCloseAll = "button__close-all";
+        private const string ButtonCloseAllClicked = "button__close-all-clicked";
+
+        private const string TagIconName = "icon_load";
 
         private LoaderSceneData _loaderSceneData;
         private ListView _listView;
@@ -43,15 +45,15 @@ namespace Ludwell.Scene
 
             closeAllButton.RegisterCallback<MouseDownEvent>(_ =>
             {
-                closeAllButton.RemoveFromClassList(_buttonCloseAll);
-                closeAllButton.AddToClassList(_buttonCloseAllClicked);
+                closeAllButton.RemoveFromClassList(ButtonCloseAll);
+                closeAllButton.AddToClassList(ButtonCloseAllClicked);
             }, TrickleDown.TrickleDown);
 
             closeAllButton.RegisterCallback<MouseUpEvent>(_ =>
             {
                 CloseAll();
-                closeAllButton.RemoveFromClassList(_buttonCloseAllClicked);
-                closeAllButton.AddToClassList(_buttonCloseAll);
+                closeAllButton.RemoveFromClassList(ButtonCloseAllClicked);
+                closeAllButton.AddToClassList(ButtonCloseAll);
             });
         }
 
@@ -81,6 +83,8 @@ namespace Ludwell.Scene
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.BindToListView(_listView);
+
+            var texture = Resources.Load<Texture2D>("Sprites/" + TagIconName);
             _dropdownSearchField
                 .WithResizableParent(this)
                 .WithDropdownBehaviour(index =>
@@ -88,7 +92,7 @@ namespace Ludwell.Scene
                     _dropdownSearchField.HideDropdown();
                     _listView.ScrollToItem(index);
                 })
-                .WithCyclingSearchBehaviour(Resources.Load<Texture2D>("Sprites/icon_load"), (searchFieldValue, boundItemSource) =>
+                .WithCyclingSearchBehaviour(texture, (searchFieldValue, boundItemSource) =>
                 {
                     List<ISearchFieldListable> filteredList = new();
 

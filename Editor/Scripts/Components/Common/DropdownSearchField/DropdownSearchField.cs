@@ -27,6 +27,8 @@ namespace Ludwell.Scene
 
         private const string SearchFieldName = "toolbar-search-field";
 
+        private const string DefaultSearchIcon = "search-icon";
+
         private const float BorderRadius = 3;
 
         private ToolbarSearchField _searchField;
@@ -158,7 +160,8 @@ namespace Ludwell.Scene
 
         private void InitializeSearchListing()
         {
-            _searchBehaviours.Add((Resources.Load<Texture2D>("Sprites/icon_open"), DefaultSearchBehaviour));
+            var searchIcon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
+            _searchBehaviours.Add((searchIcon, DefaultSearchBehaviour));
 
             _searchField.RegisterValueChangedCallback(evt =>
             {
