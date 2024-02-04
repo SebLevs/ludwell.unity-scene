@@ -20,5 +20,5 @@
 #unity-search:hover {
     transition-duration: 0.2s;
     transition-timing-function: ease;
-    scale: 1.5 1.4;
+    scale: 1.2 1.2;
 }
