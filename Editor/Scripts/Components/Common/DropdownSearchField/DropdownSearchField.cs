@@ -75,13 +75,11 @@ namespace Ludwell.Scene
                 {
                     if (_boundItemsSource[i] == null) break;
                     var dataName = (_boundItemsSource[i] as ISearchFieldListable).GetName();
-                    if (dataName.ToLower().Contains(evt.newValue.ToLower()))
-                    {
-                        var index = i;
-                        _dropdownListView.Add(
-                            dataName,
-                            () => actionAtIndex.Invoke(index));
-                    }
+                    if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
+                    var index = i;
+                    _dropdownListView.Add(
+                        dataName,
+                        () => actionAtIndex.Invoke(index));
                 }
 
                 // todo: uncomment when InitializeFocusAndBlur() bug is fixed
@@ -124,8 +122,8 @@ namespace Ludwell.Scene
 
         private void InitializeSearchListing()
         {
-            _searchBehaviour = DefaultSearchBehaviour;
-            
+            _searchBehaviours.Add(DefaultSearchBehaviour);
+
             _searchField.RegisterValueChangedCallback(evt =>
             {
                 if (string.IsNullOrEmpty(evt.newValue))
@@ -135,47 +133,52 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                _boundListView.itemsSource = _searchBehaviour.Invoke(evt.newValue);
+                _boundListView.itemsSource = GetCurrentSearchBehaviour().Invoke(evt.newValue, _boundItemsSource);
                 _boundListView.Rebuild();
             });
         }
-        
-        public void WithSecondarySearchBehaviour()
+
+        /// <param name="behaviour">
+        /// <list type="bullet">
+        /// <item>string = searchField value</item>
+        /// <item>IList = complete default list</item>
+        /// </list>
+        /// </param>
+        public void WithSecondarySearchBehaviour(Func<string, IList, List<ISearchFieldListable>> behaviour)
         {
-            // this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
-            // {
-            //     Debug.LogError("CLICK");
-            //     HideDropdown();
-            //     
-            //     _filteredList = new();
-            //     _boundListView.itemsSource = _filteredList;
-            //
-            //     if (_searchState == SearchState.Default)
-            //     {
-            //         _searchState = SearchState.Tag;
-            //         _searchBehaviour = TagSearchBehaviour;
-            //         if (string.IsNullOrEmpty(_searchField.value)) return;
-            //         _filteredList = _searchBehaviour.Invoke(_searchField.value);
-            //         _boundListView.Rebuild();
-            //         return;
-            //     }
-            //
-            //     _searchState = SearchState.Default;
-            //     _searchBehaviour = DefaultSearchBehaviour;
-            //     if (string.IsNullOrEmpty(_searchField.value)) return;
-            //     _filteredList = _searchBehaviour.Invoke(_searchField.value);
-            //     _boundListView.Rebuild();
-            // });
+            _searchBehaviours.Add(behaviour);
+
+            this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
+            {
+                Debug.LogError("CLICK");
+                HideDropdown();
+                CycleThroughSearchBehaviour();
+                _boundListView.itemsSource = GetCurrentSearchBehaviour().Invoke(_searchField.value, _boundItemsSource);
+                _boundListView.Rebuild();
+            });
         }
 
-        private Func<string, List<ISearchFieldListable>> _searchBehaviour;
-        
-        private List<ISearchFieldListable> DefaultSearchBehaviour(string searchFieldValue)
+        private int _searchBehaviourIndex;
+        private List<Func<string, IList, List<ISearchFieldListable>>> _searchBehaviours = new();
+
+        private Func<string, IList, List<ISearchFieldListable>> GetCurrentSearchBehaviour()
+        {
+            return _searchBehaviours[_searchBehaviourIndex];
+        }
+
+        private void CycleThroughSearchBehaviour()
+        {
+            _searchBehaviourIndex++;
+            if (_searchBehaviourIndex < _searchBehaviours.Count) return;
+            _searchBehaviourIndex = 0;
+        }
+
+        private List<ISearchFieldListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
         {
             Debug.LogError(nameof(DefaultSearchBehaviour));
 
             List<ISearchFieldListable> cache = new();
-            foreach (var element in _boundItemsSource)
+            foreach (var element in defaultList)
             {
                 var dataName = (element as ISearchFieldListable).GetName();
                 if (!dataName.ToLower().Contains(searchFieldValue.ToLower())) continue;

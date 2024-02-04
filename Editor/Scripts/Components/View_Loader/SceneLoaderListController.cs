@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -7,7 +8,9 @@ namespace Ludwell.Scene
 {
     public class SceneLoaderListController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits>
+        {
+        }
 
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
@@ -84,7 +87,22 @@ namespace Ludwell.Scene
                 _dropdownSearchField.HideDropdown();
                 _listView.ScrollToItem(index);
             });
-            _dropdownSearchField.WithSecondarySearchBehaviour();
+            _dropdownSearchField.WithSecondarySearchBehaviour((searchFieldValue, boundItemSource) =>
+            {
+                List<ISearchFieldListable> filteredList = new();
+
+                foreach (var listViewElement in boundItemSource)
+                {
+                    foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
+                    {
+                        if (tag != searchFieldValue) continue;
+                        filteredList.Add(listViewElement as LoaderListViewElementData);
+                        break;
+                    }
+                }
+
+                return filteredList;
+            });
         }
     }
 }
