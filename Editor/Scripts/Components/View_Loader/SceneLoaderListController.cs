@@ -22,7 +22,7 @@ namespace Ludwell.Scene
         private const string ButtonCloseAll = "button__close-all";
         private const string ButtonCloseAllClicked = "button__close-all-clicked";
 
-        private const string TagIconName = "icon_load";
+        private const string TagIconName = "icon_tag";
 
         private LoaderSceneData _loaderSceneData;
         private ListView _listView;

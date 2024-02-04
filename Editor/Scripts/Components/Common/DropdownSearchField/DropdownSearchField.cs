@@ -27,7 +27,7 @@ namespace Ludwell.Scene
 
         private const string SearchFieldName = "toolbar-search-field";
 
-        private const string DefaultSearchIcon = "icon_open";
+        private const string DefaultSearchIcon = "icon_search";
 
         private const float BorderRadius = 3;
 
