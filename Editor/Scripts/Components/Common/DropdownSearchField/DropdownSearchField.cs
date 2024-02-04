@@ -9,12 +9,12 @@ using UnityEngine.UIElements;
 namespace Ludwell.Scene
 {
     /// <summary>
-    /// InitDropdownElementBehaviour()
-    /// must be called to initialize the dropdown elements' action.<br/>
+    /// Default behaviour on value changed is to list the element by name<br/>
     /// <list type="number">
     /// <item>The dropdown will be populated from the specified Listview elements.</item>
     /// <item>The action will be invoked on mouse up from any drop down element.</item>
     /// </list>
+    /// additional search strategies can be added and cycled through on search icon click.
     /// </summary>
     public class DropdownSearchField : VisualElement
     {
@@ -27,7 +27,7 @@ namespace Ludwell.Scene
 
         private const string SearchFieldName = "toolbar-search-field";
 
-        private const string DefaultSearchIcon = "search-icon";
+        private const string DefaultSearchIcon = "icon_open";
 
         private const float BorderRadius = 3;
 
@@ -36,9 +36,9 @@ namespace Ludwell.Scene
 
         private ListView _boundListView;
         private IList _boundItemsSource;
-        
-        private int _searchBehaviourIndex;
-        private readonly List<(Texture2D, Func<string, IList, List<ISearchFieldListable>>)> _searchBehaviours = new();
+
+        private int _listingStrategyIndex;
+        private readonly List<ListingStrategy> _searchBehaviours = new();
 
         private VisualElement _icon;
 
@@ -50,6 +50,7 @@ namespace Ludwell.Scene
             SetReferences();
             InitDropDown();
             InitSearchField();
+            SetDefaultSearchBehaviour();
             InitializeSearchListing();
             InitializeFocusAndBlur();
 
@@ -103,23 +104,25 @@ namespace Ludwell.Scene
 
             return this;
         }
-        
-        /// <param name="behaviour">
+
+        /// <param name="listingStrategy">
         /// <list type="bullet">
         /// <item>string = searchField value</item>
         /// <item>IList = complete default list</item>
         /// </list>
         /// </param>
-        public DropdownSearchField WithCyclingSearchBehaviour(Texture2D icon, Func<string, IList, List<ISearchFieldListable>> behaviour)
+        public DropdownSearchField WithCyclingListingStrategy(ListingStrategy listingStrategy)
         {
-            _searchBehaviours.Add((icon, behaviour));
+            _searchBehaviours.Add(listingStrategy);
 
             this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
             {
-                Debug.LogError("CLICK");
                 HideDropdown();
-                CycleThroughSearchBehaviour();
-                _boundListView.itemsSource = GetCurrentSearchBehaviour().Item2.Invoke(_searchField.value, _boundItemsSource);
+                NextListingStrategy();
+                if (!string.IsNullOrEmpty(_searchField.value))
+                {
+                    _boundListView.itemsSource = GetCurrentListingStrategy().Execute(_searchField.value, _boundItemsSource);
+                }
                 _boundListView.Rebuild();
             });
 
@@ -160,9 +163,6 @@ namespace Ludwell.Scene
 
         private void InitializeSearchListing()
         {
-            var searchIcon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
-            _searchBehaviours.Add((searchIcon, DefaultSearchBehaviour));
-
             _searchField.RegisterValueChangedCallback(evt =>
             {
                 if (string.IsNullOrEmpty(evt.newValue))
@@ -172,15 +172,20 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                _boundListView.itemsSource = GetCurrentSearchBehaviour().Item2.Invoke(evt.newValue, _boundItemsSource);
+                _boundListView.itemsSource = GetCurrentListingStrategy().Execute(evt.newValue, _boundItemsSource);
                 _boundListView.Rebuild();
             });
         }
 
+        private void SetDefaultSearchBehaviour()
+        {
+            var icon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
+            var searchFieldListing = new ListingStrategy(icon, DefaultSearchBehaviour);
+            _searchBehaviours.Add(searchFieldListing);
+        }
+
         private List<ISearchFieldListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
         {
-            Debug.LogError(nameof(DefaultSearchBehaviour));
-
             List<ISearchFieldListable> cache = new();
             foreach (var element in defaultList)
             {
@@ -194,24 +199,24 @@ namespace Ludwell.Scene
 
             return cache;
         }
-        
-        private (Texture2D, Func<string, IList, List<ISearchFieldListable>>) GetCurrentSearchBehaviour()
+
+        private ListingStrategy GetCurrentListingStrategy()
         {
-            return _searchBehaviours[_searchBehaviourIndex];
+            return _searchBehaviours[_listingStrategyIndex];
         }
 
-        private void CycleThroughSearchBehaviour()
+        private void NextListingStrategy()
         {
-            _searchBehaviourIndex++;
-            
-            if (_searchBehaviourIndex == _searchBehaviours.Count)
+            _listingStrategyIndex++;
+
+            if (_listingStrategyIndex == _searchBehaviours.Count)
             {
-                _searchBehaviourIndex = 0;
+                _listingStrategyIndex = 0;
             }
 
-            _icon.style.backgroundImage = new StyleBackground(GetCurrentSearchBehaviour().Item1);
+            _icon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
         }
-        
+
         private void InitializeFocusAndBlur()
         {
             // todo: find out why the focus and blur are both called after selecting an element from the dropdown and then clicking on the search bar
@@ -244,6 +249,23 @@ namespace Ludwell.Scene
         {
             _searchField.style.borderBottomLeftRadius = radius;
             _searchField.style.borderBottomRightRadius = radius;
+        }
+    }
+
+    public class ListingStrategy
+    {
+        public Texture2D Icon { get; }
+        private readonly Func<string, IList, List<ISearchFieldListable>> _strategy;
+
+        public ListingStrategy(Texture2D icon, Func<string, IList, List<ISearchFieldListable>> strategy)
+        {
+            Icon = icon;
+            _strategy = strategy;
+        }
+
+        public List<ISearchFieldListable> Execute(string searchFieldValue, IList searchFrom)
+        {
+            return _strategy.Invoke(searchFieldValue, searchFrom);
         }
     }
 }

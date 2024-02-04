@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
@@ -84,7 +85,9 @@ namespace Ludwell.Scene
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.BindToListView(_listView);
 
-            var texture = Resources.Load<Texture2D>("Sprites/" + TagIconName);
+            var icon = Resources.Load<Texture2D>("Sprites/" + TagIconName);
+            var searchListingStrategy = new ListingStrategy(icon, ListTag);
+
             _dropdownSearchField
                 .WithResizableParent(this)
                 .WithDropdownBehaviour(index =>
@@ -92,22 +95,24 @@ namespace Ludwell.Scene
                     _dropdownSearchField.HideDropdown();
                     _listView.ScrollToItem(index);
                 })
-                .WithCyclingSearchBehaviour(texture, (searchFieldValue, boundItemSource) =>
+                .WithCyclingListingStrategy(searchListingStrategy);
+        }
+
+        private List<ISearchFieldListable> ListTag(string searchFieldValue, IList boundItemSource)
+        {
+            List<ISearchFieldListable> filteredList = new();
+
+            foreach (var listViewElement in boundItemSource)
+            {
+                foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
                 {
-                    List<ISearchFieldListable> filteredList = new();
+                    if (tag != searchFieldValue) continue;
+                    filteredList.Add(listViewElement as LoaderListViewElementData);
+                    break;
+                }
+            }
 
-                    foreach (var listViewElement in boundItemSource)
-                    {
-                        foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
-                        {
-                            if (tag != searchFieldValue) continue;
-                            filteredList.Add(listViewElement as LoaderListViewElementData);
-                            break;
-                        }
-                    }
-
-                    return filteredList;
-                });
+            return filteredList;
         }
     }
 }
