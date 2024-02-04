@@ -34,6 +34,9 @@ namespace Ludwell.Scene
 
         private ListView _boundListView;
         private IList _boundItemsSource;
+        
+        private int _searchBehaviourIndex;
+        private readonly List<Func<string, IList, List<ISearchFieldListable>>> _searchBehaviours = new();
 
         public DropdownSearchField()
         {
@@ -54,13 +57,14 @@ namespace Ludwell.Scene
             _boundItemsSource = listView.itemsSource;
         }
 
-        public void WithResizableParent(VisualElement resizableParent)
+        public DropdownSearchField WithResizableParent(VisualElement resizableParent)
         {
             UnregisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
             KeepDropdownUnderSelf(resizableParent);
+            return this;
         }
 
-        public void WithDropdownBehaviour(Action<int> actionAtIndex)
+        public DropdownSearchField WithDropdownBehaviour(Action<int> actionAtIndex)
         {
             _searchField.RegisterValueChangedCallback(evt =>
             {
@@ -86,6 +90,30 @@ namespace Ludwell.Scene
                 // if (_dropdownListView.Count == 0) return;
                 // ShowDropdown();
             });
+
+            return this;
+        }
+        
+        /// <param name="behaviour">
+        /// <list type="bullet">
+        /// <item>string = searchField value</item>
+        /// <item>IList = complete default list</item>
+        /// </list>
+        /// </param>
+        public DropdownSearchField WithCyclingSearchBehaviour(Func<string, IList, List<ISearchFieldListable>> behaviour)
+        {
+            _searchBehaviours.Add(behaviour);
+
+            this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
+            {
+                Debug.LogError("CLICK");
+                HideDropdown();
+                CycleThroughSearchBehaviour();
+                _boundListView.itemsSource = GetCurrentSearchBehaviour().Invoke(_searchField.value, _boundItemsSource);
+                _boundListView.Rebuild();
+            });
+
+            return this;
         }
 
         public void ShowDropdown()
@@ -138,41 +166,6 @@ namespace Ludwell.Scene
             });
         }
 
-        /// <param name="behaviour">
-        /// <list type="bullet">
-        /// <item>string = searchField value</item>
-        /// <item>IList = complete default list</item>
-        /// </list>
-        /// </param>
-        public void WithSecondarySearchBehaviour(Func<string, IList, List<ISearchFieldListable>> behaviour)
-        {
-            _searchBehaviours.Add(behaviour);
-
-            this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
-            {
-                Debug.LogError("CLICK");
-                HideDropdown();
-                CycleThroughSearchBehaviour();
-                _boundListView.itemsSource = GetCurrentSearchBehaviour().Invoke(_searchField.value, _boundItemsSource);
-                _boundListView.Rebuild();
-            });
-        }
-
-        private int _searchBehaviourIndex;
-        private List<Func<string, IList, List<ISearchFieldListable>>> _searchBehaviours = new();
-
-        private Func<string, IList, List<ISearchFieldListable>> GetCurrentSearchBehaviour()
-        {
-            return _searchBehaviours[_searchBehaviourIndex];
-        }
-
-        private void CycleThroughSearchBehaviour()
-        {
-            _searchBehaviourIndex++;
-            if (_searchBehaviourIndex < _searchBehaviours.Count) return;
-            _searchBehaviourIndex = 0;
-        }
-
         private List<ISearchFieldListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
         {
             Debug.LogError(nameof(DefaultSearchBehaviour));
@@ -190,13 +183,19 @@ namespace Ludwell.Scene
 
             return cache;
         }
-
-        private List<VisualElement> TagSearchBehaviour(string searchFieldValue)
+        
+        private Func<string, IList, List<ISearchFieldListable>> GetCurrentSearchBehaviour()
         {
-            Debug.LogError(nameof(TagSearchBehaviour));
-            return new List<VisualElement>();
+            return _searchBehaviours[_searchBehaviourIndex];
         }
 
+        private void CycleThroughSearchBehaviour()
+        {
+            _searchBehaviourIndex++;
+            if (_searchBehaviourIndex < _searchBehaviours.Count) return;
+            _searchBehaviourIndex = 0;
+        }
+        
         private void InitializeFocusAndBlur()
         {
             // todo: find out why the focus and blur are both called after selecting an element from the dropdown and then clicking on the search bar

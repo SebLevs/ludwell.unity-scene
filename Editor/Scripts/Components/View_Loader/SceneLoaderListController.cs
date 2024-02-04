@@ -81,28 +81,29 @@ namespace Ludwell.Scene
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.BindToListView(_listView);
-            _dropdownSearchField.WithResizableParent(this);
-            _dropdownSearchField.WithDropdownBehaviour(index =>
-            {
-                _dropdownSearchField.HideDropdown();
-                _listView.ScrollToItem(index);
-            });
-            _dropdownSearchField.WithSecondarySearchBehaviour((searchFieldValue, boundItemSource) =>
-            {
-                List<ISearchFieldListable> filteredList = new();
-
-                foreach (var listViewElement in boundItemSource)
+            _dropdownSearchField
+                .WithResizableParent(this)
+                .WithDropdownBehaviour(index =>
                 {
-                    foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
-                    {
-                        if (tag != searchFieldValue) continue;
-                        filteredList.Add(listViewElement as LoaderListViewElementData);
-                        break;
-                    }
-                }
+                    _dropdownSearchField.HideDropdown();
+                    _listView.ScrollToItem(index);
+                })
+                .WithCyclingSearchBehaviour((searchFieldValue, boundItemSource) =>
+                {
+                    List<ISearchFieldListable> filteredList = new();
 
-                return filteredList;
-            });
+                    foreach (var listViewElement in boundItemSource)
+                    {
+                        foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
+                        {
+                            if (tag != searchFieldValue) continue;
+                            filteredList.Add(listViewElement as LoaderListViewElementData);
+                            break;
+                        }
+                    }
+
+                    return filteredList;
+                });
         }
     }
 }
