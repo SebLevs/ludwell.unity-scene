@@ -34,7 +34,6 @@ namespace Ludwell.Scene
 
         private ListView _boundListView;
         private IList _boundItemsSource;
-        private List<LoaderListViewElementData> _filteredList = new();
 
         public DropdownSearchField()
         {
@@ -45,8 +44,6 @@ namespace Ludwell.Scene
             InitSearchField();
             InitializeSearchListing();
             InitializeFocusAndBlur();
-
-            InitializeSearchState();
 
             KeepDropdownUnderSelf(this);
         }
@@ -127,79 +124,74 @@ namespace Ludwell.Scene
 
         private void InitializeSearchListing()
         {
+            _searchBehaviour = DefaultSearchBehaviour;
+            
             _searchField.RegisterValueChangedCallback(evt =>
             {
                 if (string.IsNullOrEmpty(evt.newValue))
                 {
-                    Debug.LogError(nameof(InitializeSearchListing));
                     _boundListView.itemsSource = _boundItemsSource;
                     _boundListView.Rebuild();
                     return;
                 }
 
-                _searchBehaviour.Invoke(evt.newValue);
+                _boundListView.itemsSource = _searchBehaviour.Invoke(evt.newValue);
                 _boundListView.Rebuild();
             });
         }
         
-        private void InitializeSearchState()
+        public void WithSecondarySearchBehaviour()
         {
-            _searchBehaviour = DefaultSearchBehaviour;
-            this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
-            {
-                HideDropdown();
-
-                if (_searchState == SearchState.Default)
-                {
-                    _searchState = SearchState.Tag;
-                    _searchBehaviour = TagSearchBehaviour;
-                    if (string.IsNullOrEmpty(_searchField.value)) return;
-                    _searchBehaviour.Invoke(_searchField.value);
-                    return;
-                }
-
-                _searchState = SearchState.Default;
-                _searchBehaviour = DefaultSearchBehaviour;
-                if (string.IsNullOrEmpty(_searchField.value)) return;
-                _searchBehaviour.Invoke(_searchField.value);
-            });
+            // this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
+            // {
+            //     Debug.LogError("CLICK");
+            //     HideDropdown();
+            //     
+            //     _filteredList = new();
+            //     _boundListView.itemsSource = _filteredList;
+            //
+            //     if (_searchState == SearchState.Default)
+            //     {
+            //         _searchState = SearchState.Tag;
+            //         _searchBehaviour = TagSearchBehaviour;
+            //         if (string.IsNullOrEmpty(_searchField.value)) return;
+            //         _filteredList = _searchBehaviour.Invoke(_searchField.value);
+            //         _boundListView.Rebuild();
+            //         return;
+            //     }
+            //
+            //     _searchState = SearchState.Default;
+            //     _searchBehaviour = DefaultSearchBehaviour;
+            //     if (string.IsNullOrEmpty(_searchField.value)) return;
+            //     _filteredList = _searchBehaviour.Invoke(_searchField.value);
+            //     _boundListView.Rebuild();
+            // });
         }
 
-        private enum SearchState
-        {
-            Default,
-            Tag
-        }
-
-        private SearchState _searchState;
-        private Action<string> _searchBehaviour;
-
-        private void DefaultSearchBehaviour(string newValue)
+        private Func<string, List<ISearchFieldListable>> _searchBehaviour;
+        
+        private List<ISearchFieldListable> DefaultSearchBehaviour(string searchFieldValue)
         {
             Debug.LogError(nameof(DefaultSearchBehaviour));
-            _filteredList = new();
-            _boundListView.itemsSource = _filteredList;
-            
+
+            List<ISearchFieldListable> cache = new();
             foreach (var element in _boundItemsSource)
             {
                 var dataName = (element as ISearchFieldListable).GetName();
-                if (!dataName.ToLower().Contains(newValue.ToLower())) continue;
-                _filteredList.Add(element as LoaderListViewElementData);
+                if (!dataName.ToLower().Contains(searchFieldValue.ToLower())) continue;
+                cache.Add(element as ISearchFieldListable);
             }
-            
-            _boundListView.Rebuild();
 
             // if (_filteredList.Count == 0) return;
             // ShowDropdown();
+
+            return cache;
         }
 
-        private void TagSearchBehaviour(string newValue)
+        private List<VisualElement> TagSearchBehaviour(string searchFieldValue)
         {
             Debug.LogError(nameof(TagSearchBehaviour));
-            
-            _boundListView.Rebuild();
-            // if (_filteredList.Count == 0) return;
-            // ShowDropdown();
+            return new List<VisualElement>();
         }
 
         private void InitializeFocusAndBlur()

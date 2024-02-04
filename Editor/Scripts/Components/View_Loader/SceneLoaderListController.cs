@@ -84,6 +84,7 @@ namespace Ludwell.Scene
                 _dropdownSearchField.HideDropdown();
                 _listView.ScrollToItem(index);
             });
+            _dropdownSearchField.WithSecondarySearchBehaviour();
         }
     }
 }

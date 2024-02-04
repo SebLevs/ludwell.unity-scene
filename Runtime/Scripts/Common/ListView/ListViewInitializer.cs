@@ -21,16 +21,11 @@ namespace Ludwell.Scene
             // todo: replace workaround for the ListView visual issue concerning dynamically sized element rendering.
             listView.RegisterCallback<GeometryChangedEvent>(_ => { ListView.Rebuild(); });
         }
-        
+
         /// <summary> Workaround for a ListView visual issue concerning dynamically sized element rendering. </summary>
         public void ForceRebuild()
         {
             ListView.Rebuild();
-        }
-        
-        public void UpdateItemsSource(List<TListElement> itemsSource)
-        {
-            ListView.itemsSource = itemsSource;
         }
 
         private TVisualElement CreateElement()
@@ -42,10 +37,9 @@ namespace Ludwell.Scene
         {
             var elementAsDataType = element as IBindableListViewElement<TListElement>;
 
-            var itemsSourceAsList = ListView.itemsSource as List<TListElement>;
-            itemsSourceAsList[index] ??= new();
+            ListView.itemsSource[index] ??= new TListElement();
 
-            elementAsDataType?.CacheData(itemsSourceAsList[index]);
+            elementAsDataType?.CacheData((TListElement)ListView.itemsSource[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
         }
