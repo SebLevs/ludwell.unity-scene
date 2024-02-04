@@ -88,7 +88,7 @@ namespace Ludwell.Scene
                     _dropdownSearchField.HideDropdown();
                     _listView.ScrollToItem(index);
                 })
-                .WithCyclingSearchBehaviour((searchFieldValue, boundItemSource) =>
+                .WithCyclingSearchBehaviour(Resources.Load<Texture2D>("Sprites/icon_load"), (searchFieldValue, boundItemSource) =>
                 {
                     List<ISearchFieldListable> filteredList = new();
 

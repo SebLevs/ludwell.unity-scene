@@ -36,19 +36,27 @@ namespace Ludwell.Scene
         private IList _boundItemsSource;
         
         private int _searchBehaviourIndex;
-        private readonly List<Func<string, IList, List<ISearchFieldListable>>> _searchBehaviours = new();
+        private readonly List<(Texture2D, Func<string, IList, List<ISearchFieldListable>>)> _searchBehaviours = new();
+
+        private VisualElement _icon;
 
         public DropdownSearchField()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
+            SetReferences();
             InitDropDown();
             InitSearchField();
             InitializeSearchListing();
             InitializeFocusAndBlur();
 
             KeepDropdownUnderSelf(this);
+        }
+
+        private void SetReferences()
+        {
+            _icon = this.Q(UiToolkitNames.UnitySearch);
         }
 
         public void BindToListView(ListView listView)
@@ -100,16 +108,16 @@ namespace Ludwell.Scene
         /// <item>IList = complete default list</item>
         /// </list>
         /// </param>
-        public DropdownSearchField WithCyclingSearchBehaviour(Func<string, IList, List<ISearchFieldListable>> behaviour)
+        public DropdownSearchField WithCyclingSearchBehaviour(Texture2D icon, Func<string, IList, List<ISearchFieldListable>> behaviour)
         {
-            _searchBehaviours.Add(behaviour);
+            _searchBehaviours.Add((icon, behaviour));
 
             this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
             {
                 Debug.LogError("CLICK");
                 HideDropdown();
                 CycleThroughSearchBehaviour();
-                _boundListView.itemsSource = GetCurrentSearchBehaviour().Invoke(_searchField.value, _boundItemsSource);
+                _boundListView.itemsSource = GetCurrentSearchBehaviour().Item2.Invoke(_searchField.value, _boundItemsSource);
                 _boundListView.Rebuild();
             });
 
@@ -150,7 +158,7 @@ namespace Ludwell.Scene
 
         private void InitializeSearchListing()
         {
-            _searchBehaviours.Add(DefaultSearchBehaviour);
+            _searchBehaviours.Add((Resources.Load<Texture2D>("Sprites/icon_open"), DefaultSearchBehaviour));
 
             _searchField.RegisterValueChangedCallback(evt =>
             {
@@ -161,7 +169,7 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                _boundListView.itemsSource = GetCurrentSearchBehaviour().Invoke(evt.newValue, _boundItemsSource);
+                _boundListView.itemsSource = GetCurrentSearchBehaviour().Item2.Invoke(evt.newValue, _boundItemsSource);
                 _boundListView.Rebuild();
             });
         }
@@ -184,7 +192,7 @@ namespace Ludwell.Scene
             return cache;
         }
         
-        private Func<string, IList, List<ISearchFieldListable>> GetCurrentSearchBehaviour()
+        private (Texture2D, Func<string, IList, List<ISearchFieldListable>>) GetCurrentSearchBehaviour()
         {
             return _searchBehaviours[_searchBehaviourIndex];
         }
@@ -192,8 +200,13 @@ namespace Ludwell.Scene
         private void CycleThroughSearchBehaviour()
         {
             _searchBehaviourIndex++;
-            if (_searchBehaviourIndex < _searchBehaviours.Count) return;
-            _searchBehaviourIndex = 0;
+            
+            if (_searchBehaviourIndex == _searchBehaviours.Count)
+            {
+                _searchBehaviourIndex = 0;
+            }
+
+            _icon.style.backgroundImage = new StyleBackground(GetCurrentSearchBehaviour().Item1);
         }
         
         private void InitializeFocusAndBlur()
