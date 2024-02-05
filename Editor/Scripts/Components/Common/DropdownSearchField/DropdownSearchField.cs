@@ -48,18 +48,13 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
 
             SetReferences();
-            InitDropDown();
-            InitSearchField();
+            InitializeDropDown();
+            InitializeSearchField();
             SetDefaultSearchBehaviour();
             InitializeSearchListing();
             InitializeFocusAndBlur();
 
             KeepDropdownUnderSelf(this);
-        }
-
-        private void SetReferences()
-        {
-            _icon = this.Q(UiToolkitNames.UnitySearch);
         }
 
         public void BindToListView(ListView listView)
@@ -142,12 +137,17 @@ namespace Ludwell.Scene
             _dropdownListView.Hide();
         }
 
-        private void InitSearchField()
+        private void SetReferences()
+        {
+            _icon = this.Q(UiToolkitNames.UnitySearch);
+        }
+        
+        private void InitializeSearchField()
         {
             _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
         }
 
-        private void InitDropDown()
+        private void InitializeDropDown()
         {
             RegisterCallback<AttachToPanelEvent>(_ =>
             {

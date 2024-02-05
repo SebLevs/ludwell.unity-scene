@@ -1,8 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/LoaderController/TagsController.uss?fileID=7433441132597879392&amp;guid=14eab15702865374c8b6e134688e38ed&amp;type=3#TagsController" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/TagsManager/TagsController.uss?fileID=7433441132597879392&amp;guid=14eab15702865374c8b6e134688e38ed&amp;type=3#TagsController" />
     <ui:VisualElement name="tags" style="flex-grow: 1; padding-top: 8px; padding-bottom: 8px;">
         <ui:Label tabindex="-1" text="Tags" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; margin-bottom: 2px; padding-left: 0; padding-right: 0;">
-            <ui:Button text="~" display-tooltip-when-elided="true" name="tags__button-add" style="align-items: center; justify-content: center; align-self: center; left: -32px;" />
+            <ui:Button name="tags__button-add" tooltip="Settings" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
+                <ui:VisualElement name="icon" />
+            </ui:Button>
         </ui:Label>
         <ui:Label tabindex="-1" text="Not tagged" display-tooltip-when-elided="true" name="not-tagged" style="-unity-text-align: middle-center;" />
         <ui:VisualElement name="tags-container" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; flex-wrap: wrap; justify-content: center;" />

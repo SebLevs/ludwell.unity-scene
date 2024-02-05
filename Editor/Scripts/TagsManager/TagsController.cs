@@ -18,6 +18,8 @@ namespace Ludwell.Scene
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";
         private const string NotTaggedName = "not-tagged";
+        private const string IconName = "icon";
+        private const string IconButtonName = "tags__button-add";
 
         private List<string> _cachedTags = new();
         
@@ -31,6 +33,16 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
 
             SetReferences();
+        }
+        
+        public void OverrideIcon(Texture2D icon)
+        {
+            this.Q(IconName).style.backgroundImage = new StyleBackground(icon);
+        }
+        
+        public void OverrideIconTooltip(string value)
+        {
+            this.Q(IconButtonName).tooltip = value;
         }
 
         public TagsController WithTagList(List<string> tags)

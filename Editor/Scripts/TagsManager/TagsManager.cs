@@ -17,6 +17,8 @@ namespace Ludwell.Scene
 
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
+        private const string IconArrowLeftName = "icon_arrow-left";
+
         private TagsController _tagsController;
         
         private LoaderSceneData _loaderSceneData;
@@ -35,15 +37,9 @@ namespace Ludwell.Scene
 
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
-        }
-
-        private void InitializeDropdownSearchField()
-        {
-            _dropdownSearchField.BindToListView(_listViewInitializer.ListView);
-            _dropdownSearchField.WithDropdownBehaviour(itemIndex =>
-            {
-                _listViewInitializer.ListView.ScrollToItem(itemIndex);
-            });
+            
+            _tagsController.OverrideIconTooltip("Return");
+            _tagsController.OverrideIcon(Resources.Load<Texture2D>("Sprites/" + IconArrowLeftName));
         }
 
         public void Show(List<string> tags)
@@ -111,6 +107,15 @@ namespace Ludwell.Scene
             {
                 LoaderSceneDataHelper.SaveChange();
             };
+        }
+        
+        private void InitializeDropdownSearchField()
+        {
+            _dropdownSearchField.BindToListView(_listViewInitializer.ListView);
+            _dropdownSearchField.WithDropdownBehaviour(itemIndex =>
+            {
+                _listViewInitializer.ListView.ScrollToItem(itemIndex);
+            });
         }
 
         private void Return()
