@@ -47,10 +47,7 @@ namespace Ludwell.Scene
             _mainButton = this.Q<Button>(MainButtonName);
             _searchButton = this.Q<Button>(SearchButtonName);
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                _tagsController = GetFirstAncestorOfType<TagsController>();
-            });
+            RegisterCallback<AttachToPanelEvent>(_ => { _tagsController = GetFirstAncestorOfType<TagsController>(); });
         }
 
         private void SetButtonEvents()
@@ -59,7 +56,12 @@ namespace Ludwell.Scene
 
             _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(Value); });
 
-            _searchButton.RegisterCallback<ClickEvent>(_ => { _tagsController.ShowElementsWithTag(Value); });
+            _searchButton.RegisterCallback<ClickEvent>(_ =>
+            {
+                var dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
+                // todo: call tag strategy of dropdownSearchField
+                _tagsController.ShowElementsWithTag(Value);
+            });
         }
 
         private static void SelectTag(TagElement tagElement)
