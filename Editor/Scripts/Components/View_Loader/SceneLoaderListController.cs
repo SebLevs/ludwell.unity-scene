@@ -13,6 +13,8 @@ namespace Ludwell.Scene
         {
         }
 
+        public const string TagSearchName = "Tag";
+        
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
 
@@ -79,14 +81,14 @@ namespace Ludwell.Scene
             _listViewInitializer = new(_listView, _loaderSceneData.Elements);
             _listView.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
-
+        
         private void InitializeSearchField()
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.BindToListView(_listView);
 
             var icon = Resources.Load<Texture2D>("Sprites/" + TagIconName);
-            var searchListingStrategy = new ListingStrategy(icon, ListTag);
+            var searchListingStrategy = new ListingStrategy(TagSearchName, icon, ListTag);
 
             _dropdownSearchField
                 .WithResizableParent(this)
@@ -98,9 +100,9 @@ namespace Ludwell.Scene
                 .WithCyclingListingStrategy(searchListingStrategy);
         }
 
-        private List<ISearchFieldListable> ListTag(string searchFieldValue, IList boundItemSource)
+        private List<IListable> ListTag(string searchFieldValue, IList boundItemSource)
         {
-            List<ISearchFieldListable> filteredList = new();
+            List<IListable> filteredList = new();
 
             foreach (var listViewElement in boundItemSource)
             {

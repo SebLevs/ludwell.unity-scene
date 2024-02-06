@@ -72,7 +72,6 @@ namespace Ludwell.Scene
             foreach (var child in element.parent.Children())
             {
                 if (memoization.Contains(child)) continue;
-                Debug.LogError(child.name);
                 var query = child.Q<T>();
                 if (query != null) return query;
             }

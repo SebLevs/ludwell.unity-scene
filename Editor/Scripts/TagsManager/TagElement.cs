@@ -59,8 +59,7 @@ namespace Ludwell.Scene
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {
                 var dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
-                // todo: call tag strategy of dropdownSearchField
-                _tagsController.ShowElementsWithTag(Value);
+                dropdownSearchField.ListingFromStrategy("Tag", _mainButton.text);
             });
         }
 

@@ -86,12 +86,6 @@ namespace Ludwell.Scene
             LoaderSceneDataHelper.SaveChange();
 #endif
         }
-        
-        public void ShowElementsWithTag(string tag)
-        {
-            Debug.LogError(nameof(ShowElementsWithTag));
-            // todo: change what list the listview reference 
-        }
 
         public void Refresh()
         {

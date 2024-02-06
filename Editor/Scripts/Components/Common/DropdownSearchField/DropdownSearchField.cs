@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace Ludwell.Scene
         {
         }
 
+        public const string DefaultSearchName = "Default";
+
         private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
         private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
 
@@ -38,7 +41,7 @@ namespace Ludwell.Scene
         private IList _boundItemsSource;
 
         private int _listingStrategyIndex;
-        private readonly List<ListingStrategy> _searchBehaviours = new();
+        private readonly List<ListingStrategy> _listingStrategies = new();
 
         private VisualElement _icon;
 
@@ -56,7 +59,7 @@ namespace Ludwell.Scene
 
             KeepDropdownUnderSelf(this);
         }
-
+        
         public void BindToListView(ListView listView)
         {
             _boundListView = listView;
@@ -84,7 +87,7 @@ namespace Ludwell.Scene
                 for (var i = 0; i < _boundItemsSource.Count; i++)
                 {
                     if (_boundItemsSource[i] == null) break;
-                    var dataName = (_boundItemsSource[i] as ISearchFieldListable).GetName();
+                    var dataName = (_boundItemsSource[i] as IListable).GetName();
                     if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
                     var index = i;
                     _dropdownListView.Add(
@@ -99,16 +102,10 @@ namespace Ludwell.Scene
 
             return this;
         }
-
-        /// <param name="listingStrategy">
-        /// <list type="bullet">
-        /// <item>string = searchField value</item>
-        /// <item>IList = complete default list</item>
-        /// </list>
-        /// </param>
+        
         public DropdownSearchField WithCyclingListingStrategy(ListingStrategy listingStrategy)
         {
-            _searchBehaviours.Add(listingStrategy);
+            _listingStrategies.Add(listingStrategy);
 
             this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
             {
@@ -116,12 +113,27 @@ namespace Ludwell.Scene
                 NextListingStrategy();
                 if (!string.IsNullOrEmpty(_searchField.value))
                 {
-                    _boundListView.itemsSource = GetCurrentListingStrategy().Execute(_searchField.value, _boundItemsSource);
+                    _boundListView.itemsSource =
+                        GetCurrentListingStrategy().Execute(_searchField.value, _boundItemsSource);
                 }
+
                 _boundListView.Rebuild();
             });
 
             return this;
+        }
+        
+        public void ListingFromStrategy(string strategyName, string listFromValue)
+        {
+            for (var index = 0; index < _listingStrategies.Count; index++)
+            {
+                if (strategyName != _listingStrategies[index].Name) continue;
+
+                _listingStrategyIndex = index;
+                _icon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
+                ExecuteCurrentListingStrategy(listFromValue);
+                _searchField.value = listFromValue;
+            }
         }
 
         public void ShowDropdown()
@@ -141,7 +153,7 @@ namespace Ludwell.Scene
         {
             _icon = this.Q(UiToolkitNames.UnitySearch);
         }
-        
+
         private void InitializeSearchField()
         {
             _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
@@ -172,26 +184,31 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                _boundListView.itemsSource = GetCurrentListingStrategy().Execute(evt.newValue, _boundItemsSource);
-                _boundListView.Rebuild();
+                ExecuteCurrentListingStrategy(evt.newValue);
             });
+        }
+
+        private void ExecuteCurrentListingStrategy(string value)
+        {
+            _boundListView.itemsSource = GetCurrentListingStrategy().Execute(value, _boundItemsSource);
+            _boundListView.Rebuild();
         }
 
         private void SetDefaultSearchBehaviour()
         {
             var icon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
-            var searchFieldListing = new ListingStrategy(icon, DefaultSearchBehaviour);
-            _searchBehaviours.Add(searchFieldListing);
+            var searchFieldListing = new ListingStrategy(DefaultSearchName, icon, DefaultSearchBehaviour);
+            _listingStrategies.Add(searchFieldListing);
         }
 
-        private List<ISearchFieldListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
+        private List<IListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
         {
-            List<ISearchFieldListable> cache = new();
+            List<IListable> cache = new();
             foreach (var element in defaultList)
             {
-                var dataName = (element as ISearchFieldListable).GetName();
+                var dataName = (element as IListable).GetName();
                 if (!dataName.ToLower().Contains(searchFieldValue.ToLower())) continue;
-                cache.Add(element as ISearchFieldListable);
+                cache.Add(element as IListable);
             }
 
             // if (_filteredList.Count == 0) return;
@@ -202,14 +219,14 @@ namespace Ludwell.Scene
 
         private ListingStrategy GetCurrentListingStrategy()
         {
-            return _searchBehaviours[_listingStrategyIndex];
+            return _listingStrategies[_listingStrategyIndex];
         }
 
         private void NextListingStrategy()
         {
             _listingStrategyIndex++;
 
-            if (_listingStrategyIndex == _searchBehaviours.Count)
+            if (_listingStrategyIndex == _listingStrategies.Count)
             {
                 _listingStrategyIndex = 0;
             }

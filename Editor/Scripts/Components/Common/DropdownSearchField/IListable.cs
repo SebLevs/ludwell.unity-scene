@@ -1,6 +1,6 @@
 namespace Ludwell.Scene.Editor
 {
-    public interface ISearchFieldListable
+    public interface IListable
     {
         public string GetName();
     }
