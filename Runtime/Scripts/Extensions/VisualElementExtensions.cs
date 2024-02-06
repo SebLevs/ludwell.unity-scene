@@ -54,10 +54,10 @@ namespace Ludwell.Scene
         /// <summary>
         /// Bubble up recursive algorithm.<br/>
         /// Search children in parent of current element for a type T.<br/>
-        /// Memoization is used to prevent high complexity. Prevent searching already searched elements.
+        /// Memoization is used to prevent high complexity. Prevent searching already searched elements.<br/>
         /// </summary>
-        /// <param name="element">Current element</param>
-        /// <param name="memoization">Will be initialized automatically if null</param>
+        /// <param name="element">Current element. Starting element is omitted from search.</param>
+        /// <param name="memoization">Will be initialized automatically if null.</param>
         public static T FindInAncestors<T>(this VisualElement element, List<VisualElement> memoization = null)
             where T : VisualElement
         {
