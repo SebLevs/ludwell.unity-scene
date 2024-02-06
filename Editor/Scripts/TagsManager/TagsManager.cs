@@ -38,8 +38,7 @@ namespace Ludwell.Scene
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
             
-            _tagsController.OverrideIconTooltip("Return");
-            _tagsController.OverrideIcon(Resources.Load<Texture2D>("Sprites/" + IconArrowLeftName));
+            HandleTagController();
         }
 
         public void Show(List<string> tags)
@@ -117,10 +116,15 @@ namespace Ludwell.Scene
                 _listViewInitializer.ListView.ScrollToItem(itemIndex);
             });
         }
+        
+        private void HandleTagController()
+        {
+            _tagsController.OverrideIconTooltip("Return");
+            _tagsController.OverrideIcon(Resources.Load<Texture2D>("Sprites/" + IconArrowLeftName));
+        }
 
         private void Return()
         {
-            Debug.LogError(nameof(Return));
             this.Root().Q<TabController>().ReturnToPreviousView();
         }
     }

@@ -66,7 +66,9 @@ namespace Ludwell.Scene
             if (_cachedTags.Contains(tag)) return;
             
             _cachedTags.Add(tag);
+            _cachedTags.Sort();
             _tagsContainer.Add(CreateTagElement(tag));
+            SortTagElements();
             HandleNotTaggedState();
 
 #if UNITY_EDITOR 
@@ -111,6 +113,16 @@ namespace Ludwell.Scene
             TagElement tagElement = new();
             tagElement.SetTagName(value);
             return tagElement;
+        }
+        
+        private void SortTagElements()
+        {
+            _tagsContainer.Sort((a, b) =>
+            {
+                var aValue = (a as TagElement).Value;
+                var bValue = (b as TagElement).Value;
+                return string.Compare(aValue, bValue);
+            });
         }
 
         private void HandleNotTaggedState()
