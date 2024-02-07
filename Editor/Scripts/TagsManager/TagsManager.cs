@@ -20,7 +20,7 @@ namespace Ludwell.Scene
         private const string IconArrowLeftName = "icon_arrow-left";
 
         private TagsController _tagsController;
-        
+
         private LoaderSceneData _loaderSceneData;
 
         private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
@@ -37,29 +37,30 @@ namespace Ludwell.Scene
 
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
-            
+
             HandleTagController();
         }
 
-        public void Show(List<string> tags)
+        public void Show(List<Tag> tags)
         {
             this.Root().Q<TabController>().SwitchView(this);
             BuildTagsController(tags);
         }
 
-        public void AddTagToController(string tag)
+        public void AddTagToController(Tag tag)
         {
             _tagsController.Add(tag);
         }
 
-        public void RemoveTagFromController(string tag)
+        public void RemoveTagFromController(Tag tag)
         {
             _tagsController.Remove(tag);
         }
 
-        public void RemoveTag(VisualElement tagElement)
+        public void RemoveTag(VisualElement tagElement, bool removeFromSubscriber = false)
         {
-            var index = _contentContainer.IndexOf(tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
+            var index = _contentContainer.IndexOf(
+                tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
             _contentContainer.RemoveAt(index);
             _loaderSceneData.Tags.RemoveAt(index);
             LoaderSceneDataHelper.SaveChange();
@@ -68,7 +69,8 @@ namespace Ludwell.Scene
 
         public bool IsTagDuplicate(VisualElement tagElement, string tag)
         {
-            var index = _contentContainer.IndexOf(tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
+            var index = _contentContainer.IndexOf(
+                tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
             for (var i = 0; i < _loaderSceneData.Tags.Count; i++)
             {
                 if (i == index) continue;
@@ -78,7 +80,7 @@ namespace Ludwell.Scene
             return false;
         }
 
-        private void BuildTagsController(List<string> tags)
+        private void BuildTagsController(List<Tag> tags)
         {
             _tagsController
                 .WithTagList(tags)
@@ -94,7 +96,7 @@ namespace Ludwell.Scene
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _contentContainer = this.Q(UiToolkitNames.UnityContentContainer);
         }
-        
+
         private void InitializeListViewBehaviours()
         {
             _listViewInitializer.ListView.itemsAdded += _ =>
@@ -104,10 +106,11 @@ namespace Ludwell.Scene
             };
             _listViewInitializer.ListView.itemsRemoved += _ =>
             {
+                // todo: tag.RemoveSubscriber()
                 LoaderSceneDataHelper.SaveChange();
             };
         }
-        
+
         private void InitializeDropdownSearchField()
         {
             _dropdownSearchField.BindToListView(_listViewInitializer.ListView);
@@ -116,7 +119,7 @@ namespace Ludwell.Scene
                 _listViewInitializer.ListView.ScrollToItem(itemIndex);
             });
         }
-        
+
         private void HandleTagController()
         {
             _tagsController.OverrideIconTooltip("Return");

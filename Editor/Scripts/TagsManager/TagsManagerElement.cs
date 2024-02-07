@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -41,13 +40,14 @@ namespace Ludwell.Scene.Editor
         {
             _tagTextField.RegisterCallback<BlurEvent>(_ =>
             {
-                if (String.IsNullOrEmpty(_tagTextField.value))
+                if (string.IsNullOrEmpty(_tagTextField.value))
                 {
                     _tagsManager.RemoveTag(this);
                 }
                 else if (_tagsManager.IsTagDuplicate(this, _tagTextField.value))
                 {
-                    Debug.LogError($"Duplicate tag | \"{_tagTextField.value}\" already exists. New entry has been removed.");
+                    Debug.LogError(
+                        $"Duplicate tag | \"{_tagTextField.value}\" already exists. New entry has been removed.");
                     _tagsManager.RemoveTag(this);
                 }
             });
@@ -75,10 +75,7 @@ namespace Ludwell.Scene.Editor
 
             _tagTextField = this.Q<TextField>(TagTextFieldName);
 
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                _tagsManager = GetFirstAncestorOfType<TagsManager>();
-            });
+            RegisterCallback<AttachToPanelEvent>(_ => { _tagsManager = GetFirstAncestorOfType<TagsManager>(); });
         }
 
         private void InitializeButtons()
@@ -89,12 +86,12 @@ namespace Ludwell.Scene.Editor
 
         private void AddToController()
         {
-            _tagsManager.AddTagToController(_tagTextField.value);
+            _tagsManager.AddTagToController(Cache);
         }
 
         private void RemoveFromController()
         {
-            _tagsManager.RemoveTagFromController(_tagTextField.value);
+            _tagsManager.RemoveTagFromController(Cache);
         }
 
         private void BindTextField(ChangeEvent<string> evt)

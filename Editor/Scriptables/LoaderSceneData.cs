@@ -52,14 +52,13 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class LoaderListViewElementData : IListable
+    public class LoaderListViewElementData : TagSubscriber, IListable
     {
         [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
 
         [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
-        [field: SerializeField] public List<string> Tags { get; set; } = new();
 
         public string Name
         {
@@ -116,9 +115,29 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class Tag: IListable
+    public class Tag : IListable, IComparable
     {
         [SerializeField] private string _value;
+
+        [SerializeField] private List<TagSubscriber> _subscribers = new();
+
+        public void AddSubscriber(TagSubscriber subscriber)
+        {
+            _subscribers.Add(subscriber);
+        }
+
+        public void RemoveSubscriber(TagSubscriber subscriber)
+        {
+            _subscribers.Remove(subscriber);
+        }
+
+        public void RemoveFromAllSubscribers()
+        {
+            foreach (var subscriber in _subscribers)
+            {
+                subscriber.Tags.Remove(this);
+            }
+        }
 
         public string Value
         {
@@ -135,5 +154,17 @@ namespace Ludwell.Scene.Editor
         {
             return _value;
         }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is not Tag other) return 1;
+            return string.Compare(Value, other.Value, StringComparison.InvariantCulture);
+        }
+    }
+
+    [Serializable]
+    public class TagSubscriber
+    {
+        [field: SerializeField] public List<Tag> Tags { get; set; } = new();
     }
 }

@@ -21,11 +21,11 @@ namespace Ludwell.Scene
         private const string IconName = "icon";
         private const string IconButtonName = "tags__button-add";
 
-        private List<string> _cachedTags = new();
-        
+        private List<Tag> _cachedTags = new();
+
         private Button _manageTagsButton;
         private VisualElement _tagsContainer;
-        private Label _notTaggedLabel; 
+        private Label _notTaggedLabel;
 
         public TagsController()
         {
@@ -34,57 +34,54 @@ namespace Ludwell.Scene
 
             SetReferences();
         }
-        
+
         public void OverrideIcon(Texture2D icon)
         {
             this.Q(IconName).style.backgroundImage = new StyleBackground(icon);
         }
-        
+
         public void OverrideIconTooltip(string value)
         {
             this.Q(IconButtonName).tooltip = value;
         }
 
-        public TagsController WithTagList(List<string> tags)
+        public TagsController WithTagList(List<Tag> tags)
         {
             _cachedTags = tags;
             return this;
         }
-        
+
         public TagsController WithOptionButtonEvent(Action callback)
         {
             _manageTagsButton.style.display = DisplayStyle.Flex;
-            _manageTagsButton.RegisterCallback<ClickEvent>(_ =>
-            {
-                callback.Invoke();
-            });
+            _manageTagsButton.RegisterCallback<ClickEvent>(_ => { callback.Invoke(); });
             return this;
         }
 
-        public void Add(string tag)
+        public void Add(Tag tag)
         {
             if (_cachedTags.Contains(tag)) return;
-            
+
             _cachedTags.Add(tag);
             _cachedTags.Sort();
             _tagsContainer.Add(CreateTagElement(tag));
             SortTagElements();
             HandleNotTaggedState();
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
             LoaderSceneDataHelper.SaveChange();
 #endif
         }
 
-        public void Remove(string tag)
+        public void Remove(Tag tag)
         {
             if (!_cachedTags.Contains(tag)) return;
 
             _tagsContainer.RemoveAt(_cachedTags.IndexOf(tag));
             _cachedTags.Remove(tag);
             HandleNotTaggedState();
-            
-#if UNITY_EDITOR 
+
+#if UNITY_EDITOR
             LoaderSceneDataHelper.SaveChange();
 #endif
         }
@@ -92,7 +89,7 @@ namespace Ludwell.Scene
         public void Refresh()
         {
             _tagsContainer.Clear();
-            
+
             foreach (var tag in _cachedTags)
             {
                 _tagsContainer.Add(CreateTagElement(tag));
@@ -108,13 +105,13 @@ namespace Ludwell.Scene
             _notTaggedLabel = this.Q<Label>(NotTaggedName);
         }
 
-        private TagElement CreateTagElement(string value)
+        private TagElement CreateTagElement(Tag tag)
         {
             TagElement tagElement = new();
-            tagElement.SetTagName(value);
+            tagElement.SetTagName(tag);
             return tagElement;
         }
-        
+
         private void SortTagElements()
         {
             _tagsContainer.Sort((a, b) =>

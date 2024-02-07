@@ -14,7 +14,7 @@ namespace Ludwell.Scene
         }
 
         public const string TagSearchName = "Tag";
-        
+
         private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
         private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
 
@@ -81,7 +81,7 @@ namespace Ludwell.Scene
             _listViewInitializer = new(_listView, _loaderSceneData.Elements);
             _listView.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
         }
-        
+
         private void InitializeSearchField()
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
@@ -108,7 +108,7 @@ namespace Ludwell.Scene
             {
                 foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
                 {
-                    if (tag != searchFieldValue) continue;
+                    if (tag.Value != searchFieldValue) continue;
                     filteredList.Add(listViewElement as LoaderListViewElementData);
                     break;
                 }

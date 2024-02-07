@@ -1,3 +1,4 @@
+using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -24,6 +25,8 @@ namespace Ludwell.Scene
         private TagsController _tagsController;
         private DropdownSearchField _dropdownSearchField;
 
+        private Tag _tag;
+
         public TagElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -37,9 +40,10 @@ namespace Ludwell.Scene
 
         public string Value => _mainButton.text;
 
-        public void SetTagName(string value)
+        public void SetTagName(Tag tag)
         {
-            _mainButton.text = value;
+            _mainButton.text = tag.Value;
+            _tag = tag;
         }
 
         private void SetReferences()
@@ -60,7 +64,7 @@ namespace Ludwell.Scene
         {
             _mainButton.RegisterCallback<ClickEvent>(_ => { SelectTag(this); });
 
-            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(Value); });
+            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(_tag); });
 
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {
