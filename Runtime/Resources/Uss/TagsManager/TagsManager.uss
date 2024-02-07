@@ -42,6 +42,10 @@
     border-top-width: 0;
 }
 
+#DropdownSearchField > #search-field > #toolbar-search-field > #unity-search {
+    background-image: resource('Sprites/icon_arrow-left');
+}
+
 #search-field__background {
     border-top-width: 1px;
     border-left-color: rgb(0, 0, 0);

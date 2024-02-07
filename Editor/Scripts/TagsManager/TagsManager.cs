@@ -17,8 +17,6 @@ namespace Ludwell.Scene
 
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
-        private const string IconArrowLeftName = "icon_arrow-left";
-
         private TagsController _tagsController;
 
         private LoaderSceneData _loaderSceneData;
@@ -123,7 +121,6 @@ namespace Ludwell.Scene
         private void HandleTagController()
         {
             _tagsController.OverrideIconTooltip("Return");
-            _tagsController.OverrideIcon(Resources.Load<Texture2D>("Sprites/" + IconArrowLeftName));
         }
 
         private void Return()
