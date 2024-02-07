@@ -17,8 +17,7 @@
     background-image: resource('Sprites/icon_search');
 }
 
-#unity-search:hover {
-    transition-duration: 0.2s;
-    transition-timing-function: ease;
+.hover-behaviour:hover {
     scale: 1.2 1.2;
+    transition-duration: 0.2s;
 }

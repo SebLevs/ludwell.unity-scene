@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -59,7 +58,7 @@ namespace Ludwell.Scene
 
             KeepDropdownUnderSelf(this);
         }
-        
+
         public void BindToListView(ListView listView)
         {
             _boundListView = listView;
@@ -102,9 +101,14 @@ namespace Ludwell.Scene
 
             return this;
         }
-        
+
         public DropdownSearchField WithCyclingListingStrategy(ListingStrategy listingStrategy)
         {
+            if (_listingStrategies.Count == 1)
+            {
+                _icon.AddToClassList("hover-behaviour");
+            }
+
             _listingStrategies.Add(listingStrategy);
 
             this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
@@ -122,7 +126,7 @@ namespace Ludwell.Scene
 
             return this;
         }
-        
+
         public void ListingFromStrategy(string strategyName, string listFromValue)
         {
             for (var index = 0; index < _listingStrategies.Count; index++)
