@@ -22,6 +22,7 @@ namespace Ludwell.Scene
         private Button _searchButton;
 
         private TagsController _tagsController;
+        private DropdownSearchField _dropdownSearchField;
 
         public TagElement()
         {
@@ -47,7 +48,12 @@ namespace Ludwell.Scene
             _mainButton = this.Q<Button>(MainButtonName);
             _searchButton = this.Q<Button>(SearchButtonName);
 
-            RegisterCallback<AttachToPanelEvent>(_ => { _tagsController = GetFirstAncestorOfType<TagsController>(); });
+
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                _tagsController = GetFirstAncestorOfType<TagsController>();
+                _dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
+            });
         }
 
         private void SetButtonEvents()
@@ -58,8 +64,7 @@ namespace Ludwell.Scene
 
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {
-                var dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
-                dropdownSearchField.ListingFromStrategy("Tag", _mainButton.text);
+                _dropdownSearchField.ListingFromStrategy("Tag", _mainButton.text);
             });
         }
 
