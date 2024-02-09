@@ -228,7 +228,7 @@ namespace Ludwell.Scene
 
         private void BuildTagsController()
         {
-            _tagsController.WithOptionButtonEvent(() => { this.Root().Q<TagsManager>().Show(Cache.Tags); });
+            _tagsController.WithOptionButtonEvent(() => { this.Root().Q<TagsManager>().Show(Cache); });
         }
     }
 }

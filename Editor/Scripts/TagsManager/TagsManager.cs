@@ -18,6 +18,7 @@ namespace Ludwell.Scene
         private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
 
         private TagsController _tagsController;
+        private TagSubscriber _tagSubscriber;
 
         private LoaderSceneData _loaderSceneData;
 
@@ -39,23 +40,26 @@ namespace Ludwell.Scene
             HandleTagController();
         }
 
-        public void Show(List<Tag> tags)
+        public void Show(TagSubscriber tagSubscriber)
         {
+            _tagSubscriber = tagSubscriber;
             this.Root().Q<TabController>().SwitchView(this);
-            BuildTagsController(tags);
+            BuildTagsController(tagSubscriber.Tags);
         }
 
         public void AddTagToController(Tag tag)
         {
             _tagsController.Add(tag);
+            tag.AddSubscriber(_tagSubscriber);
         }
 
         public void RemoveTagFromController(Tag tag)
         {
             _tagsController.Remove(tag);
+            tag.RemoveSubscriber(_tagSubscriber);
         }
 
-        public void RemoveTag(VisualElement tagElement, bool removeFromSubscriber = false)
+        public void RemoveInvalidTagElement(VisualElement tagElement)
         {
             var index = _contentContainer.IndexOf(
                 tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
@@ -102,9 +106,18 @@ namespace Ludwell.Scene
                 var last = _contentContainer.Children().Last().Q<TagsManagerElement>();
                 last.FocusTextField();
             };
-            _listViewInitializer.ListView.itemsRemoved += _ =>
+
+            _listViewInitializer.ListView.itemsRemoved += indexEnumerable =>
             {
-                // todo: tag.RemoveSubscriber()
+                var itemsSource = _listViewInitializer.ListView.itemsSource;
+                var removedIndexes = indexEnumerable.ToList();
+                foreach (var index in removedIndexes)
+                {
+                    var tag = itemsSource[index] as Tag;
+                    _tagsController.Remove(tag);
+                    tag.RemoveFromAllSubscribers();
+                }
+
                 LoaderSceneDataHelper.SaveChange();
             };
         }

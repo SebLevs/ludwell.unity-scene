@@ -33,22 +33,22 @@ namespace Ludwell.Scene.Editor
 
             SetReferences();
             InitializeButtons();
-            AutomateTagValidityManagement();
+            OnBlurCheckValidity();
         }
 
-        private void AutomateTagValidityManagement()
+        private void OnBlurCheckValidity()
         {
             _tagTextField.RegisterCallback<BlurEvent>(_ =>
             {
                 if (string.IsNullOrEmpty(_tagTextField.value))
                 {
-                    _tagsManager.RemoveTag(this);
+                    _tagsManager.RemoveInvalidTagElement(this);
                 }
                 else if (_tagsManager.IsTagDuplicate(this, _tagTextField.value))
                 {
                     Debug.LogError(
                         $"Duplicate tag | \"{_tagTextField.value}\" already exists. New entry has been removed.");
-                    _tagsManager.RemoveTag(this);
+                    _tagsManager.RemoveInvalidTagElement(this);
                 }
             });
         }
@@ -97,11 +97,6 @@ namespace Ludwell.Scene.Editor
         private void BindTextField(ChangeEvent<string> evt)
         {
             Cache.Value = evt.newValue;
-        }
-
-        public string GetName()
-        {
-            return Cache.Value;
         }
     }
 }

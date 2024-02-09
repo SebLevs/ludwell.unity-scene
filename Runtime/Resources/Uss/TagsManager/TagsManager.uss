@@ -31,6 +31,10 @@
     height: 16px;
 }
 
+#tags__button-add > #icon {
+    background-image: resource('Sprites/icon_arrow-left');
+}
+
 #DropdownSearchField {
     width: 80%;
     align-self: center;
@@ -40,10 +44,6 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top-width: 0;
-}
-
-#DropdownSearchField > #search-field > #toolbar-search-field > #unity-search {
-    background-image: resource('Sprites/icon_arrow-left');
 }
 
 #search-field__background {
