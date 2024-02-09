@@ -36,6 +36,7 @@ namespace Ludwell.Scene
 
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
+            InitializeReturnInput();
 
             HandleTagController();
         }
@@ -129,6 +130,21 @@ namespace Ludwell.Scene
             {
                 _listViewInitializer.ListView.ScrollToItem(itemIndex);
             });
+        }
+
+        private void InitializeReturnInput()
+        {
+            RegisterCallback<AttachToPanelEvent>(_ => this.Root().RegisterCallback<KeyDownEvent>(OnKeyDown));
+        }
+
+        private void OnKeyDown(KeyDownEvent evt)
+        {
+            if (style.display == DisplayStyle.None) return;
+
+            if (evt.keyCode == KeyCode.Escape)
+            {
+                Return();
+            }
         }
 
         private void HandleTagController()
