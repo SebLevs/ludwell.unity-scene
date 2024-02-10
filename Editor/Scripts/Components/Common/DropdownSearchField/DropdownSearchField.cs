@@ -36,13 +36,15 @@ namespace Ludwell.Scene
         private ToolbarSearchField _searchField;
         private DropdownListView _dropdownListView;
 
-        private ListView _boundListView;
-        private IList _boundItemsSource;
+        private IList _baseItemsSource;
+        private ListView _listView;
 
         private int _listingStrategyIndex;
         private readonly List<ListingStrategy> _listingStrategies = new();
 
         private VisualElement _icon;
+
+        private bool IsListing => !string.IsNullOrEmpty(_searchField.value);
 
         public DropdownSearchField()
         {
@@ -61,8 +63,18 @@ namespace Ludwell.Scene
 
         public void BindToListView(ListView listView)
         {
-            _boundListView = listView;
-            _boundItemsSource = listView.itemsSource;
+            _baseItemsSource = listView.itemsSource;
+
+            if (_listView != null)
+            {
+                _listView.itemsAdded -= AddFromBaseSource;
+                _listView.itemsRemoved -= RemoveFromBaseSource;
+            }
+
+            _listView = listView;
+
+            _listView.itemsAdded += AddFromBaseSource;
+            _listView.itemsRemoved += RemoveFromBaseSource;
         }
 
         public DropdownSearchField WithResizableParent(VisualElement resizableParent)
@@ -83,10 +95,10 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                for (var i = 0; i < _boundItemsSource.Count; i++)
+                for (var i = 0; i < _baseItemsSource.Count; i++)
                 {
-                    if (_boundItemsSource[i] == null) break;
-                    var dataName = (_boundItemsSource[i] as IListable).GetName();
+                    if (_baseItemsSource[i] == null) break;
+                    var dataName = (_baseItemsSource[i] as IListable).GetName();
                     if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
                     var index = i;
                     _dropdownListView.Add(
@@ -117,11 +129,11 @@ namespace Ludwell.Scene
                 NextListingStrategy();
                 if (!string.IsNullOrEmpty(_searchField.value))
                 {
-                    _boundListView.itemsSource =
-                        GetCurrentListingStrategy().Execute(_searchField.value, _boundItemsSource);
+                    _listView.itemsSource =
+                        GetCurrentListingStrategy().Execute(_searchField.value, _baseItemsSource);
                 }
 
-                _boundListView.Rebuild();
+                _listView.Rebuild();
             });
 
             return this;
@@ -183,8 +195,8 @@ namespace Ludwell.Scene
             {
                 if (string.IsNullOrEmpty(evt.newValue))
                 {
-                    _boundListView.itemsSource = _boundItemsSource;
-                    _boundListView.Rebuild();
+                    _listView.itemsSource = _baseItemsSource;
+                    _listView.Rebuild();
                     return;
                 }
 
@@ -194,8 +206,8 @@ namespace Ludwell.Scene
 
         private void ExecuteCurrentListingStrategy(string value)
         {
-            _boundListView.itemsSource = GetCurrentListingStrategy().Execute(value, _boundItemsSource);
-            _boundListView.Rebuild();
+            _listView.itemsSource = GetCurrentListingStrategy().Execute(value, _baseItemsSource);
+            _listView.Rebuild();
         }
 
         private void SetDefaultSearchBehaviour()
@@ -259,6 +271,25 @@ namespace Ludwell.Scene
         private void KeepDropdownUnderSelf(VisualElement resizableElement)
         {
             resizableElement.RegisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+        }
+
+        private void AddFromBaseSource(IEnumerable<int> integers)
+        {
+            if (!IsListing) return;
+
+            foreach (var integer in integers)
+            {
+                _baseItemsSource.Add(_listView.itemsSource[integer]);
+            }
+        }
+
+        private void RemoveFromBaseSource(IEnumerable<int> integers)
+        {
+            if (!IsListing) return;
+            foreach (var integer in integers)
+            {
+                _baseItemsSource.Remove(_listView.itemsSource[integer]);
+            }
         }
 
         private void PlaceUnder()
