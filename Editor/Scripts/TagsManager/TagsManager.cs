@@ -70,14 +70,20 @@ namespace Ludwell.Scene
             _listViewInitializer.ForceRebuild();
         }
 
-        public bool IsTagDuplicate(VisualElement tagElement, string tag)
+        public void SortTags()
         {
-            var index = _contentContainer.IndexOf(
-                tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
-            for (var i = 0; i < _loaderSceneData.Tags.Count; i++)
+            // todo: Doesn't focus the right element after sorting?
+            _loaderSceneData.Tags.Sort();
+            LoaderSceneDataHelper.SaveChange();
+            _listViewInitializer.ForceRebuild();
+        }
+
+        public bool IsTagDuplicate(Tag elementTag)
+        {
+            foreach (var tag in _loaderSceneData.Tags)
             {
-                if (i == index) continue;
-                if (_loaderSceneData.Tags[i].Value == tag) return true;
+                if (tag == elementTag) continue;
+                if (tag.Value == elementTag.Value) return true;
             }
 
             return false;

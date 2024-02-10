@@ -40,15 +40,19 @@ namespace Ludwell.Scene.Editor
         {
             _tagTextField.RegisterCallback<BlurEvent>(_ =>
             {
-                if (string.IsNullOrEmpty(_tagTextField.value))
+                if (string.IsNullOrEmpty(Cache.Value))
                 {
                     _tagsManager.RemoveInvalidTagElement(this);
                 }
-                else if (_tagsManager.IsTagDuplicate(this, _tagTextField.value))
+                else if (_tagsManager.IsTagDuplicate(Cache))
                 {
                     Debug.LogError(
-                        $"Duplicate tag | \"{_tagTextField.value}\" already exists. New entry has been removed.");
+                        $"Duplicate tag | \"{Cache.Value}\" already exists. New entry has been removed.");
                     _tagsManager.RemoveInvalidTagElement(this);
+                }
+                else
+                {
+                    _tagsManager.SortTags();
                 }
             });
         }
