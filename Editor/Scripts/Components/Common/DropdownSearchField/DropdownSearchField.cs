@@ -22,8 +22,6 @@ namespace Ludwell.Scene
         {
         }
 
-        public const string DefaultSearchName = "Default";
-
         private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
         private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
 
@@ -44,6 +42,8 @@ namespace Ludwell.Scene
 
         private VisualElement _icon;
 
+        public string DefaultSearchName { get; } = "Default";
+
         private bool IsListing => !string.IsNullOrEmpty(_searchField.value);
 
         public DropdownSearchField()
@@ -59,6 +59,16 @@ namespace Ludwell.Scene
             InitializeFocusAndBlur();
 
             KeepDropdownUnderSelf(this);
+        }
+
+        public bool HasSearchStrategy(string strategy)
+        {
+            foreach (var listingStrategy in _listingStrategies)
+            {
+                if (listingStrategy.Name == strategy) return true;
+            }
+
+            return false;
         }
 
         public void BindToListView(ListView listView)
@@ -139,7 +149,7 @@ namespace Ludwell.Scene
             return this;
         }
 
-        public void ListingFromStrategy(string strategyName, string listFromValue)
+        public void ListWithStrategy(string strategyName, string listFromValue)
         {
             for (var index = 0; index < _listingStrategies.Count; index++)
             {

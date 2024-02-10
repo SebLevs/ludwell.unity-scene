@@ -57,7 +57,7 @@ namespace Ludwell.Scene
 
             _cachedTags.Add(tag);
             _cachedTags.Sort();
-            _tagsContainer.Add(CreateTagElement(tag));
+            _tagsContainer.Add(ConstructTagElement(tag));
             SortTagElements();
             HandleNotTaggedState();
 
@@ -85,7 +85,7 @@ namespace Ludwell.Scene
 
             foreach (var tag in _cachedTags)
             {
-                _tagsContainer.Add(CreateTagElement(tag));
+                _tagsContainer.Add(ConstructTagElement(tag));
             }
 
             HandleNotTaggedState();
@@ -98,7 +98,7 @@ namespace Ludwell.Scene
             _notTaggedLabel = this.Q<Label>(NotTaggedName);
         }
 
-        private TagElement CreateTagElement(Tag tag)
+        private TagElement ConstructTagElement(Tag tag)
         {
             TagElement tagElement = new();
             tagElement.SetTagName(tag);
