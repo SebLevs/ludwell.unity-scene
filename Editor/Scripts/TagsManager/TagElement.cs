@@ -16,7 +16,7 @@ namespace Ludwell.Scene
         private const string MainButtonName = "button-main";
         private const string SearchButtonName = "button-search";
 
-        private static TagElement _currentSelection;
+        private TagElement _currentSelection;
 
         private Button _removeButton;
         private Button _mainButton;
@@ -72,15 +72,15 @@ namespace Ludwell.Scene
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {
                 _dropdownSearchField.ListWithStrategy(_searchStrategyName, _mainButton.text);
+                ToggleVisual();
             });
         }
 
-        private static void SelectTag(TagElement tagElement)
+        private void SelectTag(TagElement tagElement)
         {
             if (_currentSelection == tagElement)
             {
-                var reverseDisplay = GetReverseDisplayStyle();
-                _currentSelection.ToggleBehaviourButtons(reverseDisplay);
+                ToggleVisual();
                 return;
             }
 
@@ -88,8 +88,14 @@ namespace Ludwell.Scene
             _currentSelection = tagElement;
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
         }
+        
+        private void ToggleVisual()
+        {
+            var reverseDisplay = GetReverseDisplayStyle();
+            _currentSelection.ToggleBehaviourButtons(reverseDisplay);
+        }
 
-        private static DisplayStyle GetReverseDisplayStyle()
+        private DisplayStyle GetReverseDisplayStyle()
         {
             return _currentSelection._removeButton.style.display == DisplayStyle.None
                 ? DisplayStyle.Flex
