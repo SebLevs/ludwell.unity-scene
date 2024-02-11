@@ -38,7 +38,7 @@ namespace Ludwell.Scene
             this.Q(IconButtonName).tooltip = value;
         }
 
-        public TagsController WithTagList(List<Tag> tags)
+        public TagsController WithTags(List<Tag> tags)
         {
             _cachedTags = tags;
             return this;
@@ -59,7 +59,7 @@ namespace Ludwell.Scene
             _cachedTags.Sort();
             _tagsContainer.Add(ConstructTagElement(tag));
             SortTagElements();
-            HandleNotTaggedState();
+            HandleUntaggedState();
 
 #if UNITY_EDITOR
             LoaderSceneDataHelper.SaveChange();
@@ -72,7 +72,7 @@ namespace Ludwell.Scene
 
             _tagsContainer.RemoveAt(_cachedTags.IndexOf(tag));
             _cachedTags.Remove(tag);
-            HandleNotTaggedState();
+            HandleUntaggedState();
 
 #if UNITY_EDITOR
             LoaderSceneDataHelper.SaveChange();
@@ -88,7 +88,7 @@ namespace Ludwell.Scene
                 _tagsContainer.Add(ConstructTagElement(tag));
             }
 
-            HandleNotTaggedState();
+            HandleUntaggedState();
         }
 
         private void SetReferences()
@@ -115,7 +115,7 @@ namespace Ludwell.Scene
             });
         }
 
-        private void HandleNotTaggedState()
+        private void HandleUntaggedState()
         {
             _notTaggedLabel.style.display = _cachedTags.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }

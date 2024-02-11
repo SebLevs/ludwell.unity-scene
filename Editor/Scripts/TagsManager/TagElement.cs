@@ -59,7 +59,7 @@ namespace Ludwell.Scene
                 _dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
                 _searchStrategyName = _dropdownSearchField.HasSearchStrategy(_searchStrategyName)
                     ? _searchStrategyName
-                    : _dropdownSearchField.DefaultSearchName;
+                    : DropdownSearchField.DefaultSearchName;
             });
         }
 

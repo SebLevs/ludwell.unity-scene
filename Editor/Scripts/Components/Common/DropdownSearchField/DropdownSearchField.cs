@@ -26,7 +26,6 @@ namespace Ludwell.Scene
         private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
 
         private const string SearchFieldName = "toolbar-search-field";
-
         private const string DefaultSearchIcon = "icon_search";
 
         private const float BorderRadius = 3;
@@ -42,7 +41,7 @@ namespace Ludwell.Scene
 
         private VisualElement _icon;
 
-        public string DefaultSearchName { get; } = "Default";
+        public static string DefaultSearchName => "Default";
 
         private bool IsListing => !string.IsNullOrEmpty(_searchField.value);
 
@@ -77,14 +76,14 @@ namespace Ludwell.Scene
 
             if (_listView != null)
             {
-                _listView.itemsAdded -= AddFromBaseSource;
-                _listView.itemsRemoved -= RemoveFromBaseSource;
+                _listView.itemsAdded -= AddToBaseItemsSource;
+                _listView.itemsRemoved -= RemoveFromBaseItemsSource;
             }
 
             _listView = listView;
 
-            _listView.itemsAdded += AddFromBaseSource;
-            _listView.itemsRemoved += RemoveFromBaseSource;
+            _listView.itemsAdded += AddToBaseItemsSource;
+            _listView.itemsRemoved += RemoveFromBaseItemsSource;
         }
 
         public DropdownSearchField WithResizableParent(VisualElement resizableParent)
@@ -283,7 +282,7 @@ namespace Ludwell.Scene
             resizableElement.RegisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
         }
 
-        private void AddFromBaseSource(IEnumerable<int> integers)
+        private void AddToBaseItemsSource(IEnumerable<int> integers)
         {
             if (!IsListing) return;
 
@@ -293,7 +292,7 @@ namespace Ludwell.Scene
             }
         }
 
-        private void RemoveFromBaseSource(IEnumerable<int> integers)
+        private void RemoveFromBaseItemsSource(IEnumerable<int> integers)
         {
             if (!IsListing) return;
             foreach (var integer in integers)

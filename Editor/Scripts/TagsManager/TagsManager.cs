@@ -92,7 +92,7 @@ namespace Ludwell.Scene
         private void BuildTagsController(List<Tag> tags)
         {
             _tagsController
-                .WithTagList(tags)
+                .WithTags(tags)
                 .WithOptionButtonEvent(Return)
                 .Refresh();
         }
