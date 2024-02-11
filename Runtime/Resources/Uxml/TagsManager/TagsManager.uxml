@@ -6,7 +6,7 @@
             <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" class="DropdownSearchField" style="align-items: flex-start;" />
         </ui:VisualElement>
         <ui:VisualElement name="listview-container" class="listview-container">
-            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" reorderable="true" class="listview-container__ListView" />
+            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" class="listview-container__ListView" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
