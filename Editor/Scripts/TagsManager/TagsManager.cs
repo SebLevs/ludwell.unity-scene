@@ -25,8 +25,6 @@ namespace Ludwell.Scene
         private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
 
-        private VisualElement _contentContainer;
-
         public TagsManager()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -60,19 +58,16 @@ namespace Ludwell.Scene
             tag.RemoveSubscriber(_tagSubscriber);
         }
 
-        public void RemoveInvalidTagElement(VisualElement tagElement)
+        public void RemoveInvalidTagElement(Tag tag)
         {
-            var index = _contentContainer.IndexOf(
-                tagElement.FindFirstParentWithName(UiToolkitNames.UnityListViewReorderableItem));
-            _contentContainer.RemoveAt(index);
-            _loaderSceneData.Tags.RemoveAt(index);
+            _loaderSceneData.Tags.Remove(tag);
             LoaderSceneDataHelper.SaveChange();
             _listViewInitializer.ForceRebuild();
         }
 
         public void SortTags()
         {
-            // todo: Doesn't focus the right element after sorting?
+            Debug.LogError("SortTags");
             _loaderSceneData.Tags.Sort();
             LoaderSceneDataHelper.SaveChange();
             _listViewInitializer.ForceRebuild();
@@ -103,17 +98,10 @@ namespace Ludwell.Scene
             _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
             _listViewInitializer = new(this.Q<ListView>(), _loaderSceneData.Tags);
             _dropdownSearchField = this.Q<DropdownSearchField>();
-            _contentContainer = this.Q(UiToolkitNames.UnityContentContainer);
         }
 
         private void InitializeListViewBehaviours()
         {
-            _listViewInitializer.ListView.itemsAdded += _ =>
-            {
-                var last = _contentContainer.Children().Last().Q<TagsManagerElement>();
-                last.FocusTextField();
-            };
-
             _listViewInitializer.ListView.itemsRemoved += indexEnumerable =>
             {
                 var itemsSource = _listViewInitializer.ListView.itemsSource;

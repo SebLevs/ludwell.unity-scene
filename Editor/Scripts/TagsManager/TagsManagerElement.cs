@@ -42,13 +42,13 @@ namespace Ludwell.Scene.Editor
             {
                 if (string.IsNullOrEmpty(Cache.Value))
                 {
-                    _tagsManager.RemoveInvalidTagElement(this);
+                    _tagsManager.RemoveInvalidTagElement(Cache);
                 }
                 else if (_tagsManager.IsTagDuplicate(Cache))
                 {
                     Debug.LogError(
                         $"Duplicate tag | \"{Cache.Value}\" already exists. New entry has been removed.");
-                    _tagsManager.RemoveInvalidTagElement(this);
+                    _tagsManager.RemoveInvalidTagElement(Cache);
                 }
                 else
                 {
@@ -64,7 +64,9 @@ namespace Ludwell.Scene.Editor
 
         public void SetElementFromCachedData()
         {
-            _tagTextField.value = Cache.Value;
+            SetText(Cache.Value);
+            if (!string.IsNullOrEmpty(Cache.Value)) return;
+            FocusTextField();
         }
 
         public void FocusTextField()
@@ -101,6 +103,11 @@ namespace Ludwell.Scene.Editor
         private void BindTextField(ChangeEvent<string> evt)
         {
             Cache.Value = evt.newValue;
+        }
+        
+        private void SetText(string value)
+        {
+            _tagTextField.value = value;
         }
     }
 }
