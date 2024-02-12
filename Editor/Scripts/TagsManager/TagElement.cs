@@ -26,7 +26,7 @@ namespace Ludwell.Scene
         private TagsController _tagsController;
         private DropdownSearchField _dropdownSearchField;
 
-        private Tag _tag;
+        private Tag _cache;
 
         public TagElement()
         {
@@ -39,12 +39,18 @@ namespace Ludwell.Scene
             ToggleBehaviourButtons(DisplayStyle.None);
         }
 
+        ~TagElement()
+        {
+            _cache.RemoveValueChangedCallback(SetText);
+        }
+
         public string Value => _mainButton.text;
 
-        public void SetTagName(Tag tag)
+        public void UpdateCache(Tag tag)
         {
-            _mainButton.text = tag.Value;
-            _tag = tag;
+            SetText(tag.Value);
+            _cache = tag;
+            _cache.AddValueChangedCallback(SetText);
         }
 
         private void SetReferences()
@@ -67,7 +73,7 @@ namespace Ludwell.Scene
         {
             _mainButton.RegisterCallback<ClickEvent>(_ => { SelectTag(this); });
 
-            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(_tag); });
+            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(_cache); });
 
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {
@@ -88,7 +94,7 @@ namespace Ludwell.Scene
             _currentSelection = tagElement;
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
         }
-        
+
         private void ToggleVisual()
         {
             var reverseDisplay = GetReverseDisplayStyle();
@@ -106,6 +112,11 @@ namespace Ludwell.Scene
         {
             _removeButton.style.display = displayStyle;
             _searchButton.style.display = displayStyle;
+        }
+
+        private void SetText(string text)
+        {
+            _mainButton.text = text;
         }
     }
 }

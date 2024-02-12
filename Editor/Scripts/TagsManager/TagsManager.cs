@@ -60,6 +60,7 @@ namespace Ludwell.Scene
 
         public void RemoveInvalidTagElement(Tag tag)
         {
+            _tagsController.Remove(tag);
             _loaderSceneData.Tags.Remove(tag);
             LoaderSceneDataHelper.SaveChange();
             _listViewInitializer.ForceRebuild();

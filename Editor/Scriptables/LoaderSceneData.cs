@@ -121,6 +121,8 @@ namespace Ludwell.Scene.Editor
 
         [SerializeField] private List<TagSubscriber> _subscribers = new();
 
+        private Action<string> _onValueChanged;
+
         public void AddSubscriber(TagSubscriber subscriber)
         {
             _subscribers.Add(subscriber);
@@ -139,6 +141,16 @@ namespace Ludwell.Scene.Editor
             }
         }
 
+        public void AddValueChangedCallback(Action<string> callback)
+        {
+            _onValueChanged += callback;
+        }
+
+        public void RemoveValueChangedCallback(Action<string> callback)
+        {
+            _onValueChanged -= callback;
+        }
+
         public string Value
         {
             get => _value;
@@ -146,6 +158,7 @@ namespace Ludwell.Scene.Editor
             {
                 if (_value == value) return;
                 _value = value;
+                _onValueChanged?.Invoke(_value);
                 LoaderSceneDataHelper.SaveChangeDelayed();
             }
         }

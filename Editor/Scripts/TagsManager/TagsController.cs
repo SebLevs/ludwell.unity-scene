@@ -101,7 +101,7 @@ namespace Ludwell.Scene
         private TagElement ConstructTagElement(Tag tag)
         {
             TagElement tagElement = new();
-            tagElement.SetTagName(tag);
+            tagElement.UpdateCache(tag);
             return tagElement;
         }
 

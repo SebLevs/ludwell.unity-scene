@@ -43,6 +43,7 @@ namespace Ludwell.Scene.Editor
                 if (string.IsNullOrEmpty(Cache.Value))
                 {
                     _tagsManager.RemoveInvalidTagElement(Cache);
+                    Cache.RemoveFromAllSubscribers();
                 }
                 else if (_tagsManager.IsTagDuplicate(Cache))
                 {
@@ -104,7 +105,7 @@ namespace Ludwell.Scene.Editor
         {
             Cache.Value = evt.newValue;
         }
-        
+
         private void SetText(string value)
         {
             _tagTextField.value = value;
