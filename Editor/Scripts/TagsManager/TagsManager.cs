@@ -90,7 +90,7 @@ namespace Ludwell.Scene
             _tagsController
                 .WithTags(tags)
                 .WithOptionButtonEvent(Return)
-                .Refresh();
+                .Populate();
         }
 
         private void SetReferences()

@@ -65,7 +65,7 @@ namespace Ludwell.Scene.Editor
 
         public void SetElementFromCachedData()
         {
-            SetText(Cache.Value);
+            _tagTextField.value = Cache.Value;
             if (!string.IsNullOrEmpty(Cache.Value)) return;
             FocusTextField();
         }
@@ -104,11 +104,6 @@ namespace Ludwell.Scene.Editor
         private void BindTextField(ChangeEvent<string> evt)
         {
             Cache.Value = evt.newValue;
-        }
-
-        private void SetText(string value)
-        {
-            _tagTextField.value = value;
         }
     }
 }

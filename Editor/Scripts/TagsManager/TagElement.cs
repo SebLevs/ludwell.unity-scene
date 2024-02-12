@@ -117,6 +117,7 @@ namespace Ludwell.Scene
         private void SetText(string text)
         {
             _mainButton.text = text;
+            _tagsController?.Rebuild();
         }
     }
 }

@@ -19,10 +19,9 @@ namespace Ludwell.Scene
         private const string NotTaggedName = "not-tagged";
         private const string IconButtonName = "tags__button-add";
 
-        private List<Tag> _cachedTags = new();
-
         private Button _manageTagsButton;
         private VisualElement _tagsContainer;
+        private List<Tag> _cache = new();
         private Label _notTaggedLabel;
 
         public TagsController()
@@ -40,7 +39,7 @@ namespace Ludwell.Scene
 
         public TagsController WithTags(List<Tag> tags)
         {
-            _cachedTags = tags;
+            _cache = tags;
             return this;
         }
 
@@ -53,13 +52,11 @@ namespace Ludwell.Scene
 
         public void Add(Tag tag)
         {
-            if (_cachedTags.Contains(tag)) return;
+            if (_cache.Contains(tag)) return;
 
-            _cachedTags.Add(tag);
-            _cachedTags.Sort();
+            _cache.Add(tag);
             _tagsContainer.Add(ConstructTagElement(tag));
-            SortTagElements();
-            HandleUntaggedState();
+            Rebuild();
 
 #if UNITY_EDITOR
             LoaderSceneDataHelper.SaveChange();
@@ -68,10 +65,10 @@ namespace Ludwell.Scene
 
         public void Remove(Tag tag)
         {
-            if (!_cachedTags.Contains(tag)) return;
+            if (!_cache.Contains(tag)) return;
 
-            _tagsContainer.RemoveAt(_cachedTags.IndexOf(tag));
-            _cachedTags.Remove(tag);
+            _tagsContainer.RemoveAt(_cache.IndexOf(tag));
+            _cache.Remove(tag);
             HandleUntaggedState();
 
 #if UNITY_EDITOR
@@ -79,16 +76,20 @@ namespace Ludwell.Scene
 #endif
         }
 
-        public void Refresh()
+        public void Rebuild()
+        {
+            _cache.Sort();
+            Sort();
+            HandleUntaggedState();
+        }
+
+        public void Populate()
         {
             _tagsContainer.Clear();
-
-            foreach (var tag in _cachedTags)
+            foreach (var tag in _cache)
             {
                 _tagsContainer.Add(ConstructTagElement(tag));
             }
-
-            HandleUntaggedState();
         }
 
         private void SetReferences()
@@ -105,19 +106,19 @@ namespace Ludwell.Scene
             return tagElement;
         }
 
-        private void SortTagElements()
+        private void Sort()
         {
             _tagsContainer.Sort((a, b) =>
             {
                 var aValue = (a as TagElement).Value;
                 var bValue = (b as TagElement).Value;
-                return string.Compare(aValue, bValue);
+                return string.Compare(aValue, bValue, StringComparison.InvariantCulture);
             });
         }
 
         private void HandleUntaggedState()
         {
-            _notTaggedLabel.style.display = _cachedTags.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _notTaggedLabel.style.display = _cache.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }
