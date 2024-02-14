@@ -33,29 +33,7 @@ namespace Ludwell.Scene.Editor
 
             SetReferences();
             InitializeButtons();
-            OnBlurCheckValidity();
-        }
-
-        private void OnBlurCheckValidity()
-        {
-            _tagTextField.RegisterCallback<BlurEvent>(_ =>
-            {
-                if (string.IsNullOrEmpty(Cache.Value))
-                {
-                    _tagsManager.RemoveInvalidTagElement(Cache);
-                    Cache.RemoveFromAllSubscribers();
-                }
-                else if (_tagsManager.IsTagDuplicate(Cache))
-                {
-                    Debug.LogError(
-                        $"Duplicate tag | \"{Cache.Value}\" already exists. New entry has been removed.");
-                    _tagsManager.RemoveInvalidTagElement(Cache);
-                }
-                else
-                {
-                    _tagsManager.SortTags();
-                }
-            });
+            InitializeValidityHandlingEvents();
         }
 
         public void BindElementToCachedData()
@@ -67,12 +45,8 @@ namespace Ludwell.Scene.Editor
         {
             _tagTextField.value = Cache.Value;
             if (!string.IsNullOrEmpty(Cache.Value)) return;
-            FocusTextField();
-        }
-
-        public void FocusTextField()
-        {
             _tagTextField.Focus();
+            _tagsManager.SetPreviousTarget(this);
         }
 
         private void SetReferences()
@@ -99,6 +73,26 @@ namespace Ludwell.Scene.Editor
         private void RemoveFromController()
         {
             _tagsManager.RemoveTagFromController(Cache);
+        }
+
+        private void InitializeValidityHandlingEvents()
+        {
+            _tagTextField.RegisterCallback<BlurEvent>(_ => HandleInvalidTag());
+            RegisterCallback<AttachToPanelEvent>(_ => _tagTextField.RegisterCallback<KeyDownEvent>(OnKeyDown));
+        }
+
+        private void OnKeyDown(KeyDownEvent evt)
+        {
+            if (evt.keyCode != KeyCode.Return) return;
+            _tagsManager.SortTags();
+            _tagsManager.SetPreviousTarget(null);
+        }
+
+        public void HandleInvalidTag()
+        {
+            if (!string.IsNullOrEmpty(Cache.Value) && !_tagsManager.IsTagDuplicate(Cache)) return;
+            _tagsManager.RemoveInvalidTagElement(Cache);
+            Cache.RemoveFromAllSubscribers();
         }
 
         private void BindTextField(ChangeEvent<string> evt)

@@ -171,7 +171,7 @@ namespace Ludwell.Scene.Editor
         public int CompareTo(object obj)
         {
             if (obj is not Tag other) return 1;
-            return string.Compare(Value, other.Value, StringComparison.InvariantCulture);
+            return string.Compare(Value, other.Value, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 

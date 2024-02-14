@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ludwell.Scene.Editor;
@@ -25,6 +26,8 @@ namespace Ludwell.Scene
         private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
 
+        private TagsManagerElement _previousTarget;
+
         public TagsManager()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -35,6 +38,8 @@ namespace Ludwell.Scene
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
             InitializeReturnInput();
+            // todo: work around for Focus/Blur overlap issue with ListView Rebuild. Sort logic should be on TME blur.
+            InitializeTagSorting();
 
             HandleTagController();
         }
@@ -66,12 +71,9 @@ namespace Ludwell.Scene
             _listViewInitializer.ForceRebuild();
         }
 
-        public void SortTags()
+        public void SetPreviousTarget(TagsManagerElement target)
         {
-            Debug.LogError("SortTags");
-            _loaderSceneData.Tags.Sort();
-            LoaderSceneDataHelper.SaveChange();
-            _listViewInitializer.ForceRebuild();
+            _previousTarget = target;
         }
 
         public bool IsTagDuplicate(Tag elementTag)
@@ -79,10 +81,17 @@ namespace Ludwell.Scene
             foreach (var tag in _loaderSceneData.Tags)
             {
                 if (tag == elementTag) continue;
-                if (tag.Value == elementTag.Value) return true;
+                if (string.Equals(tag.Value, elementTag.Value, StringComparison.CurrentCultureIgnoreCase)) return true;
             }
 
             return false;
+        }
+
+        public void SortTags()
+        {
+            _loaderSceneData.Tags.Sort();
+            LoaderSceneDataHelper.SaveChangeDelayed();
+            _listViewInitializer.ForceRebuild();
         }
 
         private void BuildTagsController(List<Tag> tags)
@@ -140,6 +149,24 @@ namespace Ludwell.Scene
             {
                 Return();
             }
+        }
+
+        private void InitializeTagSorting()
+        {
+            RegisterCallback<MouseUpEvent>(evt =>
+            {
+                var tagsManagerElement = (evt.target as VisualElement).GetFirstAncestorOfType<TagsManagerElement>();
+                if (_previousTarget != null && _previousTarget != tagsManagerElement)
+                {
+                    SortTags();
+                    _previousTarget.HandleInvalidTag();
+                    _previousTarget = null;
+                }
+
+                if (evt.target is not TextElement) return;
+                if (tagsManagerElement == null) return;
+                _previousTarget = tagsManagerElement;
+            });
         }
 
         private void HandleTagController()
