@@ -48,7 +48,7 @@ namespace Ludwell.Scene
 
         public void UpdateCache(Tag tag)
         {
-            SetText(tag.Value);
+            SetText(tag.Name);
             _cache = tag;
             _cache.AddValueChangedCallback(SetText);
         }

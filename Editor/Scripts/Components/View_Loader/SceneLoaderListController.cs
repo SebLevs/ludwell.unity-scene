@@ -108,8 +108,8 @@ namespace Ludwell.Scene
             {
                 foreach (var tag in (listViewElement as LoaderListViewElementData).Tags)
                 {
-                    if (tag.Value != searchFieldValue) continue;
-                    filteredList.Add(listViewElement as LoaderListViewElementData);
+                    if (tag.Name != searchFieldValue) continue;
+                    filteredList.Add(listViewElement as IListable);
                     break;
                 }
             }

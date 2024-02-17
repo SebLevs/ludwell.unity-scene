@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerElement : VisualElement, IBindableListViewElement<Tag>
+    public class TagsManagerElement : VisualElement, IBindableListViewElement<TagWithSubscribers>
     {
         public new class UxmlFactory : UxmlFactory<TagsManagerElement, UxmlTraits>
         {
@@ -24,7 +24,7 @@ namespace Ludwell.Scene.Editor
 
         private TagsManager _tagsManager;
 
-        public Tag Cache { get; set; }
+        public TagWithSubscribers Cache { get; set; }
 
         public TagsManagerElement()
         {
@@ -43,8 +43,8 @@ namespace Ludwell.Scene.Editor
 
         public void SetElementFromCachedData()
         {
-            _tagTextField.value = Cache.Value;
-            if (!string.IsNullOrEmpty(Cache.Value)) return;
+            _tagTextField.value = Cache.Name;
+            if (!string.IsNullOrEmpty(Cache.Name)) return;
             _tagTextField.Focus();
             _tagsManager.SetPreviousTarget(this);
         }
@@ -90,14 +90,16 @@ namespace Ludwell.Scene.Editor
 
         public void HandleInvalidTag()
         {
-            if (!string.IsNullOrEmpty(Cache.Value) && !_tagsManager.IsTagDuplicate(Cache)) return;
+            Debug.LogError(Cache);
+            Debug.LogError(Cache.Name);
+            if (!string.IsNullOrEmpty(Cache.Name) && !_tagsManager.IsTagDuplicate(Cache)) return;
             _tagsManager.RemoveInvalidTagElement(Cache);
             Cache.RemoveFromAllSubscribers();
         }
 
         private void BindTextField(ChangeEvent<string> evt)
         {
-            Cache.Value = evt.newValue;
+            Cache.Name = evt.newValue;
         }
     }
 }

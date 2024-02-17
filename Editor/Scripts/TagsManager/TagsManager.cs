@@ -23,7 +23,7 @@ namespace Ludwell.Scene
 
         private LoaderSceneData _loaderSceneData;
 
-        private ListViewInitializer<TagsManagerElement, Tag> _listViewInitializer;
+        private ListViewInitializer<TagsManagerElement, TagWithSubscribers> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
 
         private TagsManagerElement _previousTarget;
@@ -44,26 +44,26 @@ namespace Ludwell.Scene
             HandleTagController();
         }
 
-        public void Show(TagSubscriber tagSubscriber)
+        public void Show(TagSubscriberWithTags tagSubscriber)
         {
             _tagSubscriber = tagSubscriber;
             this.Root().Q<TabController>().SwitchView(this);
             BuildTagsController(tagSubscriber.Tags);
         }
 
-        public void AddTagToController(Tag tag)
+        public void AddTagToController(TagWithSubscribers tag)
         {
             _tagsController.Add(tag);
             tag.AddSubscriber(_tagSubscriber);
         }
 
-        public void RemoveTagFromController(Tag tag)
+        public void RemoveTagFromController(TagWithSubscribers tag)
         {
             _tagsController.Remove(tag);
             tag.RemoveSubscriber(_tagSubscriber);
         }
 
-        public void RemoveInvalidTagElement(Tag tag)
+        public void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             _tagsController.Remove(tag);
             _loaderSceneData.Tags.Remove(tag);
@@ -81,7 +81,7 @@ namespace Ludwell.Scene
             foreach (var tag in _loaderSceneData.Tags)
             {
                 if (tag == elementTag) continue;
-                if (string.Equals(tag.Value, elementTag.Value, StringComparison.CurrentCultureIgnoreCase)) return true;
+                if (string.Equals(tag.Name, elementTag.Name, StringComparison.CurrentCultureIgnoreCase)) return true;
             }
 
             return false;
@@ -118,7 +118,7 @@ namespace Ludwell.Scene
                 var removedIndexes = indexEnumerable.ToList();
                 foreach (var index in removedIndexes)
                 {
-                    var tag = itemsSource[index] as Tag;
+                    var tag = itemsSource[index] as TagWithSubscribers;
                     _tagsController.Remove(tag);
                     tag.RemoveFromAllSubscribers();
                 }

@@ -18,7 +18,7 @@ namespace Ludwell.Scene.Editor
 
         [field: HideInInspector]
         [field: SerializeField]
-        public List<Tag> Tags { get; set; } = new();
+        public List<TagWithSubscribers> Tags { get; set; } = new();
 
         public SceneData MainMenuScene
         {
@@ -52,24 +52,12 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class LoaderListViewElementData : TagSubscriber, IListable
+    public class LoaderListViewElementData : TagSubscriberWithTags
     {
-        [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
 
         [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
-
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (name == value) return;
-                name = value;
-                LoaderSceneDataHelper.SaveChangeDelayed();
-            }
-        }
 
         public bool IsOpen
         {
@@ -92,9 +80,14 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public string GetName()
+        // public string GetName()
+        // {
+        //     return name;
+        // }
+
+        public LoaderListViewElementData()
         {
-            return name;
+            Name = LoaderListViewElement.DefaultHeaderTextValue;
         }
     }
 
@@ -112,72 +105,5 @@ namespace Ludwell.Scene.Editor
                 LoaderSceneDataHelper.SaveChange();
             }
         }
-    }
-
-    [Serializable]
-    public class Tag : IListable, IComparable
-    {
-        [SerializeField] private string _value;
-
-        [SerializeField] private List<TagSubscriber> _subscribers = new();
-
-        private Action<string> _onValueChanged;
-
-        public void AddSubscriber(TagSubscriber subscriber)
-        {
-            _subscribers.Add(subscriber);
-        }
-
-        public void RemoveSubscriber(TagSubscriber subscriber)
-        {
-            _subscribers.Remove(subscriber);
-        }
-
-        public void RemoveFromAllSubscribers()
-        {
-            foreach (var subscriber in _subscribers)
-            {
-                subscriber.Tags.Remove(this);
-            }
-        }
-
-        public void AddValueChangedCallback(Action<string> callback)
-        {
-            _onValueChanged += callback;
-        }
-
-        public void RemoveValueChangedCallback(Action<string> callback)
-        {
-            _onValueChanged -= callback;
-        }
-
-        public string Value
-        {
-            get => _value;
-            set
-            {
-                if (_value == value) return;
-                _value = value;
-                _onValueChanged?.Invoke(_value);
-                LoaderSceneDataHelper.SaveChangeDelayed();
-            }
-        }
-
-        public string GetName()
-        {
-            return _value;
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (obj is not Tag other) return 1;
-            return string.Compare(Value, other.Value, StringComparison.InvariantCultureIgnoreCase);
-        }
-    }
-
-    [Serializable]
-    public class TagSubscriber
-    {
-        [field: SerializeField] public List<Tag> Tags { get; set; } = new();
     }
 }
