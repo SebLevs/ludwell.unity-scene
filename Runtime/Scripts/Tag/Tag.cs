@@ -28,7 +28,6 @@ namespace Ludwell.Scene
                 if (name == value) return;
                 name = value;
                 _onValueChanged?.Invoke(name);
-                // LoaderSceneDataHelper.SaveChangeDelayed();
             }
         }
 

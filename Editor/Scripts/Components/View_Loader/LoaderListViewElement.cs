@@ -27,7 +27,7 @@ namespace Ludwell.Scene
         private const string OpenButtonName = "button__open";
         private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
 
-        public const string DefaultHeaderTextValue = "Scene Loader Element";
+        public const string DefaultHeaderTextValue = "Quick load element";
 
         private VisualElement _reorderableHandle;
         private Foldout _foldoutElement;
@@ -44,8 +44,9 @@ namespace Ludwell.Scene
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
+
             SetReferences();
-            InitAndReferenceFoldoutTextField();
+            InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
 
             RegisterButtonsClickEventCallback();
@@ -64,12 +65,13 @@ namespace Ludwell.Scene
             _tagsController = this.Q<TagsController>();
         }
 
-        private void InitAndReferenceFoldoutTextField()
+        private void InitializeAndReferenceFoldoutTextField()
         {
             var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
+            _foldoutTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
         }
 
         private void RegisterStyleEvents()

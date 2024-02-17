@@ -34,6 +34,7 @@ namespace Ludwell.Scene.Editor
             SetReferences();
             InitializeButtons();
             InitializeValidityHandlingEvents();
+            InitializeDelayedSaveEvent();
         }
 
         public void BindElementToCachedData()
@@ -79,6 +80,11 @@ namespace Ludwell.Scene.Editor
         {
             _tagTextField.RegisterCallback<BlurEvent>(_ => HandleInvalidTag());
             RegisterCallback<AttachToPanelEvent>(_ => _tagTextField.RegisterCallback<KeyDownEvent>(OnKeyDown));
+        }
+        
+        private void InitializeDelayedSaveEvent()
+        {
+            _tagTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
         }
 
         private void OnKeyDown(KeyDownEvent evt)

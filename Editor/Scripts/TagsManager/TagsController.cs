@@ -90,6 +90,7 @@ namespace Ludwell.Scene
             {
                 _tagsContainer.Add(ConstructTagElement(tag));
             }
+            HandleUntaggedState();
         }
 
         private void SetReferences()

@@ -80,11 +80,6 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        // public string GetName()
-        // {
-        //     return name;
-        // }
-
         public LoaderListViewElementData()
         {
             Name = LoaderListViewElement.DefaultHeaderTextValue;
