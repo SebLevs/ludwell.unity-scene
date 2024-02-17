@@ -90,8 +90,6 @@ namespace Ludwell.Scene.Editor
 
         public void HandleInvalidTag()
         {
-            Debug.LogError(Cache);
-            Debug.LogError(Cache.Name);
             if (!string.IsNullOrEmpty(Cache.Name) && !_tagsManager.IsTagDuplicate(Cache)) return;
             _tagsManager.RemoveInvalidTagElement(Cache);
             Cache.RemoveFromAllSubscribers();
