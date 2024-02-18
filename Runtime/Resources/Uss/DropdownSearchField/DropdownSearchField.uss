@@ -12,3 +12,12 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+#unity-search {
+    background-image: resource('Sprites/icon_search');
+}
+
+.hover-behaviour:hover {
+    scale: 1.2 1.2;
+    transition-duration: 0.2s;
+}

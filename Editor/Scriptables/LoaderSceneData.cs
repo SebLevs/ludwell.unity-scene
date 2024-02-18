@@ -48,25 +48,12 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class LoaderListViewElementData
+    public class LoaderListViewElementData : TagSubscriberWithTags
     {
-        
-        [SerializeField] private string name = LoaderListViewElement.DefaultHeaderTextValue;
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
-        
+
         [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
-        
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (name == value) return;
-                name = value;
-                LoaderSceneDataHelper.SaveChangeDelayed();
-            }
-        }
 
         public bool IsOpen
         {
@@ -87,6 +74,11 @@ namespace Ludwell.Scene.Editor
                 mainScene = value;
                 LoaderSceneDataHelper.SaveChange();
             }
+        }
+
+        public LoaderListViewElementData()
+        {
+            Name = LoaderListViewElement.DefaultHeaderTextValue;
         }
     }
 

@@ -1,0 +1,5 @@
+ScrollView > VisualElement > VisualElement > Label {
+    -unity-text-align: middle-center;
+    height: 100%;
+    max-width: 100%;
+}

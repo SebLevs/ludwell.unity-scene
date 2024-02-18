@@ -10,6 +10,7 @@
             <Ludwell.Scene.SettingsController name="SettingsController" style="display: none;">
                 <ui:Label tabindex="-1" text="settings&#10;soon..." display-tooltip-when-elided="true" style="flex-shrink: 1; flex-grow: 1; -unity-text-align: middle-center; font-size: 80px;" />
             </Ludwell.Scene.SettingsController>
+            <Ludwell.Scene.TagsManager style="flex-grow: 1; display: none;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

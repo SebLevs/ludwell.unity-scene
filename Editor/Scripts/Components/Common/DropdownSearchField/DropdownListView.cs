@@ -15,6 +15,8 @@ namespace Ludwell.Scene
         private readonly List<DropdownData> _data = new();
         
         private float _heightDifference = -1;
+        
+        private const float _maxHeight = 200;
 
         public DropdownListView()
         {
@@ -29,6 +31,13 @@ namespace Ludwell.Scene
         
         public bool IsHidden => style.display == DisplayStyle.None;
 
+        private DropdownSearchField _owner;
+
+        public void SetOwner(DropdownSearchField dropdownSearchField)
+        {
+            _owner = dropdownSearchField;
+        }
+        
         public void Show()
         {
             style.display = DisplayStyle.Flex;
@@ -83,10 +92,14 @@ namespace Ludwell.Scene
 
         private void SetStyle()
         {
-            style.width = Length.Percent(40);
-            style.maxHeight = 200;
+            style.maxHeight = _maxHeight;
             style.position = Position.Absolute;
             this.Q<Scroller>().style.backgroundColor = new StyleColor(new Color(0.2627451f, 0.2627451f, 0.2627451f, 1f));
+            
+            RegisterCallback<GeometryChangedEvent>(_ =>
+            {
+                style.width = _owner.resolvedStyle.width;
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
@@ -8,75 +9,156 @@ using UnityEngine.UIElements;
 namespace Ludwell.Scene
 {
     /// <summary>
-    /// InitDropdownElementBehaviour()
-    /// must be called to initialize the dropdown elements' action.<br/>
+    /// Default behaviour on value changed is to list the element by name<br/>
     /// <list type="number">
     /// <item>The dropdown will be populated from the specified Listview elements.</item>
     /// <item>The action will be invoked on mouse up from any drop down element.</item>
     /// </list>
+    /// additional search strategies can be added and cycled through on search icon click.
     /// </summary>
     public class DropdownSearchField : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<DropdownSearchField, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<DropdownSearchField, UxmlTraits>
+        {
+        }
 
         private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
         private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
 
         private const string SearchFieldName = "toolbar-search-field";
+        private const string DefaultSearchIcon = "icon_search";
+
+        private const float BorderRadius = 3;
 
         private ToolbarSearchField _searchField;
         private DropdownListView _dropdownListView;
 
-        private const float BorderRadius = 3;
+        private IList _baseItemsSource;
+        private ListView _listView;
+
+        private int _listingStrategyIndex;
+        private readonly List<ListingStrategy> _listingStrategies = new();
+
+        private VisualElement _icon;
+
+        public static string DefaultSearchName => "Default";
+
+        private bool IsListing => !string.IsNullOrEmpty(_searchField.value);
 
         public DropdownSearchField()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
-            InitDropDown();
-            InitSearchField();
-            OnClickedSearchFieldRefreshDropdown();
-            
-            RegisterCallback<MouseLeaveWindowEvent>(_ =>
-            {
-                Debug.LogError("leave window");
-                HideDropdown();
-            });
+            SetReferences();
+            InitializeDropDown();
+            InitializeSearchField();
+            SetDefaultSearchBehaviour();
+            InitializeSearchListing();
+            InitializeFocusAndBlur();
+
+            KeepDropdownUnderSelf(this);
         }
 
-        public void InitDropdownElementBehaviour(ListView populateFrom, Action<int> actionAtIndex)
+        public bool HasSearchStrategy(string strategy)
         {
-            InitPlaceDropdown();
+            foreach (var listingStrategy in _listingStrategies)
+            {
+                if (listingStrategy.Name == strategy) return true;
+            }
 
-            var itemsSource = populateFrom.itemsSource;
+            return false;
+        }
 
+        public void BindToListView(ListView listView)
+        {
+            _baseItemsSource = listView.itemsSource;
+
+            if (_listView != null)
+            {
+                _listView.itemsAdded -= AddToBaseItemsSource;
+                _listView.itemsRemoved -= RemoveFromBaseItemsSource;
+            }
+
+            _listView = listView;
+
+            _listView.itemsAdded += AddToBaseItemsSource;
+            _listView.itemsRemoved += RemoveFromBaseItemsSource;
+        }
+
+        public DropdownSearchField WithResizableParent(VisualElement resizableParent)
+        {
+            UnregisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+            KeepDropdownUnderSelf(resizableParent);
+            return this;
+        }
+
+        public DropdownSearchField WithDropdownBehaviour(Action<int> actionAtIndex)
+        {
             _searchField.RegisterValueChangedCallback(evt =>
             {
                 _dropdownListView.ClearData();
-
-                if (evt.newValue == string.Empty)
+                if (string.IsNullOrEmpty(evt.newValue))
                 {
                     HideDropdown();
                     return;
                 }
 
-                for (var i = 0; i < itemsSource.Count; i++)
+                for (var i = 0; i < _baseItemsSource.Count; i++)
                 {
-                    if (itemsSource[i] == null) break;
-                    var dataName = (itemsSource[i] as LoaderListViewElementData).Name;
-                    if (dataName.ToLower().Contains(evt.newValue.ToLower()))
-                    {
-                        var index = i;
-                        _dropdownListView.Add(
-                            dataName,
-                            () => actionAtIndex.Invoke(index));
-                    }
+                    if (_baseItemsSource[i] == null) break;
+                    var dataName = (_baseItemsSource[i] as IListable).Name;
+                    if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
+                    var index = i;
+                    _dropdownListView.Add(
+                        dataName,
+                        () => actionAtIndex.Invoke(index));
                 }
 
-                if (_dropdownListView.Count == 0) return;
-                ShowDropdown();
+                // todo: uncomment when InitializeFocusAndBlur() bug is fixed
+                // if (_dropdownListView.Count == 0) return;
+                // ShowDropdown();
             });
+
+            return this;
+        }
+
+        public DropdownSearchField WithCyclingListingStrategy(ListingStrategy listingStrategy)
+        {
+            if (_listingStrategies.Count == 1)
+            {
+                _icon.AddToClassList("hover-behaviour");
+            }
+
+            _listingStrategies.Add(listingStrategy);
+
+            this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
+            {
+                HideDropdown();
+                NextListingStrategy();
+                if (!string.IsNullOrEmpty(_searchField.value))
+                {
+                    _listView.itemsSource =
+                        GetCurrentListingStrategy().Execute(_searchField.value, _baseItemsSource);
+                }
+
+                _listView.Rebuild();
+            });
+
+            return this;
+        }
+
+        public void ListWithStrategy(string strategyName, string listFromValue)
+        {
+            for (var index = 0; index < _listingStrategies.Count; index++)
+            {
+                if (strategyName != _listingStrategies[index].Name) continue;
+
+                _listingStrategyIndex = index;
+                _icon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
+                ExecuteCurrentListingStrategy(listFromValue);
+                _searchField.value = listFromValue;
+            }
         }
 
         public void ShowDropdown()
@@ -92,95 +174,136 @@ namespace Ludwell.Scene
             _dropdownListView.Hide();
         }
 
-        public List<DropdownElement> GetDropdownElements()
+        private void SetReferences()
         {
-            return _dropdownListView.GetElements();
+            _icon = this.Q(UiToolkitNames.UnitySearch);
         }
 
-        public void ClearDropdownData()
-        {
-            _dropdownListView.ClearData();
-        }
-
-        private void InitSearchField()
+        private void InitializeSearchField()
         {
             _searchField = this.Q<ToolbarSearchField>(SearchFieldName);
         }
 
-        private void OnClickedSearchFieldRefreshDropdown()
-        {
-            RegisterCallback<MouseUpEvent>(evt =>
-            {
-                if (!_dropdownListView.IsHidden) return;
-                if (_searchField.value == string.Empty) return;
-
-                var value = _searchField.value;
-                _searchField.value = string.Empty;
-                _searchField.value = value;
-            });
-        }
-
-        private void InitDropDown()
+        private void InitializeDropDown()
         {
             RegisterCallback<AttachToPanelEvent>(_ =>
             {
                 _dropdownListView = new DropdownListView();
-                var rootVisualContainer = this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
+                _dropdownListView.SetOwner(this);
+                var rootVisualContainer =
+                    this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
                 rootVisualContainer.Add(_dropdownListView);
-                
+
                 _dropdownListView.Hide();
             });
         }
 
-        private void InitPlaceDropdown()
+        private void InitializeSearchListing()
         {
-            this.Root().RegisterCallback<GeometryChangedEvent>(_ => _dropdownListView.PlaceUnder(this));
-        }
-
-        public void InitMouseEvents(VisualElement registerFrom)
-        {
-            OnMouseUpHideDropdown(registerFrom);
-            OnEventCaptureHideDropdown(registerFrom);
-        }
-
-        private void OnMouseUpHideDropdown(VisualElement registerFrom)
-        {
-            registerFrom.RegisterCallback<MouseUpEvent>(_ =>
+            _searchField.RegisterValueChangedCallback(evt =>
             {
-                if (_dropdownListView.IsHidden) return;
+                if (string.IsNullOrEmpty(evt.newValue))
+                {
+                    _listView.itemsSource = _baseItemsSource;
+                    _listView.Rebuild();
+                    return;
+                }
 
-                HideDropdown();
+                ExecuteCurrentListingStrategy(evt.newValue);
             });
         }
 
-        // todo: investigate better solution & remove line ~61 "if (itemsSource[i] == null) break;"
-        // note: issue stems from buttons consuming events, so the OnMouseUpHideDropdown is never called
-        private void OnEventCaptureHideDropdown(VisualElement registerFrom)
+        private void ExecuteCurrentListingStrategy(string value)
         {
-            registerFrom.RegisterCallback<MouseCaptureEvent>(evt =>
+            _listView.itemsSource = GetCurrentListingStrategy().Execute(value, _baseItemsSource);
+            _listView.Rebuild();
+        }
+
+        private void SetDefaultSearchBehaviour()
+        {
+            var icon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
+            var searchFieldListing = new ListingStrategy(DefaultSearchName, icon, DefaultSearchBehaviour);
+            _listingStrategies.Add(searchFieldListing);
+        }
+
+        private List<IListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
+        {
+            List<IListable> cache = new();
+            foreach (var element in defaultList)
             {
-                if (_dropdownListView.IsHidden) return;
+                var dataName = (element as IListable).Name;
+                if (!dataName.ToLower().Contains(searchFieldValue.ToLower())) continue;
+                cache.Add(element as IListable);
+            }
 
-                if (IsTargetFromSelf(evt)) return;
-                if (IsTargetFromDropdown(evt)) return;
+            // if (_filteredList.Count == 0) return;
+            // ShowDropdown();
 
-                HideDropdown();
-            });
+            return cache;
         }
 
-        private bool IsTargetFromSelf(MouseCaptureEvent evt)
+        private ListingStrategy GetCurrentListingStrategy()
         {
-            return evt.target == _searchField.Q(UiToolkitNames.UnitySearch) ||
-                   evt.target == _searchField.Q(UiToolkitNames.UnityTextInput).ElementAt(0) ||
-                   evt.target == _searchField.Q(UiToolkitNames.UnityTextInput).ElementAt(0);
+            return _listingStrategies[_listingStrategyIndex];
         }
 
-        private bool IsTargetFromDropdown(MouseCaptureEvent evt)
+        private void NextListingStrategy()
         {
-            return evt.target is DropdownElement ||
-                   evt.target == _dropdownListView.Q(UiToolkitNames.UnityDragContainer) ||
-                   evt.target == _dropdownListView.Q(UiToolkitNames.UnityLowButton) ||
-                   evt.target == _dropdownListView.Q(UiToolkitNames.UnityHighButton);
+            _listingStrategyIndex++;
+
+            if (_listingStrategyIndex == _listingStrategies.Count)
+            {
+                _listingStrategyIndex = 0;
+            }
+
+            _icon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
+        }
+
+        private void InitializeFocusAndBlur()
+        {
+            // todo: find out why the focus and blur are both called after selecting an element from the dropdown and then clicking on the search bar
+            // _searchField.RegisterCallback<FocusEvent>(_ =>
+            // {
+            //     if (string.IsNullOrEmpty(_searchField.value)) return;
+            //     Debug.LogError("FOCUS");
+            //     ShowDropdown();
+            // });
+            //
+            // _searchField.RegisterCallback<BlurEvent>(_ =>
+            // {
+            //     if (string.IsNullOrEmpty(_searchField.value)) return;
+            //     Debug.LogError("Blur");
+            //     HideDropdown();
+            // });
+        }
+
+        private void KeepDropdownUnderSelf(VisualElement resizableElement)
+        {
+            resizableElement.RegisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+        }
+
+        private void AddToBaseItemsSource(IEnumerable<int> integers)
+        {
+            if (!IsListing) return;
+
+            foreach (var integer in integers)
+            {
+                _baseItemsSource.Add(_listView.itemsSource[integer]);
+            }
+        }
+
+        private void RemoveFromBaseItemsSource(IEnumerable<int> integers)
+        {
+            if (!IsListing) return;
+            foreach (var integer in integers)
+            {
+                _baseItemsSource.Remove(_listView.itemsSource[integer]);
+            }
+        }
+
+        private void PlaceUnder()
+        {
+            _dropdownListView.PlaceUnder(this);
         }
 
         private void SetBottomBorderRadii(float radius)

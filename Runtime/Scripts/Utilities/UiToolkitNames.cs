@@ -7,13 +7,8 @@ namespace Ludwell.Scene
         public const string UnityCheckmark = "unity-checkmark";
         public const string UnityContent = "unity-content";
         public const string UnityContentContainer = "unity-content-container";
+        public const string UnityListViewReorderableItem = "unity-list-view__reorderable-item";
 
         public const string UnitySearch = "unity-search";
-        public const string UnityTextInput = "unity-text-input";
-        public const string UnityHighButton = "unity-high-button";
-        public const string UnityLowButton = "unity-low-button";
-        public const string UnityDragContainer = "unity-drag-container";
-        
-        public const string ListViewRemoveButtonName = "unity-list-view__remove-button";
     }
 }

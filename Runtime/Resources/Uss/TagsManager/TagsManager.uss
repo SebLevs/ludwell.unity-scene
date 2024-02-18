@@ -1,0 +1,141 @@
+.tag-manager__header {
+    align-self: stretch;
+    -unity-text-align: middle-center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#main-container {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+#not-tagged {
+    height: 20px;
+}
+
+#tags-container {
+    align-self: center;
+    padding-left: 4px;
+    padding-right: 4px;
+    width: 100%;
+    padding-top: 4px;
+}
+
+#button__return > #button {
+    width: 16px;
+    height: 16px;
+}
+
+#button__return > #button > #icon {
+    height: 16px;
+}
+
+#tags__button-add > #icon {
+    background-image: resource('Sprites/icon_arrow-left');
+}
+
+#DropdownSearchField {
+    width: 80%;
+    align-self: center;
+}
+
+#DropdownSearchField > #search-field > #toolbar-search-field {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-width: 0;
+}
+
+#search-field__background {
+    border-top-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    background-color: rgb(70, 70, 70);
+    padding-bottom: 4px;
+}
+
+#listview-container {
+    background-color: rgba(0, 0, 0, 0);
+    margin-bottom: 2px;
+    min-height: 100px;
+    flex-grow: 1;
+}
+
+#listview-container > ListView {
+    flex-grow: 1;
+}
+
+#listview-container > ListView > ScrollView {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-top-width: 0;
+}
+
+#listview-container > ListView > #unity-list-view__footer {
+    flex-grow: 0;
+    flex-direction: row-reverse;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-basis: 22.5px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+#listview-container > ListView > #unity-list-view__footer > #unity-list-view__add-button {
+    margin-right: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 32px;
+    bottom: 0.5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#listview-container > ListView > #unity-list-view__footer > #unity-list-view__remove-button {
+    margin-left: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    bottom: 0.5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    width: 32px;
+}

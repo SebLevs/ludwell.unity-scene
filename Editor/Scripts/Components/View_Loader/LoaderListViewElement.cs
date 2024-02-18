@@ -27,28 +27,32 @@ namespace Ludwell.Scene
         private const string OpenButtonName = "button__open";
         private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
 
-        public const string DefaultHeaderTextValue = "Scene Loader Element";
+        public const string DefaultHeaderTextValue = "Quick load element";
 
         private VisualElement _reorderableHandle;
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
+        private TagsController _tagsController;
 
         private ListView _listViewRequiredElements;
         private ListViewInitializer<RequiredSceneElement, SceneDataReference> _listViewInitializer;
 
-        public LoaderListViewElementData Cache { get; set; }
+        public LoaderListViewElementData Cache { get; set; } = new();
 
         public LoaderListViewElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
+
             SetReferences();
-            InitAndReferenceFoldoutTextField();
+            InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
 
             RegisterButtonsClickEventCallback();
             PreventFoldoutToggleFromKeyPress();
+
+            BuildTagsController();
         }
 
         public void SetFoldoutValue(bool value) => _foldoutElement.value = value;
@@ -58,14 +62,16 @@ namespace Ludwell.Scene
             _foldoutElement = this.Q<Foldout>(FoldoutName);
             _mainSceneField = this.Q<ObjectField>(MainSceneName);
             _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
+            _tagsController = this.Q<TagsController>();
         }
 
-        private void InitAndReferenceFoldoutTextField()
+        private void InitializeAndReferenceFoldoutTextField()
         {
             var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
+            _foldoutTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
         }
 
         private void RegisterStyleEvents()
@@ -112,6 +118,8 @@ namespace Ludwell.Scene
             _foldoutTextField.value = Cache.Name;
             _foldoutElement.value = Cache.IsOpen;
             _mainSceneField.value = Cache.MainScene;
+            _tagsController.WithTagSubscriber(Cache);
+            _tagsController.Populate();
             HandleRequiredSceneListView();
         }
 
@@ -218,6 +226,11 @@ namespace Ludwell.Scene
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+        }
+
+        private void BuildTagsController()
+        {
+            _tagsController.WithOptionButtonEvent(() => { this.Root().Q<TagsManager>().Show(Cache); });
         }
     }
 }

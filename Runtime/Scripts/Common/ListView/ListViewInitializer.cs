@@ -7,22 +7,25 @@ namespace Ludwell.Scene
         where TVisualElement : VisualElement, new()
         where TListElement : new()
     {
-        private readonly List<TListElement> _data;
+        public ListView ListView { get; }
 
         public ListViewInitializer(ListView listView, List<TListElement> data)
         {
-            _data = data;
-            listView.itemsSource = _data;
-            listView.makeItem = CreateElement;
-            listView.bindItem = OnElementScrollIntoView;
-            listView.itemsAdded += _ => ForceRebuild(listView);
-            listView.itemsRemoved += _ => ForceRebuild(listView);
-            
-            // todo: replace workaround for the ListView visual bug concerning dynamically sized element rendering.
-            listView.RegisterCallback<GeometryChangedEvent>(evt =>
-            {
-                listView.Rebuild();
-            });
+            ListView = listView;
+            ListView.itemsSource = data;
+            ListView.makeItem = CreateElement;
+            ListView.bindItem = OnElementScrollIntoView;
+            ListView.itemsAdded += _ => ForceRebuild();
+            ListView.itemsRemoved += _ => ForceRebuild();
+
+            // todo: replace workaround for the ListView visual issue concerning dynamically sized element rendering.
+            listView.RegisterCallback<GeometryChangedEvent>(_ => { ListView.Rebuild(); });
+        }
+
+        /// <summary> Workaround for a ListView visual issue concerning dynamically sized element rendering. </summary>
+        public void ForceRebuild()
+        {
+            ListView.Rebuild();
         }
 
         private TVisualElement CreateElement()
@@ -34,17 +37,11 @@ namespace Ludwell.Scene
         {
             var elementAsDataType = element as IBindableListViewElement<TListElement>;
 
-            _data[index] ??= new();
+            ListView.itemsSource[index] ??= new TListElement();
 
-            elementAsDataType?.CacheData(_data[index]);
+            elementAsDataType?.CacheData((TListElement)ListView.itemsSource[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
-        }
-
-        /// <summary> Workaround for a ListView visual bug concerning dynamically sized element rendering. </summary>
-        private void ForceRebuild(ListView listView)
-        {
-            listView.Rebuild();
         }
     }
 }
