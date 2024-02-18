@@ -11,6 +11,7 @@ namespace Ludwell.Scene
 
         public void AddSubscriber(TagSubscriber subscriber)
         {
+            if (_subscribers.Contains(subscriber)) return;
             _subscribers.Add(subscriber);
         }
 
