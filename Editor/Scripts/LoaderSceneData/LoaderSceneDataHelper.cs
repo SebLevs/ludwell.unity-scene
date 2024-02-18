@@ -13,25 +13,22 @@ namespace Ludwell.Scene.Editor
         public static LoaderSceneData GetLoaderSceneData()
         {
             CacheLoaderSceneData();
-
+            return _loaderSceneData;
+        }
+        
+        public static LoaderSceneData GetTagContainer()
+        {
+            CacheTagContainer();
             return _loaderSceneData;
         }
 
         public static void SaveChange()
         {
-            if (!_loaderSceneData)
-            {
-                _loaderSceneData = Resources.Load<LoaderSceneData>(Path.Combine("Scriptables", nameof(LoaderSceneData)));
-            }
-
+            CacheLoaderSceneData();
             EditorUtility.SetDirty(_loaderSceneData);
             AssetDatabase.SaveAssetIfDirty(_loaderSceneData);
 
-            if (!_tagContainer)
-            {
-                _tagContainer = Resources.Load<TagContainer>(Path.Combine("Scriptables", nameof(TagContainer)));
-            }
-
+            CacheTagContainer();
             EditorUtility.SetDirty(_tagContainer);
             AssetDatabase.SaveAssetIfDirty(_tagContainer);
         }
@@ -47,6 +44,14 @@ namespace Ludwell.Scene.Editor
             if (!_loaderSceneData)
             {
                 _loaderSceneData = Resources.Load<LoaderSceneData>(Path.Combine("Scriptables",  nameof(LoaderSceneData)));
+            }
+        }
+        
+        private static void CacheTagContainer()
+        {
+            if (!_tagContainer)
+            {
+                _tagContainer = Resources.Load<TagContainer>(Path.Combine("Scriptables", nameof(TagContainer)));
             }
         }
     }

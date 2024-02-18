@@ -2,11 +2,12 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     public class SceneDataPostProcessor : AssetPostprocessor
     {
-        private static void OnPostprocessAllAssets(string[] importedAssets,
+        private static void OnPostprocessAllAssets(
+            string[] importedAssets,
             string[] deletedAssets,
             string[] movedAssets,
             string[] movedFromAssetPaths)
@@ -33,11 +34,24 @@ namespace Ludwell.Scene
             return sceneData;
         }
 
-        private static void CreateAndSaveSceneDataAsset(SceneData sceneData, string createAssetAtPath)
+        private static void CreateAndSaveSceneDataAsset(SceneData sceneData, string fullAssetPath)
         {
-            AssetDatabase.CreateAsset(sceneData, createAssetAtPath);
+            AssetDatabase.CreateAsset(sceneData, fullAssetPath);
+            AddSceneDataToQuickLoadContainer(fullAssetPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private static void AddSceneDataToQuickLoadContainer(string fullAssetPath)
+        {
+            var container = LoaderSceneDataHelper.GetLoaderSceneData();
+            var sceneDataAsset = AssetDatabase.LoadAssetAtPath<SceneData>(fullAssetPath);
+            Debug.LogError($"scenedata: {sceneDataAsset}");
+            container.Elements.Add(new LoaderListViewElementData()
+            {
+                Name = sceneDataAsset.Name,
+                MainScene = sceneDataAsset
+            });
         }
     }
 }
