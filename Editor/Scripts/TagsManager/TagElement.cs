@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -8,7 +9,7 @@ namespace Ludwell.Scene
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagElement);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagElement));
         private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagElement);
 
         private const string RemoveButtonName = "button-remove";

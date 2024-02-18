@@ -28,3 +28,16 @@
     justify-content: center;
     align-self: center;
 }
+
+#button-main {
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    min-width: 32px;
+    height: 19px;
+}
