@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Ludwell.Scene.Editor;
 using UnityEngine;
@@ -48,7 +47,7 @@ namespace Ludwell.Scene
         {
             _tagSubscriber = tagSubscriber;
             this.Root().Q<TabController>().SwitchView(this);
-            BuildTagsController(tagSubscriber.Tags);
+            BuildTagsController(tagSubscriber);
         }
 
         public void AddTagToController(TagWithSubscribers tag)
@@ -94,10 +93,10 @@ namespace Ludwell.Scene
             _listViewInitializer.ForceRebuild();
         }
 
-        private void BuildTagsController(List<Tag> tags)
+        private void BuildTagsController(TagSubscriberWithTags tagSubscriber)
         {
             _tagsController
-                .WithTags(tags)
+                .WithTagSubscriber(tagSubscriber)
                 .WithOptionButtonEvent(Return)
                 .Populate();
         }

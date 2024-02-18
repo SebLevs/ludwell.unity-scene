@@ -1,4 +1,3 @@
-using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -73,7 +72,7 @@ namespace Ludwell.Scene
         {
             _mainButton.RegisterCallback<ClickEvent>(_ => { SelectTag(this); });
 
-            _removeButton.RegisterCallback<ClickEvent>(_ => { _tagsController.Remove(_cache); });
+            _removeButton.RegisterCallback<ClickEvent>(_ => _tagsController.Remove(_cache as TagWithSubscribers));
 
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {

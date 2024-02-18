@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
@@ -21,7 +20,7 @@ namespace Ludwell.Scene
 
         private Button _manageTagsButton;
         private VisualElement _tagsContainer;
-        private List<Tag> _cache = new();
+        private TagSubscriberWithTags _cache = new();
         private Label _notTaggedLabel;
 
         public TagsController()
@@ -37,9 +36,9 @@ namespace Ludwell.Scene
             this.Q(IconButtonName).tooltip = value;
         }
 
-        public TagsController WithTags(List<Tag> tags)
+        public TagsController WithTagSubscriber(TagSubscriberWithTags tagSubscriber)
         {
-            _cache = tags;
+            _cache = tagSubscriber;
             return this;
         }
 
@@ -52,33 +51,29 @@ namespace Ludwell.Scene
 
         public void Add(Tag tag)
         {
-            if (_cache.Contains(tag)) return;
+            if (_cache.Tags.Contains(tag)) return;
 
-            _cache.Add(tag);
+            _cache.Tags.Add(tag);
             _tagsContainer.Add(ConstructTagElement(tag));
             Rebuild();
 
-#if UNITY_EDITOR
-            LoaderSceneDataHelper.SaveChange();
-#endif
+            LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
-        public void Remove(Tag tag)
+        public void Remove(TagWithSubscribers tagWithSubscribers)
         {
-            if (!_cache.Contains(tag)) return;
-
-            _tagsContainer.RemoveAt(_cache.IndexOf(tag));
-            _cache.Remove(tag);
+            if (!_cache.Tags.Contains(tagWithSubscribers)) return;
+            _tagsContainer.RemoveAt(_cache.Tags.IndexOf(tagWithSubscribers));
+            _cache.Tags.Remove(tagWithSubscribers);
+            tagWithSubscribers.RemoveSubscriber(_cache);
             HandleUntaggedState();
 
-#if UNITY_EDITOR
-            LoaderSceneDataHelper.SaveChange();
-#endif
+            LoaderSceneDataHelper.SaveChangeDelayed();
         }
 
         public void Rebuild()
         {
-            _cache.Sort();
+            _cache.Tags.Sort();
             Sort();
             HandleUntaggedState();
         }
@@ -86,10 +81,11 @@ namespace Ludwell.Scene
         public void Populate()
         {
             _tagsContainer.Clear();
-            foreach (var tag in _cache)
+            foreach (var tag in _cache.Tags)
             {
                 _tagsContainer.Add(ConstructTagElement(tag));
             }
+
             HandleUntaggedState();
         }
 
@@ -119,7 +115,7 @@ namespace Ludwell.Scene
 
         private void HandleUntaggedState()
         {
-            _notTaggedLabel.style.display = _cache.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _notTaggedLabel.style.display = _cache.Tags.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

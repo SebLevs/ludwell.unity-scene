@@ -118,7 +118,7 @@ namespace Ludwell.Scene
             _foldoutTextField.value = Cache.Name;
             _foldoutElement.value = Cache.IsOpen;
             _mainSceneField.value = Cache.MainScene;
-            _tagsController.WithTags(Cache.Tags);
+            _tagsController.WithTagSubscriber(Cache);
             _tagsController.Populate();
             HandleRequiredSceneListView();
         }
