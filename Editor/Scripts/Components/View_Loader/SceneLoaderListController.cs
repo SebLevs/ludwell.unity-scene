@@ -79,7 +79,15 @@ namespace Ludwell.Scene
         {
             _listView = this.Q<ListView>(ListViewName);
             _listViewInitializer = new(_listView, _loaderSceneData.Elements);
-            _listView.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
+            _listView.itemsRemoved += indexEnumerable =>
+            {
+                foreach (var index in indexEnumerable)
+                {
+                    var element = _loaderSceneData.Elements[index] as TagSubscriberWithTags;
+                    element.RemoveFromAllTags();
+                }
+                LoaderSceneDataHelper.SaveChangeDelayed();
+            };
         }
 
         private void InitializeSearchField()
