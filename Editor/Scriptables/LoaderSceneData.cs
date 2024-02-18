@@ -16,10 +16,6 @@ namespace Ludwell.Scene.Editor
         [field: SerializeField]
         public List<LoaderListViewElementData> Elements { get; set; } = new();
 
-        [field: HideInInspector]
-        [field: SerializeField]
-        public List<TagWithSubscribers> Tags { get; set; } = new();
-
         public SceneData MainMenuScene
         {
             get => mainMenuScene;

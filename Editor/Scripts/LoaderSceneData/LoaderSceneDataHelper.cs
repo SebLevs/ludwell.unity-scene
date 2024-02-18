@@ -6,8 +6,9 @@ namespace Ludwell.Scene.Editor
     public static class LoaderSceneDataHelper
     {
         private static LoaderSceneData _loaderSceneData;
+        private static TagContainer _tagContainer;
         private static DelayedEditorUpdateAction _delayedEditorUpdateAction;
-        
+
         public static LoaderSceneData GetLoaderSceneData()
         {
             CacheLoaderSceneData();
@@ -24,6 +25,14 @@ namespace Ludwell.Scene.Editor
 
             EditorUtility.SetDirty(_loaderSceneData);
             AssetDatabase.SaveAssetIfDirty(_loaderSceneData);
+
+            if (!_tagContainer)
+            {
+                _tagContainer = Resources.Load<TagContainer>("Scriptables/" + nameof(TagContainer));
+            }
+
+            EditorUtility.SetDirty(_tagContainer);
+            AssetDatabase.SaveAssetIfDirty(_tagContainer);
         }
 
         public static void SaveChangeDelayed()
@@ -31,7 +40,7 @@ namespace Ludwell.Scene.Editor
             _delayedEditorUpdateAction ??= new DelayedEditorUpdateAction(0.5f, SaveChange);
             _delayedEditorUpdateAction.StartOrRefresh();
         }
-        
+
         private static void CacheLoaderSceneData()
         {
             if (!_loaderSceneData)

@@ -15,12 +15,12 @@ namespace Ludwell.Scene
         private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManager);
         private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManager);
 
-        private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
+        private const string TagContainerPath = "Scriptables/" + nameof(TagContainer);
 
         private TagsController _tagsController;
         private TagSubscriber _tagSubscriber;
 
-        private LoaderSceneData _loaderSceneData;
+        private TagContainer _tagContainer;
 
         private ListViewInitializer<TagsManagerElement, TagWithSubscribers> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
@@ -65,7 +65,7 @@ namespace Ludwell.Scene
         public void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             _tagsController.Remove(tag);
-            _loaderSceneData.Tags.Remove(tag);
+            _tagContainer.Tags.Remove(tag);
             LoaderSceneDataHelper.SaveChange();
             _listViewInitializer.ForceRebuild();
         }
@@ -77,7 +77,7 @@ namespace Ludwell.Scene
 
         public bool IsTagDuplicate(Tag elementTag)
         {
-            foreach (var tag in _loaderSceneData.Tags)
+            foreach (var tag in _tagContainer.Tags)
             {
                 if (tag == elementTag) continue;
                 if (string.Equals(tag.Name, elementTag.Name, StringComparison.CurrentCultureIgnoreCase)) return true;
@@ -88,7 +88,7 @@ namespace Ludwell.Scene
 
         public void SortTags()
         {
-            _loaderSceneData.Tags.Sort();
+            _tagContainer.Tags.Sort();
             LoaderSceneDataHelper.SaveChangeDelayed();
             _listViewInitializer.ForceRebuild();
         }
@@ -104,8 +104,8 @@ namespace Ludwell.Scene
         private void SetReferences()
         {
             _tagsController = this.Q<TagsController>();
-            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
-            _listViewInitializer = new(this.Q<ListView>(), _loaderSceneData.Tags);
+            _tagContainer = Resources.Load<TagContainer>(TagContainerPath);
+            _listViewInitializer = new(this.Q<ListView>(), _tagContainer.Tags);
             _dropdownSearchField = this.Q<DropdownSearchField>();
         }
 
