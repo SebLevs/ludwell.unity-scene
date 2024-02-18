@@ -16,7 +16,7 @@ namespace Ludwell.Scene
         private const string MainButtonName = "button-main";
         private const string SearchButtonName = "button-search";
 
-        private TagElement _currentSelection;
+        private static TagElement _currentSelection;
 
         private Button _removeButton;
         private Button _mainButton;

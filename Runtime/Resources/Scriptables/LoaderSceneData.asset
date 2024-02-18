@@ -15,4 +15,10 @@ MonoBehaviour:
   mainMenuScene: {fileID: 0}
   persistentScene: {fileID: 0}
   loadingScene: {fileID: 0}
-  <Elements>k__BackingField: []
+  <Elements>k__BackingField:
+  - _name: Quick load element
+    <Tags>k__BackingField: []
+    isOpen: 1
+    mainScene: {fileID: 0}
+    <RequiredScenes>k__BackingField: []
+  <Tags>k__BackingField: []
