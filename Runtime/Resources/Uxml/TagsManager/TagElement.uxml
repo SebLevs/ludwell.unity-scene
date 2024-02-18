@@ -4,7 +4,7 @@
         <ui:Button display-tooltip-when-elided="true" name="button-search" text="&#10;" class="button-left">
             <ui:VisualElement name="icon" />
         </ui:Button>
-        <ui:Button display-tooltip-when-elided="true" text="g" name="button-main" />
+        <ui:Button name="button-main" text="Tag" />
         <ui:Button display-tooltip-when-elided="true" text="-" name="button-remove" class="button-right" />
     </ui:VisualElement>
 </ui:UXML>
