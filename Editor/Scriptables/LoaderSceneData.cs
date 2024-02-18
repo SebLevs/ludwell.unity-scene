@@ -45,6 +45,21 @@ namespace Ludwell.Scene.Editor
                 LoaderSceneDataHelper.SaveChange();
             }
         }
+
+        public void RemoveElementWithMainScene(string assetName)
+        {
+            var hasRemoved = false;
+            for (var index = Elements.Count - 1; index >= 0; index--)
+            {
+                var element = Elements[index];
+                if (element.MainScene.Name != assetName) continue;
+                Elements.Remove(element);
+                hasRemoved = true;
+            }
+
+            if (!hasRemoved) return;
+            LoaderSceneDataHelper.SaveChange();
+        }
     }
 
     [Serializable]

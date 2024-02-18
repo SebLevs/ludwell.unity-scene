@@ -1,6 +1,6 @@
 using System.IO;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
@@ -12,18 +12,21 @@ namespace Ludwell.Scene.Editor
             string[] movedAssets,
             string[] movedFromAssetPaths)
         {
+            HandleCreatedAsset(importedAssets);
+        }
+
+        private static void HandleCreatedAsset(string[] importedAssets)
+        {
             foreach (string importedAsset in importedAssets)
             {
-                if (importedAsset.EndsWith(".unity"))
-                {
-                    var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(importedAsset);
-                    var sceneData = CreateSceneDataInstance(sceneAsset);
+                if (!importedAsset.EndsWith(".unity")) continue;
+                var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(importedAsset);
+                var sceneData = CreateSceneDataInstance(sceneAsset);
 
-                    var directoryPath = Path.GetDirectoryName(importedAsset);
-                    var assetName = sceneData.EditorSceneAsset.name + ".asset";
-                    var createAssetAtPath = Path.Combine(directoryPath, assetName);
-                    CreateAndSaveSceneDataAsset(sceneData, createAssetAtPath);
-                }
+                var directoryPath = Path.GetDirectoryName(importedAsset);
+                var assetName = sceneData.EditorSceneAsset.name + ".asset";
+                var createAssetAtPath = Path.Combine(directoryPath, assetName);
+                CreateAndSaveSceneDataAsset(sceneData, createAssetAtPath);
             }
         }
 
@@ -46,12 +49,12 @@ namespace Ludwell.Scene.Editor
         {
             var container = LoaderSceneDataHelper.GetLoaderSceneData();
             var sceneDataAsset = AssetDatabase.LoadAssetAtPath<SceneData>(fullAssetPath);
-            Debug.LogError($"scenedata: {sceneDataAsset}");
             container.Elements.Add(new LoaderListViewElementData()
             {
                 Name = sceneDataAsset.Name,
                 MainScene = sceneDataAsset
             });
+            LoaderSceneDataHelper.SaveChange();
         }
     }
 }

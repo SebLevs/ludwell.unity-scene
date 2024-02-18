@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Ludwell.Scene
@@ -8,13 +9,13 @@ namespace Ludwell.Scene
     {
         public string Name { get; private set; }
 #if UNITY_EDITOR
-        [SerializeField] private UnityEditor.SceneAsset editorSceneAsset;
-        public UnityEditor.SceneAsset EditorSceneAsset
+        private SceneAsset _editorSceneAsset;
+        public SceneAsset EditorSceneAsset
         {
-            get => editorSceneAsset;
+            get => _editorSceneAsset;
             set
             {
-                editorSceneAsset = value;
+                _editorSceneAsset = value;
                 Name = value.name;
             }
         }

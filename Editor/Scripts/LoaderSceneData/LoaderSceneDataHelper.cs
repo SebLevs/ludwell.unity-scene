@@ -15,7 +15,7 @@ namespace Ludwell.Scene.Editor
             CacheLoaderSceneData();
             return _loaderSceneData;
         }
-        
+
         public static LoaderSceneData GetTagContainer()
         {
             CacheTagContainer();
@@ -43,10 +43,11 @@ namespace Ludwell.Scene.Editor
         {
             if (!_loaderSceneData)
             {
-                _loaderSceneData = Resources.Load<LoaderSceneData>(Path.Combine("Scriptables",  nameof(LoaderSceneData)));
+                _loaderSceneData =
+                    Resources.Load<LoaderSceneData>(Path.Combine("Scriptables", nameof(LoaderSceneData)));
             }
         }
-        
+
         private static void CacheTagContainer()
         {
             if (!_tagContainer)
