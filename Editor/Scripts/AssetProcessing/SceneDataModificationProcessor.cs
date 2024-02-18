@@ -9,11 +9,6 @@ namespace Ludwell.Scene.Editor
 
         private static AssetDeleteResult OnWillDeleteAsset(string assetPath, RemoveAssetOptions options)
         {
-            return HandleDeletedAsset(assetPath);
-        }
-
-        private static AssetDeleteResult HandleDeletedAsset(string assetPath)
-        {
             if (_isHandling) return AssetDeleteResult.DidNotDelete;
             if (!assetPath.EndsWith(".unity") && !assetPath.EndsWith(".asset")) return AssetDeleteResult.DidNotDelete;
 
@@ -41,6 +36,39 @@ namespace Ludwell.Scene.Editor
             _isHandling = false;
 
             return AssetDeleteResult.DidDelete;
+        }
+
+        public static AssetMoveResult OnWillMoveAsset(string oldAssetPath, string newAssetPath)
+        {
+            if (_isHandling) return AssetMoveResult.DidNotMove;
+            if (!oldAssetPath.EndsWith(".unity") && !oldAssetPath.EndsWith(".asset")) return AssetMoveResult.DidNotMove;
+
+            _isHandling = true;
+
+            var oldAssetName = Path.GetFileNameWithoutExtension(oldAssetPath);
+            (SceneAsset, SceneData) assets = LoaderSceneDataHelper.GetLoaderSceneData().GetScenesWithName(oldAssetName);
+
+            if (!assets.Item1) return AssetMoveResult.DidNotMove;
+
+            var newName = Path.GetFileNameWithoutExtension(newAssetPath);
+
+            var oldPathSceneData = AssetDatabase.GetAssetPath(assets.Item2);
+            AssetDatabase.RenameAsset(oldPathSceneData, newName);
+            AssetDatabase.MoveAsset(oldPathSceneData,
+                Path.Combine(Path.GetDirectoryName(newAssetPath), newName + ".asset"));
+
+
+            var oldPathSceneAsset = AssetDatabase.GetAssetPath(assets.Item1);
+            AssetDatabase.RenameAsset(oldPathSceneAsset, newName);
+            AssetDatabase.MoveAsset(oldPathSceneAsset,
+                Path.Combine(Path.GetDirectoryName(newAssetPath), newName + ".unity"));
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            _isHandling = false;
+
+            return AssetMoveResult.DidNotMove;
         }
     }
 }

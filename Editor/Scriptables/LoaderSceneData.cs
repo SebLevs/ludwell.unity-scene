@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Ludwell.Scene.Editor
@@ -59,6 +61,13 @@ namespace Ludwell.Scene.Editor
 
             if (!hasRemoved) return;
             LoaderSceneDataHelper.SaveChange();
+        }
+
+        public (SceneAsset, SceneData) GetScenesWithName(string assetName)
+        {
+            var sceneData = Elements.FirstOrDefault(element => element.MainScene.Name == assetName)?.MainScene;
+            var sceneAsset = sceneData?.EditorSceneAsset;
+            return (sceneAsset, sceneData);
         }
     }
 
