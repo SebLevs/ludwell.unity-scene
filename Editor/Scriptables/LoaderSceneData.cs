@@ -53,8 +53,6 @@ namespace Ludwell.Scene.Editor
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
 
-        [field: SerializeField] public List<SceneDataReference> RequiredScenes { get; set; } = new();
-
         public bool IsOpen
         {
             get => isOpen;
@@ -79,22 +77,6 @@ namespace Ludwell.Scene.Editor
         public LoaderListViewElementData()
         {
             Name = LoaderListViewElement.DefaultHeaderTextValue;
-        }
-    }
-
-    [Serializable]
-    public class SceneDataReference
-    {
-        private SceneData _sceneData;
-
-        public SceneData SceneData
-        {
-            get => _sceneData;
-            set
-            {
-                _sceneData = value;
-                LoaderSceneDataHelper.SaveChange();
-            }
         }
     }
 }
