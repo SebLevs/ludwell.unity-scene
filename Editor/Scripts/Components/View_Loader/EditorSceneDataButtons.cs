@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,8 +32,8 @@ namespace Ludwell.Scene
             }
         }
 
-        private const string _buttonUxmlPath = "Uxml/" + "Common/" + "button__open-load";
-        private const string _buttonUssPath = "Uss/" + "Common/" + "button__open-load";
+        private static readonly string ButtonUxmlPath = Path.Combine("Uxml", "Common", "button__open-load");
+        private static readonly string ButtonUssPath = Path.Combine("Uss", "Common", "button__open-load");
 
         private readonly Button _loadButton;
         private readonly Button _openButton;
@@ -76,10 +77,10 @@ namespace Ludwell.Scene
 
         public EditorSceneDataButtons()
         {
-            this.AddStyleFromUss(_buttonUssPath);
-            _loadButton = this.AddHierarchyFromUxml(_buttonUxmlPath).Q<Button>();
+            this.AddStyleFromUss(ButtonUssPath);
+            _loadButton = this.AddHierarchyFromUxml(ButtonUxmlPath).Q<Button>();
             _loadButton.name = "button__load";
-            _openButton = this.AddHierarchyFromUxml(_buttonUxmlPath).Q<Button>();
+            _openButton = this.AddHierarchyFromUxml(ButtonUxmlPath).Q<Button>();
             _openButton.name = "button__open";
         }
 

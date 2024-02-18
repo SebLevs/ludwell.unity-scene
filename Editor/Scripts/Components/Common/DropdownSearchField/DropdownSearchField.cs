@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -22,8 +23,8 @@ namespace Ludwell.Scene
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
-        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownSearchField);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(DropdownSearchField), nameof(DropdownSearchField));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownSearchField));
 
         private const string SearchFieldName = "toolbar-search-field";
         private const string DefaultSearchIcon = "icon_search";

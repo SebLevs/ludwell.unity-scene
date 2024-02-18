@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Ludwell.Scene.Editor;
 using UnityEngine;
@@ -12,10 +13,10 @@ namespace Ludwell.Scene
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManager);
-        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManager);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagsManager));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagsManager));
 
-        private const string TagContainerPath = "Scriptables/" + nameof(TagContainer);
+        private static readonly string TagContainerPath = Path.Combine("Scriptables", nameof(TagContainer));
 
         private TagsController _tagsController;
         private TagSubscriber _tagSubscriber;

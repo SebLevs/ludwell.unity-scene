@@ -1,3 +1,4 @@
+using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -7,8 +8,8 @@ namespace Ludwell.Scene
 {
     public class RequiredSceneElement : VisualElement, IBindableListViewElement<SceneDataReference>
     {
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(RequiredSceneElement);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(RequiredSceneElement);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(LoaderController), nameof(RequiredSceneElement));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(LoaderController), nameof(RequiredSceneElement));
 
         private const string ObjectFieldName = "scene-data";
 

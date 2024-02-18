@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
@@ -10,8 +11,8 @@ namespace Ludwell.Scene
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsController);
-        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsController);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagsController));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagsController));
 
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";

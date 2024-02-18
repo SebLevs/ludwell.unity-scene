@@ -1,3 +1,4 @@
+using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -9,14 +10,17 @@ namespace Ludwell.Scene
 {
     public class LoaderListViewElement : VisualElement, IBindableListViewElement<LoaderListViewElementData>
     {
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderListViewElement);
+        private static readonly string UxmlPath =
+            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderListViewElement));
 
-        private const string HeaderContentUxmlPath =
-            "Uxml/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+        private static readonly string UssPath =
+            Path.Combine("Uss", nameof(LoaderController), nameof(LoaderListViewElement));
 
-        private const string HeaderContentUssPath =
-            "Uss/" + nameof(LoaderController) + "/scene-loader-element__header-content";
+        private static readonly string HeaderContentUxmlPath =
+            Path.Combine("Uxml", nameof(LoaderController), "scene-loader-element__header-content");
+
+        private static readonly string HeaderContentUssPath =
+            Path.Combine("Uss", nameof(LoaderController), "scene-loader-element__header-content");
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";
