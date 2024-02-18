@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace Ludwell.Scene.Editor
         {
             if (!_loaderSceneData)
             {
-                _loaderSceneData = Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData));
+                _loaderSceneData = Resources.Load<LoaderSceneData>(Path.Combine("Scriptables", nameof(LoaderSceneData)));
             }
 
             EditorUtility.SetDirty(_loaderSceneData);
@@ -28,7 +29,7 @@ namespace Ludwell.Scene.Editor
 
             if (!_tagContainer)
             {
-                _tagContainer = Resources.Load<TagContainer>("Scriptables/" + nameof(TagContainer));
+                _tagContainer = Resources.Load<TagContainer>(Path.Combine("Scriptables", nameof(TagContainer)));
             }
 
             EditorUtility.SetDirty(_tagContainer);
@@ -45,7 +46,7 @@ namespace Ludwell.Scene.Editor
         {
             if (!_loaderSceneData)
             {
-                _loaderSceneData = Resources.Load<LoaderSceneData>("Scriptables/" + nameof(LoaderSceneData));
+                _loaderSceneData = Resources.Load<LoaderSceneData>(Path.Combine("Scriptables",  nameof(LoaderSceneData)));
             }
         }
     }

@@ -1,3 +1,4 @@
+using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -9,10 +10,10 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(LoaderController);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(LoaderController);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderController));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(LoaderController), nameof(LoaderController));
 
-        private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
+        private static readonly string LoaderSceneDataPath = Path.Combine("Scriptables", nameof(LoaderSceneData));
         private const string MainMenuButtonsName = "main-menu__buttons";
         private const string MainMenuObjectFieldName = "launcher__main-menu";
         private const string PersistentObjectFieldName = "core-scene__persistent";

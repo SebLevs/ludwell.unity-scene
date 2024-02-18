@@ -1,11 +1,12 @@
+using System.IO;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
     public class DropdownElement : VisualElement, IBindableListViewElement<DropdownData>
     {
-        private const string UxmlPath = "Uxml/" + nameof(DropdownSearchField) + "/" + nameof(DropdownElement);
-        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownElement);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(DropdownSearchField), nameof(DropdownElement));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownElement));
 
         private readonly Button _button;
 

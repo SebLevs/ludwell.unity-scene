@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -7,8 +8,8 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<TabController, UxmlTraits> { }
 
-        private const string UxmlPath = "Uxml/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
-        private const string UssPath = "Uss/" + nameof(SceneDataEditorWindow) + "/" + nameof(TabController);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(SceneDataEditorWindow), nameof(TabController));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(SceneDataEditorWindow), nameof(TabController));
 
         private VisualElement _previousView;
         private VisualElement _currentView;

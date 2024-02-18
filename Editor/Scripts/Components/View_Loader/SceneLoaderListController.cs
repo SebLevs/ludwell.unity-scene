@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -15,18 +16,21 @@ namespace Ludwell.Scene
 
         public const string TagSearchName = "Tag";
 
-        private const string UxmlPath = "Uxml/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
-        private const string UssPath = "Uss/" + nameof(LoaderController) + "/" + nameof(SceneLoaderListController);
+        private static readonly string UxmlPath =
+            Path.Combine("Uxml", nameof(LoaderController), nameof(SceneLoaderListController));
+
+        private static readonly string UssPath =
+            Path.Combine("Uss", nameof(LoaderController), nameof(SceneLoaderListController));
 
         private const string ListViewName = "scenes__list";
-        private const string LoaderSceneDataPath = "Scriptables/" + nameof(LoaderSceneData);
+        private static readonly string LoaderSceneDataPath = Path.Combine("Scriptables", nameof(LoaderSceneData));
 
         private const string ButtonCloseAll = "button__close-all";
         private const string ButtonCloseAllClicked = "button__close-all-clicked";
 
         private const string TagIconName = "icon_tag";
 
-        private LoaderSceneData _loaderSceneData;
+        private readonly LoaderSceneData _loaderSceneData;
         private ListView _listView;
         private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
@@ -86,6 +90,7 @@ namespace Ludwell.Scene
                     var element = _loaderSceneData.Elements[index] as TagSubscriberWithTags;
                     element.RemoveFromAllTags();
                 }
+
                 LoaderSceneDataHelper.SaveChangeDelayed();
             };
         }
@@ -95,7 +100,7 @@ namespace Ludwell.Scene
             _dropdownSearchField = this.Q<DropdownSearchField>();
             _dropdownSearchField.BindToListView(_listView);
 
-            var icon = Resources.Load<Texture2D>("Sprites/" + TagIconName);
+            var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
             var searchListingStrategy = new ListingStrategy(TagSearchName, icon, ListTag);
 
             _dropdownSearchField

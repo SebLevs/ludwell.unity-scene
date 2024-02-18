@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +10,7 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<DropdownListView, UxmlTraits> { }
 
-        private const string UssPath = "Uss/" + nameof(DropdownSearchField) + "/" + nameof(DropdownListView);
+        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownListView));
 
         private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
         private readonly List<DropdownData> _data = new();
