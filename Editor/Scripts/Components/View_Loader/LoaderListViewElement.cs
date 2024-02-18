@@ -26,7 +26,6 @@ namespace Ludwell.Scene
         private const string FoldoutTextFieldName = "foldout-text-field";
         private const string ToggleBottomName = "toggle-bottom";
         private const string MainSceneName = "main-scene";
-        private const string RequiredScenesListViewName = "required-scenes";
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
         private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
@@ -38,9 +37,6 @@ namespace Ludwell.Scene
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
         private TagsController _tagsController;
-
-        private ListView _listViewRequiredElements;
-        private ListViewInitializer<RequiredSceneElement, SceneDataReference> _listViewInitializer;
 
         public LoaderListViewElementData Cache { get; set; } = new();
 
@@ -65,7 +61,6 @@ namespace Ludwell.Scene
         {
             _foldoutElement = this.Q<Foldout>(FoldoutName);
             _mainSceneField = this.Q<ObjectField>(MainSceneName);
-            _listViewRequiredElements = this.Q<ListView>(RequiredScenesListViewName);
             _tagsController = this.Q<TagsController>();
         }
 
@@ -99,7 +94,6 @@ namespace Ludwell.Scene
         {
             _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
             _reorderableHandle.style.display = DisplayStyle.None;
-            _listViewRequiredElements.Rebuild();
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)
@@ -124,36 +118,6 @@ namespace Ludwell.Scene
             _mainSceneField.value = Cache.MainScene;
             _tagsController.WithTagSubscriber(Cache);
             _tagsController.Populate();
-            HandleRequiredSceneListView();
-        }
-
-        private void HandleRequiredSceneListView()
-        {
-            InitRequiredScenesListView();
-            PreventRequiredElementWheelCallbackPropagation();
-        }
-
-        private void InitRequiredScenesListView()
-        {
-            _listViewInitializer = new(_listViewRequiredElements, Cache.RequiredScenes);
-            _listViewRequiredElements.itemsRemoved += _ => LoaderSceneDataHelper.SaveChangeDelayed();
-        }
-
-        private void PreventRequiredElementWheelCallbackPropagation()
-        {
-            var scroller = _listViewRequiredElements.Q<Scroller>();
-            _listViewRequiredElements.RegisterCallback<WheelEvent>(evt =>
-            {
-                if (scroller.style.display == DisplayStyle.None) return;
-                if (evt.delta.y < 0 && Mathf.Approximately(scroller.value, scroller.lowValue))
-                {
-                    evt.StopPropagation();
-                }
-                else if (evt.delta.y > 0 && Mathf.Approximately(scroller.value, scroller.highValue))
-                {
-                    evt.StopPropagation();
-                }
-            });
         }
 
         private void RegisterButtonsClickEventCallback()
@@ -173,15 +137,6 @@ namespace Ludwell.Scene
                     return;
                 }
 
-                foreach (var requiredScene in Cache.RequiredScenes)
-                {
-                    if (requiredScene.SceneData == null)
-                    {
-                        Debug.LogError($" {_foldoutTextField.value} | Cannot load a null required scene.");
-                        return;
-                    }
-                }
-
                 if (evt.currentTarget != loadButton) return;
                 SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
 
@@ -189,12 +144,6 @@ namespace Ludwell.Scene
                 if (persistentScene)
                 {
                     var cache = AssetDatabase.GetAssetPath(persistentScene.EditorSceneAsset);
-                    EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
-                }
-
-                foreach (var requiredScene in Cache.RequiredScenes)
-                {
-                    var cache = AssetDatabase.GetAssetPath(requiredScene.SceneData.EditorSceneAsset);
                     EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
                 }
 
