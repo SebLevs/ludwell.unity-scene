@@ -35,7 +35,7 @@ namespace Ludwell.Scene.Editor
 
                     AssetDatabase.MoveAsset(oppositeOldPathFull, oppositeNewPathFull);
 
-                    LoaderSceneDataHelper.GetLoaderSceneData().UpdateElement(newAssetName);
+                    LoaderSceneDataHelper.GetLoaderSceneData().UpdateElement(oldAssetName, newAssetName);
                     LoaderSceneDataHelper.SaveChange();
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();

@@ -61,12 +61,13 @@ namespace Ludwell.Scene.Editor
             LoaderSceneDataHelper.SaveChange();
         }
 
-        public void UpdateElement(string assetName)
+        public void UpdateElement(string oldName, string newName)
         {
             foreach (var element in Elements)
             {
-                if (element.MainScene.name != assetName) continue;
-                element.Name = assetName;
+                if (element.Name != oldName) continue;
+                if (element.MainScene.name != newName) continue;
+                element.Name = newName;
             }
         }
     }
