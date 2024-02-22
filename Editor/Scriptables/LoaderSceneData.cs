@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace Ludwell.Scene.Editor
@@ -63,11 +61,13 @@ namespace Ludwell.Scene.Editor
             LoaderSceneDataHelper.SaveChange();
         }
 
-        public (SceneAsset, SceneData) GetScenesWithName(string assetName)
+        public void UpdateElement(string assetName)
         {
-            var sceneData = Elements.FirstOrDefault(element => element.MainScene.Name == assetName)?.MainScene;
-            var sceneAsset = sceneData?.EditorSceneAsset;
-            return (sceneAsset, sceneData);
+            foreach (var element in Elements)
+            {
+                if (element.MainScene.name != assetName) continue;
+                element.Name = assetName;
+            }
         }
     }
 

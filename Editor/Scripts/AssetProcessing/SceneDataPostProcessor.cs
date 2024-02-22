@@ -6,20 +6,50 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneDataPostProcessor : AssetPostprocessor
     {
+        private static bool _isHandling;
+
         private static void OnPostprocessAllAssets(
             string[] importedAssets,
             string[] deletedAssets,
             string[] movedAssets,
             string[] movedFromAssetPaths)
         {
-            HandleCreatedAsset(importedAssets);
-        }
+            if (_isHandling) return;
 
-        private static void HandleCreatedAsset(string[] importedAssets)
-        {
-            foreach (string importedAsset in importedAssets)
+            if (movedFromAssetPaths.Length > 0)
+            {
+                for (var index = 0; index < movedAssets.Length; index++)
+                {
+                    if (!movedAssets[index].EndsWith(".unity") && !movedAssets[index].EndsWith(".asset")) continue;
+                    _isHandling = true;
+
+                    var oppositeExtension = movedAssets[index].EndsWith(".unity") ? ".asset" : ".unity";
+
+                    var oldAssetName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
+                    var oldPath = Path.GetDirectoryName(movedFromAssetPaths[index]);
+                    var oppositeOldPathFull = Path.Combine(oldPath, oldAssetName + oppositeExtension);
+
+                    var newAssetName = Path.GetFileNameWithoutExtension(movedAssets[index]);
+                    var newPath = Path.GetDirectoryName(movedAssets[index]);
+                    var oppositeNewPathFull = Path.Combine(newPath, newAssetName + oppositeExtension);
+
+                    AssetDatabase.MoveAsset(oppositeOldPathFull, oppositeNewPathFull);
+
+                    LoaderSceneDataHelper.GetLoaderSceneData().UpdateElement(newAssetName);
+                    LoaderSceneDataHelper.SaveChange();
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+
+                    _isHandling = false;
+                }
+
+                return;
+            }
+
+            foreach (var importedAsset in importedAssets)
             {
                 if (!importedAsset.EndsWith(".unity")) continue;
+
                 var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(importedAsset);
                 var sceneData = CreateSceneDataInstance(sceneAsset);
 
