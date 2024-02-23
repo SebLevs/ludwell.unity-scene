@@ -1,7 +1,6 @@
 using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -143,8 +142,7 @@ namespace Ludwell.Scene
                 var persistentScene = LoaderSceneDataHelper.GetLoaderSceneData().PersistentScene;
                 if (persistentScene)
                 {
-                    var cache = AssetDatabase.GetAssetPath(persistentScene.EditorSceneAsset);
-                    EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
+                    SceneDataManagerEditorApplication.OpenSceneAdditive(_mainSceneField.value as SceneData);
                 }
 
                 EditorApplication.isPlaying = true;

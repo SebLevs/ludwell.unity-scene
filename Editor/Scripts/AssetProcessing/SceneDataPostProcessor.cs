@@ -50,29 +50,16 @@ namespace Ludwell.Scene.Editor
             {
                 if (!importedAsset.EndsWith(".unity")) continue;
 
-                var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(importedAsset);
-                var sceneData = CreateSceneDataInstance(sceneAsset);
-
                 var directoryPath = Path.GetDirectoryName(importedAsset);
-                var assetName = sceneData.EditorSceneAsset.name + ".asset";
+                var sceneData = ScriptableObject.CreateInstance<SceneData>();
+                var assetName = Path.GetFileNameWithoutExtension(importedAsset) + ".asset";
                 var createAssetAtPath = Path.Combine(directoryPath, assetName);
-                CreateAndSaveSceneDataAsset(sceneData, createAssetAtPath);
+
+                AssetDatabase.CreateAsset(sceneData, createAssetAtPath);
+                AddSceneDataToQuickLoadContainer(createAssetAtPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
-        }
-
-        private static SceneData CreateSceneDataInstance(SceneAsset sceneAsset)
-        {
-            var sceneData = ScriptableObject.CreateInstance<SceneData>();
-            sceneData.EditorSceneAsset = sceneAsset;
-            return sceneData;
-        }
-
-        private static void CreateAndSaveSceneDataAsset(SceneData sceneData, string fullAssetPath)
-        {
-            AssetDatabase.CreateAsset(sceneData, fullAssetPath);
-            AddSceneDataToQuickLoadContainer(fullAssetPath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         private static void AddSceneDataToQuickLoadContainer(string fullAssetPath)

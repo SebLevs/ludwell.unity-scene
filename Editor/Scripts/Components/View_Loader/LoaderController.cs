@@ -8,10 +8,15 @@ namespace Ludwell.Scene
 {
     public class LoaderController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits>
+        {
+        }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderController));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(LoaderController), nameof(LoaderController));
+        private static readonly string UxmlPath =
+            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderController));
+
+        private static readonly string
+            UssPath = Path.Combine("Uss", nameof(LoaderController), nameof(LoaderController));
 
         private static readonly string LoaderSceneDataPath = Path.Combine("Scriptables", nameof(LoaderSceneData));
         private const string MainMenuButtonsName = "main-menu__buttons";
@@ -32,7 +37,7 @@ namespace Ludwell.Scene
             var loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
 
             var mainMenuObjectField = this.Q(MainMenuObjectFieldName).Q<ObjectField>();
-            if (loaderSceneData.MainMenuScene != null && loaderSceneData.MainMenuScene.EditorSceneAsset != null)
+            if (loaderSceneData.MainMenuScene != null)
             {
                 mainMenuObjectField.value = loaderSceneData.MainMenuScene;
             }
@@ -43,7 +48,7 @@ namespace Ludwell.Scene
             });
 
             var persistentSceneObjectField = this.Q(PersistentObjectFieldName).Q<ObjectField>();
-            if (loaderSceneData.PersistentScene != null && loaderSceneData.PersistentScene.EditorSceneAsset != null)
+            if (loaderSceneData.PersistentScene != null)
             {
                 persistentSceneObjectField.value = loaderSceneData.PersistentScene;
             }
@@ -54,7 +59,7 @@ namespace Ludwell.Scene
             });
 
             var loadingObjectField = this.Q(LoadingObjectFieldName).Q<ObjectField>();
-            if (loaderSceneData.LoadingScene != null && loaderSceneData.LoadingScene.EditorSceneAsset != null)
+            if (loaderSceneData.LoadingScene != null)
             {
                 loadingObjectField.value = loaderSceneData.LoadingScene;
             }
