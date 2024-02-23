@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace Ludwell.Scene
 {
-     public class SceneDataEditor : MonoBehaviour
-     {
+    public class SceneDataEditor : MonoBehaviour
+    {
 //         private const string sceneFolder = "Assets/Scenes/";
 //         private static string[] sceneFolders = new[] { sceneFolder };
 //         private const string sceneDataFolder = "Assets/Scriptables/SceneDatas";
@@ -108,7 +108,7 @@ namespace Ludwell.Scene
 //
 //             AssetDatabase.SaveAssets();
 //         }
-     }
+    }
 }
 #endif
 
