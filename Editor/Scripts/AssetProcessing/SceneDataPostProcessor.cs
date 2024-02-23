@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 namespace Ludwell.Scene.Editor
@@ -8,6 +9,19 @@ namespace Ludwell.Scene.Editor
     {
         private static bool _isHandling;
 
+        [OnOpenAsset]
+        private static bool HandleDoubleClick(int instanceId, int line)
+        {
+            var path = AssetDatabase.GetAssetPath(instanceId);
+            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(path);
+
+            if (!sceneData) return false;
+            
+            SceneDataManagerEditorApplication.OpenScene(sceneData);
+
+            return true;
+        }
+        
         private static void OnPostprocessAllAssets(
             string[] importedAssets,
             string[] deletedAssets,
