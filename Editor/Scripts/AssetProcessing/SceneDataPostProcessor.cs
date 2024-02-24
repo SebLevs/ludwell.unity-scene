@@ -58,7 +58,7 @@ namespace Ludwell.Scene.Editor
                 }
 
                 if (!shouldSave) return;
-                LoaderSceneDataHelper.SaveChange();
+                LoaderSceneDataHelper.SaveChangeDelayed();
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
@@ -76,10 +76,11 @@ namespace Ludwell.Scene.Editor
                 var createAssetAtPath = Path.Combine(directoryPath, assetName);
                 AssetDatabase.CreateAsset(sceneData, createAssetAtPath);
                 AddSceneDataToQuickLoadContainer(createAssetAtPath);
+                Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
             }
 
             if (!shouldSave) return;
-            LoaderSceneDataHelper.SaveChange();
+            LoaderSceneDataHelper.SaveChangeDelayed();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

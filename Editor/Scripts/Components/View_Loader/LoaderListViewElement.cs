@@ -69,7 +69,6 @@ namespace Ludwell.Scene
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
-            _foldoutTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
         }
 
         private void RegisterStyleEvents()

@@ -44,6 +44,13 @@ namespace Ludwell.Scene
             InitializeButtonCloseAll();
             InitializeLoaderListView();
             InitializeSearchField();
+
+            Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
+        }
+
+        ~SceneLoaderListController()
+        {
+            Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
 
         private void InitializeButtonCloseAll()
@@ -128,6 +135,11 @@ namespace Ludwell.Scene
             }
 
             return filteredList;
+        }
+        
+        private void ForceRebuildListView()
+        {
+            _listViewInitializer?.ForceRebuild();
         }
     }
 }

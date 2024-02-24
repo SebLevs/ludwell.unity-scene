@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
             }
 
             LoaderSceneDataHelper.GetLoaderSceneData().RemoveElementWithMainScene(assetName);
-            LoaderSceneDataHelper.SaveChange();
+            LoaderSceneDataHelper.SaveChangeDelayed();
             AssetDatabase.DeleteAsset(assetPath);
             _isHandling = false;
 

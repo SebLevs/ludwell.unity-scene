@@ -58,7 +58,8 @@ namespace Ludwell.Scene.Editor
             }
 
             if (!hasRemoved) return;
-            LoaderSceneDataHelper.SaveChange();
+            LoaderSceneDataHelper.SaveChangeDelayed();
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
         public void UpdateElement(string oldName, string newName)
@@ -69,6 +70,8 @@ namespace Ludwell.Scene.Editor
                 if (element.MainScene.name != newName) continue;
                 element.Name = newName;
             }
+            
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }
 
@@ -95,7 +98,7 @@ namespace Ludwell.Scene.Editor
             set
             {
                 mainScene = value;
-                LoaderSceneDataHelper.SaveChange();
+                LoaderSceneDataHelper.SaveChangeDelayed();
             }
         }
 
