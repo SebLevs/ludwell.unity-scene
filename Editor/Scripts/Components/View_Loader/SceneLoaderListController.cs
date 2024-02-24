@@ -46,12 +46,28 @@ namespace Ludwell.Scene
             InitializeSearchField();
 
             Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
+
+
+            _listViewInitializer.ListView.Q<Button>("unity-list-view__add-button").clicked += () => CreateSceneAtPath();
+            _listViewInitializer.ListView.Q<Button>("unity-list-view__remove-button").clicked += () => DeleteSceneAtPath();
         }
 
         ~SceneLoaderListController()
         {
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
+
+        private void CreateSceneAtPath() // todo: cleanup ==============================================================
+        {
+            SceneDataGenerator.CreateSceneAssetAtPath();
+            // Handle the auto-add of + button
+        }
+
+        private void DeleteSceneAtPath()
+        {
+            // delete scene asset at path on - button click
+        }
+
 
         private void InitializeButtonCloseAll()
         {
@@ -136,7 +152,7 @@ namespace Ludwell.Scene
 
             return filteredList;
         }
-        
+
         private void ForceRebuildListView()
         {
             _listViewInitializer?.ForceRebuild();

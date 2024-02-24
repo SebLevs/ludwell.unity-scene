@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Ludwell.Scene.Editor
@@ -11,6 +12,24 @@ namespace Ludwell.Scene.Editor
         static SceneDataGenerator()
         {
             GenerateSceneData();
+        }
+
+        public static void CreateSceneAssetAtPath()
+        {
+            var path = EditorUtility.SaveFilePanel("Select Folder", "Assets", "New Scene", "unity");
+            
+            if (string.IsNullOrEmpty(path)) return;
+            
+            var projectPath = Application.dataPath.Replace("/Assets", "");
+            if (path.StartsWith(projectPath))
+            {
+                EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), path);
+                AssetDatabase.Refresh();
+            }
+            else
+            { 
+                Debug.LogError($"Operation was aborted | Invalid path | \"{path}\"");
+            }
         }
 
         public static void GenerateSceneData()
