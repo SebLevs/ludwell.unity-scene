@@ -1,7 +1,6 @@
 using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -70,7 +69,6 @@ namespace Ludwell.Scene
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             _foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
-            _foldoutTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
         }
 
         private void RegisterStyleEvents()
@@ -143,8 +141,7 @@ namespace Ludwell.Scene
                 var persistentScene = LoaderSceneDataHelper.GetLoaderSceneData().PersistentScene;
                 if (persistentScene)
                 {
-                    var cache = AssetDatabase.GetAssetPath(persistentScene.EditorSceneAsset);
-                    EditorSceneManager.OpenScene(cache, OpenSceneMode.Additive);
+                    SceneDataManagerEditorApplication.OpenSceneAdditive(_mainSceneField.value as SceneData);
                 }
 
                 EditorApplication.isPlaying = true;
