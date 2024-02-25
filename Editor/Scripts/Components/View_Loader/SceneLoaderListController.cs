@@ -150,19 +150,23 @@ namespace Ludwell.Scene
 
         private void DeleteSceneAtPath()
         {
-            if (_loaderSceneData.Elements.Count == 0) return;
+            if (_listViewInitializer.ListView.itemsSource.Count == 0) return;
 
             SceneData sceneData;
             
             var selectedIndex = _listViewInitializer.ListView.selectedIndex;
+            LoaderListViewElementData elementToDelete;
             if (selectedIndex == -1)
             {
-                sceneData = _loaderSceneData.Elements[^1].MainScene;
+                elementToDelete = _listViewInitializer.ListView.itemsSource[^1] as LoaderListViewElementData;
+                sceneData = elementToDelete.MainScene;
+                _listViewInitializer.ListView.itemsSource.Remove(sceneData);
                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
                 return;
             }
             
-            sceneData = _loaderSceneData.Elements[selectedIndex].MainScene;
+            elementToDelete = _listViewInitializer.ListView.itemsSource[selectedIndex] as LoaderListViewElementData;
+            sceneData = elementToDelete.MainScene;
             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
         }
 
