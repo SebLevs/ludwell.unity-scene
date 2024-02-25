@@ -46,13 +46,14 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public void RemoveElementWithMainScene(string assetName)
+        public void RemoveElementWithSceneData(SceneData sceneData)
         {
             var hasRemoved = false;
+
             for (var index = Elements.Count - 1; index >= 0; index--)
             {
                 var element = Elements[index];
-                if (element.MainScene.Name != assetName) continue;
+                if (element.MainScene != sceneData) continue;
                 Elements.Remove(element);
                 hasRemoved = true;
             }
@@ -70,7 +71,7 @@ namespace Ludwell.Scene.Editor
                 if (element.MainScene.name != newName) continue;
                 element.Name = newName;
             }
-            
+
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }

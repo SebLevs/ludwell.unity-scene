@@ -6,7 +6,7 @@
                 <ui:Label tabindex="-1" text="Quick Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
             </ui:VisualElement>
             <ui:VisualElement name="header__actions" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; border-bottom-width: 1px; border-bottom-color: rgb(35, 35, 35); justify-content: center; height: 22.5px; flex-shrink: 0;">
-                <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" class="button__close-all" />
+                <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" class="button__close-all" style="background-color: rgba(56, 56, 56, 0);" />
                 <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" style="align-self: center; width: 40%;" />
             </ui:VisualElement>
         </ui:VisualElement>

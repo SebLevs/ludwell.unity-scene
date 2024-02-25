@@ -14,26 +14,16 @@ namespace Ludwell.Scene.Editor
 
             _isHandling = true;
 
-            var otherSpecifier = assetPath.EndsWith(".unity") ? ".asset" : ".unity";
-
+            var directoryName = Path.GetDirectoryName(assetPath);
             var assetName = Path.GetFileNameWithoutExtension(assetPath);
-            var assetsGuid = AssetDatabase.FindAssets(assetName);
-
-            foreach (var assetGuid in assetsGuid)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(assetGuid);
-
-                if (!path.EndsWith(otherSpecifier)) continue;
-
-                var foundAssetName = Path.GetFileNameWithoutExtension(path);
-                if (foundAssetName != assetName) continue;
-
-                AssetDatabase.DeleteAsset(path);
-            }
-
-            LoaderSceneDataHelper.GetLoaderSceneData().RemoveElementWithMainScene(assetName);
+            var SceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.Combine(directoryName, assetName + ".asset"));
+            LoaderSceneDataHelper.GetLoaderSceneData().RemoveElementWithSceneData(SceneData);
             LoaderSceneDataHelper.SaveChangeDelayed();
+
+            var otherSpecifier = assetPath.EndsWith(".unity") ? ".asset" : ".unity";
+            AssetDatabase.DeleteAsset(Path.Combine(directoryName, assetName + otherSpecifier));
             AssetDatabase.DeleteAsset(assetPath);
+            
             _isHandling = false;
 
             return AssetDeleteResult.DidDelete;
