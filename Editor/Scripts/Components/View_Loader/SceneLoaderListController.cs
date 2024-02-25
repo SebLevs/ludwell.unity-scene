@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Ludwell.Scene.Editor;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,6 +29,9 @@ namespace Ludwell.Scene
         private const string ButtonCloseAll = "button__close-all";
         private const string ButtonCloseAllClicked = "button__close-all-clicked";
 
+        private const string ButtonAddName = "add";
+        private const string ButtonRemoveName = "remove";
+
         private const string TagIconName = "icon_tag";
 
         private readonly LoaderSceneData _loaderSceneData;
@@ -44,30 +48,15 @@ namespace Ludwell.Scene
             InitializeButtonCloseAll();
             InitializeLoaderListView();
             InitializeSearchField();
+            InitializeAddRemoveButtons();
 
             Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
-
-
-            _listViewInitializer.ListView.Q<Button>("unity-list-view__add-button").clicked += () => CreateSceneAtPath();
-            _listViewInitializer.ListView.Q<Button>("unity-list-view__remove-button").clicked += () => DeleteSceneAtPath();
         }
 
         ~SceneLoaderListController()
         {
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
-
-        private void CreateSceneAtPath() // todo: cleanup ==============================================================
-        {
-            SceneDataGenerator.CreateSceneAssetAtPath();
-            // Handle the auto-add of + button
-        }
-
-        private void DeleteSceneAtPath()
-        {
-            // delete scene asset at path on - button click
-        }
-
 
         private void InitializeButtonCloseAll()
         {
@@ -151,6 +140,30 @@ namespace Ludwell.Scene
             }
 
             return filteredList;
+        }
+
+        private void InitializeAddRemoveButtons()
+        {
+            this.Q<Button>(ButtonAddName).clicked += SceneDataGenerator.CreateSceneAssetAtPath;
+            this.Q<Button>(ButtonRemoveName).clicked += DeleteSceneAtPath;
+        }
+
+        private void DeleteSceneAtPath()
+        {
+            if (_loaderSceneData.Elements.Count == 0) return;
+
+            SceneData sceneData;
+            
+            var selectedIndex = _listViewInitializer.ListView.selectedIndex;
+            if (selectedIndex == -1)
+            {
+                sceneData = _loaderSceneData.Elements[^1].MainScene;
+                AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
+                return;
+            }
+            
+            sceneData = _loaderSceneData.Elements[selectedIndex].MainScene;
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
         }
 
         private void ForceRebuildListView()
