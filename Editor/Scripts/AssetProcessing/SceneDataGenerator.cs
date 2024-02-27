@@ -27,11 +27,15 @@ namespace Ludwell.Scene.Editor
                 Debug.LogError($"Operation cancelled | Invalid path | {absolutePath}");
                 return;
             }
+            
+            var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
+            if (sceneData)
+            {
+                LoaderSceneDataHelper.GetLoaderSceneData().RemoveElement(sceneData);
+            }
 
             EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
             AssetDatabase.Refresh();
-
-            ReplaceMissingQuickLoadReferences(absolutePath);
         }
 
         public static void GenerateSceneData()
@@ -73,30 +77,6 @@ namespace Ludwell.Scene.Editor
             LoaderSceneDataHelper.SaveChange();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
-
-        private static void ReplaceMissingQuickLoadReferences(string absolutePath)
-        {
-            var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
-
-            var loaderSceneDataElements = LoaderSceneDataHelper.GetLoaderSceneData().Elements;
-            LoaderListViewElementData replacedElement = null;
-            foreach (var element in loaderSceneDataElements)
-            {
-                if (element.MainScene != null) continue;
-
-                if (element.Name == sceneData.Name)
-                {
-                    replacedElement = element;
-                    continue;
-                }
-
-                element.MainScene = sceneData;
-            }
-
-            loaderSceneDataElements.Remove(replacedElement);
-
-            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
         private static SceneData GetSceneDataFromAbsolutePath(string absolutePath)
