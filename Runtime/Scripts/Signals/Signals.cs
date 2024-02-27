@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Ludwell.Scene
 {
@@ -15,6 +16,16 @@ namespace Ludwell.Scene
                 _signals.Add(type, new List<Action>());
             }
 
+            if (_signals[type].Count > 0)
+            {
+                foreach (var evt in _signals[type])
+                {
+                    if (evt.Method.Name != action.Method.Name) continue;
+                    return;
+                }
+            }
+
+            Debug.LogError($"Added: {action.Method.Name}");
             _signals[type].Add(action);
         }
 
@@ -22,6 +33,8 @@ namespace Ludwell.Scene
         {
             const string type = nameof(T);
             _signals[type].Remove(action);
+            
+            Debug.LogError($"Removed: {action.Method.Name}");
             
             if (_signals[type].Count > 0) return;
             _signals.Remove(type);

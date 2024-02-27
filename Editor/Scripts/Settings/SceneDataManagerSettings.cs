@@ -3,15 +3,10 @@ using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    [CreateAssetMenu(fileName = "SceneDataManagerSettings", menuName = "Scene Manager/SceneDataManagerSettings")]
+    // [CreateAssetMenu(fileName = "SceneDataManagerSettings", menuName = "Scene Manager/SceneDataManagerSettings")]
     public class SceneDataManagerSettings : ScriptableObject
     {
         [HideInInspector] public bool GenerateSceneData = true;
-
-        public string SceneFolder = "Assets/Scenes/";
-        public string[] GetSceneFolders => new[] { SceneFolder };
-        public string SceneDataFolder = "Assets/Scriptables/SceneDatas";
-        public string[] GetSceneDataFolders => new[] { SceneDataFolder };
     }
 
     [CustomEditor(typeof(SceneDataManagerSettings))]
