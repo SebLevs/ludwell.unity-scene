@@ -25,7 +25,6 @@ namespace Ludwell.Scene
                 }
             }
 
-            Debug.LogError($"Added: {action.Method.Name}");
             _signals[type].Add(action);
         }
 
@@ -33,8 +32,6 @@ namespace Ludwell.Scene
         {
             const string type = nameof(T);
             _signals[type].Remove(action);
-            
-            Debug.LogError($"Removed: {action.Method.Name}");
             
             if (_signals[type].Count > 0) return;
             _signals.Remove(type);

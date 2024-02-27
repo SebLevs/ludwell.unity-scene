@@ -80,7 +80,6 @@ namespace Ludwell.Scene.Editor
             }
 
             if (!shouldSave) return;
-            LoaderSceneDataHelper.SaveChangeDelayed();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -89,11 +88,7 @@ namespace Ludwell.Scene.Editor
         {
             var container = LoaderSceneDataHelper.GetLoaderSceneData();
             var sceneDataAsset = AssetDatabase.LoadAssetAtPath<SceneData>(fullAssetPath);
-            container.Elements.Add(new LoaderListViewElementData()
-            {
-                Name = sceneDataAsset.Name,
-                MainScene = sceneDataAsset
-            });
+            container.AddElement(sceneDataAsset);
         }
     }
 }
