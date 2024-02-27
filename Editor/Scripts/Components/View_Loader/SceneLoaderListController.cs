@@ -58,9 +58,7 @@ namespace Ludwell.Scene
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
             
             this.Q<Button>(ButtonAddName).clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
-            
             this.Q<Button>(ButtonRemoveName).clicked -= DeleteSceneAtPath;
-            this.Q<Button>(ButtonRemoveName).clicked -= _dropdownSearchField.RebuildListing;
         }
 
         private void InitializeButtonCloseAll()
@@ -150,9 +148,7 @@ namespace Ludwell.Scene
         private void InitializeAddRemoveButtons()
         {
             this.Q<Button>(ButtonAddName).clicked += SceneDataGenerator.CreateSceneAssetAtPath;
-            
             this.Q<Button>(ButtonRemoveName).clicked += DeleteSceneAtPath;
-            this.Q<Button>(ButtonRemoveName).clicked += _dropdownSearchField.RebuildListing;
         }
 
         private void DeleteSceneAtPath()

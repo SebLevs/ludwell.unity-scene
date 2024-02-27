@@ -76,7 +76,6 @@ namespace Ludwell.Scene.Editor
                 var createAssetAtPath = Path.Combine(directoryPath, assetName);
                 AssetDatabase.CreateAsset(sceneData, createAssetAtPath);
                 AddSceneDataToQuickLoadContainer(createAssetAtPath);
-                Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
             }
 
             if (!shouldSave) return;
