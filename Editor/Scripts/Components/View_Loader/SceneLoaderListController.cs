@@ -176,7 +176,7 @@ namespace Ludwell.Scene
         private void ForceRebuildListView()
         {
             _listViewInitializer.ForceRebuild();
-            _dropdownSearchField.RebuildListing();
+            _dropdownSearchField.RebuildActiveListing();
         }
     }
 }

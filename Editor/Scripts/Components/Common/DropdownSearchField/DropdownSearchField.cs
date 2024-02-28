@@ -162,8 +162,9 @@ namespace Ludwell.Scene
             }
         }
         
-        public void RebuildListing()
+        public void RebuildActiveListing()
         {
+            if (!IsListing) return;
             ExecuteCurrentListingStrategy(_searchField.value);
         }
 

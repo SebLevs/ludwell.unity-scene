@@ -57,7 +57,6 @@ namespace Ludwell.Scene.Editor
                 }
 
                 shouldSave = true;
-                Debug.LogError("MOVED");
 
                 var oppositeExtension = movedAssets[index].EndsWith(".unity") ? ".asset" : ".unity";
 
