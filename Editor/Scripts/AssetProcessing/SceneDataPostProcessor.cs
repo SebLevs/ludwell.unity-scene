@@ -11,7 +11,7 @@ namespace Ludwell.Scene.Editor
     {
         private static bool _isHandlingMove;
         private static bool _isHandlingImport;
-        
+
         [OnOpenAsset]
         private static bool HandleDoubleClick(int instanceId, int line)
         {
@@ -41,7 +41,7 @@ namespace Ludwell.Scene.Editor
         {
             if (movedAssets.Count <= 0) return false;
             if (_isHandlingMove) return false;
-            
+
             _isHandlingMove = true;
             var shouldSave = false;
 
@@ -55,22 +55,21 @@ namespace Ludwell.Scene.Editor
                     var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(movedAssets[index]);
                     if (!sceneData) continue;
                 }
-                
+
                 shouldSave = true;
-            
+                Debug.LogError("MOVED");
+
                 var oppositeExtension = movedAssets[index].EndsWith(".unity") ? ".asset" : ".unity";
-                
-                var oldAssetName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
+
                 var oppositeOldPathFull = Path.ChangeExtension(movedFromAssetPaths[index], oppositeExtension);
-            
-                var newAssetName = Path.GetFileNameWithoutExtension(movedAssets[index]);
                 var oppositeNewPathFull = Path.ChangeExtension(movedAssets[index], oppositeExtension);
-            
                 AssetDatabase.MoveAsset(oppositeOldPathFull, oppositeNewPathFull);
-            
+
+                var oldAssetName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
+                var newAssetName = Path.GetFileNameWithoutExtension(movedAssets[index]);
                 LoaderSceneDataHelper.GetLoaderSceneData().UpdateElement(oldAssetName, newAssetName);
             }
-            
+
             _isHandlingMove = false;
             return shouldSave;
         }
@@ -82,22 +81,22 @@ namespace Ludwell.Scene.Editor
 
             _isHandlingImport = true;
             var shouldSave = false;
-            
+
             foreach (var asset in importedAssets)
             {
-                if(asset.EndsWith(".unity"))
+                if (asset.EndsWith(".unity"))
                 {
                     shouldSave = true;
                     CreateSceneDataAsset(asset);
                 }
-                else if(asset.EndsWith(".asset"))
+                else if (asset.EndsWith(".asset"))
                 {
                     if (!AssetDatabase.LoadAssetAtPath<SceneData>(asset)) continue;
                     shouldSave = true;
                     CreateSceneAsset(asset);
                 }
             }
-                
+
             _isHandlingImport = false;
 
             return shouldSave;
@@ -107,7 +106,13 @@ namespace Ludwell.Scene.Editor
         {
             var sceneDataPath = Path.ChangeExtension(sceneAssetPath, ".asset");
 
-            if (AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath)) return;
+            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
+            if (sceneData)
+            {
+                LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
+                return;
+            }
+
             var myAsset = ScriptableObject.CreateInstance<SceneData>();
             AssetDatabase.CreateAsset(myAsset, sceneDataPath);
             LoaderSceneDataHelper.GetLoaderSceneData().AddElement(myAsset);

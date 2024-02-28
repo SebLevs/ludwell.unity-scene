@@ -15,7 +15,7 @@ namespace Ludwell.Scene.Editor
         [field: HideInInspector]
         [field: SerializeField]
         public List<LoaderListViewElementData> Elements { get; set; } = new();
-        
+
         public SceneData MainMenuScene
         {
             get => mainMenuScene;
@@ -45,7 +45,7 @@ namespace Ludwell.Scene.Editor
                 LoaderSceneDataHelper.SaveChange();
             }
         }
-        
+
         public void AddElement(SceneData sceneData)
         {
             Elements.Add(new LoaderListViewElementData()
@@ -53,6 +53,7 @@ namespace Ludwell.Scene.Editor
                 Name = sceneData.Name,
                 MainScene = sceneData
             });
+
             LoaderSceneDataHelper.SaveChangeDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
@@ -64,10 +65,10 @@ namespace Ludwell.Scene.Editor
                 var element = Elements[index];
                 if (element.MainScene != sceneData) continue;
                 Elements.Remove(element);
-                LoaderSceneDataHelper.SaveChangeDelayed();
-                Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
-                return;
             }
+
+            LoaderSceneDataHelper.SaveChangeDelayed();
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
         public void UpdateElement(string oldName, string newName)
@@ -79,6 +80,7 @@ namespace Ludwell.Scene.Editor
                 element.Name = newName;
             }
 
+            LoaderSceneDataHelper.SaveChangeDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }
