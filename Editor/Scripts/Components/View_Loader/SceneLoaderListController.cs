@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Ludwell.Scene.Editor;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,6 +29,9 @@ namespace Ludwell.Scene
         private const string ButtonCloseAll = "button__close-all";
         private const string ButtonCloseAllClicked = "button__close-all-clicked";
 
+        private const string ButtonAddName = "add";
+        private const string ButtonRemoveName = "remove";
+
         private const string TagIconName = "icon_tag";
 
         private readonly LoaderSceneData _loaderSceneData;
@@ -44,6 +48,7 @@ namespace Ludwell.Scene
             InitializeButtonCloseAll();
             InitializeLoaderListView();
             InitializeSearchField();
+            InitializeAddRemoveButtons();
 
             Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
@@ -51,6 +56,9 @@ namespace Ludwell.Scene
         ~SceneLoaderListController()
         {
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
+            
+            this.Q<Button>(ButtonAddName).clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
+            this.Q<Button>(ButtonRemoveName).clicked -= DeleteSceneAtPath;
         }
 
         private void InitializeButtonCloseAll()
@@ -136,10 +144,39 @@ namespace Ludwell.Scene
 
             return filteredList;
         }
-        
+
+        private void InitializeAddRemoveButtons()
+        {
+            this.Q<Button>(ButtonAddName).clicked += SceneDataGenerator.CreateSceneAssetAtPath;
+            this.Q<Button>(ButtonRemoveName).clicked += DeleteSceneAtPath;
+        }
+
+        private void DeleteSceneAtPath()
+        {
+            if (_listViewInitializer.ListView.itemsSource.Count == 0) return;
+
+            SceneData sceneData;
+            
+            var selectedIndex = _listViewInitializer.ListView.selectedIndex;
+            LoaderListViewElementData elementToDelete;
+            if (selectedIndex == -1)
+            {
+                elementToDelete = _listViewInitializer.ListView.itemsSource[^1] as LoaderListViewElementData;
+                sceneData = elementToDelete.MainScene;
+                _listViewInitializer.ListView.itemsSource.Remove(sceneData);
+                AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
+                return;
+            }
+            
+            elementToDelete = _listViewInitializer.ListView.itemsSource[selectedIndex] as LoaderListViewElementData;
+            sceneData = elementToDelete.MainScene;
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
+        }
+
         private void ForceRebuildListView()
         {
-            _listViewInitializer?.ForceRebuild();
+            _listViewInitializer.ForceRebuild();
+            _dropdownSearchField.RebuildActiveListing();
         }
     }
 }

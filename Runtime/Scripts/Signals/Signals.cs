@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Ludwell.Scene
 {
@@ -13,6 +14,15 @@ namespace Ludwell.Scene
             if (!_signals.ContainsKey(type))
             {
                 _signals.Add(type, new List<Action>());
+            }
+
+            if (_signals[type].Count > 0)
+            {
+                foreach (var evt in _signals[type])
+                {
+                    if (evt.Method.Name != action.Method.Name) continue;
+                    return;
+                }
             }
 
             _signals[type].Add(action);

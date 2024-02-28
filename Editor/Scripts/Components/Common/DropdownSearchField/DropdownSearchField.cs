@@ -161,6 +161,12 @@ namespace Ludwell.Scene
                 _searchField.value = listFromValue;
             }
         }
+        
+        public void RebuildActiveListing()
+        {
+            if (!IsListing) return;
+            ExecuteCurrentListingStrategy(_searchField.value);
+        }
 
         public void ShowDropdown()
         {

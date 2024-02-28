@@ -46,18 +46,27 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public void RemoveElementWithMainScene(string assetName)
+        public void AddElement(SceneData sceneData)
         {
-            var hasRemoved = false;
+            Elements.Add(new LoaderListViewElementData()
+            {
+                Name = sceneData.Name,
+                MainScene = sceneData
+            });
+
+            LoaderSceneDataHelper.SaveChangeDelayed();
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
+        }
+
+        public void RemoveElement(SceneData sceneData)
+        {
             for (var index = Elements.Count - 1; index >= 0; index--)
             {
                 var element = Elements[index];
-                if (element.MainScene.Name != assetName) continue;
+                if (element.MainScene != sceneData) continue;
                 Elements.Remove(element);
-                hasRemoved = true;
             }
 
-            if (!hasRemoved) return;
             LoaderSceneDataHelper.SaveChangeDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
@@ -70,7 +79,8 @@ namespace Ludwell.Scene.Editor
                 if (element.MainScene.name != newName) continue;
                 element.Name = newName;
             }
-            
+
+            LoaderSceneDataHelper.SaveChangeDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }

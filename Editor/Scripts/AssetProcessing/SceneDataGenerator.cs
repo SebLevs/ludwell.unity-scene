@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Ludwell.Scene.Editor
@@ -13,9 +15,31 @@ namespace Ludwell.Scene.Editor
             GenerateSceneData();
         }
 
+        public static void CreateSceneAssetAtPath()
+        {
+            var absolutePath = EditorUtility.SaveFilePanel("Select Folder", "Assets", "New Scene", "unity");
+
+            if (string.IsNullOrEmpty(absolutePath)) return;
+
+            var projectPath = Application.dataPath.Replace("/Assets", "");
+            if (!absolutePath.StartsWith(projectPath))
+            {
+                Debug.LogError($"Operation cancelled | Invalid path | {absolutePath}");
+                return;
+            }
+
+            var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
+            if (sceneData)
+            {
+                LoaderSceneDataHelper.GetLoaderSceneData().RemoveElement(sceneData);
+            }
+
+            EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
+            AssetDatabase.Refresh();
+        }
+
         public static void GenerateSceneData()
         {
-            
             var settings = Resources.Load<SceneDataManagerSettings>(nameof(SceneDataManagerSettings));
 
             if (!settings.GenerateSceneData) return;
@@ -26,9 +50,7 @@ namespace Ludwell.Scene.Editor
             foreach (var guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
-                var directory = Path.GetDirectoryName(path);
-                var name = Path.GetFileNameWithoutExtension(path);
-                paths.Add(Path.Combine(directory, name + ".asset"));
+                paths.Add(Path.ChangeExtension(path, ".asset"));
             }
 
             var shouldSave = false;
@@ -41,13 +63,12 @@ namespace Ludwell.Scene.Editor
                 shouldSave = true;
                 sceneData = ScriptableObject.CreateInstance<SceneData>();
                 AssetDatabase.CreateAsset(sceneData, path);
-                AddSceneDataToQuickLoadContainer(sceneData);
+                LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
             }
 
             settings.GenerateSceneData = false;
             EditorUtility.SetDirty(settings);
             AssetDatabase.SaveAssetIfDirty(settings);
-            Debug.Log("SceneData were generated");
 
             if (!shouldSave) return;
             LoaderSceneDataHelper.SaveChange();
@@ -55,14 +76,12 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.Refresh();
         }
 
-        private static void AddSceneDataToQuickLoadContainer(SceneData sceneData)
+        private static SceneData GetSceneDataFromAbsolutePath(string absolutePath)
         {
-            var container = LoaderSceneDataHelper.GetLoaderSceneData();
-            container.Elements.Add(new LoaderListViewElementData()
-            {
-                Name = sceneData.Name,
-                MainScene = sceneData
-            });
+            var indexOfAssets = absolutePath.IndexOf("Assets/", StringComparison.Ordinal);
+            var relativePath = absolutePath[indexOfAssets..];
+            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.ChangeExtension(relativePath, ".asset"));
+            return sceneData;
         }
     }
 }
