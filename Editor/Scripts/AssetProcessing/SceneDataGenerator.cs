@@ -40,7 +40,7 @@ namespace Ludwell.Scene.Editor
 
         public static void GenerateSceneData()
         {
-            var settings = Resources.Load<SceneDataManagerSettings>(nameof(SceneDataManagerSettings));
+            var settings = Resources.Load<SceneDataManagerSettings>(Path.Combine("Scriptables", nameof(SceneDataManagerSettings)));
 
             if (!settings.GenerateSceneData) return;
 
