@@ -43,7 +43,7 @@ namespace Ludwell.Scene.Editor
             if (_isHandlingMove) return false;
             
             _isHandlingMove = true;
-            bool shouldSave = false;
+            var shouldSave = false;
 
             for (var index = 0; index < movedAssets.Count; index++)
             {
