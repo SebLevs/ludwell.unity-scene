@@ -47,7 +47,14 @@ namespace Ludwell.Scene.Editor
 
             for (var index = 0; index < movedAssets.Count; index++)
             {
-                if (!movedAssets[index].EndsWith(".unity") && !movedAssets[index].EndsWith(".asset")) continue;
+                var isAsset = movedAssets[index].EndsWith(".asset");
+                if (!movedAssets[index].EndsWith(".unity") && !isAsset) continue;
+
+                if (isAsset)
+                {
+                    var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(movedAssets[index]);
+                    if (!sceneData) continue;
+                }
                 
                 shouldSave = true;
             
