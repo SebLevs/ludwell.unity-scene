@@ -36,7 +36,7 @@ namespace Ludwell.Scene
 
         private readonly LoaderSceneData _loaderSceneData;
         private ListView _listView;
-        private ListViewInitializer<LoaderListViewElement, LoaderListViewElementData> _listViewInitializer;
+        private ListViewInitializer<LoaderListViewVisualElement, LoaderListViewElementData> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
 
         public SceneLoaderListController()
@@ -88,7 +88,7 @@ namespace Ludwell.Scene
                 element.IsOpen = false;
             }
 
-            foreach (var item in _listView.Query<LoaderListViewElement>().ToList())
+            foreach (var item in _listView.Query<LoaderListViewVisualElement>().ToList())
             {
                 item.SetFoldoutValue(false);
             }

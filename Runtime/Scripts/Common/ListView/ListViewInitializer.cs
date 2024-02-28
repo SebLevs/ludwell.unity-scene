@@ -3,13 +3,19 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class ListViewInitializer<TVisualElement, TListElement>
-        where TVisualElement : VisualElement, new()
-        where TListElement : new()
+    /// <typeparam name="TVisualElement">
+    /// The VisualElement must be a IListViewVisualElement, as it's methods are used for binding and setting data.
+    /// </typeparam>
+    /// <typeparam name="TData">
+    /// The data type needed for the IList element bound to the ListView.
+    /// </typeparam>
+    public class ListViewInitializer<TVisualElement, TData>
+        where TVisualElement : VisualElement, IListViewVisualElement<TData>, new()
+        where TData : new()
     {
         public ListView ListView { get; }
 
-        public ListViewInitializer(ListView listView, List<TListElement> data)
+        public ListViewInitializer(ListView listView, List<TData> data)
         {
             ListView = listView;
             ListView.itemsSource = data;
@@ -35,11 +41,11 @@ namespace Ludwell.Scene
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            var elementAsDataType = element as IBindableListViewElement<TListElement>;
+            var elementAsDataType = element as IListViewVisualElement<TData>;
 
-            ListView.itemsSource[index] ??= new TListElement();
+            ListView.itemsSource[index] ??= new TData();
 
-            elementAsDataType?.CacheData((TListElement)ListView.itemsSource[index]);
+            elementAsDataType?.CacheData((TData)ListView.itemsSource[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
         }

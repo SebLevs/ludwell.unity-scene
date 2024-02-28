@@ -114,7 +114,7 @@ namespace Ludwell.Scene.Editor
 
         public LoaderListViewElementData()
         {
-            Name = LoaderListViewElement.DefaultHeaderTextValue;
+            Name = LoaderListViewVisualElement.DefaultHeaderTextValue;
         }
     }
 }

@@ -1,10 +1,10 @@
 namespace Ludwell.Scene
 {
-    public interface IBindableListViewElement<T>
+    public interface IListViewVisualElement<TData>
     {
-        public T Cache { get; set; }
+        public TData Cache { get; set; }
 
-        public void CacheData(T data)
+        public void CacheData(TData data)
         {
             Cache = data;
         }

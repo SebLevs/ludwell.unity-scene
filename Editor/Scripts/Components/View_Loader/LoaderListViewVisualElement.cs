@@ -7,13 +7,13 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class LoaderListViewElement : VisualElement, IBindableListViewElement<LoaderListViewElementData>
+    public class LoaderListViewVisualElement : VisualElement, IListViewVisualElement<LoaderListViewElementData>
     {
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderListViewElement));
+            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderListViewVisualElement));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(LoaderController), nameof(LoaderListViewElement));
+            Path.Combine("Uss", nameof(LoaderController), nameof(LoaderListViewVisualElement));
 
         private static readonly string HeaderContentUxmlPath =
             Path.Combine("Uxml", nameof(LoaderController), "scene-loader-element__header-content");
@@ -39,7 +39,7 @@ namespace Ludwell.Scene
 
         public LoaderListViewElementData Cache { get; set; } = new();
 
-        public LoaderListViewElement()
+        public LoaderListViewVisualElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
