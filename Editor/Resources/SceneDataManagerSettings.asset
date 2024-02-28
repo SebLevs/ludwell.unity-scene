@@ -13,5 +13,3 @@ MonoBehaviour:
   m_Name: SceneDataManagerSettings
   m_EditorClassIdentifier: 
   GenerateSceneData: 0
-  SceneFolder: Assets/Scenes/
-  SceneDataFolder: Assets/Scriptables/SceneDatas

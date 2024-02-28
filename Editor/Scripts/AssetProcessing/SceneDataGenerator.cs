@@ -27,7 +27,7 @@ namespace Ludwell.Scene.Editor
                 Debug.LogError($"Operation cancelled | Invalid path | {absolutePath}");
                 return;
             }
-            
+
             var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
             if (sceneData)
             {
@@ -50,9 +50,7 @@ namespace Ludwell.Scene.Editor
             foreach (var guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
-                var directory = Path.GetDirectoryName(path);
-                var name = Path.GetFileNameWithoutExtension(path);
-                paths.Add(Path.Combine(directory, name + ".asset"));
+                paths.Add(Path.ChangeExtension(path, ".asset"));
             }
 
             var shouldSave = false;
@@ -65,13 +63,12 @@ namespace Ludwell.Scene.Editor
                 shouldSave = true;
                 sceneData = ScriptableObject.CreateInstance<SceneData>();
                 AssetDatabase.CreateAsset(sceneData, path);
-                AddSceneDataToQuickLoadContainer(sceneData);
+                LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
             }
 
             settings.GenerateSceneData = false;
             EditorUtility.SetDirty(settings);
             AssetDatabase.SaveAssetIfDirty(settings);
-            Debug.Log("SceneData generation completed.");
 
             if (!shouldSave) return;
             LoaderSceneDataHelper.SaveChange();
@@ -83,20 +80,8 @@ namespace Ludwell.Scene.Editor
         {
             var indexOfAssets = absolutePath.IndexOf("Assets/", StringComparison.Ordinal);
             var relativePath = absolutePath[indexOfAssets..];
-            var directory = Path.GetDirectoryName(relativePath);
-            var assetName = Path.GetFileNameWithoutExtension(relativePath);
-            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.Combine(directory, assetName + ".asset"));
+            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.ChangeExtension(relativePath, ".asset"));
             return sceneData;
-        }
-
-        private static void AddSceneDataToQuickLoadContainer(SceneData sceneData)
-        {
-            var container = LoaderSceneDataHelper.GetLoaderSceneData();
-            container.Elements.Add(new LoaderListViewElementData()
-            {
-                Name = sceneData.Name,
-                MainScene = sceneData
-            });
         }
     }
 }
