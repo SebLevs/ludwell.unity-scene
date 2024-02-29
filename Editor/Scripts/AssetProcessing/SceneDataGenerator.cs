@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Ludwell.Scene.Editor
 {
     [InitializeOnLoad]
-    public class SceneDataGenerator : MonoBehaviour
+    public static class SceneDataGenerator
     {
         static SceneDataGenerator()
         {
