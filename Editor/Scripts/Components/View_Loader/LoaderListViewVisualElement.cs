@@ -27,7 +27,6 @@ namespace Ludwell.Scene
         private const string MainSceneName = "main-scene";
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
-        private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
 
         public const string DefaultHeaderTextValue = "Quick load element";
 
@@ -82,16 +81,9 @@ namespace Ludwell.Scene
 
         public void BindElementToCachedData()
         {
-            CleanupStyle();
             _foldoutElement.RegisterValueChangedCallback(BindFoldoutValue);
             _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
-        }
-
-        private void CleanupStyle()
-        {
-            _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
-            _reorderableHandle.style.display = DisplayStyle.None;
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)
