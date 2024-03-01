@@ -131,6 +131,7 @@
     font-size: 18px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
+    margin-top: 0;
 }
 
 #remove {
@@ -153,4 +154,5 @@
     font-size: 18px;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
+    margin-top: 0;
 }
