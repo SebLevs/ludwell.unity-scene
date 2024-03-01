@@ -67,7 +67,7 @@ namespace Ludwell.Scene
         {
             _tagsController.Remove(tag);
             _tagContainer.Tags.Remove(tag);
-            LoaderSceneDataHelper.SaveChange();
+            DataFetcher.SaveEveryScriptable();
             _listViewInitializer.ForceRebuild();
         }
 
@@ -90,7 +90,7 @@ namespace Ludwell.Scene
         public void SortTags()
         {
             _tagContainer.Tags.Sort();
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
             _listViewInitializer.ForceRebuild();
         }
 
@@ -123,7 +123,7 @@ namespace Ludwell.Scene
                     tag.RemoveFromAllSubscribers();
                 }
 
-                LoaderSceneDataHelper.SaveChange();
+                DataFetcher.SaveEveryScriptable();
             };
         }
 

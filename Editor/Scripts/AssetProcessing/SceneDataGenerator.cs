@@ -31,7 +31,7 @@ namespace Ludwell.Scene.Editor
             var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
             if (sceneData)
             {
-                LoaderSceneDataHelper.GetLoaderSceneData().RemoveElement(sceneData);
+                DataFetcher.GetQuickLoadElements().RemoveElement(sceneData);
             }
 
             EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
@@ -63,7 +63,7 @@ namespace Ludwell.Scene.Editor
                 shouldSave = true;
                 sceneData = ScriptableObject.CreateInstance<SceneData>();
                 AssetDatabase.CreateAsset(sceneData, path);
-                LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
+                DataFetcher.GetQuickLoadElements().AddElement(sceneData);
             }
 
             settings.GenerateSceneData = false;
@@ -71,7 +71,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.SaveAssetIfDirty(settings);
 
             if (!shouldSave) return;
-            LoaderSceneDataHelper.SaveChange();
+            DataFetcher.SaveEveryScriptable();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

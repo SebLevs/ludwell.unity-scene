@@ -4,47 +4,13 @@ using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    // [CreateAssetMenu(fileName = "LoaderSceneData", menuName = "SceneDataManager/LoaderSceneData")]
+    // [CreateAssetMenu(fileName = "QuickLoadData", menuName = "SceneDataManager/QuickLoadData")]
     [Serializable]
-    public class LoaderSceneData : ScriptableObject
+    public class QuickLoadElements : ScriptableObject
     {
-        [HideInInspector] [SerializeField] private SceneData mainMenuScene;
-        [HideInInspector] [SerializeField] private SceneData persistentScene;
-        [HideInInspector] [SerializeField] private SceneData loadingScene;
-
         [field: HideInInspector]
         [field: SerializeField]
         public List<LoaderListViewElementData> Elements { get; set; } = new();
-
-        public SceneData MainMenuScene
-        {
-            get => mainMenuScene;
-            set
-            {
-                mainMenuScene = value;
-                LoaderSceneDataHelper.SaveChange();
-            }
-        }
-
-        public SceneData PersistentScene
-        {
-            get => persistentScene;
-            set
-            {
-                persistentScene = value;
-                LoaderSceneDataHelper.SaveChange();
-            }
-        }
-
-        public SceneData LoadingScene
-        {
-            get => loadingScene;
-            set
-            {
-                loadingScene = value;
-                LoaderSceneDataHelper.SaveChange();
-            }
-        }
 
         public void AddElement(SceneData sceneData)
         {
@@ -54,7 +20,7 @@ namespace Ludwell.Scene.Editor
                 MainScene = sceneData
             });
 
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
@@ -67,7 +33,7 @@ namespace Ludwell.Scene.Editor
                 Elements.Remove(element);
             }
 
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
@@ -80,7 +46,7 @@ namespace Ludwell.Scene.Editor
                 element.Name = newName;
             }
 
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }
@@ -98,7 +64,7 @@ namespace Ludwell.Scene.Editor
             {
                 if (isOpen == value) return;
                 isOpen = value;
-                LoaderSceneDataHelper.SaveChangeDelayed();
+                DataFetcher.SaveEveryScriptableDelayed();
             }
         }
 
@@ -108,7 +74,7 @@ namespace Ludwell.Scene.Editor
             set
             {
                 mainScene = value;
-                LoaderSceneDataHelper.SaveChangeDelayed();
+                DataFetcher.SaveEveryScriptableDelayed();
             }
         }
 

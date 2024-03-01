@@ -84,7 +84,7 @@ namespace Ludwell.Scene.Editor
         
         private void InitializeDelayedSaveEvent()
         {
-            _tagTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
+            _tagTextField.RegisterValueChangedCallback(_ => DataFetcher.SaveEveryScriptableDelayed());
         }
 
         private void OnKeyDown(KeyDownEvent evt)

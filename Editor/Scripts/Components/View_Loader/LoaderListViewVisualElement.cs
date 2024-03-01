@@ -130,7 +130,7 @@ namespace Ludwell.Scene
                 if (evt.currentTarget != loadButton) return;
                 SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
 
-                var persistentScene = LoaderSceneDataHelper.GetLoaderSceneData().PersistentScene;
+                var persistentScene = DataFetcher.GetCoreScenes().PersistentScene;
                 if (persistentScene)
                 {
                     SceneDataManagerEditorApplication.OpenSceneAdditive(_mainSceneField.value as SceneData);

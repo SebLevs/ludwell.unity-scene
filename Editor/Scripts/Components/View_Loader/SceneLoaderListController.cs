@@ -24,7 +24,6 @@ namespace Ludwell.Scene
             Path.Combine("Uss", nameof(LoaderController), nameof(SceneLoaderListController));
 
         private const string ListViewName = "scenes__list";
-        private static readonly string LoaderSceneDataPath = Path.Combine("Scriptables", nameof(LoaderSceneData));
 
         private const string ButtonCloseAll = "button__close-all";
         private const string ButtonCloseAllClicked = "button__close-all-clicked";
@@ -34,7 +33,7 @@ namespace Ludwell.Scene
 
         private const string TagIconName = "icon_tag";
 
-        private readonly LoaderSceneData _loaderSceneData;
+        private readonly QuickLoadElements _quickLoadElements;
         private ListView _listView;
         private ListViewInitializer<LoaderListViewVisualElement, LoaderListViewElementData> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
@@ -44,7 +43,7 @@ namespace Ludwell.Scene
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
-            _loaderSceneData = Resources.Load<LoaderSceneData>(LoaderSceneDataPath);
+            _quickLoadElements = DataFetcher.GetQuickLoadElements();
             InitializeButtonCloseAll();
             InitializeLoaderListView();
             InitializeSearchField();
@@ -81,9 +80,9 @@ namespace Ludwell.Scene
 
         private void CloseAll()
         {
-            if (_loaderSceneData == null || _loaderSceneData.Elements == null) return;
+            if (_quickLoadElements == null || _quickLoadElements.Elements == null) return;
 
-            foreach (var element in _loaderSceneData.Elements)
+            foreach (var element in _quickLoadElements.Elements)
             {
                 element.IsOpen = false;
             }
@@ -97,16 +96,16 @@ namespace Ludwell.Scene
         private void InitializeLoaderListView()
         {
             _listView = this.Q<ListView>(ListViewName);
-            _listViewInitializer = new(_listView, _loaderSceneData.Elements);
+            _listViewInitializer = new(_listView, _quickLoadElements.Elements);
             _listView.itemsRemoved += indexEnumerable =>
             {
                 foreach (var index in indexEnumerable)
                 {
-                    var element = _loaderSceneData.Elements[index] as TagSubscriberWithTags;
+                    var element = _quickLoadElements.Elements[index] as TagSubscriberWithTags;
                     element.RemoveFromAllTags();
                 }
 
-                LoaderSceneDataHelper.SaveChangeDelayed();
+                DataFetcher.SaveEveryScriptableDelayed();
             };
         }
 
