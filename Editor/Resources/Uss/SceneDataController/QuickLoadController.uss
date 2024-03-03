@@ -146,6 +146,7 @@
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     margin-top: 0;
+    border-top-width: 0;
 }
 
 #remove {
@@ -169,4 +170,5 @@
     -unity-text-align: middle-center;
     -unity-font-style: bold;
     margin-top: 0;
+    border-top-width: 0;
 }
