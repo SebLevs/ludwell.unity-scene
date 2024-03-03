@@ -3,14 +3,14 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class DropdownElement : VisualElement, IBindableListViewElement<DropdownData>
+    public class DropdownVisualElement : VisualElement, IListViewVisualElement<DropdownData>
     {
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(DropdownSearchField), nameof(DropdownElement));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownElement));
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(DropdownSearchField), nameof(DropdownVisualElement));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownVisualElement));
 
         private readonly Button _button;
 
-        public DropdownElement()
+        public DropdownVisualElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -21,7 +21,7 @@ namespace Ludwell.Scene
 
         public void BindElementToCachedData()
         {
-            Cache.Element = this;
+            Cache.VisualElement = this;
         }
 
         public void SetElementFromCachedData()

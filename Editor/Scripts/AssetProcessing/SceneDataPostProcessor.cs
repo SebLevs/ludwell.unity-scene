@@ -66,7 +66,7 @@ namespace Ludwell.Scene.Editor
 
                 var oldAssetName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
                 var newAssetName = Path.GetFileNameWithoutExtension(movedAssets[index]);
-                LoaderSceneDataHelper.GetLoaderSceneData().UpdateElement(oldAssetName, newAssetName);
+                DataFetcher.GetQuickLoadElements().UpdateElement(oldAssetName, newAssetName);
             }
 
             _isHandlingMove = false;
@@ -108,13 +108,13 @@ namespace Ludwell.Scene.Editor
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
             if (sceneData)
             {
-                LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
+                DataFetcher.GetQuickLoadElements().AddElement(sceneData);
                 return;
             }
 
             var myAsset = ScriptableObject.CreateInstance<SceneData>();
             AssetDatabase.CreateAsset(myAsset, sceneDataPath);
-            LoaderSceneDataHelper.GetLoaderSceneData().AddElement(myAsset);
+            DataFetcher.GetQuickLoadElements().AddElement(myAsset);
         }
 
         private static void CreateSceneAsset(string sceneDataPath)
@@ -128,7 +128,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.SaveScene(newScene, scenePath);
 
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
-            LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
+            DataFetcher.GetQuickLoadElements().AddElement(sceneData);
         }
     }
 }

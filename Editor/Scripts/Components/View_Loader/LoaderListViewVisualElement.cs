@@ -7,13 +7,13 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class LoaderListViewElement : VisualElement, IBindableListViewElement<LoaderListViewElementData>
+    public class LoaderListViewVisualElement : VisualElement, IListViewVisualElement<LoaderListViewElementData>
     {
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderListViewElement));
+            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderListViewVisualElement));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(LoaderController), nameof(LoaderListViewElement));
+            Path.Combine("Uss", nameof(LoaderController), nameof(LoaderListViewVisualElement));
 
         private static readonly string HeaderContentUxmlPath =
             Path.Combine("Uxml", nameof(LoaderController), "scene-loader-element__header-content");
@@ -27,7 +27,6 @@ namespace Ludwell.Scene
         private const string MainSceneName = "main-scene";
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
-        private const string ReorderableHandleName = "unity-list-view__reorderable-handle";
 
         public const string DefaultHeaderTextValue = "Quick load element";
 
@@ -39,7 +38,7 @@ namespace Ludwell.Scene
 
         public LoaderListViewElementData Cache { get; set; } = new();
 
-        public LoaderListViewElement()
+        public LoaderListViewVisualElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -82,16 +81,9 @@ namespace Ludwell.Scene
 
         public void BindElementToCachedData()
         {
-            CleanupStyle();
             _foldoutElement.RegisterValueChangedCallback(BindFoldoutValue);
             _foldoutTextField.RegisterValueChangedCallback(BindFoldoutTextField);
             _mainSceneField.RegisterValueChangedCallback(BindMainSceneField);
-        }
-
-        private void CleanupStyle()
-        {
-            _reorderableHandle ??= parent.parent.Q<VisualElement>(ReorderableHandleName);
-            _reorderableHandle.style.display = DisplayStyle.None;
         }
 
         private void BindFoldoutValue(ChangeEvent<bool> evt)
@@ -138,7 +130,7 @@ namespace Ludwell.Scene
                 if (evt.currentTarget != loadButton) return;
                 SceneDataManagerEditorApplication.OpenScene(_mainSceneField.value as SceneData);
 
-                var persistentScene = LoaderSceneDataHelper.GetLoaderSceneData().PersistentScene;
+                var persistentScene = DataFetcher.GetCoreScenes().PersistentScene;
                 if (persistentScene)
                 {
                     SceneDataManagerEditorApplication.OpenSceneAdditive(_mainSceneField.value as SceneData);

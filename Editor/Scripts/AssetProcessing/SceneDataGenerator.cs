@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Ludwell.Scene.Editor
 {
     [InitializeOnLoad]
-    public class SceneDataGenerator : MonoBehaviour
+    public static class SceneDataGenerator
     {
         static SceneDataGenerator()
         {
@@ -31,7 +31,7 @@ namespace Ludwell.Scene.Editor
             var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
             if (sceneData)
             {
-                LoaderSceneDataHelper.GetLoaderSceneData().RemoveElement(sceneData);
+                DataFetcher.GetQuickLoadElements().RemoveElement(sceneData);
             }
 
             EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
@@ -40,7 +40,7 @@ namespace Ludwell.Scene.Editor
 
         public static void GenerateSceneData()
         {
-            var settings = Resources.Load<SceneDataManagerSettings>(nameof(SceneDataManagerSettings));
+            var settings = Resources.Load<SceneDataManagerSettings>(Path.Combine("Scriptables", nameof(SceneDataManagerSettings)));
 
             if (!settings.GenerateSceneData) return;
 
@@ -63,7 +63,7 @@ namespace Ludwell.Scene.Editor
                 shouldSave = true;
                 sceneData = ScriptableObject.CreateInstance<SceneData>();
                 AssetDatabase.CreateAsset(sceneData, path);
-                LoaderSceneDataHelper.GetLoaderSceneData().AddElement(sceneData);
+                DataFetcher.GetQuickLoadElements().AddElement(sceneData);
             }
 
             settings.GenerateSceneData = false;
@@ -71,7 +71,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.SaveAssetIfDirty(settings);
 
             if (!shouldSave) return;
-            LoaderSceneDataHelper.SaveChange();
+            DataFetcher.SaveEveryScriptable();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

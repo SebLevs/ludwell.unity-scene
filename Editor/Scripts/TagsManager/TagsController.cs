@@ -58,7 +58,7 @@ namespace Ludwell.Scene
             _tagsContainer.Add(ConstructTagElement(tag));
             Rebuild();
 
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
         }
 
         public void Remove(TagWithSubscribers tagWithSubscribers)
@@ -69,7 +69,7 @@ namespace Ludwell.Scene
             tagWithSubscribers.RemoveSubscriber(_cache);
             HandleUntaggedState();
 
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
         }
 
         public void Rebuild()

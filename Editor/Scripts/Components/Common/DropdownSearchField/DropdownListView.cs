@@ -12,7 +12,7 @@ namespace Ludwell.Scene
 
         private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownListView));
 
-        private ListViewInitializer<DropdownElement, DropdownData> _listViewInitializer;
+        private ListViewInitializer<DropdownVisualElement, DropdownData> _listViewInitializer;
         private readonly List<DropdownData> _data = new();
         
         private float _heightDifference = -1;
@@ -65,9 +65,9 @@ namespace Ludwell.Scene
             Rebuild();
         }
 
-        public List<DropdownElement> GetElements()
+        public List<DropdownVisualElement> GetElements()
         {
-            return this.Query<DropdownElement>().ToList();
+            return this.Query<DropdownVisualElement>().ToList();
         }
 
         public void PlaceUnder(VisualElement target)

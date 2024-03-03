@@ -23,10 +23,10 @@ namespace Ludwell.Scene
 
         private TagContainer _tagContainer;
 
-        private ListViewInitializer<TagsManagerElement, TagWithSubscribers> _listViewInitializer;
+        private ListViewInitializer<TagsManagerVisualElement, TagWithSubscribers> _listViewInitializer;
         private DropdownSearchField _dropdownSearchField;
 
-        private TagsManagerElement _previousTarget;
+        private TagsManagerVisualElement _previousTarget;
 
         public TagsManager()
         {
@@ -67,11 +67,11 @@ namespace Ludwell.Scene
         {
             _tagsController.Remove(tag);
             _tagContainer.Tags.Remove(tag);
-            LoaderSceneDataHelper.SaveChange();
+            DataFetcher.SaveEveryScriptable();
             _listViewInitializer.ForceRebuild();
         }
 
-        public void SetPreviousTarget(TagsManagerElement target)
+        public void SetPreviousTarget(TagsManagerVisualElement target)
         {
             _previousTarget = target;
         }
@@ -90,7 +90,7 @@ namespace Ludwell.Scene
         public void SortTags()
         {
             _tagContainer.Tags.Sort();
-            LoaderSceneDataHelper.SaveChangeDelayed();
+            DataFetcher.SaveEveryScriptableDelayed();
             _listViewInitializer.ForceRebuild();
         }
 
@@ -123,7 +123,7 @@ namespace Ludwell.Scene
                     tag.RemoveFromAllSubscribers();
                 }
 
-                LoaderSceneDataHelper.SaveChange();
+                DataFetcher.SaveEveryScriptable();
             };
         }
 
@@ -155,7 +155,7 @@ namespace Ludwell.Scene
         {
             RegisterCallback<MouseUpEvent>(evt =>
             {
-                var tagsManagerElement = (evt.target as VisualElement).GetFirstAncestorOfType<TagsManagerElement>();
+                var tagsManagerElement = (evt.target as VisualElement).GetFirstAncestorOfType<TagsManagerVisualElement>();
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
                 {
                     SortTags();

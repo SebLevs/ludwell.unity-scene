@@ -54,6 +54,10 @@
     padding-bottom: 0;
 }
 
+#main-scene > VisualElement > ObjectFieldSelector {
+    display: none;
+}
+
 #unity-list-view__reorderable-handle {
     -unity-text-align: middle-center;
     margin-left: 0;

@@ -3,14 +3,14 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerElement : VisualElement, IBindableListViewElement<TagWithSubscribers>
+    public class TagsManagerVisualElement : VisualElement, IListViewVisualElement<TagWithSubscribers>
     {
-        public new class UxmlFactory : UxmlFactory<TagsManagerElement, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TagsManagerVisualElement, UxmlTraits>
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManagerElement);
-        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManagerElement);
+        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManagerVisualElement);
+        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManagerVisualElement);
 
         private const string AddButtonName = "button__add";
         private const string RemoveButtonName = "button__remove";
@@ -26,7 +26,7 @@ namespace Ludwell.Scene.Editor
 
         public TagWithSubscribers Cache { get; set; }
 
-        public TagsManagerElement()
+        public TagsManagerVisualElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -84,7 +84,7 @@ namespace Ludwell.Scene.Editor
         
         private void InitializeDelayedSaveEvent()
         {
-            _tagTextField.RegisterValueChangedCallback(_ => LoaderSceneDataHelper.SaveChangeDelayed());
+            _tagTextField.RegisterValueChangedCallback(_ => DataFetcher.SaveEveryScriptableDelayed());
         }
 
         private void OnKeyDown(KeyDownEvent evt)
