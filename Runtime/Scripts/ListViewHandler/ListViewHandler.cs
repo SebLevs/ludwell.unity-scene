@@ -9,13 +9,13 @@ namespace Ludwell.Scene
     /// <typeparam name="TData">
     /// The data type needed for the IList element bound to the ListView.
     /// </typeparam>
-    public class ListViewInitializer<TVisualElement, TData>
+    public class ListViewHandler<TVisualElement, TData>
         where TVisualElement : VisualElement, IListViewVisualElement<TData>, new()
         where TData : new()
     {
         public ListView ListView { get; }
 
-        public ListViewInitializer(ListView listView, List<TData> data)
+        public ListViewHandler(ListView listView, List<TData> data)
         {
             ListView = listView;
             ListView.itemsSource = data;

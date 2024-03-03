@@ -80,7 +80,7 @@ namespace Ludwell.Scene.Editor
 
         public LoaderListViewElementData()
         {
-            Name = LoaderListViewVisualElement.DefaultHeaderTextValue;
+            Name = QuickLoadElement.DefaultHeaderTextValue;
         }
     }
 }

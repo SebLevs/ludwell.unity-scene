@@ -1,29 +1,28 @@
 using System.IO;
 using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class LoaderController : VisualElement
+    public class SceneDataController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<SceneDataController, UxmlTraits>
         {
         }
 
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderController));
+            Path.Combine("Uxml", nameof(SceneDataController), nameof(SceneDataController));
 
         private static readonly string
-            UssPath = Path.Combine("Uss", nameof(LoaderController), nameof(LoaderController));
+            UssPath = Path.Combine("Uss", nameof(SceneDataController), nameof(SceneDataController));
 
         private const string MainMenuButtonsName = "main-menu__buttons";
         private const string MainMenuObjectFieldName = "launcher__main-menu";
         private const string PersistentObjectFieldName = "core-scene__persistent";
         private const string LoadingObjectFieldName = "core-scene__loading";
 
-        public LoaderController()
+        public SceneDataController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -36,14 +35,15 @@ namespace Ludwell.Scene
             var coreScenes = DataFetcher.GetCoreScenes();
 
             var mainMenuObjectField = this.Q(MainMenuObjectFieldName).Q<ObjectField>();
-            if (coreScenes.MainMenuScene != null)
+            if (coreScenes.LaunchScene != null)
             {
-                mainMenuObjectField.value = coreScenes.MainMenuScene;
+                mainMenuObjectField.value = coreScenes.LaunchScene;
             }
 
             mainMenuObjectField.RegisterValueChangedCallback(evt =>
             {
-                coreScenes.MainMenuScene = evt.newValue as SceneData;
+                coreScenes.LaunchScene = evt.newValue as SceneData;
+                DataFetcher.SaveEveryScriptable();
             });
 
             var persistentSceneObjectField = this.Q(PersistentObjectFieldName).Q<ObjectField>();
@@ -55,6 +55,7 @@ namespace Ludwell.Scene
             persistentSceneObjectField.RegisterValueChangedCallback(evt =>
             {
                 coreScenes.PersistentScene = evt.newValue as SceneData;
+                DataFetcher.SaveEveryScriptable();
             });
 
             var loadingObjectField = this.Q(LoadingObjectFieldName).Q<ObjectField>();
@@ -66,6 +67,7 @@ namespace Ludwell.Scene
             loadingObjectField.RegisterValueChangedCallback(evt =>
             {
                 coreScenes.LoadingScene = evt.newValue as SceneData;
+                DataFetcher.SaveEveryScriptable();
             });
         }
 

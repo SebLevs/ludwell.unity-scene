@@ -14,6 +14,6 @@
                 <AttributeOverrides element-name="scene-selection" label="Loading scene" />
             </ui:Instance>
         </FoldoutHeader>
-        <Ludwell.Scene.SceneLoaderListController name="scene-loader-list-controller" style="flex-grow: 1;" />
+        <Ludwell.Scene.QuickLoadController name="scene-loader-list-controller" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

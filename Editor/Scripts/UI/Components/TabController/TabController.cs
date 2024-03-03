@@ -53,7 +53,7 @@ namespace Ludwell.Scene
 
         private VisualElement BindTabToLoaderView(VisualElement queryFrom)
         {
-            var view = queryFrom.Q<LoaderController>();
+            var view = queryFrom.Q<SceneDataController>();
             return view;
         }
 

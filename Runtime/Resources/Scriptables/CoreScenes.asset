@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 3728ab5556a7eb24d8c81e38305c00f9, type: 3}
   m_Name: CoreScenes
   m_EditorClassIdentifier: Editor:Ludwell.Scene.Editor:CoreScenes
-  mainMenuScene: {fileID: 0}
-  persistentScene: {fileID: 0}
-  loadingScene: {fileID: 0}
+  LaunchScene: {fileID: 0}
+  PersistentScene: {fileID: 0}
+  LoadingScene: {fileID: 0}

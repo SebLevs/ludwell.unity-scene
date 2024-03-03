@@ -9,19 +9,19 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneLoaderListController : VisualElement
+    public class QuickLoadController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<QuickLoadController, UxmlTraits>
         {
         }
 
         public const string TagSearchName = "Tag";
 
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(LoaderController), nameof(SceneLoaderListController));
+            Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadController));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(LoaderController), nameof(SceneLoaderListController));
+            Path.Combine("Uss", nameof(SceneDataController), nameof(QuickLoadController));
 
         private const string ListViewName = "scenes__list";
 
@@ -35,10 +35,10 @@ namespace Ludwell.Scene
 
         private readonly QuickLoadElements _quickLoadElements;
         private ListView _listView;
-        private ListViewInitializer<LoaderListViewVisualElement, LoaderListViewElementData> _listViewInitializer;
+        private ListViewHandler<QuickLoadElement, LoaderListViewElementData> _listViewHandler;
         private DropdownSearchField _dropdownSearchField;
 
-        public SceneLoaderListController()
+        public QuickLoadController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -52,7 +52,7 @@ namespace Ludwell.Scene
             Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
 
-        ~SceneLoaderListController()
+        ~QuickLoadController()
         {
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
             
@@ -87,7 +87,7 @@ namespace Ludwell.Scene
                 element.IsOpen = false;
             }
 
-            foreach (var item in _listView.Query<LoaderListViewVisualElement>().ToList())
+            foreach (var item in _listView.Query<QuickLoadElement>().ToList())
             {
                 item.SetFoldoutValue(false);
             }
@@ -96,7 +96,7 @@ namespace Ludwell.Scene
         private void InitializeLoaderListView()
         {
             _listView = this.Q<ListView>(ListViewName);
-            _listViewInitializer = new(_listView, _quickLoadElements.Elements);
+            _listViewHandler = new(_listView, _quickLoadElements.Elements);
             _listView.itemsRemoved += indexEnumerable =>
             {
                 foreach (var index in indexEnumerable)
@@ -152,29 +152,29 @@ namespace Ludwell.Scene
 
         private void DeleteSceneAtPath()
         {
-            if (_listViewInitializer.ListView.itemsSource.Count == 0) return;
+            if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
             SceneData sceneData;
             
-            var selectedIndex = _listViewInitializer.ListView.selectedIndex;
+            var selectedIndex = _listViewHandler.ListView.selectedIndex;
             LoaderListViewElementData elementToDelete;
             if (selectedIndex == -1)
             {
-                elementToDelete = _listViewInitializer.ListView.itemsSource[^1] as LoaderListViewElementData;
+                elementToDelete = _listViewHandler.ListView.itemsSource[^1] as LoaderListViewElementData;
                 sceneData = elementToDelete.MainScene;
-                _listViewInitializer.ListView.itemsSource.Remove(sceneData);
+                _listViewHandler.ListView.itemsSource.Remove(sceneData);
                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
                 return;
             }
             
-            elementToDelete = _listViewInitializer.ListView.itemsSource[selectedIndex] as LoaderListViewElementData;
+            elementToDelete = _listViewHandler.ListView.itemsSource[selectedIndex] as LoaderListViewElementData;
             sceneData = elementToDelete.MainScene;
             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
         }
 
         private void ForceRebuildListView()
         {
-            _listViewInitializer.ForceRebuild();
+            _listViewHandler.ForceRebuild();
             _dropdownSearchField.RebuildActiveListing();
         }
     }
