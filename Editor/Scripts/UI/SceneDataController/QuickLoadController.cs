@@ -9,19 +9,19 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneLoaderListController : VisualElement
+    public class QuickLoadController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<SceneLoaderListController, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<QuickLoadController, UxmlTraits>
         {
         }
 
         public const string TagSearchName = "Tag";
 
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(LoaderController), nameof(SceneLoaderListController));
+            Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadController));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(LoaderController), nameof(SceneLoaderListController));
+            Path.Combine("Uss", nameof(SceneDataController), nameof(QuickLoadController));
 
         private const string ListViewName = "scenes__list";
 
@@ -35,10 +35,10 @@ namespace Ludwell.Scene
 
         private readonly QuickLoadElements _quickLoadElements;
         private ListView _listView;
-        private ListViewHandler<LoaderListViewVisualElement, LoaderListViewElementData> _listViewHandler;
+        private ListViewHandler<QuickLoadElement, LoaderListViewElementData> _listViewHandler;
         private DropdownSearchField _dropdownSearchField;
 
-        public SceneLoaderListController()
+        public QuickLoadController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -52,7 +52,7 @@ namespace Ludwell.Scene
             Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
 
-        ~SceneLoaderListController()
+        ~QuickLoadController()
         {
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
             
@@ -87,7 +87,7 @@ namespace Ludwell.Scene
                 element.IsOpen = false;
             }
 
-            foreach (var item in _listView.Query<LoaderListViewVisualElement>().ToList())
+            foreach (var item in _listView.Query<QuickLoadElement>().ToList())
             {
                 item.SetFoldoutValue(false);
             }

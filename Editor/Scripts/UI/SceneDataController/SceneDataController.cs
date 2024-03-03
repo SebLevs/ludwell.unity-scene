@@ -5,24 +5,24 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class LoaderController : VisualElement
+    public class SceneDataController : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<LoaderController, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<SceneDataController, UxmlTraits>
         {
         }
 
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(LoaderController), nameof(LoaderController));
+            Path.Combine("Uxml", nameof(SceneDataController), nameof(SceneDataController));
 
         private static readonly string
-            UssPath = Path.Combine("Uss", nameof(LoaderController), nameof(LoaderController));
+            UssPath = Path.Combine("Uss", nameof(SceneDataController), nameof(SceneDataController));
 
         private const string MainMenuButtonsName = "main-menu__buttons";
         private const string MainMenuObjectFieldName = "launcher__main-menu";
         private const string PersistentObjectFieldName = "core-scene__persistent";
         private const string LoadingObjectFieldName = "core-scene__loading";
 
-        public LoaderController()
+        public SceneDataController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
