@@ -29,6 +29,8 @@ namespace Ludwell.Scene
         private const string SearchFieldName = "toolbar-search-field";
         private const string DefaultSearchIcon = "icon_search";
 
+        private const string CyclingIconName = "icon__behaviour-cycling";
+
         private const float BorderRadius = 3;
 
         private ToolbarSearchField _searchField;
@@ -40,9 +42,9 @@ namespace Ludwell.Scene
         private int _listingStrategyIndex;
         private readonly List<ListingStrategy> _listingStrategies = new();
 
-        private VisualElement _icon;
+        private VisualElement _searchIcon;
 
-        public static string DefaultSearchName => "Default";
+        public static string DefaultSearchName => "name";
 
         private bool IsListing => !string.IsNullOrEmpty(_searchField.value);
 
@@ -128,7 +130,8 @@ namespace Ludwell.Scene
         {
             if (_listingStrategies.Count == 1)
             {
-                _icon.AddToClassList("hover-behaviour");
+                _searchIcon.AddToClassList("hover-behaviour");
+                this.Q<VisualElement>(CyclingIconName).style.display = DisplayStyle.Flex;
             }
 
             _listingStrategies.Add(listingStrategy);
@@ -156,7 +159,7 @@ namespace Ludwell.Scene
                 if (strategyName != _listingStrategies[index].Name) continue;
 
                 _listingStrategyIndex = index;
-                _icon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
+                _searchIcon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
                 ExecuteCurrentListingStrategy(listFromValue);
                 _searchField.value = listFromValue;
             }
@@ -183,7 +186,7 @@ namespace Ludwell.Scene
 
         private void SetReferences()
         {
-            _icon = this.Q(UiToolkitNames.UnitySearch);
+            _searchIcon = this.Q(UiToolkitNames.UnitySearch);
         }
 
         private void InitializeSearchField()
@@ -231,6 +234,7 @@ namespace Ludwell.Scene
             var icon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
             var searchFieldListing = new ListingStrategy(DefaultSearchName, icon, DefaultSearchBehaviour);
             _listingStrategies.Add(searchFieldListing);
+            _searchIcon.tooltip = "Search by " + DefaultSearchName;
         }
 
         private List<IListable> DefaultSearchBehaviour(string searchFieldValue, IList defaultList)
@@ -263,7 +267,9 @@ namespace Ludwell.Scene
                 _listingStrategyIndex = 0;
             }
 
-            _icon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
+            var currentStrategy = GetCurrentListingStrategy();
+            _searchIcon.style.backgroundImage = new StyleBackground(currentStrategy.Icon);
+            _searchIcon.tooltip = "Search by " + currentStrategy.Name;
         }
 
         private void InitializeFocusAndBlur()

@@ -1,3 +1,15 @@
+#icon__behaviour-cycling {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: resource('Sprites/icon_cycling');
+    width: 8px;
+    height: 8px;
+    align-self: center;
+    margin-left: 2px;
+    margin-right: 2px;
+    position: absolute;
+    left: -12px;
+}
+
 #search-field {
     background-color: rgba(0, 0, 0, 0);
     align-self: center;

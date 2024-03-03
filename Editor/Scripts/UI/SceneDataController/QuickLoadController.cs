@@ -15,7 +15,7 @@ namespace Ludwell.Scene
         {
         }
 
-        public const string TagSearchName = "Tag";
+        public const string TagSearchName = "tag";
 
         private static readonly string UxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadController));
