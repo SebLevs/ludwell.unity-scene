@@ -7,6 +7,10 @@
     border-top-color: rgb(80, 80, 80);
     border-bottom-color: rgb(80, 80, 80);
     height: 20px;
+    background-color: rgb(37, 37, 37);
+    -unity-text-align: middle-center;
+    font-size: 14px;
+    color: rgb(196, 196, 196);
 }
 
 #header__actions {
@@ -87,6 +91,11 @@
     position: absolute;
     height: 15px;
     -unity-background-image-tint-color: rgb(70, 96, 124);
+}
+
+#DropdownSearchField {
+    align-self: center;
+    width: 40%;
 }
 
 #scenes__list > ScrollView > VisualElement > VisualElement > Label {
