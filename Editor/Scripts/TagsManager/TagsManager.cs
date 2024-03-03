@@ -37,7 +37,7 @@ namespace Ludwell.Scene
 
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
-            InitializeReturnInput();
+            InitializeListViewKeyUpEVents();
             // todo: work around for Focus/Blur overlap issue with ListView Rebuild. Sort logic should be on TME blur.
             InitializeTagSorting();
 
@@ -136,12 +136,16 @@ namespace Ludwell.Scene
             });
         }
 
-        private void InitializeReturnInput()
+        private void InitializeListViewKeyUpEVents()
         {
-            RegisterCallback<AttachToPanelEvent>(_ => this.Root().RegisterCallback<KeyDownEvent>(OnKeyDown));
+            RegisterCallback<AttachToPanelEvent>(_ => this.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn));
+
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
 
-        private void OnKeyDown(KeyDownEvent evt)
+        private void OnKeyUpReturn(KeyUpEvent evt)
         {
             if (style.display == DisplayStyle.None) return;
 
@@ -149,6 +153,39 @@ namespace Ludwell.Scene
             {
                 Return();
             }
+        }
+
+        private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
+
+            var data = _listViewHandler.GetSelectedElementData();
+            _tagsController.Remove(data);
+            data.RemoveFromAllSubscribers();
+            _listViewHandler.RemoveSelectedElement();
+        }
+
+        private void OnKeyUpAddSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
+
+            var data = _listViewHandler.GetSelectedElementData();
+            if (_tagsController.Contains(data)) return;
+
+            AddTagToController(_listViewHandler.GetSelectedElementData());
+        }
+
+        private void OnKeyUpRemoveSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
+            
+            var data = _listViewHandler.GetSelectedElementData();
+            if (!_tagsController.Contains(data)) return;
+
+            _tagsController.Remove(data);
         }
 
         private void InitializeTagSorting()
