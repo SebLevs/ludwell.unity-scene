@@ -1,16 +1,17 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerVisualElement : VisualElement, IListViewVisualElement<TagWithSubscribers>
+    public class TagsManagerElement : VisualElement, IListViewVisualElement<TagWithSubscribers>
     {
-        public new class UxmlFactory : UxmlFactory<TagsManagerVisualElement, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TagsManagerElement, UxmlTraits>
         {
         }
 
-        private const string UxmlPath = "Uxml/" + nameof(TagsManager) + "/" + nameof(TagsManagerVisualElement);
-        private const string UssPath = "Uss/" + nameof(TagsManager) + "/" + nameof(TagsManagerVisualElement);
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagsManagerElement));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagsManagerElement));
 
         private const string AddButtonName = "button__add";
         private const string RemoveButtonName = "button__remove";
@@ -26,7 +27,7 @@ namespace Ludwell.Scene.Editor
 
         public TagWithSubscribers Cache { get; set; }
 
-        public TagsManagerVisualElement()
+        public TagsManagerElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
