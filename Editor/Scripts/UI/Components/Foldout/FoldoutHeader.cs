@@ -64,7 +64,7 @@ public class FoldoutHeader : Foldout
         _headerElement.style.marginLeft = 0;
         _headerElement.style.marginRight = 0;
 
-        _headerElement.style.flexBasis = 22.5f;
+        _headerElement.style.height = 20f;
     }
 
     private void InitUnityCheckMark()

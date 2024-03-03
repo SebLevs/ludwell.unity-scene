@@ -6,7 +6,7 @@
     border-right-color: rgb(80, 80, 80);
     border-top-color: rgb(80, 80, 80);
     border-bottom-color: rgb(80, 80, 80);
-    height: 22.5px;
+    height: 20px;
 }
 
 #header__actions {
@@ -16,7 +16,7 @@
     border-bottom-width: 1px;
     border-bottom-color: rgb(35, 35, 35);
     justify-content: center;
-    height: 22.5px;
+    height: 20px;
     flex-shrink: 0;
 }
 
