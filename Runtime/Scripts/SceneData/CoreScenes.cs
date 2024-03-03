@@ -9,5 +9,4 @@ namespace Ludwell.Scene
         [HideInInspector] public SceneData PersistentScene;
         [HideInInspector] public SceneData LoadingScene;
     }
-
 }
