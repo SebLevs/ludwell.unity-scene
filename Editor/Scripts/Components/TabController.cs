@@ -7,8 +7,8 @@ namespace Ludwell.Scene
     {
         public new class UxmlFactory : UxmlFactory<TabController, UxmlTraits> { }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(SceneDataEditorWindow), nameof(TabController));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(SceneDataEditorWindow), nameof(TabController));
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TabController), nameof(TabController));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TabController), nameof(TabController));
 
         private VisualElement _previousView;
         private VisualElement _currentView;

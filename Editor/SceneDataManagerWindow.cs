@@ -4,14 +4,14 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneDataEditorWindow : EditorWindow
+    public class SceneDataManagerWindow : EditorWindow
     {
         [SerializeField] private VisualTreeAsset visualTreeAsset;
 
-        [MenuItem("Tool/Scene Data Manager")]
+        [MenuItem("Tools/Scene Data Manager")]
         public static void OpenWindow()
         {
-            GetWindow<SceneDataEditorWindow>(title: "Scene Data Manager");
+            GetWindow<SceneDataManagerWindow>(title: "Scene Data Manager");
         }
 
         public void CreateGUI()
