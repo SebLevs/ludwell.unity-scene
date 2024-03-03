@@ -1,3 +1,12 @@
+#core-scene__container {
+    flex-grow: 1;
+    border-bottom-width: 1px;
+    border-left-color: rgb(40, 40, 40);
+    border-right-color: rgb(40, 40, 40);
+    border-top-color: rgb(40, 40, 40);
+    border-bottom-color: rgb(40, 40, 40);
+}
+
 #core-scene__container > #scene-selection > Label {
     margin-left: 0;
     margin-right: 0;

@@ -46,6 +46,9 @@ namespace Ludwell.Scene
             _quickLoadElements = DataFetcher.GetQuickLoadElements();
             InitializeButtonCloseAll();
             InitializeLoaderListView();
+
+            InitializeListViewKeyUpEvents();
+
             InitializeSearchField();
             InitializeAddRemoveButtons();
 
@@ -55,10 +58,11 @@ namespace Ludwell.Scene
         ~QuickLoadController()
         {
             Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
-            
+
             this.Q<Button>(ButtonAddName).clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
             this.Q<Button>(ButtonRemoveName).clicked -= DeleteSceneAtPath;
         }
+
 
         private void InitializeButtonCloseAll()
         {
@@ -109,6 +113,20 @@ namespace Ludwell.Scene
             };
         }
 
+        private void InitializeListViewKeyUpEvents()
+        {
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+        }
+
+        private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
+
+            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(_listViewHandler.GetSelectedElementData().MainScene));
+        }
+
         private void InitializeSearchField()
         {
             _dropdownSearchField = this.Q<DropdownSearchField>();
@@ -155,7 +173,7 @@ namespace Ludwell.Scene
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
             SceneData sceneData;
-            
+
             var selectedIndex = _listViewHandler.ListView.selectedIndex;
             LoaderListViewElementData elementToDelete;
             if (selectedIndex == -1)
@@ -166,7 +184,7 @@ namespace Ludwell.Scene
                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
                 return;
             }
-            
+
             elementToDelete = _listViewHandler.ListView.itemsSource[selectedIndex] as LoaderListViewElementData;
             sceneData = elementToDelete.MainScene;
             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));

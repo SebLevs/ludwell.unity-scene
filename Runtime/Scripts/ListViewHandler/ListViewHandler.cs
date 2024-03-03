@@ -34,6 +34,23 @@ namespace Ludwell.Scene
             ListView.Rebuild();
         }
 
+        public TData GetSelectedElementData()
+        {
+            return (TData)ListView.selectedItem;
+        }
+
+        public void RemoveSelectedElement()
+        {
+            if (ListView.selectedItem == null) return;
+            RemoveElement((TData)ListView.selectedItem);
+        }
+
+        public void RemoveElement(TData element)
+        {
+            ListView.itemsSource.Remove(element);
+            ForceRebuild();
+        }
+
         private TVisualElement CreateElement()
         {
             return new TVisualElement();

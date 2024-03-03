@@ -1,8 +1,28 @@
+#TagsManager {
+    flex-grow: 1;
+}
+
 .tag-manager__header {
     align-self: stretch;
     -unity-text-align: middle-center;
     padding-left: 0;
     padding-right: 0;
+}
+
+#reference-name {
+    -unity-text-align: middle-center;
+    font-size: 12px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    align-self: stretch;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 0;
+    text-overflow: ellipsis;
+    -unity-font-style: bold;
 }
 
 #main-container {
@@ -40,7 +60,7 @@
     align-self: center;
 }
 
-#DropdownSearchField > #search-field > #toolbar-search-field {
+#DropdownSearchField > #search-field > VisualElement > #toolbar-search-field {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top-width: 0;
@@ -138,4 +158,8 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     width: 32px;
+}
+
+#core-scene__container > #scene-selection > VisualElement > ObjectFieldSelector {
+    display: none;
 }

@@ -82,7 +82,7 @@ namespace Ludwell.Scene.Editor
             _tagTextField.RegisterCallback<BlurEvent>(_ => HandleInvalidTag());
             RegisterCallback<AttachToPanelEvent>(_ => _tagTextField.RegisterCallback<KeyDownEvent>(OnKeyDown));
         }
-        
+
         private void InitializeDelayedSaveEvent()
         {
             _tagTextField.RegisterValueChangedCallback(_ => DataFetcher.SaveEveryScriptableDelayed());

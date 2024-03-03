@@ -50,6 +50,11 @@ namespace Ludwell.Scene
             return this;
         }
 
+        public bool Contains(Tag tag)
+        {
+            return _cache.Tags.Contains(tag);
+        }
+
         public void Add(Tag tag)
         {
             if (_cache.Tags.Contains(tag)) return;

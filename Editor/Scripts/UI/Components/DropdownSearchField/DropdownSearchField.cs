@@ -234,6 +234,7 @@ namespace Ludwell.Scene
             var icon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
             var searchFieldListing = new ListingStrategy(DefaultSearchName, icon, DefaultSearchBehaviour);
             _listingStrategies.Add(searchFieldListing);
+            this.Q<VisualElement>(CyclingIconName).style.display = DisplayStyle.None;
             _searchIcon.tooltip = "Search by " + DefaultSearchName;
         }
 

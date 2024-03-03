@@ -18,6 +18,9 @@ namespace Ludwell.Scene
 
         private static readonly string TagContainerPath = Path.Combine("Scriptables", nameof(TagContainer));
 
+        private const string ReferenceName = "reference-name";
+        private Label _referenceName;
+
         private TagsController _tagsController;
         private TagSubscriber _tagSubscriber;
 
@@ -37,7 +40,7 @@ namespace Ludwell.Scene
 
             InitializeListViewBehaviours();
             InitializeDropdownSearchField();
-            InitializeReturnInput();
+            InitializeListViewKeyUpEVents();
             // todo: work around for Focus/Blur overlap issue with ListView Rebuild. Sort logic should be on TME blur.
             InitializeTagSorting();
 
@@ -47,6 +50,7 @@ namespace Ludwell.Scene
         public void Show(TagSubscriberWithTags tagSubscriber)
         {
             _tagSubscriber = tagSubscriber;
+            _referenceName.text = _tagSubscriber.Name;
             this.Root().Q<TabController>().SwitchView(this);
             BuildTagsController(tagSubscriber);
         }
@@ -104,6 +108,8 @@ namespace Ludwell.Scene
 
         private void SetReferences()
         {
+            _referenceName = this.Q<Label>(ReferenceName);
+
             _tagsController = this.Q<TagsController>();
             _tagContainer = Resources.Load<TagContainer>(TagContainerPath);
             _listViewHandler = new(this.Q<ListView>(), _tagContainer.Tags);
@@ -136,12 +142,16 @@ namespace Ludwell.Scene
             });
         }
 
-        private void InitializeReturnInput()
+        private void InitializeListViewKeyUpEVents()
         {
-            RegisterCallback<AttachToPanelEvent>(_ => this.Root().RegisterCallback<KeyDownEvent>(OnKeyDown));
+            RegisterCallback<AttachToPanelEvent>(_ => this.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn));
+
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            _listViewHandler.ListView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
 
-        private void OnKeyDown(KeyDownEvent evt)
+        private void OnKeyUpReturn(KeyUpEvent evt)
         {
             if (style.display == DisplayStyle.None) return;
 
@@ -149,6 +159,39 @@ namespace Ludwell.Scene
             {
                 Return();
             }
+        }
+
+        private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
+
+            var data = _listViewHandler.GetSelectedElementData();
+            _tagsController.Remove(data);
+            data.RemoveFromAllSubscribers();
+            _listViewHandler.RemoveSelectedElement();
+        }
+
+        private void OnKeyUpAddSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
+
+            var data = _listViewHandler.GetSelectedElementData();
+            if (_tagsController.Contains(data)) return;
+
+            AddTagToController(_listViewHandler.GetSelectedElementData());
+        }
+
+        private void OnKeyUpRemoveSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listViewHandler.ListView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
+
+            var data = _listViewHandler.GetSelectedElementData();
+            if (!_tagsController.Contains(data)) return;
+
+            _tagsController.Remove(data);
         }
 
         private void InitializeTagSorting()
