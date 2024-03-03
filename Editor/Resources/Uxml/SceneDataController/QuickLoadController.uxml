@@ -1,19 +1,19 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uss/LoaderController/SceneLoaderListController.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#SceneLoaderListController" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uss/SceneDataController/QuickLoadController.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#QuickLoadController" />
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement name="header-content">
             <ui:VisualElement name="header__load">
-                <ui:Label tabindex="-1" text="Quick Load" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; color: rgb(196, 196, 196); flex-direction: row; font-size: 14px; flex-grow: 1; background-color: rgb(37, 37, 37);" />
+                <ui:Label tabindex="-1" text="Quick Load" display-tooltip-when-elided="true" />
             </ui:VisualElement>
             <ui:VisualElement name="header__actions">
-                <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" class="button__close-all" style="background-color: rgba(56, 56, 56, 0);" />
-                <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" style="align-self: center; width: 40%;" />
+                <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" class="button__close-all" />
+                <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" />
         <ui:VisualElement name="buttons">
-            <ui:Button text="+" display-tooltip-when-elided="true" name="add" style="border-top-width: 0;" />
-            <ui:Button text="-" display-tooltip-when-elided="true" name="remove" style="border-top-width: 0;" />
+            <ui:Button text="+" display-tooltip-when-elided="true" name="add" />
+            <ui:Button text="-" display-tooltip-when-elided="true" name="remove" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
