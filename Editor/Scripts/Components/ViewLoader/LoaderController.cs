@@ -36,14 +36,15 @@ namespace Ludwell.Scene
             var coreScenes = DataFetcher.GetCoreScenes();
 
             var mainMenuObjectField = this.Q(MainMenuObjectFieldName).Q<ObjectField>();
-            if (coreScenes.MainMenuScene != null)
+            if (coreScenes.LaunchScene != null)
             {
-                mainMenuObjectField.value = coreScenes.MainMenuScene;
+                mainMenuObjectField.value = coreScenes.LaunchScene;
             }
 
             mainMenuObjectField.RegisterValueChangedCallback(evt =>
             {
-                coreScenes.MainMenuScene = evt.newValue as SceneData;
+                coreScenes.LaunchScene = evt.newValue as SceneData;
+                DataFetcher.SaveEveryScriptable();
             });
 
             var persistentSceneObjectField = this.Q(PersistentObjectFieldName).Q<ObjectField>();
@@ -55,6 +56,7 @@ namespace Ludwell.Scene
             persistentSceneObjectField.RegisterValueChangedCallback(evt =>
             {
                 coreScenes.PersistentScene = evt.newValue as SceneData;
+                DataFetcher.SaveEveryScriptable();
             });
 
             var loadingObjectField = this.Q(LoadingObjectFieldName).Q<ObjectField>();
@@ -66,6 +68,7 @@ namespace Ludwell.Scene
             loadingObjectField.RegisterValueChangedCallback(evt =>
             {
                 coreScenes.LoadingScene = evt.newValue as SceneData;
+                DataFetcher.SaveEveryScriptable();
             });
         }
 
