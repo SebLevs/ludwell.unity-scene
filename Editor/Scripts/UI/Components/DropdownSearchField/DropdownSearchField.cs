@@ -29,6 +29,8 @@ namespace Ludwell.Scene
         private const string SearchFieldName = "toolbar-search-field";
         private const string DefaultSearchIcon = "icon_search";
 
+        private const string CyclingIconName = "icon__behaviour-cycling";
+
         private const float BorderRadius = 3;
 
         private ToolbarSearchField _searchField;
@@ -129,6 +131,7 @@ namespace Ludwell.Scene
             if (_listingStrategies.Count == 1)
             {
                 _icon.AddToClassList("hover-behaviour");
+                this.Q<VisualElement>(CyclingIconName).style.display = DisplayStyle.Flex;
             }
 
             _listingStrategies.Add(listingStrategy);
