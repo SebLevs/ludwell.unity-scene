@@ -23,7 +23,7 @@ namespace Ludwell.Scene
 
         private TagContainer _tagContainer;
 
-        private ListViewInitializer<TagsManagerElement, TagWithSubscribers> _listViewInitializer;
+        private ListViewHandler<TagsManagerElement, TagWithSubscribers> _listViewHandler;
         private DropdownSearchField _dropdownSearchField;
 
         private TagsManagerElement _previousTarget;
@@ -68,7 +68,7 @@ namespace Ludwell.Scene
             _tagsController.Remove(tag);
             _tagContainer.Tags.Remove(tag);
             DataFetcher.SaveEveryScriptable();
-            _listViewInitializer.ForceRebuild();
+            _listViewHandler.ForceRebuild();
         }
 
         public void SetPreviousTarget(TagsManagerElement target)
@@ -91,7 +91,7 @@ namespace Ludwell.Scene
         {
             _tagContainer.Tags.Sort();
             DataFetcher.SaveEveryScriptableDelayed();
-            _listViewInitializer.ForceRebuild();
+            _listViewHandler.ForceRebuild();
         }
 
         private void BuildTagsController(TagSubscriberWithTags tagSubscriber)
@@ -106,15 +106,15 @@ namespace Ludwell.Scene
         {
             _tagsController = this.Q<TagsController>();
             _tagContainer = Resources.Load<TagContainer>(TagContainerPath);
-            _listViewInitializer = new(this.Q<ListView>(), _tagContainer.Tags);
+            _listViewHandler = new(this.Q<ListView>(), _tagContainer.Tags);
             _dropdownSearchField = this.Q<DropdownSearchField>();
         }
 
         private void InitializeListViewBehaviours()
         {
-            _listViewInitializer.ListView.itemsRemoved += indexEnumerable =>
+            _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
             {
-                var itemsSource = _listViewInitializer.ListView.itemsSource;
+                var itemsSource = _listViewHandler.ListView.itemsSource;
                 var removedIndexes = indexEnumerable.ToList();
                 foreach (var index in removedIndexes)
                 {
@@ -129,10 +129,10 @@ namespace Ludwell.Scene
 
         private void InitializeDropdownSearchField()
         {
-            _dropdownSearchField.BindToListView(_listViewInitializer.ListView);
+            _dropdownSearchField.BindToListView(_listViewHandler.ListView);
             _dropdownSearchField.WithDropdownBehaviour(itemIndex =>
             {
-                _listViewInitializer.ListView.ScrollToItem(itemIndex);
+                _listViewHandler.ListView.ScrollToItem(itemIndex);
             });
         }
 

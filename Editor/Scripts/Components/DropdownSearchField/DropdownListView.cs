@@ -12,7 +12,7 @@ namespace Ludwell.Scene
 
         private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownListView));
 
-        private ListViewInitializer<DropdownVisualElement, DropdownData> _listViewInitializer;
+        private ListViewHandler<DropdownVisualElement, DropdownData> _listViewHandler;
         private readonly List<DropdownData> _data = new();
         
         private float _heightDifference = -1;
@@ -25,7 +25,7 @@ namespace Ludwell.Scene
             AddToClassList("dropdown-list-view");
             SetStyle();
 
-            _listViewInitializer = new(this, _data);
+            _listViewHandler = new(this, _data);
         }
 
         public int Count => itemsSource.Count;
