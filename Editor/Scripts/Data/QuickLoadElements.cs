@@ -20,6 +20,7 @@ namespace Ludwell.Scene.Editor
                 MainScene = sceneData
             });
 
+            Elements.Sort();
             DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
@@ -52,7 +53,7 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class LoaderListViewElementData : TagSubscriberWithTags
+    public class LoaderListViewElementData : TagSubscriberWithTags, IComparable
     {
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
@@ -81,6 +82,14 @@ namespace Ludwell.Scene.Editor
         public LoaderListViewElementData()
         {
             Name = QuickLoadElement.DefaultHeaderTextValue;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            var otherAsType = obj as LoaderListViewElementData;
+            return string.Compare(Name, otherAsType.Name, StringComparison.Ordinal);
         }
     }
 }
