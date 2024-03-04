@@ -15,7 +15,6 @@ namespace Ludwell.Scene
         {
         }
 
-        public const string TagSearchName = "tag";
 
         private static readonly string UxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadController));
@@ -28,6 +27,7 @@ namespace Ludwell.Scene
         private const string ButtonAddName = "add";
         private const string ButtonRemoveName = "remove";
 
+        private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
 
         private readonly QuickLoadElements _quickLoadElements;
@@ -118,7 +118,7 @@ namespace Ludwell.Scene
             _dropdownSearchField.BindToListView(_listView);
 
             var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
-            var searchListingStrategy = new ListingStrategy(TagSearchName, icon, ListTag);
+            var searchListingStrategy = new ListingStrategy(TagListingStrategyName, icon, ListTag);
 
             _dropdownSearchField
                 .WithResizableParent(this)

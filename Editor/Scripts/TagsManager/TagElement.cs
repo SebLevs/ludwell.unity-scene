@@ -21,7 +21,7 @@ namespace Ludwell.Scene
         private Button _removeButton;
         private Button _mainButton;
         private Button _searchButton;
-        private string _searchStrategyName = "Tag";
+        private string _listingStrategyName = "tag";
 
         private TagsController _tagsController;
         private DropdownSearchField _dropdownSearchField;
@@ -63,8 +63,8 @@ namespace Ludwell.Scene
             {
                 _tagsController = GetFirstAncestorOfType<TagsController>();
                 _dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
-                _searchStrategyName = _dropdownSearchField.HasSearchStrategy(_searchStrategyName)
-                    ? _searchStrategyName
+                _listingStrategyName = _dropdownSearchField.HasSearchStrategy(_listingStrategyName)
+                    ? _listingStrategyName
                     : DropdownSearchField.DefaultSearchName;
             });
         }
@@ -77,7 +77,7 @@ namespace Ludwell.Scene
 
             _searchButton.RegisterCallback<ClickEvent>(_ =>
             {
-                _dropdownSearchField.ListWithStrategy(_searchStrategyName, _mainButton.text);
+                _dropdownSearchField.ListWithStrategy(_listingStrategyName, _mainButton.text);
                 ToggleVisual();
             });
         }
