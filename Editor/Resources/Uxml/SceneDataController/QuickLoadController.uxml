@@ -6,7 +6,9 @@
                 <ui:Label tabindex="-1" text="Quick Load" display-tooltip-when-elided="true" />
             </ui:VisualElement>
             <ui:VisualElement name="header__actions">
-                <uie:ToolbarButton display-tooltip-when-elided="true" name="button__close-all" focusable="false" tooltip="Close all" class="button__close-all" />
+                <ui:Button name="button__close-all" display-tooltip-when-elided="true" tooltip="Close all" class="button__close-all" style="left: 0;">
+                    <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+                </ui:Button>
                 <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" />
             </ui:VisualElement>
         </ui:VisualElement>
