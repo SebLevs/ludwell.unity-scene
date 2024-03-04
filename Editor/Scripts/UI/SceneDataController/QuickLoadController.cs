@@ -25,9 +25,6 @@ namespace Ludwell.Scene
 
         private const string ListViewName = "scenes__list";
 
-        private const string ButtonCloseAll = "button__close-all";
-        private const string ButtonCloseAllClicked = "button__close-all-clicked";
-
         private const string ButtonAddName = "add";
         private const string ButtonRemoveName = "remove";
 
@@ -66,20 +63,8 @@ namespace Ludwell.Scene
 
         private void InitializeButtonCloseAll()
         {
-            var closeAllButton = this.Q<ToolbarButton>();
-
-            closeAllButton.RegisterCallback<MouseDownEvent>(_ =>
-            {
-                closeAllButton.RemoveFromClassList(ButtonCloseAll);
-                closeAllButton.AddToClassList(ButtonCloseAllClicked);
-            }, TrickleDown.TrickleDown);
-
-            closeAllButton.RegisterCallback<MouseUpEvent>(_ =>
-            {
-                CloseAll();
-                closeAllButton.RemoveFromClassList(ButtonCloseAllClicked);
-                closeAllButton.AddToClassList(ButtonCloseAll);
-            });
+            var closeAllButton = this.Q<Button>();
+            closeAllButton.RegisterCallback<MouseUpEvent>(_ => CloseAll());
         }
 
         private void CloseAll()

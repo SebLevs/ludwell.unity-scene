@@ -24,73 +24,37 @@
     flex-shrink: 0;
 }
 
-.button__close-all {
+#button__close-all {
     -unity-text-align: middle-center;
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
-    background-color: rgb(56, 56, 56);
-    margin-left: 12px;
-    background-image: resource('Sprites/icon_close-all');
+    background-color: rgba(56, 56, 56, 0);
+    display: flex;
+    width: 20px;
+    position: absolute;
+    height: 20px;
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    display: flex;
-    -unity-background-scale-mode: stretch-to-fill;
-    width: 24px;
-    position: absolute;
-    height: 15px;
-    -unity-background-image-tint-color: rgb(88, 88, 88);
+    margin-left: 4px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    align-self: center;
+    left: -1px;
 }
 
-.button__close-all:hover {
-    -unity-text-align: middle-center;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    background-color: rgb(56, 56, 56);
-    margin-left: 12px;
+#button__close-all > #icon {
+    -unity-background-image-tint-color: rgb(104, 104, 104);
     background-image: resource('Sprites/icon_close-all');
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    display: flex;
-    -unity-background-scale-mode: stretch-to-fill;
-    width: 24px;
-    position: absolute;
-    height: 15px;
-    -unity-background-image-tint-color: rgb(103, 103, 103);
 }
 
-.button__close-all-clicked {
-    -unity-text-align: middle-center;
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    background-color: rgb(56, 56, 56);
-    margin-left: 12px;
-    background-image: resource('Sprites/icon_close-all');
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    display: flex;
-    -unity-background-scale-mode: stretch-to-fill;
-    width: 24px;
-    position: absolute;
-    height: 15px;
-    -unity-background-image-tint-color: rgb(70, 96, 124);
+#button__close-all > #icon:hover {
+    transition-duration: 0.02s;
+    scale: 1.2 1.2;
 }
 
 #DropdownSearchField {
