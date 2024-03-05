@@ -1,9 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uss/DropdownSearchField/DropdownSearchField.uss?fileID=7433441132597879392&amp;guid=35cca6b5f33d478489bdad7c654c9780&amp;type=3#DropdownSearchField" />
-    <ui:VisualElement name="search-field" class="search-field">
-        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-            <ui:VisualElement name="icon__behaviour-cycling" tooltip="This search bar has multiple search behaviours. Click the icon inside the search bar to change the search behaviour." />
-            <uie:ToolbarSearchField focusable="true" name="toolbar-search-field" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 1; width: auto; flex-shrink: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
-        </ui:VisualElement>
+    <ui:VisualElement name="search-field" class="search-field" style="flex-direction: row;">
+        <ui:VisualElement name="icon__behaviour-cycling" tooltip="This search bar has multiple search behaviours. Click the icon inside the search bar to change the search behaviour." />
+        <uie:ToolbarSearchField focusable="true" name="toolbar-search-field" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 1; width: auto; flex-shrink: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
     </ui:VisualElement>
 </ui:UXML>

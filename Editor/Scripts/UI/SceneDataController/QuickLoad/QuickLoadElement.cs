@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class QuickLoadElement : VisualElement, IListViewVisualElement<LoaderListViewElementData>
+    public class QuickLoadElement : VisualElement, IListViewVisualElement<QuickLoadElementData>
     {
         private static readonly string UxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadElement));
@@ -28,15 +28,13 @@ namespace Ludwell.Scene
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
 
-        public const string DefaultHeaderTextValue = "Quick load element";
-
         private VisualElement _reorderableHandle;
         private Foldout _foldoutElement;
         private TextField _foldoutTextField;
         private ObjectField _mainSceneField;
         private TagsController _tagsController;
 
-        public LoaderListViewElementData Cache { get; set; } = new();
+        public QuickLoadElementData Cache { get; set; } = new();
 
         public QuickLoadElement()
         {

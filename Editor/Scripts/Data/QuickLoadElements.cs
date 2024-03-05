@@ -10,11 +10,11 @@ namespace Ludwell.Scene.Editor
     {
         [field: HideInInspector]
         [field: SerializeField]
-        public List<LoaderListViewElementData> Elements { get; set; } = new();
+        public List<QuickLoadElementData> Elements { get; set; } = new();
 
         public void AddElement(SceneData sceneData)
         {
-            Elements.Add(new LoaderListViewElementData()
+            Elements.Add(new QuickLoadElementData()
             {
                 Name = sceneData.Name,
                 MainScene = sceneData
@@ -53,7 +53,7 @@ namespace Ludwell.Scene.Editor
     }
 
     [Serializable]
-    public class LoaderListViewElementData : TagSubscriberWithTags, IComparable
+    public class QuickLoadElementData : TagSubscriberWithTags, IComparable
     {
         [SerializeField] private bool isOpen = true;
         [SerializeField] private SceneData mainScene;
@@ -79,16 +79,11 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public LoaderListViewElementData()
-        {
-            Name = QuickLoadElement.DefaultHeaderTextValue;
-        }
-
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
 
-            var otherAsType = obj as LoaderListViewElementData;
+            var otherAsType = obj as QuickLoadElementData;
             return string.Compare(Name, otherAsType.Name, StringComparison.Ordinal);
         }
     }
