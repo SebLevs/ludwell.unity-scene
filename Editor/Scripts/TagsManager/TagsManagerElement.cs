@@ -25,7 +25,7 @@ namespace Ludwell.Scene.Editor
 
         private TagsManager _tagsManager;
 
-        public TagWithSubscribers Cache { get; set; }
+        private TagWithSubscribers _cache;
 
         public TagsManagerElement()
         {
@@ -38,6 +38,11 @@ namespace Ludwell.Scene.Editor
             InitializeDelayedSaveEvent();
         }
 
+        public void CacheData(TagWithSubscribers data)
+        {
+            _cache = data;
+        }
+
         public void BindElementToCachedData()
         {
             _tagTextField.RegisterValueChangedCallback(BindTextField);
@@ -45,8 +50,8 @@ namespace Ludwell.Scene.Editor
 
         public void SetElementFromCachedData()
         {
-            _tagTextField.value = Cache.Name;
-            if (!string.IsNullOrEmpty(Cache.Name)) return;
+            _tagTextField.value = _cache.Name;
+            if (!string.IsNullOrEmpty(_cache.Name)) return;
             _tagTextField.Focus();
             _tagsManager.SetPreviousTarget(this);
         }
@@ -69,12 +74,12 @@ namespace Ludwell.Scene.Editor
 
         private void AddToController()
         {
-            _tagsManager.AddTagToController(Cache);
+            _tagsManager.AddTagToController(_cache);
         }
 
         private void RemoveFromController()
         {
-            _tagsManager.RemoveTagFromController(Cache);
+            _tagsManager.RemoveTagFromController(_cache);
         }
 
         private void InitializeValidityHandlingEvents()
@@ -97,14 +102,14 @@ namespace Ludwell.Scene.Editor
 
         public void HandleInvalidTag()
         {
-            if (!string.IsNullOrEmpty(Cache.Name) && !_tagsManager.IsTagDuplicate(Cache)) return;
-            _tagsManager.RemoveInvalidTagElement(Cache);
-            Cache.RemoveFromAllSubscribers();
+            if (!string.IsNullOrEmpty(_cache.Name) && !_tagsManager.IsTagDuplicate(_cache)) return;
+            _tagsManager.RemoveInvalidTagElement(_cache);
+            _cache.RemoveFromAllSubscribers();
         }
 
         private void BindTextField(ChangeEvent<string> evt)
         {
-            Cache.Name = evt.newValue;
+            _cache.Name = evt.newValue;
         }
     }
 }

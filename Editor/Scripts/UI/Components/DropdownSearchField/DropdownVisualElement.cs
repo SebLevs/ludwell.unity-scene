@@ -9,6 +9,8 @@ namespace Ludwell.Scene
         private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownVisualElement));
 
         private readonly Button _button;
+        
+        private DropdownData _cache;
 
         public DropdownVisualElement()
         {
@@ -17,17 +19,20 @@ namespace Ludwell.Scene
             _button = this.Q<Button>();
         }
 
-        public DropdownData Cache { get; set; }
+        public void CacheData(DropdownData data)
+        {
+            _cache = data;
+        }
 
         public void BindElementToCachedData()
         {
-            Cache.VisualElement = this;
+            _cache.VisualElement = this;
         }
 
         public void SetElementFromCachedData()
         {
-            _button.text = Cache.Name;
-            _button.clicked += Cache.Action;
+            _button.text = _cache.Name;
+            _button.clicked += _cache.Action;
         }
     }
 }

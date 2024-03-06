@@ -51,7 +51,7 @@ namespace Ludwell.Scene.Editor
 
             foreach (var item in _listViewHandler.ListView.Query<QuickLoadElementView>().ToList())
             {
-                item.SetFoldoutValue(false);
+                item.SetIsOpen(false);
             }
         }
         

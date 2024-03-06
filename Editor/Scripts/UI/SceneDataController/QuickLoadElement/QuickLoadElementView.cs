@@ -32,19 +32,13 @@ namespace Ludwell.Scene
         private ObjectField _sceneData;
 
         private readonly QuickLoadElementController _controller;
-        
-        public void SetFoldoutValue(bool value) => _foldout.value = value;
-        
-        public void SetFoldoutText(string text) => _foldoutText.value = text;
+
+        public void SetIsOpen(bool value) => _foldout.value = value;
+
+        public void SetName(string text) => _foldoutText.value = text;
 
         public void SetSceneData(SceneData sceneData) => _sceneData.value = sceneData;
-        
-        public QuickLoadElementData Cache 
-        {
-            get => _controller.Cache;
-            set => _controller.Cache = value;
-        }
-        
+
         public QuickLoadElementView()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -74,6 +68,11 @@ namespace Ludwell.Scene
             _foldoutText = this.Q<TextField>(FoldoutTextFieldName);
         }
 
+        public void CacheData(QuickLoadElementData data)
+        {
+            _controller.Data = data;
+        }
+
         public void BindElementToCachedData()
         {
             _foldout.RegisterValueChangedCallback(_controller.UpdateIsOpen);
@@ -83,9 +82,9 @@ namespace Ludwell.Scene
 
         public void SetElementFromCachedData()
         {
-            SetFoldoutValue(_controller.Cache.IsOpen);
-            SetFoldoutText(_controller.Cache.Name);
-            SetSceneData(_controller.Cache.SceneData);
+            _controller.SetIsOpen(this);
+            _controller.SetName(this);
+            _controller.SetSceneData(this);
 
             _controller.UpdateTagsContainer();
         }
@@ -107,7 +106,7 @@ namespace Ludwell.Scene
             var openButton = this.Q(OpenButtonName).Q<Button>();
             openButton.RegisterCallback<ClickEvent>(_ => _controller.OpenScene(_sceneData.value as SceneData));
         }
-        
+
         private void RegisterStyleEvents()
         {
             _foldout.RegisterValueChangedCallback(evt =>
@@ -125,7 +124,7 @@ namespace Ludwell.Scene
                 evt.StopPropagation();
                 if (evt.currentTarget != foldoutTextField) return;
                 if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
-                SetFoldoutValue(!_foldout.value);
+                SetIsOpen(!_foldout.value);
             });
 
             foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());

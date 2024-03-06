@@ -22,10 +22,10 @@ namespace Ludwell.Scene
         private const string ButtonAddName = "add";
         private const string ButtonRemoveName = "remove";
 
-        private DropdownSearchField _dropdownSearchField;
-        private ListView _listView;
+        private readonly DropdownSearchField _dropdownSearchField;
+        private readonly ListView _listView;
 
-        private QuickLoadController _controller;
+        private readonly QuickLoadController _controller;
 
         public QuickLoadView()
         {

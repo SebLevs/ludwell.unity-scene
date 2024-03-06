@@ -6,10 +6,9 @@ namespace Ludwell.Scene.Editor
 {
     public class QuickLoadElementController
     {
-        
-        private TagsController _tagsController;
-        
-        public QuickLoadElementData Cache { get; set; } = new();
+        private readonly TagsController _tagsController;
+
+        public QuickLoadElementData Data { private get; set; } = new();
 
         public QuickLoadElementController(VisualElement view)
         {
@@ -34,31 +33,46 @@ namespace Ludwell.Scene.Editor
         {
             SceneDataManagerEditorApplication.OpenScene(sceneData);
         }
-        
+
         public void UpdateIsOpen(ChangeEvent<bool> evt)
         {
-            Cache.IsOpen = evt.newValue;
+            Data.IsOpen = evt.newValue;
         }
 
         public void UpdateName(ChangeEvent<string> evt)
         {
-            Cache.Name = evt.newValue;
+            Data.Name = evt.newValue;
         }
 
         public void UpdateSceneData(ChangeEvent<Object> evt)
         {
-            Cache.SceneData = evt.newValue as SceneData;
+            Data.SceneData = evt.newValue as SceneData;
         }
 
         public void UpdateTagsContainer()
         {
-            _tagsController.WithTagSubscriber(Cache);
+            _tagsController.WithTagSubscriber(Data);
             _tagsController.Populate();
         }
-        
+
+        public void SetIsOpen(QuickLoadElementView view)
+        {
+            view.SetIsOpen(Data.IsOpen);
+        }
+
+        public void SetName(QuickLoadElementView view)
+        {
+            view.SetName(Data.Name);
+        }
+
+        public void SetSceneData(QuickLoadElementView view)
+        {
+            view.SetSceneData(Data.SceneData);
+        }
+
         private void BuildTagsController()
         {
-            _tagsController.WithOptionButtonEvent(() => { _tagsController.Q<TagsManager>().Show(Cache); });
+            _tagsController.WithOptionButtonEvent(() => { _tagsController.Q<TagsManager>().Show(Data); });
         }
     }
 }
