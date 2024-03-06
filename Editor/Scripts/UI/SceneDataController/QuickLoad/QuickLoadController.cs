@@ -13,7 +13,7 @@ namespace Ludwell.Scene.Editor
         private const string TagIconName = "icon_tag";
         
         private readonly QuickLoadElements _quickLoadElements;
-        private ListViewHandler<QuickLoadElement, QuickLoadElementData> _listViewHandler;
+        private ListViewHandler<QuickLoadElementView, QuickLoadElementData> _listViewHandler;
 
         public QuickLoadController(VisualElement view, ListView listView, DropdownSearchField dropdownSearchField)
         {
@@ -23,27 +23,21 @@ namespace Ludwell.Scene.Editor
             
             InitializeSearchField(view, dropdownSearchField);
         }
-        
-        public void DeleteSceneAtPath()
+
+        /// <summary> If no item is selected, deletes the last item. </summary>
+        public void DeleteSelection()
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
+            
+            var selectedElementData = _listViewHandler.GetSelectedElementData();
+            
+            var elementToDelete = selectedElementData != null
+                ? AssetDatabase.GetAssetPath(selectedElementData.SceneData)
+                : AssetDatabase.GetAssetPath(_listViewHandler.GetLastData().SceneData);
+            
+            AssetDatabase.DeleteAsset(elementToDelete);
 
-            SceneData sceneData;
-
-            var selectedIndex = _listViewHandler.ListView.selectedIndex;
-            QuickLoadElementData elementToDelete;
-            if (selectedIndex == -1)
-            {
-                elementToDelete = _listViewHandler.ListView.itemsSource[^1] as QuickLoadElementData;
-                sceneData = elementToDelete.MainScene;
-                _listViewHandler.ListView.itemsSource.Remove(sceneData);
-                AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
-                return;
-            }
-
-            elementToDelete = _listViewHandler.ListView.itemsSource[selectedIndex] as QuickLoadElementData;
-            sceneData = elementToDelete.MainScene;
-            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(sceneData));
+            _listViewHandler.ForceRebuild();
         }
         
         public void CloseAll()
@@ -55,15 +49,10 @@ namespace Ludwell.Scene.Editor
                 element.IsOpen = false;
             }
 
-            foreach (var item in _listViewHandler.ListView.Query<QuickLoadElement>().ToList())
+            foreach (var item in _listViewHandler.ListView.Query<QuickLoadElementView>().ToList())
             {
                 item.SetFoldoutValue(false);
             }
-        }
-        
-        public void DeleteSelectedScene()
-        {
-            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(_listViewHandler.GetSelectedElementData().MainScene));
         }
         
         private void InitializeListViewHandler(ListView listView)

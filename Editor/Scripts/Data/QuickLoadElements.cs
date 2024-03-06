@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
             Elements.Add(new QuickLoadElementData()
             {
                 Name = sceneData.Name,
-                MainScene = sceneData
+                SceneData = sceneData
             });
 
             Elements.Sort();
@@ -30,7 +30,7 @@ namespace Ludwell.Scene.Editor
             for (var index = Elements.Count - 1; index >= 0; index--)
             {
                 var element = Elements[index];
-                if (element.MainScene != sceneData) continue;
+                if (element.SceneData != sceneData) continue;
                 Elements.Remove(element);
             }
 
@@ -43,7 +43,7 @@ namespace Ludwell.Scene.Editor
             foreach (var element in Elements)
             {
                 if (element.Name != oldName) continue;
-                if (element.MainScene.name != newName) continue;
+                if (element.SceneData.name != newName) continue;
                 element.Name = newName;
             }
 

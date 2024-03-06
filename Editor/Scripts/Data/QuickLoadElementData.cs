@@ -7,7 +7,7 @@ namespace Ludwell.Scene.Editor
     public class QuickLoadElementData : TagSubscriberWithTags, IComparable
     {
         [SerializeField] private bool isOpen = true;
-        [SerializeField] private SceneData mainScene;
+        [SerializeField] private SceneData sceneData;
 
         public bool IsOpen
         {
@@ -20,12 +20,12 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public SceneData MainScene
+        public SceneData SceneData
         {
-            get => mainScene;
+            get => sceneData;
             set
             {
-                mainScene = value;
+                sceneData = value;
                 DataFetcher.SaveEveryScriptableDelayed();
             }
         }

@@ -39,6 +39,12 @@ namespace Ludwell.Scene
             return (TData)ListView.selectedItem;
         }
 
+        public TData GetLastData()
+        {
+            var lastIndex = ListView.itemsSource.Count - 1;
+            return (TData)ListView.itemsSource[lastIndex];
+        }
+
         public void RemoveSelectedElement()
         {
             if (ListView.selectedItem == null) return;

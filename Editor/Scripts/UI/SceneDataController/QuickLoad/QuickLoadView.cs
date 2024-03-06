@@ -66,19 +66,19 @@ namespace Ludwell.Scene
             if (_listView.selectedItem == null) return;
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
-            _controller.DeleteSelectedScene();
+            _controller.DeleteSelection();
         }
 
         private void InitializeAddRemoveButtons()
         {
             this.Q<Button>(ButtonAddName).clicked += SceneDataGenerator.CreateSceneAssetAtPath;
-            this.Q<Button>(ButtonRemoveName).clicked += _controller.DeleteSceneAtPath;
+            this.Q<Button>(ButtonRemoveName).clicked += _controller.DeleteSelection;
         }
 
         private void ClearAddRemoveButtons()
         {
             this.Q<Button>(ButtonAddName).clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
-            this.Q<Button>(ButtonRemoveName).clicked -= _controller.DeleteSceneAtPath;
+            this.Q<Button>(ButtonRemoveName).clicked -= _controller.DeleteSelection;
         }
 
         private void ForceRebuildListView()
