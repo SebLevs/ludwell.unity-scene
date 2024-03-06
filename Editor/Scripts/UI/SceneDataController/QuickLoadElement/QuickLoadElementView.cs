@@ -48,7 +48,9 @@ namespace Ludwell.Scene
             InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
 
-            RegisterButtonsClickEventCallback();
+            RegisterLoadButtonEvents();
+            RegisterOpenButtonEvents();
+
             PreventFoldoutToggleFromKeyPress();
 
             _controller = new QuickLoadElementController(this);
@@ -87,12 +89,6 @@ namespace Ludwell.Scene
             _controller.SetSceneData(this);
 
             _controller.UpdateTagsContainer();
-        }
-
-        private void RegisterButtonsClickEventCallback()
-        {
-            RegisterLoadButtonEvents();
-            RegisterOpenButtonEvents();
         }
 
         private void RegisterLoadButtonEvents()
