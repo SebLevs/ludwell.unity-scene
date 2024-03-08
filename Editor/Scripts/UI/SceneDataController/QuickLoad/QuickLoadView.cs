@@ -13,7 +13,6 @@ namespace Ludwell.Scene
 
         private static readonly string UxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadView));
-
         private static readonly string UssPath =
             Path.Combine("Uss", nameof(SceneDataController), nameof(QuickLoadView));
 

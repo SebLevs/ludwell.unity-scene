@@ -10,13 +10,11 @@ namespace Ludwell.Scene
     {
         private static readonly string UxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadElementView));
-
         private static readonly string UssPath =
             Path.Combine("Uss", nameof(SceneDataController), nameof(QuickLoadElementView));
 
         private static readonly string HeaderContentUxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), "quick-load-element__header-content");
-
         private static readonly string HeaderContentUssPath =
             Path.Combine("Uss", nameof(SceneDataController), "quick-load-element__header-content");
 
