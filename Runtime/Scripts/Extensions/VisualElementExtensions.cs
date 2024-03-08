@@ -48,7 +48,8 @@ namespace Ludwell.Scene
                 }
             }
 
-            throw new MissingReferenceException($"No child containing the name \"{name}\" was found");
+            Debug.LogWarning($"No child containing the name \"{name}\" was found");
+            return null;
         }
 
         /// <summary>

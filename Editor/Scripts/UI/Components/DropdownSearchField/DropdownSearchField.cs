@@ -202,7 +202,7 @@ namespace Ludwell.Scene
                 _dropdownListView.SetOwner(this);
                 var rootVisualContainer =
                     this.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
-                rootVisualContainer.Add(_dropdownListView);
+                rootVisualContainer?.Add(_dropdownListView);
 
                 _dropdownListView.Hide();
             });
