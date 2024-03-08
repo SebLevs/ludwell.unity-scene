@@ -1,10 +1,9 @@
 using System.IO;
-using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     public class QuickLoadElementView : VisualElement, IListViewVisualElement<QuickLoadElementData>
     {
@@ -29,7 +28,7 @@ namespace Ludwell.Scene
         private TextField _foldoutText;
         private ObjectField _sceneData;
 
-        private readonly QuickLoadElementController _controller;
+        private QuickLoadElementController _controller;
 
         public void SetIsOpen(bool value) => _foldout.value = value;
 
@@ -51,7 +50,10 @@ namespace Ludwell.Scene
 
             PreventFoldoutToggleFromKeyPress();
 
-            _controller = new QuickLoadElementController(this);
+            RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                _controller = new QuickLoadElementController(this);
+            });
         }
 
         private void SetReferences()

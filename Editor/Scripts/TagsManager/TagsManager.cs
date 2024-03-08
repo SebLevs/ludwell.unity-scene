@@ -31,6 +31,8 @@ namespace Ludwell.Scene
 
         private TagsManagerElement _previousTarget;
 
+        private VisualElement _previousView;
+
         public TagsManager()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -47,11 +49,15 @@ namespace Ludwell.Scene
             HandleTagController();
         }
 
-        public void Show(TagSubscriberWithTags tagSubscriber)
+        public void Show(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
         {
             _tagSubscriber = tagSubscriber;
             _referenceName.text = _tagSubscriber.Name;
-            this.Root().Q<TabController>().SwitchView(this);
+
+            _previousView = previousView;
+            _previousView.style.display = DisplayStyle.None;
+            style.display = DisplayStyle.Flex;
+
             BuildTagsController(tagSubscriber);
         }
 
@@ -219,7 +225,8 @@ namespace Ludwell.Scene
 
         private void Return()
         {
-            this.Root().Q<TabController>().ReturnToPreviousView();
+            style.display = DisplayStyle.None;
+            _previousView.style.display = DisplayStyle.Flex;
         }
     }
 }

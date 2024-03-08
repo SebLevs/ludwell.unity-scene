@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/SceneDataEditorWindow/TabController.uss?fileID=7433441132597879392&amp;guid=d2ce06e267b8aff45803b0438d65a729&amp;type=3#TabController" />
-    <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;" />
-</ui:UXML>

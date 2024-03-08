@@ -13,7 +13,7 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController(VisualElement view)
         {
             _tagsController = view.Q<TagsController>();
-            BuildTagsController();
+            BuildTagsController(view);
         }
 
         public void LoadScene(SceneData sceneData)
@@ -70,9 +70,14 @@ namespace Ludwell.Scene.Editor
             view.SetSceneData(Data.SceneData);
         }
 
-        private void BuildTagsController()
+        private void BuildTagsController(VisualElement view)
         {
-            _tagsController.WithOptionButtonEvent(() => { _tagsController.Q<TagsManager>().Show(Data); });
+            _tagsController.WithOptionButtonEvent(() =>
+            {
+                var root = view.Root();
+                var tagsManager = root.Q<TagsManager>();
+                tagsManager.Show(Data, root.Q<SceneDataController>());
+            });
         }
     }
 }
