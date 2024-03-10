@@ -3,20 +3,20 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TagElement : VisualElement
+    public class TagControllerElement : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TagElement, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TagControllerElement, UxmlTraits>
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagElement));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagElement));
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagControllerElement));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagControllerElement));
 
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
         private const string SearchButtonName = "button-search";
 
-        private static TagElement _currentSelection;
+        private static TagControllerElement _currentSelection;
 
         private Button _removeButton;
         private Button _mainButton;
@@ -28,7 +28,7 @@ namespace Ludwell.Scene
 
         private Tag _cache;
 
-        public TagElement()
+        public TagControllerElement()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -39,7 +39,7 @@ namespace Ludwell.Scene
             ToggleBehaviourButtons(DisplayStyle.None);
         }
 
-        ~TagElement()
+        ~TagControllerElement()
         {
             _cache.RemoveValueChangedCallback(SetText);
         }
@@ -82,16 +82,16 @@ namespace Ludwell.Scene
             });
         }
 
-        private void SelectTag(TagElement tagElement)
+        private void SelectTag(TagControllerElement tagControllerElement)
         {
-            if (_currentSelection == tagElement)
+            if (_currentSelection == tagControllerElement)
             {
                 ToggleVisual();
                 return;
             }
 
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.None);
-            _currentSelection = tagElement;
+            _currentSelection = tagControllerElement;
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
         }
 

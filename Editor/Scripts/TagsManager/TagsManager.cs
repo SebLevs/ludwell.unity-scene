@@ -26,10 +26,10 @@ namespace Ludwell.Scene
 
         private TagContainer _tagContainer;
 
-        private ListViewHandler<TagsManagerElement, TagWithSubscribers> _listViewHandler;
+        private ListViewHandler<TagsManagerElementView, TagWithSubscribers> _listViewHandler;
         private DropdownSearchField _dropdownSearchField;
 
-        private TagsManagerElement _previousTarget;
+        private TagsManagerElementView _previousTarget;
 
         private VisualElement _previousView;
 
@@ -81,7 +81,7 @@ namespace Ludwell.Scene
             _listViewHandler.ForceRebuild();
         }
 
-        public void SetPreviousTarget(TagsManagerElement target)
+        public void SetPreviousTarget(TagsManagerElementView target)
         {
             _previousTarget = target;
         }
@@ -204,7 +204,7 @@ namespace Ludwell.Scene
         {
             RegisterCallback<MouseUpEvent>(evt =>
             {
-                var tagsManagerElement = (evt.target as VisualElement).GetFirstAncestorOfType<TagsManagerElement>();
+                var tagsManagerElement = (evt.target as VisualElement).GetFirstAncestorOfType<TagsManagerElementView>();
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
                 {
                     SortTags();
