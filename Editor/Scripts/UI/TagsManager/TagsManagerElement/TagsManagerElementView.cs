@@ -47,7 +47,7 @@ namespace Ludwell.Scene.Editor
 
         public void SetElementFromCachedData()
         {
-            _controller.SetValue(_textField);
+            _controller.SetValue(this);
             _controller.FocusTextField(this, _textField);
         }
 
@@ -55,6 +55,11 @@ namespace Ludwell.Scene.Editor
         public void HandleInvalidTag()
         {
             _controller.HandleInvalidTag();
+        }
+
+        public void SetText(string value)
+        {
+            _textField.value = value;
         }
 
         private void SetReferences()

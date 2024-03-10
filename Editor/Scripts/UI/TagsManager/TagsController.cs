@@ -102,19 +102,19 @@ namespace Ludwell.Scene
             _notTaggedLabel = this.Q<Label>(NotTaggedName);
         }
 
-        private TagControllerElement ConstructTagElement(Tag tag)
+        private TagControllerElementView ConstructTagElement(Tag tag)
         {
-            TagControllerElement tagControllerElement = new();
-            tagControllerElement.UpdateCache(tag);
-            return tagControllerElement;
+            TagControllerElementView tagControllerElementView = new();
+            tagControllerElementView.UpdateCache(tag);
+            return tagControllerElementView;
         }
 
         private void Sort()
         {
             _tagsContainer.Sort((a, b) =>
             {
-                var aValue = (a as TagControllerElement).Value;
-                var bValue = (b as TagControllerElement).Value;
+                var aValue = (a as TagControllerElementView).Value;
+                var bValue = (b as TagControllerElementView).Value;
                 return string.Compare(aValue, bValue, StringComparison.InvariantCulture);
             });
         }

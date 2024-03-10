@@ -30,9 +30,9 @@ namespace Ludwell.Scene.Editor
             DataFetcher.SaveEveryScriptableDelayed();
         }
 
-        public void SetValue(TextField textField)
+        public void SetValue(TagsManagerElementView view)
         {
-            textField.value = Cache.Name;
+            view.SetText(Cache.Name);
         }
 
         public void FocusTextField(TagsManagerElementView view, TextField textField)

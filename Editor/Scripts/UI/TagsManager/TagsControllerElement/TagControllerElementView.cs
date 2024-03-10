@@ -1,0 +1,109 @@
+using System.IO;
+using Ludwell.Scene.Editor;
+using UnityEngine.UIElements;
+
+namespace Ludwell.Scene
+{
+    public class TagControllerElementView : VisualElement
+    {
+        public new class UxmlFactory : UxmlFactory<TagControllerElementView, UxmlTraits>
+        {
+        }
+
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagControllerElementView));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagControllerElementView));
+
+        private const string RemoveButtonName = "button-remove";
+        private const string MainButtonName = "button-main";
+        private const string SearchButtonName = "button-search";
+
+        private static TagControllerElementView _currentSelection;
+
+        private Button _removeButton;
+        private Button _mainButton;
+        private Button _searchButton;
+
+        private TagControllerElementController _controller;
+        
+        public string Value => _mainButton.text;
+
+        public TagControllerElementView()
+        {
+            this.AddHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
+
+            SetReferences();
+            SetButtonEvents();
+
+            ToggleBehaviourButtons(DisplayStyle.None);
+        }
+
+        ~TagControllerElementView()
+        {
+            _controller.RemoveValueChangedCallback(SetValue);
+        }
+
+        public void SetValue(string text)
+        {
+            _mainButton.text = text;
+        }
+        
+        public void UpdateCache(Tag tag)
+        {
+            _controller.UpdateTag(tag);
+            _controller.SetValue(this);
+            _controller.AddValueChangedCallback(SetValue);
+        }
+
+        private void SetReferences()
+        {
+            _removeButton = this.Q<Button>(RemoveButtonName);
+            _mainButton = this.Q<Button>(MainButtonName);
+            _searchButton = this.Q<Button>(SearchButtonName);
+            
+            _controller = new TagControllerElementController(this);
+        }
+
+        private void SetButtonEvents()
+        {
+            _mainButton.clicked += () => SelectTag(this);
+            
+            _removeButton.clicked += _controller.RemoveFromController; 
+            
+            _searchButton.clicked += _controller.SearchWithData;
+            _searchButton.clicked += ToggleVisual;
+        }
+
+        private void SelectTag(TagControllerElementView tagControllerElementView)
+        {
+            if (_currentSelection == tagControllerElementView)
+            {
+                ToggleVisual();
+                return;
+            }
+
+            _currentSelection?.ToggleBehaviourButtons(DisplayStyle.None);
+            _currentSelection = tagControllerElementView;
+            _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
+        }
+        
+        private void ToggleVisual()
+        {
+            var reverseDisplay = GetReverseDisplayStyle();
+            _currentSelection.ToggleBehaviourButtons(reverseDisplay);
+        }
+
+        private DisplayStyle GetReverseDisplayStyle()
+        {
+            return _currentSelection._removeButton.style.display == DisplayStyle.None
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+        }
+
+        private void ToggleBehaviourButtons(DisplayStyle displayStyle)
+        {
+            _removeButton.style.display = displayStyle;
+            _searchButton.style.display = displayStyle;
+        }
+    }
+}
