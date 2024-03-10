@@ -10,8 +10,11 @@ namespace Ludwell.Scene
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagControllerElementView));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagControllerElementView));
+        private static readonly string UxmlPath =
+            Path.Combine("Uxml", nameof(TagsManager), nameof(TagControllerElementView));
+
+        private static readonly string UssPath =
+            Path.Combine("Uss", nameof(TagsManager), nameof(TagControllerElementView));
 
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
@@ -24,7 +27,7 @@ namespace Ludwell.Scene
         private Button _searchButton;
 
         private TagControllerElementController _controller;
-        
+
         public string Value => _mainButton.text;
 
         public TagControllerElementView()
@@ -41,13 +44,14 @@ namespace Ludwell.Scene
         ~TagControllerElementView()
         {
             _controller.RemoveValueChangedCallback(SetValue);
+            RemoveButtonEvents();
         }
 
         public void SetValue(string text)
         {
             _mainButton.text = text;
         }
-        
+
         public void UpdateCache(Tag tag)
         {
             _controller.UpdateTag(tag);
@@ -60,33 +64,43 @@ namespace Ludwell.Scene
             _removeButton = this.Q<Button>(RemoveButtonName);
             _mainButton = this.Q<Button>(MainButtonName);
             _searchButton = this.Q<Button>(SearchButtonName);
-            
+
             _controller = new TagControllerElementController(this);
         }
 
         private void SetButtonEvents()
         {
-            _mainButton.clicked += () => SelectTag(this);
-            
-            _removeButton.clicked += _controller.RemoveFromController; 
-            
+            _mainButton.clicked += SelectSelf;
+
+            _removeButton.clicked += _controller.RemoveFromController;
+
             _searchButton.clicked += _controller.SearchWithData;
             _searchButton.clicked += ToggleVisual;
         }
 
-        private void SelectTag(TagControllerElementView tagControllerElementView)
+        private void RemoveButtonEvents()
         {
-            if (_currentSelection == tagControllerElementView)
+            _mainButton.clicked -= SelectSelf;
+            
+            _removeButton.clicked -= _controller.RemoveFromController;
+
+            _searchButton.clicked -= _controller.SearchWithData;
+            _searchButton.clicked -= ToggleVisual;
+        }
+
+        private void SelectSelf()
+        {
+            if (_currentSelection == this)
             {
                 ToggleVisual();
                 return;
             }
 
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.None);
-            _currentSelection = tagControllerElementView;
+            _currentSelection = this;
             _currentSelection?.ToggleBehaviourButtons(DisplayStyle.Flex);
         }
-        
+
         private void ToggleVisual()
         {
             var reverseDisplay = GetReverseDisplayStyle();
