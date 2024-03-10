@@ -72,7 +72,7 @@ namespace Ludwell.Scene.Editor
 
         public void CacheData(QuickLoadElementData data)
         {
-            _controller.Data = data;
+            _controller.UpdateData(data);
         }
 
         public void BindElementToCachedData()

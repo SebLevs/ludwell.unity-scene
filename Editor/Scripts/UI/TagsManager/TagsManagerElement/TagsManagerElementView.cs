@@ -37,7 +37,7 @@ namespace Ludwell.Scene.Editor
 
         public void CacheData(TagWithSubscribers data)
         {
-            _controller.Cache = data;
+            _controller.UpdateData(data);
         }
 
         public void BindElementToCachedData()

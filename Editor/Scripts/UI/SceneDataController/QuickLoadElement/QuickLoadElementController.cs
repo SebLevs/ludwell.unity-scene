@@ -8,7 +8,7 @@ namespace Ludwell.Scene.Editor
     {
         private readonly TagsController _tagsController;
 
-        public QuickLoadElementData Data { private get; set; } = new();
+        private QuickLoadElementData _data = new();
 
         public QuickLoadElementController(VisualElement view)
         {
@@ -34,40 +34,45 @@ namespace Ludwell.Scene.Editor
             SceneDataManagerEditorApplication.OpenScene(sceneData);
         }
 
+        public void UpdateData(QuickLoadElementData data)
+        {
+            _data = data;
+        }
+
         public void UpdateIsOpen(ChangeEvent<bool> evt)
         {
-            Data.IsOpen = evt.newValue;
+            _data.IsOpen = evt.newValue;
         }
 
         public void UpdateName(ChangeEvent<string> evt)
         {
-            Data.Name = evt.newValue;
+            _data.Name = evt.newValue;
         }
 
         public void UpdateSceneData(ChangeEvent<Object> evt)
         {
-            Data.SceneData = evt.newValue as SceneData;
+            _data.SceneData = evt.newValue as SceneData;
         }
 
         public void UpdateTagsContainer()
         {
-            _tagsController.WithTagSubscriber(Data);
+            _tagsController.WithTagSubscriber(_data);
             _tagsController.Populate();
         }
 
         public void SetIsOpen(QuickLoadElementView view)
         {
-            view.SetIsOpen(Data.IsOpen);
+            view.SetIsOpen(_data.IsOpen);
         }
 
         public void SetName(QuickLoadElementView view)
         {
-            view.SetName(Data.Name);
+            view.SetName(_data.Name);
         }
 
         public void SetSceneData(QuickLoadElementView view)
         {
-            view.SetSceneData(Data.SceneData);
+            view.SetSceneData(_data.SceneData);
         }
 
         private void BuildTagsController(VisualElement view)
@@ -76,7 +81,7 @@ namespace Ludwell.Scene.Editor
             {
                 var root = view.Root();
                 var tagsManager = root.Q<TagsManager>();
-                tagsManager.Show(Data, root.Q<SceneDataController>());
+                tagsManager.Show(_data, root.Q<SceneDataController>());
             });
         }
     }
