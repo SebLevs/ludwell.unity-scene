@@ -6,13 +6,13 @@ namespace Ludwell.Scene.Editor
 {
     public class QuickLoadElementController
     {
-        private readonly TagsController _tagsController;
+        private readonly TagsShelfView _tagsShelfView;
 
         private QuickLoadElementData _data = new();
 
         public QuickLoadElementController(VisualElement view)
         {
-            _tagsController = view.Q<TagsController>();
+            _tagsShelfView = view.Q<TagsShelfView>();
             BuildTagsController(view);
         }
 
@@ -56,8 +56,8 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateTagsContainer()
         {
-            _tagsController.WithTagSubscriber(_data);
-            _tagsController.Populate();
+            _tagsShelfView.WithTagSubscriber(_data);
+            _tagsShelfView.PopulateContainer();
         }
 
         public void SetIsOpen(QuickLoadElementView view)
@@ -77,7 +77,7 @@ namespace Ludwell.Scene.Editor
 
         private void BuildTagsController(VisualElement view)
         {
-            _tagsController.WithOptionButtonEvent(() =>
+            _tagsShelfView.WithOptionButtonEvent(() =>
             {
                 var root = view.Root();
                 var tagsManager = root.Q<TagsManager>();

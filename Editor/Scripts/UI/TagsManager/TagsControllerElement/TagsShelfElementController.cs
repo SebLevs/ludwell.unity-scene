@@ -3,21 +3,21 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagControllerElementController
+    public class TagsShelfElementController
     {
         private Tag _data;
         
-        private TagsController _tagsController;
+        private TagsShelfView _tagsShelfView;
         
         private string _listingStrategyName = "tag";
         private DropdownSearchField _dropdownSearchField;
         
-        public TagControllerElementController(VisualElement view)
+        public TagsShelfElementController(VisualElement view)
         {
             
             view.RegisterCallback<AttachToPanelEvent>(_ =>
             {
-                _tagsController = view.GetFirstAncestorOfType<TagsController>();
+                _tagsShelfView = view.GetFirstAncestorOfType<TagsShelfView>();
                 _dropdownSearchField = view.FindInAncestors<DropdownSearchField>();
                 _listingStrategyName = _dropdownSearchField.HasSearchStrategy(_listingStrategyName)
                     ? _listingStrategyName
@@ -27,7 +27,7 @@ namespace Ludwell.Scene.Editor
 
         public void RemoveFromController()
         {
-            _tagsController.Remove(_data as TagWithSubscribers);
+            _tagsShelfView.Remove(_data as TagWithSubscribers);
         }
 
         public void UpdateTag(Tag tag)
@@ -35,10 +35,10 @@ namespace Ludwell.Scene.Editor
             _data = tag;
         }
 
-        public void SetValue(TagControllerElementView view)
+        public void SetValue(TagsShelfElementView view)
         {
             view.SetValue(_data.Name);
-            _tagsController?.Rebuild();
+            _tagsShelfView?.Rebuild();
         }
 
         public void AddValueChangedCallback(Action<string> callback)

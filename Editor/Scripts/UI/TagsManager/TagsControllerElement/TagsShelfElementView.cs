@@ -4,33 +4,33 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TagControllerElementView : VisualElement
+    public class TagsShelfElementView : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TagControllerElementView, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TagsShelfElementView, UxmlTraits>
         {
         }
 
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(TagsManager), nameof(TagControllerElementView));
+            Path.Combine("Uxml", nameof(TagsManager), nameof(TagsShelfElementView));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(TagsManager), nameof(TagControllerElementView));
+            Path.Combine("Uss", nameof(TagsManager), nameof(TagsShelfElementView));
 
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
         private const string SearchButtonName = "button-search";
 
-        private static TagControllerElementView _currentSelection;
+        private static TagsShelfElementView _currentSelection;
 
         private Button _removeButton;
         private Button _mainButton;
         private Button _searchButton;
 
-        private TagControllerElementController _controller;
+        private TagsShelfElementController _controller;
 
         public string Value => _mainButton.text;
 
-        public TagControllerElementView()
+        public TagsShelfElementView()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -41,7 +41,7 @@ namespace Ludwell.Scene
             ToggleBehaviourButtons(DisplayStyle.None);
         }
 
-        ~TagControllerElementView()
+        ~TagsShelfElementView()
         {
             _controller.RemoveValueChangedCallback(SetValue);
             RemoveButtonEvents();
@@ -65,7 +65,7 @@ namespace Ludwell.Scene
             _mainButton = this.Q<Button>(MainButtonName);
             _searchButton = this.Q<Button>(SearchButtonName);
 
-            _controller = new TagControllerElementController(this);
+            _controller = new TagsShelfElementController(this);
         }
 
         private void SetButtonEvents()

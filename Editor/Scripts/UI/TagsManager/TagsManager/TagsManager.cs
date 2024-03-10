@@ -21,7 +21,7 @@ namespace Ludwell.Scene
         private const string ReferenceName = "reference-name";
         private Label _referenceName;
 
-        private TagsController _tagsController;
+        private TagsShelfView _tagsShelfView;
         private TagSubscriber _tagSubscriber;
 
         private TagContainer _tagContainer;
@@ -63,19 +63,19 @@ namespace Ludwell.Scene
 
         public void AddTagToController(TagWithSubscribers tag)
         {
-            _tagsController.Add(tag);
+            _tagsShelfView.Add(tag);
             tag.AddSubscriber(_tagSubscriber);
         }
 
         public void RemoveTagFromController(TagWithSubscribers tag)
         {
-            _tagsController.Remove(tag);
+            _tagsShelfView.Remove(tag);
             tag.RemoveSubscriber(_tagSubscriber);
         }
 
         public void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
-            _tagsController.Remove(tag);
+            _tagsShelfView.Remove(tag);
             _tagContainer.Tags.Remove(tag);
             DataFetcher.SaveEveryScriptable();
             _listViewHandler.ForceRebuild();
@@ -106,17 +106,17 @@ namespace Ludwell.Scene
 
         private void BuildTagsController(TagSubscriberWithTags tagSubscriber)
         {
-            _tagsController
+            _tagsShelfView
                 .WithTagSubscriber(tagSubscriber)
                 .WithOptionButtonEvent(Return)
-                .Populate();
+                .PopulateContainer();
         }
 
         private void SetReferences()
         {
             _referenceName = this.Q<Label>(ReferenceName);
 
-            _tagsController = this.Q<TagsController>();
+            _tagsShelfView = this.Q<TagsShelfView>();
             _tagContainer = Resources.Load<TagContainer>(TagContainerPath);
             _listViewHandler = new(this.Q<ListView>(), _tagContainer.Tags);
             _dropdownSearchField = this.Q<DropdownSearchField>();
@@ -131,7 +131,7 @@ namespace Ludwell.Scene
                 foreach (var index in removedIndexes)
                 {
                     var tag = itemsSource[index] as TagWithSubscribers;
-                    _tagsController.Remove(tag);
+                    _tagsShelfView.Remove(tag);
                     tag.RemoveFromAllSubscribers();
                 }
 
@@ -173,7 +173,7 @@ namespace Ludwell.Scene
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
             var data = _listViewHandler.GetSelectedElementData();
-            _tagsController.Remove(data);
+            _tagsShelfView.Remove(data);
             data.RemoveFromAllSubscribers();
             _listViewHandler.RemoveSelectedElement();
         }
@@ -184,7 +184,7 @@ namespace Ludwell.Scene
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
 
             var data = _listViewHandler.GetSelectedElementData();
-            if (_tagsController.Contains(data)) return;
+            if (_tagsShelfView.ContainsData(data)) return;
 
             AddTagToController(_listViewHandler.GetSelectedElementData());
         }
@@ -195,9 +195,9 @@ namespace Ludwell.Scene
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
 
             var data = _listViewHandler.GetSelectedElementData();
-            if (!_tagsController.Contains(data)) return;
+            if (!_tagsShelfView.ContainsData(data)) return;
 
-            _tagsController.Remove(data);
+            _tagsShelfView.Remove(data);
         }
 
         private void InitializeTagSorting()
@@ -220,7 +220,7 @@ namespace Ludwell.Scene
 
         private void HandleTagController()
         {
-            _tagsController.OverrideIconTooltip("Return");
+            _tagsShelfView.OverrideIconTooltip("Return");
         }
 
         private void Return()
