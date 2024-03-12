@@ -15,7 +15,6 @@ namespace Ludwell.Scene.Editor
         {
             _view = view;
             _tagsShelfView = view.Q<TagsShelfView>();
-
         }
 
         public void Show(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
