@@ -10,8 +10,8 @@ namespace Ludwell.Scene.Editor
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagsManagerElementView));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagsManagerElementView));
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsManagerElementView));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsManagerElementView));
 
         private const string AddButtonName = "button__add";
         private const string RemoveButtonName = "button__remove";

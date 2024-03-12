@@ -12,8 +12,8 @@ namespace Ludwell.Scene
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagsShelfView));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagsShelfView));
+        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsShelfView));
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsShelfView));
 
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";

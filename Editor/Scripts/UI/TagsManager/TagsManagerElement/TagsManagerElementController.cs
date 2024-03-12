@@ -6,11 +6,11 @@ namespace Ludwell.Scene.Editor
     {
         private TagWithSubscribers _data;
         
-        private readonly TagsManager _tagsManager;
+        private readonly TagsManagerView _tagsManagerView;
         
         public TagsManagerElementController(VisualElement view)
         {
-            _tagsManager = view.GetFirstAncestorOfType<TagsManager>();
+            _tagsManagerView = view.GetFirstAncestorOfType<TagsManagerView>();
         }
 
         public void UpdateData(TagWithSubscribers data)
@@ -20,12 +20,12 @@ namespace Ludwell.Scene.Editor
         
         public void AddToController()
         {
-            _tagsManager.AddTagToController(_data);
+            _tagsManagerView.AddTagToShelfDelegated(_data);
         }
         
         public void RemoveFromController()
         {
-            _tagsManager.RemoveTagFromController(_data);
+            _tagsManagerView.RemoveTagFromShelfDelegated(_data);
         }
 
         public void UpdateValue(string value)
@@ -43,21 +43,21 @@ namespace Ludwell.Scene.Editor
         {
             if (!string.IsNullOrEmpty(_data.Name)) return;
             textField.Focus();
-            _tagsManager.SetPreviousTarget(view);
+            _tagsManagerView.SetPreviousTarget(view);
 
         }
         
         public void HandleInvalidTag()
         {
-            if (!string.IsNullOrEmpty(_data.Name) && !_tagsManager.IsTagDuplicate(_data)) return;
-            _tagsManager.RemoveInvalidTagElement(_data);
+            if (!string.IsNullOrEmpty(_data.Name) && !_tagsManagerView.IsTagDuplicate(_data)) return;
+            _tagsManagerView.RemoveInvalidTagElement(_data);
             _data.RemoveFromAllSubscribers();
         }
         
         public void OnEditCompleted()
         {
-            _tagsManager.SortTags();
-            _tagsManager.SetPreviousTarget(null);
+            _tagsManagerView.SortTags();
+            _tagsManagerView.SetPreviousTarget(null);
         }
     }
 }

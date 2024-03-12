@@ -7,22 +7,22 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TagsManager : VisualElement
+    public class TagsManagerView : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<TagsManager, UxmlTraits>
+        public new class UxmlFactory : UxmlFactory<TagsManagerView, UxmlTraits>
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManager), nameof(TagsManager));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManager), nameof(TagsManager));
+        private static readonly string
+            UxmlPath = Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsManagerView));
+
+        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsManagerView));
 
         private static readonly string TagContainerPath = Path.Combine("Scriptables", nameof(TagContainer));
 
         private const string ReferenceName = "reference-name";
         private Label _referenceName;
 
-        private TagsShelfView _tagsShelfView;
-        private TagSubscriber _tagSubscriber;
 
         private TagContainer _tagContainer;
 
@@ -31,9 +31,9 @@ namespace Ludwell.Scene
 
         private TagsManagerElementView _previousTarget;
 
-        private VisualElement _previousView;
+        private TagsManagerPresentor _presentor;
 
-        public TagsManager()
+        public TagsManagerView()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
@@ -49,33 +49,36 @@ namespace Ludwell.Scene
             HandleTagController();
         }
 
-        public void Show(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
+        public void ShowDelegated(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
         {
-            _tagSubscriber = tagSubscriber;
-            _referenceName.text = _tagSubscriber.Name;
+            _presentor.Show(tagSubscriber, previousView);
+        }
 
-            _previousView = previousView;
-            _previousView.style.display = DisplayStyle.None;
+        public void Show()
+        {
             style.display = DisplayStyle.Flex;
-
-            BuildTagsController(tagSubscriber);
         }
 
-        public void AddTagToController(TagWithSubscribers tag)
+        public void SetReferenceText(string value)
         {
-            _tagsShelfView.Add(tag);
-            tag.AddSubscriber(_tagSubscriber);
+            _referenceName.text = value;
         }
 
-        public void RemoveTagFromController(TagWithSubscribers tag)
+        public void AddTagToShelfDelegated(TagWithSubscribers tag)
         {
-            _tagsShelfView.Remove(tag);
-            tag.RemoveSubscriber(_tagSubscriber);
+            _presentor.AddTagToShelf(tag);
+            _presentor.AddSubscriberToTag(tag);
+        }
+
+        public void RemoveTagFromShelfDelegated(TagWithSubscribers tag)
+        {
+            _presentor.RemoveTagFromShelf(tag);
+            _presentor.RemoveSubscriberFromTag(tag);
         }
 
         public void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
-            _tagsShelfView.Remove(tag);
+            _presentor.RemoveTagFromShelf(tag);
             _tagContainer.Tags.Remove(tag);
             DataFetcher.SaveEveryScriptable();
             _listViewHandler.ForceRebuild();
@@ -103,23 +106,16 @@ namespace Ludwell.Scene
             DataFetcher.SaveEveryScriptableDelayed();
             _listViewHandler.ForceRebuild();
         }
-
-        private void BuildTagsController(TagSubscriberWithTags tagSubscriber)
-        {
-            _tagsShelfView
-                .WithTagSubscriber(tagSubscriber)
-                .WithOptionButtonEvent(Return)
-                .PopulateContainer();
-        }
-
+        
         private void SetReferences()
         {
             _referenceName = this.Q<Label>(ReferenceName);
 
-            _tagsShelfView = this.Q<TagsShelfView>();
             _tagContainer = Resources.Load<TagContainer>(TagContainerPath);
             _listViewHandler = new(this.Q<ListView>(), _tagContainer.Tags);
             _dropdownSearchField = this.Q<DropdownSearchField>();
+
+            _presentor = new TagsManagerPresentor(this);
         }
 
         private void InitializeListViewBehaviours()
@@ -131,8 +127,7 @@ namespace Ludwell.Scene
                 foreach (var index in removedIndexes)
                 {
                     var tag = itemsSource[index] as TagWithSubscribers;
-                    _tagsShelfView.Remove(tag);
-                    tag.RemoveFromAllSubscribers();
+                    _presentor.RemoveTagFromAllSubscribers(tag);
                 }
 
                 DataFetcher.SaveEveryScriptable();
@@ -163,7 +158,7 @@ namespace Ludwell.Scene
 
             if (evt.keyCode == KeyCode.Escape)
             {
-                Return();
+                _presentor.ReturnToPreviousView();
             }
         }
 
@@ -173,7 +168,7 @@ namespace Ludwell.Scene
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
             var data = _listViewHandler.GetSelectedElementData();
-            _tagsShelfView.Remove(data);
+            _presentor.RemoveTagFromShelf(data);
             data.RemoveFromAllSubscribers();
             _listViewHandler.RemoveSelectedElement();
         }
@@ -184,9 +179,7 @@ namespace Ludwell.Scene
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
 
             var data = _listViewHandler.GetSelectedElementData();
-            if (_tagsShelfView.ContainsData(data)) return;
-
-            AddTagToController(_listViewHandler.GetSelectedElementData());
+            _presentor.AddTagToShelf(data);
         }
 
         private void OnKeyUpRemoveSelected(KeyUpEvent keyUpEvent)
@@ -195,9 +188,7 @@ namespace Ludwell.Scene
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
 
             var data = _listViewHandler.GetSelectedElementData();
-            if (!_tagsShelfView.ContainsData(data)) return;
-
-            _tagsShelfView.Remove(data);
+            _presentor.RemoveTagFromShelf(data);
         }
 
         private void InitializeTagSorting()
@@ -220,13 +211,7 @@ namespace Ludwell.Scene
 
         private void HandleTagController()
         {
-            _tagsShelfView.OverrideIconTooltip("Return");
-        }
-
-        private void Return()
-        {
-            style.display = DisplayStyle.None;
-            _previousView.style.display = DisplayStyle.Flex;
+            _presentor.HandleTagController();
         }
     }
 }

@@ -11,10 +11,10 @@ namespace Ludwell.Scene
         }
 
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(TagsManager), nameof(TagsShelfElementView));
+            Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsShelfElementView));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(TagsManager), nameof(TagsShelfElementView));
+            Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsShelfElementView));
 
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";

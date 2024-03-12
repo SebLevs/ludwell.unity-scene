@@ -80,8 +80,8 @@ namespace Ludwell.Scene.Editor
             _tagsShelfView.WithOptionButtonEvent(() =>
             {
                 var root = view.Root();
-                var tagsManager = root.Q<TagsManager>();
-                tagsManager.Show(_data, root.Q<SceneDataController>());
+                var tagsManager = root.Q<TagsManagerView>();
+                tagsManager.ShowDelegated(_data, root.Q<SceneDataController>());
             });
         }
     }
