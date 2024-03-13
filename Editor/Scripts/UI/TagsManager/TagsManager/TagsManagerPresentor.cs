@@ -6,8 +6,6 @@ namespace Ludwell.Scene.Editor
 {
     public class TagsManagerPresentor
     {
-        private TagSubscriber _tagSubscriber;
-
         private VisualElement _previousView;
         private readonly TagsManagerView _view;
 
@@ -16,7 +14,7 @@ namespace Ludwell.Scene.Editor
         private ListViewHandler<TagsManagerElementView, TagWithSubscribers> _listViewHandler;
 
         private readonly TagContainer _tagContainer;
-        
+
         private TagsManagerElementView _previousTarget;
 
         public TagsManagerPresentor(TagsManagerView view)
@@ -27,18 +25,21 @@ namespace Ludwell.Scene.Editor
 
             _tagContainer = DataFetcher.GetTagContainer();
 
+            SetViewReturnIconTooltip();
+
             InitializeListViewHandler();
             InitializeDropdownSearchField();
-            
+
             // todo: work around for Focus/Blur overlap issue with ListView Rebuild. Sort logic should be on TME blur.
             InitializeTagSorting();
 
             InitializeReturnEvent();
+            
+            _tagContainer.OnRemove += RemoveInvalidTagElement;
         }
 
         public void Show(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
         {
-            _tagSubscriber = tagSubscriber;
             _previousView = previousView;
             _previousView.style.display = DisplayStyle.None;
 
@@ -48,46 +49,35 @@ namespace Ludwell.Scene.Editor
             _view.Show();
         }
 
-        public void AddTagToShelf(TagWithSubscribers tag)
+        private void AddTagToShelf(TagWithSubscribers tag)
         {
             _tagsShelfView.Add(tag);
         }
 
-        public void RemoveTagFromShelf(TagWithSubscribers tag)
+        private void RemoveTagFromShelf(TagWithSubscribers tag)
         {
             _tagsShelfView.Remove(tag);
         }
 
-        public void AddSubscriberToTag(TagWithSubscribers tag)
-        {
-            tag.AddSubscriber(_tagSubscriber);
-        }
-
-        public void RemoveSubscriberFromTag(TagWithSubscribers tag)
-        {
-            tag.RemoveSubscriber(_tagSubscriber);
-        }
-
-        public void RemoveTagFromAllSubscribers(TagWithSubscribers tag)
+        private void RemoveTagFromAllSubscribers(TagWithSubscribers tag)
         {
             _tagsShelfView.Remove(tag);
             tag.RemoveFromAllSubscribers();
         }
-        
-        public void SetPreviousTargetedElement(TagsManagerElementView target)
+
+        private void SetPreviousTargetedElement(TagsManagerElementView target)
         {
             _previousTarget = target;
         }
-        
-        public void RemoveInvalidTagElement(TagWithSubscribers tag)
+
+        private void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             RemoveTagFromShelf(tag);
-            _tagContainer.Tags.Remove(tag);
             DataFetcher.SaveEveryScriptable();
             _listViewHandler.ForceRebuild();
         }
 
-        public void HandleTagController()
+        private void SetViewReturnIconTooltip()
         {
             _tagsShelfView.OverrideIconTooltip("Return");
         }
@@ -133,7 +123,7 @@ namespace Ludwell.Scene.Editor
                 DataFetcher.SaveEveryScriptable();
             };
         }
-        
+
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
         {
             if (_listViewHandler.ListView.selectedItem == null) return;
@@ -184,7 +174,7 @@ namespace Ludwell.Scene.Editor
                 _listViewHandler.ListView.ScrollToItem(itemIndex);
             });
         }
-        
+
         private void InitializeTagSorting()
         {
             _view.RegisterCallback<MouseUpEvent>(evt =>
@@ -193,7 +183,7 @@ namespace Ludwell.Scene.Editor
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
                 {
                     SortTags();
-                    _previousTarget.HandleInvalidTag();
+                    // _previousTarget.HandleInvalidTag(); // todo: already handled?????
                     _previousTarget = null;
                 }
 
@@ -202,7 +192,7 @@ namespace Ludwell.Scene.Editor
                 _previousTarget = tagsManagerElement;
             });
         }
-        
+
         private void InitializeReturnEvent()
         {
             _view.RegisterCallback<AttachToPanelEvent>(_ => _view.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn));
@@ -217,7 +207,7 @@ namespace Ludwell.Scene.Editor
                 ReturnToPreviousView();
             }
         }
-        
+
         private void SortTags()
         {
             _tagContainer.Tags.Sort();

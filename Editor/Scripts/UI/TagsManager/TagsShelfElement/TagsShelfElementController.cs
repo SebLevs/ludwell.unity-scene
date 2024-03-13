@@ -43,12 +43,12 @@ namespace Ludwell.Scene.Editor
 
         public void AddValueChangedCallback(Action<string> callback)
         {
-            _data.AddValueChangedCallback(callback);
+            _data.OnValueChanged += callback;
         }
         
         public void RemoveValueChangedCallback(Action<string> callback)
         {
-            _data.RemoveValueChangedCallback(callback);
+            _data.OnValueChanged -= callback;
         }
 
         public void SearchWithData()

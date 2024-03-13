@@ -27,8 +27,6 @@ namespace Ludwell.Scene
             this.AddStyleFromUss(UssPath);
 
             SetReferences();
-
-            HandleTagController();
         }
 
         public void ShowDelegated(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
@@ -46,25 +44,10 @@ namespace Ludwell.Scene
             _referenceName.text = value;
         }
 
-        public void SetPreviousTargetedElementDelegated(TagsManagerElementView target)
-        {
-            _presentor.SetPreviousTargetedElement(target);
-        }
-
-        public void RemoveInvalidTagElementDelegated(TagWithSubscribers tag)
-        {
-            _presentor.RemoveInvalidTagElement(tag);
-        }
-
         private void SetReferences()
         {
             _referenceName = this.Q<Label>(ReferenceName);
             _presentor = new TagsManagerPresentor(this);
-        }
-
-        private void HandleTagController()
-        {
-            _presentor.HandleTagController();
         }
     }
 }

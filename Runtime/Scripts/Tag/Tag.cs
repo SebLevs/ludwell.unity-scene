@@ -8,18 +8,8 @@ namespace Ludwell.Scene
     {
         [SerializeField] private string name;
 
-        private Action<string> _onValueChanged;
-
-        public void AddValueChangedCallback(Action<string> callback)
-        {
-            _onValueChanged += callback;
-        }
-
-        public void RemoveValueChangedCallback(Action<string> callback)
-        {
-            _onValueChanged -= callback;
-        }
-
+        public Action<string> OnValueChanged;
+        
         public string Name
         {
             get => name;
@@ -27,7 +17,7 @@ namespace Ludwell.Scene
             {
                 if (name == value) return;
                 name = value;
-                _onValueChanged?.Invoke(name);
+                OnValueChanged?.Invoke(name);
             }
         }
 
