@@ -34,7 +34,7 @@ namespace Ludwell.Scene.Editor
             InitializeTagSorting();
 
             InitializeReturnEvent();
-            
+
             _tagContainer.OnRemove += RemoveInvalidTagElement;
         }
 
@@ -183,7 +183,6 @@ namespace Ludwell.Scene.Editor
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
                 {
                     SortTags();
-                    // _previousTarget.HandleInvalidTag(); // todo: already handled?????
                     _previousTarget = null;
                 }
 

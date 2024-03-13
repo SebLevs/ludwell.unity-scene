@@ -21,7 +21,7 @@ namespace Ludwell.Scene
             if (IsTagValid(tag)) return;
             RemoveTag(tag);
         }
-        
+
         public bool IsTagValid(Tag tag)
         {
             return !string.IsNullOrEmpty(tag.Name) && !IsTagDuplicate(tag);

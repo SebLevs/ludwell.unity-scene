@@ -6,16 +6,6 @@ namespace Ludwell.Scene.Editor
     {
         public TagWithSubscribers Data;
 
-        private readonly TagsManagerView _tagsManagerView;
-
-        private readonly TagContainer _tagContainer;
-
-        public TagsManagerElementController(VisualElement view)
-        {
-            _tagsManagerView = view.GetFirstAncestorOfType<TagsManagerView>();
-            _tagContainer = DataFetcher.GetTagContainer();
-        }
-
         public void UpdateValue(string value)
         {
             Data.Name = value;

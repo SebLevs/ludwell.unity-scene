@@ -56,7 +56,7 @@ namespace Ludwell.Scene.Editor
         public void SetElementFromCachedData()
         {
             _controller.SetValue(this);
-            
+
             if (!string.IsNullOrEmpty(_textField.value)) return;
             _textField.Focus();
         }
@@ -73,7 +73,7 @@ namespace Ludwell.Scene.Editor
 
             _textField = this.Q<TextField>(TagTextFieldName);
 
-            RegisterCallback<AttachToPanelEvent>(_ => _controller = new TagsManagerElementController(this));
+            RegisterCallback<AttachToPanelEvent>(_ => _controller = new TagsManagerElementController());
         }
 
         private void InitializeButtons()
@@ -94,7 +94,8 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeValidityHandlingEvents()
         {
-            _textField.RegisterCallback<BlurEvent>(_ => DataFetcher.GetTagContainer().HandleUpdatedTag(_controller.Data));
+            _textField.RegisterCallback<BlurEvent>(
+                _ => DataFetcher.GetTagContainer().HandleUpdatedTag(_controller.Data));
             RegisterCallback<AttachToPanelEvent>(_ => _textField.RegisterCallback<KeyDownEvent>(OnKeyDown));
         }
 
