@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,8 @@ namespace Ludwell.Scene
         where TData : new()
     {
         public ListView ListView { get; }
+
+        public Action<TVisualElement> OnItemMade;
 
         public ListViewHandler(ListView listView, List<TData> data)
         {
@@ -59,7 +62,9 @@ namespace Ludwell.Scene
 
         private TVisualElement CreateElement()
         {
-            return new TVisualElement();
+            var visualElement = new TVisualElement();
+            OnItemMade?.Invoke(visualElement);
+            return visualElement;
         }
 
         private void OnElementScrollIntoView(VisualElement element, int index)

@@ -1,63 +1,45 @@
+using System;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
     public class TagsManagerElementController
     {
-        private TagWithSubscribers _data;
-        
+        public TagWithSubscribers Data;
+
         private readonly TagsManagerView _tagsManagerView;
-        
+
+        private readonly TagContainer _tagContainer;
+
         public TagsManagerElementController(VisualElement view)
         {
             _tagsManagerView = view.GetFirstAncestorOfType<TagsManagerView>();
-        }
-
-        public void UpdateData(TagWithSubscribers data)
-        {
-            _data = data;
-        }
-        
-        public void AddToController()
-        {
-            _tagsManagerView.AddTagToShelfDelegated(_data);
-        }
-        
-        public void RemoveFromController()
-        {
-            _tagsManagerView.RemoveTagFromShelfDelegated(_data);
+            _tagContainer = DataFetcher.GetTagContainer();
         }
 
         public void UpdateValue(string value)
         {
-            _data.Name = value;
+            Data.Name = value;
             DataFetcher.SaveEveryScriptableDelayed();
         }
 
         public void SetValue(TagsManagerElementView view)
         {
-            view.SetText(_data.Name);
+            view.SetText(Data.Name);
         }
 
         public void FocusTextField(TagsManagerElementView view, TextField textField)
         {
-            if (!string.IsNullOrEmpty(_data.Name)) return;
+            if (!string.IsNullOrEmpty(Data.Name)) return;
             textField.Focus();
-            _tagsManagerView.SetPreviousTarget(view);
-
+            _tagsManagerView.SetPreviousTargetedElementDelegated(view);
         }
-        
+
         public void HandleInvalidTag()
         {
-            if (!string.IsNullOrEmpty(_data.Name) && !_tagsManagerView.IsTagDuplicate(_data)) return;
-            _tagsManagerView.RemoveInvalidTagElement(_data);
-            _data.RemoveFromAllSubscribers();
-        }
-        
-        public void OnEditCompleted()
-        {
-            _tagsManagerView.SortTags();
-            _tagsManagerView.SetPreviousTarget(null);
+            if (_tagContainer.CanTagBeAdded(Data)) return;
+            _tagsManagerView.RemoveInvalidTagElementDelegated(Data); // todo: find better way to handle either that line or invalidity itself
+            Data.RemoveFromAllSubscribers();
         }
     }
 }

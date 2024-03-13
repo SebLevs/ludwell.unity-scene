@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,8 +11,15 @@ namespace Ludwell.Scene.Editor
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsManagerElementView));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsManagerElementView));
+        private static readonly string UxmlPath =
+            Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsManagerElementView));
+
+        private static readonly string UssPath =
+            Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsManagerElementView));
+
+        public Action<TagWithSubscribers> OnAdd;
+        public Action<TagWithSubscribers> OnRemove;
+        public Action OnTextEditEnd;
 
         private const string AddButtonName = "button__add";
         private const string RemoveButtonName = "button__remove";
@@ -37,7 +45,7 @@ namespace Ludwell.Scene.Editor
 
         public void CacheData(TagWithSubscribers data)
         {
-            _controller.UpdateData(data);
+            _controller.Data = data;
         }
 
         public void BindElementToCachedData()
@@ -74,10 +82,20 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeButtons()
         {
-            _addButton.RegisterCallback<ClickEvent>(_ => _controller.AddToController());
-            _removeButton.RegisterCallback<ClickEvent>(_ => _controller.RemoveFromController());
+            _addButton.clicked += AddBehaviour;
+            _removeButton.clicked += RemoveBehaviour;
         }
-        
+
+        private void AddBehaviour()
+        {
+            OnAdd?.Invoke(_controller.Data);
+        }
+
+        private void RemoveBehaviour()
+        {
+            OnRemove?.Invoke(_controller.Data);
+        }
+
         private void InitializeValidityHandlingEvents()
         {
             _textField.RegisterCallback<BlurEvent>(_ => _controller.HandleInvalidTag());
@@ -87,7 +105,7 @@ namespace Ludwell.Scene.Editor
         private void OnKeyDown(KeyDownEvent evt)
         {
             if (evt.keyCode != KeyCode.Return) return;
-            _controller.OnEditCompleted();
+            OnTextEditEnd?.Invoke();
         }
 
         private void BindTextField(ChangeEvent<string> evt)
