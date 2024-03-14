@@ -11,36 +11,51 @@ namespace Ludwell.Scene.Editor
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
-        
+
         private readonly QuickLoadElements _quickLoadElements;
         private ListViewHandler<QuickLoadElementView, QuickLoadElementData> _listViewHandler;
 
-        public QuickLoadController(VisualElement view, ListView listView, DropdownSearchField dropdownSearchField)
+        private readonly QuickLoadView _view;
+        private ListView _listView;
+        private DropdownSearchField _dropdownSearchField;
+
+        public QuickLoadController(VisualElement parent)
         {
+            var root = parent.Q(nameof(QuickLoadView));
+            _view = new QuickLoadView(root, CloseAll, SceneDataGenerator.CreateSceneAssetAtPath, DeleteSelection);
+
             _quickLoadElements = DataFetcher.GetQuickLoadElements();
-            
-            InitializeListViewHandler(listView);
-            
-            InitializeSearchField(view, dropdownSearchField);
+
+            _listView = root.Q<ListView>();
+
+            InitializeListViewHandler(root.Q<ListView>());
+            InitializeSearchField(root, root.Q<DropdownSearchField>());
+            InitializeListViewKeyUpEvents();
+            InitializeForceRebuildSignal(root);
+        }
+
+        ~QuickLoadController()
+        {
+            Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>
         public void DeleteSelection()
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
-            
+
             var selectedElementData = _listViewHandler.GetSelectedElementData();
-            
+
             var elementToDelete = selectedElementData != null
                 ? AssetDatabase.GetAssetPath(selectedElementData.SceneData)
                 : AssetDatabase.GetAssetPath(_listViewHandler.GetLastData().SceneData);
-            
+
             AssetDatabase.DeleteAsset(elementToDelete);
 
             _listViewHandler.ForceRebuild();
         }
-        
-        public void CloseAll()
+
+        private void CloseAll()
         {
             if (_quickLoadElements == null || _quickLoadElements.Elements == null) return;
 
@@ -54,11 +69,11 @@ namespace Ludwell.Scene.Editor
                 item.SetIsOpen(false);
             }
         }
-        
+
         private void InitializeListViewHandler(ListView listView)
         {
             _listViewHandler = new(listView, _quickLoadElements.Elements);
-            
+
             _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
             {
                 foreach (var index in indexEnumerable)
@@ -70,8 +85,8 @@ namespace Ludwell.Scene.Editor
                 DataFetcher.SaveEveryScriptableDelayed();
             };
         }
-        
-        private void InitializeSearchField(VisualElement view, DropdownSearchField dropdownSearchField)
+
+        private void InitializeSearchField(VisualElement root, DropdownSearchField dropdownSearchField)
         {
             dropdownSearchField.BindToListView(_listViewHandler.ListView);
 
@@ -79,7 +94,7 @@ namespace Ludwell.Scene.Editor
             var searchListingStrategy = new ListingStrategy(TagListingStrategyName, icon, ListTag);
 
             dropdownSearchField
-                .WithResizableParent(view)
+                .WithResizableParent(root)
                 .WithDropdownBehaviour(index =>
                 {
                     dropdownSearchField.HideDropdown();
@@ -87,7 +102,33 @@ namespace Ludwell.Scene.Editor
                 })
                 .WithCyclingListingStrategy(searchListingStrategy);
         }
-        
+
+        private void InitializeListViewKeyUpEvents()
+        {
+            _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+        }
+
+        private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
+        {
+            if (_listView.selectedItem == null) return;
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
+
+            DeleteSelection();
+        }
+
+        private void InitializeForceRebuildSignal(VisualElement root)
+        {
+            _listView = root.Q<ListView>();
+            _dropdownSearchField = root.Q<DropdownSearchField>();
+            Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
+        }
+
+        private void ForceRebuildListView()
+        {
+            _listView.Rebuild();
+            _dropdownSearchField.RebuildActiveListing();
+        }
+
         private List<IListable> ListTag(string searchFieldValue, IList boundItemSource)
         {
             List<IListable> filteredList = new();

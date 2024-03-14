@@ -52,11 +52,6 @@ namespace Ludwell.Scene
             return this;
         }
 
-        public bool ContainsData(Tag tag)
-        {
-            return _controller.Contains(tag);
-        }
-
         public void Add(Tag tag)
         {
             if (_controller.Contains(tag)) return;

@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Template name="core-scene" src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uxml/SceneDataController/core-scene.uxml?fileID=9197481963319205126&amp;guid=5f9b25b9ce92eb54596cf40af535b054&amp;type=3#core-scene" />
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uss/SceneDataController/SceneDataController.uss?fileID=7433441132597879392&amp;guid=6d52c786db684094a8788aa48687b6b4&amp;type=3#SceneDataController" />
+    <ui:Template name="QuickLoadView" src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uxml/SceneDataController/QuickLoadView.uxml?fileID=9197481963319205126&amp;guid=14480c97d71de344c9818775c93f888a&amp;type=3#QuickLoadView" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/SceneDataController/SceneDataController.uss?fileID=7433441132597879392&amp;guid=6d52c786db684094a8788aa48687b6b4&amp;type=3#SceneDataController" />
     <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; display: flex;">
         <ui:Foldout text="Starting Scene" name="foldout__main-menu" class="foldout">
             <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 8px; margin-bottom: 8px; align-self: stretch; align-items: center;">
@@ -14,6 +15,6 @@
                 <AttributeOverrides element-name="scene-selection" label="Loading scene" />
             </ui:Instance>
         </ui:Foldout>
-        <Ludwell.Scene.QuickLoadView name="scene-loader-list-controller" style="flex-grow: 1;" />
+        <ui:Instance template="QuickLoadView" name="QuickLoadView" />
     </ui:VisualElement>
 </ui:UXML>

@@ -3,3 +3,12 @@ ScrollView > VisualElement > VisualElement > Label {
     height: 100%;
     max-width: 100%;
 }
+
+#SceneDataView {
+    flex-grow: 1;
+}
+
+#TagsManagerView {
+    flex-grow: 1;
+    display: none;
+}

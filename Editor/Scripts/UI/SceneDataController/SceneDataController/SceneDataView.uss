@@ -52,3 +52,7 @@
     border-top-color: rgb(80, 80, 80);
     border-bottom-color: rgb(80, 80, 80);
 }
+
+#QuickLoadView {
+    flex-grow: 1;
+}

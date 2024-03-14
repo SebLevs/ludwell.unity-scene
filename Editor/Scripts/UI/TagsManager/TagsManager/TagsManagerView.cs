@@ -1,42 +1,42 @@
-using System.IO;
+using System;
 using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TagsManagerView : VisualElement
+    public class TagsManagerView: IViewable
     {
-        public new class UxmlFactory : UxmlFactory<TagsManagerView, UxmlTraits>
-        {
-        }
-
-        private static readonly string
-            UxmlPath = Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsManagerView));
-
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsManagerView));
-
         private const string ReferenceName = "reference-name";
 
         private Label _referenceName;
 
-        private TagsManagerPresentor _presentor;
+        private VisualElement _root;
 
-        public TagsManagerView()
+        private Action OnShow;
+
+        public TagsManagerView(VisualElement root, Action onShow)
         {
-            this.AddHierarchyFromUxml(UxmlPath);
-            this.AddStyleFromUss(UssPath);
-
+            _root = root;
+            OnShow = onShow;
             SetReferences();
+            
+            ViewManager.Instance.Add(this);
         }
 
-        public void ShowDelegated(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
+        ~TagsManagerView()
         {
-            _presentor.Show(tagSubscriber, previousView);
+            ViewManager.Instance.Remove(this);
         }
 
         public void Show()
         {
-            style.display = DisplayStyle.Flex;
+            _root.style.display = DisplayStyle.Flex;
+            OnShow?.Invoke();
+        }
+
+        public void Hide()
+        {
+            _root.style.display = DisplayStyle.None;
         }
 
         public void SetReferenceText(string value)
@@ -46,8 +46,7 @@ namespace Ludwell.Scene
 
         private void SetReferences()
         {
-            _referenceName = this.Q<Label>(ReferenceName);
-            _presentor = new TagsManagerPresentor(this);
+            _referenceName = _root.Q<Label>(ReferenceName);
         }
     }
 }

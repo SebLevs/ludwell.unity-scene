@@ -4,49 +4,39 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerPresentor
+    public class TagsManagerController
     {
-        private VisualElement _previousView;
+        private readonly VisualElement _root;
         private readonly TagsManagerView _view;
-
         private readonly TagsShelfView _tagsShelfView;
-
-        private ListViewHandler<TagsManagerElementView, TagWithSubscribers> _listViewHandler;
 
         private readonly TagContainer _tagContainer;
 
+        private VisualElement _previousView;
+
+        private ListViewHandler<TagsManagerElementView, TagWithSubscribers> _listViewHandler;
+
         private TagsManagerElementView _previousTarget;
 
-        public TagsManagerPresentor(TagsManagerView view)
+        public TagsManagerController(VisualElement parent)
         {
-            _view = view;
+            _root = parent.Q(nameof(TagsManagerView));
+            _view = new TagsManagerView(_root, BuildTagsController);
 
-            _tagsShelfView = _view.Q<TagsShelfView>();
+            _tagsShelfView = _root.Q<TagsShelfView>();
 
             _tagContainer = DataFetcher.GetTagContainer();
 
             SetViewReturnIconTooltip();
 
+            InitializeReturnEvent();
             InitializeListViewHandler();
             InitializeDropdownSearchField();
 
             // todo: work around for Focus/Blur overlap issue with ListView Rebuild. Sort logic should be on TME blur.
             InitializeTagSorting();
 
-            InitializeReturnEvent();
-
             _tagContainer.OnRemove += RemoveInvalidTagElement;
-        }
-
-        public void Show(TagSubscriberWithTags tagSubscriber, VisualElement previousView)
-        {
-            _previousView = previousView;
-            _previousView.style.display = DisplayStyle.None;
-
-            BuildTagsController(tagSubscriber);
-
-            _view.SetReferenceText(tagSubscriber.Name);
-            _view.Show();
         }
 
         private void AddTagToShelf(TagWithSubscribers tag)
@@ -82,25 +72,40 @@ namespace Ludwell.Scene.Editor
             _tagsShelfView.OverrideIconTooltip("Return");
         }
 
-        private void ReturnToPreviousView()
-        {
-            _view.style.display = DisplayStyle.None;
-            _previousView.style.display = DisplayStyle.Flex;
-        }
-
-        private void BuildTagsController(TagSubscriberWithTags tagSubscriber)
+        public static TagSubscriberWithTags foo;
+        private void BuildTagsController() // TagSubscriberWithTags tagSubscriber
         {
             _tagsShelfView
-                .WithTagSubscriber(tagSubscriber)
+                .WithTagSubscriber(foo)
                 .WithOptionButtonEvent(ReturnToPreviousView)
                 .PopulateContainer();
+        }
+
+        private void ReturnToPreviousView()
+        {
+            ViewManager.Instance.TransitionToFirstViewOfType<SceneDataView>();
+        }
+
+        private void InitializeReturnEvent()
+        {
+            _root.RegisterCallback<AttachToPanelEvent>(_ => _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn));
+        }
+
+        private void OnKeyUpReturn(KeyUpEvent evt)
+        {
+            if (_root.style.display == DisplayStyle.None) return;
+
+            if (evt.keyCode == KeyCode.Escape)
+            {
+                ReturnToPreviousView();
+            }
         }
 
         private void InitializeListViewHandler()
         {
             _listViewHandler =
                 new ListViewHandler<TagsManagerElementView, TagWithSubscribers>(
-                    _view.Q<ListView>(),
+                    _root.Q<ListView>(),
                     DataFetcher.GetTagContainer().Tags);
 
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
@@ -167,7 +172,7 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeDropdownSearchField()
         {
-            var dropDropdownSearchField = _view.Q<DropdownSearchField>();
+            var dropDropdownSearchField = _root.Q<DropdownSearchField>();
             dropDropdownSearchField.BindToListView(_listViewHandler.ListView);
             dropDropdownSearchField.WithDropdownBehaviour(itemIndex =>
             {
@@ -177,7 +182,7 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeTagSorting()
         {
-            _view.RegisterCallback<MouseUpEvent>(evt =>
+            _root.RegisterCallback<MouseUpEvent>(evt =>
             {
                 var tagsManagerElement = (evt.target as VisualElement).GetFirstAncestorOfType<TagsManagerElementView>();
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
@@ -190,21 +195,6 @@ namespace Ludwell.Scene.Editor
                 if (tagsManagerElement == null) return;
                 _previousTarget = tagsManagerElement;
             });
-        }
-
-        private void InitializeReturnEvent()
-        {
-            _view.RegisterCallback<AttachToPanelEvent>(_ => _view.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn));
-        }
-
-        private void OnKeyUpReturn(KeyUpEvent evt)
-        {
-            if (_view.style.display == DisplayStyle.None) return;
-
-            if (evt.keyCode == KeyCode.Escape)
-            {
-                ReturnToPreviousView();
-            }
         }
 
         private void SortTags()

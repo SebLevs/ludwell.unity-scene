@@ -13,7 +13,7 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController(VisualElement view)
         {
             _tagsShelfView = view.Q<TagsShelfView>();
-            BuildTagsController(view);
+            InitializeViewTransition();
         }
 
         public void LoadScene(SceneData sceneData)
@@ -74,14 +74,19 @@ namespace Ludwell.Scene.Editor
         {
             view.SetSceneData(_data.SceneData);
         }
-
-        private void BuildTagsController(VisualElement view)
+        
+        private void InitializeViewTransition()
         {
             _tagsShelfView.WithOptionButtonEvent(() =>
             {
-                var root = view.Root();
-                var tagsManager = root.Q<TagsManagerView>();
-                tagsManager.ShowDelegated(_data, root.Q<SceneDataController>());
+                TagsManagerController.foo = _data;
+                Debug.LogError("Find better way to handle above");
+                
+                var viewRenderer = ViewManager.Instance;
+                viewRenderer.TransitionToFirstViewOfType<TagsManagerView>();
+                var currentView = viewRenderer.CurrentView;
+                (currentView as TagsManagerView)?.SetReferenceText(_data.Name);
+                
             });
         }
     }
