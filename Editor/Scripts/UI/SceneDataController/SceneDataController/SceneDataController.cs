@@ -5,11 +5,13 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class SceneDataController
+    public class SceneDataController : IViewable
     {
         private const string MainMenuButtonsName = "main-menu__buttons";
         private const string MainMenuObjectFieldName = "launcher__main-menu";
 
+        private readonly ViewManager _viewManager;
+        
         private readonly VisualElement _root;
         private SceneDataView _view;
         private readonly QuickLoadController _quickLoadController;
@@ -22,6 +24,19 @@ namespace Ludwell.Scene
             InitMainMenuButtons();
             
             _quickLoadController = new QuickLoadController(_root);
+
+            _viewManager = parent.Root().Q<ViewManager>();
+            _viewManager.Add(this);
+        }
+        
+        public void Show(ViewArgs args)
+        {
+            _view.Show();
+        }
+
+        public void Hide()
+        {
+            _view.Hide();
         }
 
         private void UpdateStartingScene(ChangeEvent<Object> evt)

@@ -1,35 +1,48 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.UIElements;
+
 namespace Ludwell.Scene.Editor
 {
     public class TagsShelfController
     {
         private TagSubscriberWithTags _data = new();
 
-        public int Count => _data.Tags.Count;
+        private readonly TagsShelfView _view;
+
         public int IndexOf(TagWithSubscribers tagWithSubscribers) => _data.Tags.IndexOf(tagWithSubscribers);
 
-        public TagsShelfController()
+        public TagsShelfController(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
         {
+            _view = new TagsShelfView(parent, onOptionClicked);
         }
 
-        public bool Contains(Tag tag)
+        public void Add(TagWithSubscribers tag)
         {
-            return _data.Tags.Contains(tag);
-        }
-
-        public void Add(Tag tag)
-        {
+            if (Contains(tag)) return;
             _data.Tags.Add(tag);
+            tag.AddSubscriber(_data);
+            _view.Add(ConstructTagElement(tag));
+            Sort();
+
+            DataFetcher.SaveEveryScriptableDelayed();
         }
 
         public void Remove(TagWithSubscribers tagWithSubscribers)
         {
+            if (!Contains(tagWithSubscribers)) return;
+
+            _view.RemoveAt(IndexOf(tagWithSubscribers));
             _data.Tags.Remove(tagWithSubscribers);
             tagWithSubscribers.RemoveSubscriber(_data);
+
+            DataFetcher.SaveEveryScriptableDelayed();
         }
 
-        public void Sort()
+        private void Sort()
         {
             _data.Tags.Sort();
+            _view.Sort();
         }
 
         public void UpdateData(TagSubscriberWithTags data)
@@ -37,10 +50,33 @@ namespace Ludwell.Scene.Editor
             _data = data;
         }
 
-        public void PopulateContainer(TagsShelfView view)
+        public void PopulateContainer()
         {
-            view.ClearContainer();
-            view.Populate(_data.Tags);
+            _view.ClearContainer();
+            _view.Populate(ConstructTagElements(_data.Tags));
+        }
+
+        public void OverrideIconTooltip(string value)
+        {
+            _view.OverrideIconTooltip(value);
+        }
+
+        private bool Contains(Tag tag)
+        {
+            return _data.Tags.Contains(tag);
+        }
+
+        private TagsShelfElementView ConstructTagElement(Tag tag)
+        {
+            TagsShelfElementView tagsShelfElementView = new();
+            tagsShelfElementView.UpdateCache(tag);
+            tagsShelfElementView.SetTagShelfController(this);
+            return tagsShelfElementView;
+        }
+
+        private IEnumerable<TagsShelfElementView> ConstructTagElements(List<Tag> tags)
+        {
+            return tags.Select(ConstructTagElement);
         }
     }
 }

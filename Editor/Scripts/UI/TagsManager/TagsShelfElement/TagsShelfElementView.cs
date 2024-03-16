@@ -46,6 +46,11 @@ namespace Ludwell.Scene
             _controller.RemoveValueChangedCallback(SetValue);
             RemoveButtonEvents();
         }
+        
+        public void SetTagShelfController(TagsShelfController tagsShelfController)
+        {
+            _controller.SetTagShelfController(tagsShelfController);
+        }
 
         public void SetValue(string text)
         {
@@ -54,6 +59,7 @@ namespace Ludwell.Scene
 
         public void UpdateCache(Tag tag)
         {
+            _controller.RemoveValueChangedCallback(SetValue);
             _controller.UpdateTag(tag);
             _controller.SetValue(this);
             _controller.AddValueChangedCallback(SetValue);

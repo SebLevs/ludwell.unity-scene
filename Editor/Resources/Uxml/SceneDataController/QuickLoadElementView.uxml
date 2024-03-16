@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/LoaderController/LoaderListViewElement.uss?fileID=7433441132597879392&amp;guid=bd93788d9e440a24cb492b378a5f6ae4&amp;type=3#LoaderListViewElement" />
+    <ui:Template name="TagsShelfView" src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uxml/TagsManagerView/TagsShelfView.uxml?fileID=9197481963319205126&amp;guid=b11f09c9737ee2b448c3a12d9e566bcf&amp;type=3#TagsShelfView" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uss/SceneDataController/QuickLoadElementView.uss?fileID=7433441132597879392&amp;guid=bd93788d9e440a24cb492b378a5f6ae4&amp;type=3#QuickLoadElementView" />
     <ui:VisualElement name="root">
         <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgba(71, 71, 71, 0); display: flex;" />
         <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
@@ -8,7 +9,7 @@
                     <ui:VisualElement name="container__main-scene" style="background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); padding-bottom: 8px;">
                         <uie:ObjectField label="Main scene" type="Ludwell.Scene.SceneData, ludwell.scene" name="main-scene" style="width: 80%; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
                     </ui:VisualElement>
-                    <Ludwell.Scene.TagsShelfView />
+                    <ui:Instance template="TagsShelfView" name="TagsShelfView" />
                 </ui:VisualElement>
             </ui:Foldout>
             <uie:ToolbarSpacer name="toggle-bottom" style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgb(56, 56, 56); border-top-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);" />

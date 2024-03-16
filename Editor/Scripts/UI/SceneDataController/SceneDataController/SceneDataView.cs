@@ -4,7 +4,7 @@ using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataView : IViewable
+    public class SceneDataView
     {
         private const string StartingObjectFieldName = "launcher__main-menu";
         private const string PersistentObjectFieldName = "core-scene__persistent";
@@ -31,15 +31,8 @@ namespace Ludwell.Scene.Editor
             InitializeStartingSceneCallback();
             InitializePersistentSceneCallback();
             InitializeLoadingSceneCallback();
-            
-            ViewManager.Instance.Add(this);
         }
-        
-        ~SceneDataView()
-        {
-            ViewManager.Instance.Remove(this);
-        }
-        
+
         public void Show()
         {
             _root.style.display = DisplayStyle.Flex;

@@ -34,11 +34,6 @@ namespace Ludwell.Scene.Editor
             InitializeForceRebuildSignal(root);
         }
 
-        ~QuickLoadController()
-        {
-            Signals.Remove<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
-        }
-
         /// <summary> If no item is selected, deletes the last item. </summary>
         public void DeleteSelection()
         {

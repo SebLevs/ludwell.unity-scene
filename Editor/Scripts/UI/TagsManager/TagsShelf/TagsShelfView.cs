@@ -1,121 +1,73 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TagsShelfView : VisualElement
+    public class TagsShelfView
     {
-        public new class UxmlFactory : UxmlFactory<TagsShelfView, UxmlTraits>
-        {
-        }
-
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(TagsManagerView), nameof(TagsShelfView));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(TagsManagerView), nameof(TagsShelfView));
-
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";
         private const string NotTaggedName = "not-tagged";
         private const string IconButtonName = "tags__button-add";
 
-        private Button _manageTagsButton;
+        private Button _optionsButton;
         private VisualElement _container;
         private Label _notTaggedLabel;
 
-        private TagsShelfController _controller;
+        private VisualElement _root;
 
-        public TagsShelfView()
+        private int ElementsCount => _container.contentContainer.childCount;
+
+        public TagsShelfView(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
         {
-            this.AddHierarchyFromUxml(UxmlPath);
-            this.AddStyleFromUss(UssPath);
-
+            _root = parent.Q(nameof(TagsShelfView));
             SetReferences();
+            _optionsButton.RegisterCallback(onOptionClicked);
         }
 
         public void OverrideIconTooltip(string value)
         {
-            this.Q(IconButtonName).tooltip = value;
+            _root.Q(IconButtonName).tooltip = value;
         }
 
-        public TagsShelfView WithTagSubscriber(TagSubscriberWithTags tagSubscriber)
+        public void Add(TagsShelfElementView tagShelfElementView)
         {
-            _controller.UpdateData(tagSubscriber);
-            return this;
-        }
-
-        public TagsShelfView WithOptionButtonEvent(Action callback)
-        {
-            _manageTagsButton.style.display = DisplayStyle.Flex;
-            _manageTagsButton.RegisterCallback<ClickEvent>(_ => { callback.Invoke(); });
-            return this;
-        }
-
-        public void Add(Tag tag)
-        {
-            if (_controller.Contains(tag)) return;
-
-            _controller.Add(tag);
-            _container.Add(ConstructTagElement(tag));
-            Rebuild();
-
-            DataFetcher.SaveEveryScriptableDelayed();
-        }
-
-        public void Remove(TagWithSubscribers tagWithSubscribers)
-        {
-            if (!_controller.Contains(tagWithSubscribers)) return;
-            _container.RemoveAt(_controller.IndexOf(tagWithSubscribers));
-            _controller.Remove(tagWithSubscribers);
-            HandleUntaggedState();
-
-            DataFetcher.SaveEveryScriptableDelayed();
-        }
-
-        public void Rebuild()
-        {
-            _controller.Sort();
+            _container.Add(tagShelfElementView);
             Sort();
-            HandleUntaggedState();
+
+            if (ElementsCount > 1) return;
+            SetNotTaggedLabelDisplay(DisplayStyle.None);
         }
 
-        public void PopulateContainer()
+        public void RemoveAt(int index)
         {
-            _controller.PopulateContainer(this);
+            _container.RemoveAt(index);
             HandleUntaggedState();
         }
 
         public void ClearContainer()
         {
             _container.Clear();
+            SetNotTaggedLabelDisplay(DisplayStyle.None);
         }
 
-        public void Populate(List<Tag> tags)
+        private void SetNotTaggedLabelDisplay(DisplayStyle displayStyle)
         {
-            foreach (var tag in tags)
+            _notTaggedLabel.style.display = displayStyle;
+        }
+
+        public void Populate(IEnumerable<TagsShelfElementView> tagElements)
+        {
+            foreach (var tag in tagElements)
             {
-                _container.Add(ConstructTagElement(tag));
+                _container.Add(tag);
             }
+
+            HandleUntaggedState();
         }
 
-        private void SetReferences()
-        {
-            _manageTagsButton = this.Q<Button>(AddButtonName);
-            _container = this.Q<VisualElement>(TagsContainerName);
-            _notTaggedLabel = this.Q<Label>(NotTaggedName);
-
-            _controller = new TagsShelfController();
-        }
-
-        private TagsShelfElementView ConstructTagElement(Tag tag)
-        {
-            TagsShelfElementView tagsShelfElementView = new();
-            tagsShelfElementView.UpdateCache(tag);
-            return tagsShelfElementView;
-        }
-
-        private void Sort()
+        public void Sort()
         {
             _container.Sort((a, b) =>
             {
@@ -125,9 +77,16 @@ namespace Ludwell.Scene
             });
         }
 
+        private void SetReferences()
+        {
+            _optionsButton = _root.Q<Button>(AddButtonName);
+            _container = _root.Q<VisualElement>(TagsContainerName);
+            _notTaggedLabel = _root.Q<Label>(NotTaggedName);
+        }
+
         private void HandleUntaggedState()
         {
-            _notTaggedLabel.style.display = _controller.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _notTaggedLabel.style.display = ElementsCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

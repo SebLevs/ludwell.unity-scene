@@ -73,7 +73,7 @@ namespace Ludwell.Scene.Editor
 
             _textField = this.Q<TextField>(TagTextFieldName);
 
-            RegisterCallback<AttachToPanelEvent>(_ => _controller = new TagsManagerElementController());
+            _controller = new TagsManagerElementController();
         }
 
         private void InitializeButtons()

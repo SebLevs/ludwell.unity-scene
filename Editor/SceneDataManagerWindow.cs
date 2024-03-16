@@ -25,7 +25,12 @@ namespace Ludwell.Scene
             _tagsManagerController = new TagsManagerController(rootVisualElement);
             _sceneDataController = new SceneDataController(rootVisualElement);
             
-            ViewManager.Instance.TransitionToFirstViewOfType<SceneDataView>();
+            rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneDataController>();
         }
+
+        // public void OnDestroy()
+        // {
+        //     rootVisualElement.Q<ViewManager>().Reset();
+        // }
     }
 }

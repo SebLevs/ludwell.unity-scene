@@ -9,11 +9,13 @@ namespace Ludwell.Scene.Editor
     {
         private static readonly string UxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadElementView));
+
         private static readonly string UssPath =
             Path.Combine("Uss", nameof(SceneDataController), nameof(QuickLoadElementView));
 
         private static readonly string HeaderContentUxmlPath =
             Path.Combine("Uxml", nameof(SceneDataController), "quick-load-element__header-content");
+
         private static readonly string HeaderContentUssPath =
             Path.Combine("Uss", nameof(SceneDataController), "quick-load-element__header-content");
 
@@ -41,6 +43,8 @@ namespace Ludwell.Scene.Editor
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
+            _controller = new QuickLoadElementController(this);
+
             SetReferences();
             InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
@@ -49,11 +53,6 @@ namespace Ludwell.Scene.Editor
             RegisterOpenButtonEvents();
 
             PreventFoldoutToggleFromKeyPress();
-
-            RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                _controller = new QuickLoadElementController(this);
-            });
         }
 
         private void SetReferences()

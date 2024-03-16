@@ -6,14 +6,20 @@ namespace Ludwell.Scene.Editor
 {
     public class QuickLoadElementController
     {
-        private readonly TagsShelfView _tagsShelfView;
+        private ViewManager _viewManager;
+        
+        private readonly TagsShelfController _tagsShelfController;
 
         private QuickLoadElementData _data = new();
 
         public QuickLoadElementController(VisualElement view)
         {
-            _tagsShelfView = view.Q<TagsShelfView>();
-            InitializeViewTransition();
+            _tagsShelfController = new TagsShelfController(view, _ => InitializeViewTransition());
+            
+            view.RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                _viewManager = view.Root().Q<ViewManager>();
+            });
         }
 
         public void LoadScene(SceneData sceneData)
@@ -56,8 +62,8 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateTagsContainer()
         {
-            _tagsShelfView.WithTagSubscriber(_data);
-            _tagsShelfView.PopulateContainer();
+            _tagsShelfController.UpdateData(_data);
+            _tagsShelfController.PopulateContainer();
         }
 
         public void SetIsOpen(QuickLoadElementView view)
@@ -74,20 +80,10 @@ namespace Ludwell.Scene.Editor
         {
             view.SetSceneData(_data.SceneData);
         }
-        
+
         private void InitializeViewTransition()
         {
-            _tagsShelfView.WithOptionButtonEvent(() =>
-            {
-                TagsManagerController.foo = _data;
-                Debug.LogError("Find better way to handle above");
-                
-                var viewRenderer = ViewManager.Instance;
-                viewRenderer.TransitionToFirstViewOfType<TagsManagerView>();
-                var currentView = viewRenderer.CurrentView;
-                (currentView as TagsManagerView)?.SetReferenceText(_data.Name);
-                
-            });
+            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_data));
         }
     }
 }
