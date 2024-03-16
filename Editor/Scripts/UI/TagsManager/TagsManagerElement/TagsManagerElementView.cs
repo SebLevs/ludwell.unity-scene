@@ -1,113 +1,73 @@
 using System;
-using System.IO;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerElementView : VisualElement, IListViewVisualElement<TagWithSubscribers>
+    public class TagsManagerElementView
     {
-        public new class UxmlFactory : UxmlFactory<TagsManagerElementView, UxmlTraits>
-        {
-        }
-
-        private static readonly string UxmlPath =
-            Path.Combine("UI", nameof(TagsManagerElementView), nameof(TagsManagerElementView) + "Uxml");
-
-        private static readonly string UssPath =
-            Path.Combine("UI", nameof(TagsManagerElementView), nameof(TagsManagerElementView) + "Uss");
-
-        public Action<TagWithSubscribers> OnAdd;
-        public Action<TagWithSubscribers> OnRemove;
-        public Action OnTextEditEnd;
-
         private const string AddButtonName = "button__add";
         private const string RemoveButtonName = "button__remove";
 
         private const string TagTextFieldName = "tag";
 
-        private Button _addButton;
-        private Button _removeButton;
+        private readonly VisualElement _root;
 
-        private TextField _textField;
+        public Action OnAdd;
+        public Action OnRemove;
+        public Action<string> OnValueChanged;
 
-        private TagsManagerElementController _controller;
+        private readonly TextField _textField;
 
-        public TagsManagerElementView()
+        public string Value => _textField.value;
+
+        public TagsManagerElementView(VisualElement root)
         {
-            this.AddHierarchyFromUxml(UxmlPath);
-            this.AddStyleFromUss(UssPath);
+            _root = root;
 
-            SetReferences();
-            InitializeButtons();
-            InitializeValidityHandlingEvents();
+            var addButton = _root.Q<Button>(AddButtonName);
+            addButton.clicked += AddButtonAction;
+
+            var removeButton = _root.Q<Button>(RemoveButtonName);
+            removeButton.clicked += RemoveButtonAction;
+
+            _textField = _root.Q<TextField>(TagTextFieldName);
+            _textField.RegisterValueChangedCallback(ValueChangedAction);
         }
 
-        public void CacheData(TagWithSubscribers data)
+        ~TagsManagerElementView()
         {
-            _controller.Data = data;
+            var addButton = _root.Q<Button>(AddButtonName);
+            addButton.clicked -= AddButtonAction;
+
+            var removeButton = _root.Q<Button>(RemoveButtonName);
+            removeButton.clicked -= RemoveButtonAction;
+
+            _textField.UnregisterValueChangedCallback(ValueChangedAction);
         }
 
-        public void BindElementToCachedData()
-        {
-            _textField.RegisterValueChangedCallback(BindTextField);
-        }
-
-        public void SetElementFromCachedData()
-        {
-            _controller.SetValue(this);
-
-            if (!string.IsNullOrEmpty(_textField.value)) return;
-            _textField.Focus();
-        }
-
-        public void SetText(string value)
+        public void SetValue(string value)
         {
             _textField.value = value;
         }
 
-        private void SetReferences()
+        public void FocusTextField()
         {
-            _addButton = this.Q<Button>(AddButtonName);
-            _removeButton = this.Q<Button>(RemoveButtonName);
-
-            _textField = this.Q<TextField>(TagTextFieldName);
-
-            _controller = new TagsManagerElementController();
+            _textField.Focus();
         }
 
-        private void InitializeButtons()
+        private void AddButtonAction()
         {
-            _addButton.clicked += AddBehaviour;
-            _removeButton.clicked += RemoveBehaviour;
+            OnAdd?.Invoke();
         }
 
-        private void AddBehaviour()
+        private void RemoveButtonAction()
         {
-            OnAdd?.Invoke(_controller.Data);
+            OnRemove?.Invoke();
         }
-
-        private void RemoveBehaviour()
+        
+        private void ValueChangedAction(ChangeEvent<string> evt)
         {
-            OnRemove?.Invoke(_controller.Data);
-        }
-
-        private void InitializeValidityHandlingEvents()
-        {
-            _textField.RegisterCallback<BlurEvent>(
-                _ => DataFetcher.GetTagContainer().HandleUpdatedTag(_controller.Data));
-            RegisterCallback<AttachToPanelEvent>(_ => _textField.RegisterCallback<KeyDownEvent>(OnKeyDown));
-        }
-
-        private void OnKeyDown(KeyDownEvent evt)
-        {
-            if (evt.keyCode != KeyCode.Return) return;
-            OnTextEditEnd?.Invoke();
-        }
-
-        private void BindTextField(ChangeEvent<string> evt)
-        {
-            _controller.UpdateValue(evt.newValue);
+            OnValueChanged?.Invoke(evt.newValue);
         }
     }
 }

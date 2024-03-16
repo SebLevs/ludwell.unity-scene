@@ -24,9 +24,9 @@ namespace Ludwell.Scene.Editor
 
         private readonly TagContainer _tagContainer;
 
-        private ListViewHandler<TagsManagerElementView, TagWithSubscribers> _listViewHandler;
+        private ListViewHandler<TagsManagerElementController, TagWithSubscribers> _listViewHandler;
 
-        private TagsManagerElementView _previousTarget;
+        private TagsManagerElementController _previousTarget;
 
         public TagsManagerController(VisualElement parent)
         {
@@ -92,7 +92,7 @@ namespace Ludwell.Scene.Editor
             tag.RemoveFromAllSubscribers();
         }
 
-        private void SetPreviousTargetedElement(TagsManagerElementView target)
+        private void SetPreviousTargetedElement(TagsManagerElementController target)
         {
             _previousTarget = target;
         }
@@ -132,7 +132,7 @@ namespace Ludwell.Scene.Editor
         private void InitializeListViewHandler()
         {
             _listViewHandler =
-                new ListViewHandler<TagsManagerElementView, TagWithSubscribers>(
+                new ListViewHandler<TagsManagerElementController, TagWithSubscribers>(
                     _root.Q<ListView>(),
                     DataFetcher.GetTagContainer().Tags);
 
@@ -186,16 +186,17 @@ namespace Ludwell.Scene.Editor
             RemoveTagFromShelf(data);
         }
 
-        private void OnItemMadeRegisterEvents(TagsManagerElementView view)
+        private void OnItemMadeRegisterEvents(TagsManagerElementController controller)
         {
-            view.OnAdd += AddTagToShelf;
-            view.OnRemove += RemoveTagFromShelf;
+            controller.OnAdd += AddTagToShelf;
+            controller.OnRemove += RemoveTagFromShelf;
+            controller.OnValueChanged += OnControllerTextEditEnd;
+        }
 
-            view.OnTextEditEnd += () =>
-            {
-                SortTags();
-                SetPreviousTargetedElement(null);
-            };
+        private void OnControllerTextEditEnd(string _)
+        {
+            SortTags();
+            SetPreviousTargetedElement(null);
         }
 
         private void InitializeDropdownSearchField()
@@ -212,7 +213,7 @@ namespace Ludwell.Scene.Editor
         {
             _root.RegisterCallback<MouseUpEvent>(evt =>
             {
-                var tagsManagerElement = ((VisualElement)evt.target).GetFirstAncestorOfType<TagsManagerElementView>();
+                var tagsManagerElement = ((VisualElement)evt.target).GetFirstAncestorOfType<TagsManagerElementController>();
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
                 {
                     SortTags();
