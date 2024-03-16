@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -12,11 +13,29 @@ namespace Ludwell.Scene.Editor
         private readonly Button _mainButton;
         private readonly Button _searchButton;
 
+        public Action OnRemoveButtonClicked;
+        public Action OnMainButtonClicked;
+        public Action OnSearchButtonClicked;
+
+        public string Value => _mainButton.text;
+
         public TagsShelfElementView(VisualElement view)
         {
             _removeButton = view.Q<Button>(RemoveButtonName);
+            _removeButton.clicked += RemoveButtonAction;
+
             _mainButton = view.Q<Button>(MainButtonName);
+            _mainButton.clicked += MainButtonAction;
+
             _searchButton = view.Q<Button>(SearchButtonName);
+            _searchButton.clicked += SearchButtonAction;
+        }
+
+        ~TagsShelfElementView()
+        {
+            _removeButton.clicked -= RemoveButtonAction;
+            _mainButton.clicked -= MainButtonAction;
+            _searchButton.clicked -= SearchButtonAction;
         }
 
         public void SetValue(string text)
@@ -41,6 +60,21 @@ namespace Ludwell.Scene.Editor
             return _removeButton.style.display == DisplayStyle.None
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
+        }
+
+        private void RemoveButtonAction()
+        {
+            OnRemoveButtonClicked?.Invoke();
+        }
+
+        private void MainButtonAction()
+        {
+            OnMainButtonClicked?.Invoke();
+        }
+
+        private void SearchButtonAction()
+        {
+            OnSearchButtonClicked?.Invoke();
         }
     }
 }

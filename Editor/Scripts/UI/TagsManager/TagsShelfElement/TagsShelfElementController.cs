@@ -14,12 +14,6 @@ namespace Ludwell.Scene
 
         private static TagsShelfElementView _currentSelection;
 
-        private const string RemoveButtonName = "button-remove";
-        private const string MainButtonName = "button-main";
-        private const string SearchButtonName = "button-search";
-
-        private readonly Button _mainButton;
-
         private readonly TagsShelfElementView _view;
 
         private Tag _data;
@@ -29,40 +23,29 @@ namespace Ludwell.Scene
 
         private TagsShelfController _tagShelfController;
 
-        public string Value => _mainButton.text;
+        public string Value => _view.Value;
 
         public TagsShelfElementController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
             this.AddStyleFromUss(UssPath);
 
-            _mainButton = this.Q<Button>(MainButtonName);
-
             _view = new TagsShelfElementView(this);
+            _view.OnRemoveButtonClicked += RemoveFromController;
+            _view.OnMainButtonClicked += SelectSelf;
+            _view.OnSearchButtonClicked += SearchWithData;
+            _view.OnSearchButtonClicked += _view.ToggleVisual;
             _view.SetButtonsStyle(DisplayStyle.None);
-
-            var removeButton = this.Q<Button>(RemoveButtonName);
-            removeButton.clicked += RemoveFromController;
-
-            _mainButton.clicked += SelectSelf;
-
-            var searchButton = this.Q<Button>(SearchButtonName);
-            searchButton.clicked += SearchWithData;
-            searchButton.clicked += _view.ToggleVisual;
 
             RegisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
 
         ~TagsShelfElementController()
         {
-            var removeButton = this.Q<Button>(RemoveButtonName);
-            removeButton.clicked -= RemoveFromController;
-
-            _mainButton.clicked -= SelectSelf;
-
-            var searchButton = this.Q<Button>(SearchButtonName);
-            searchButton.clicked -= SearchWithData;
-            searchButton.clicked -= _view.ToggleVisual;
+            _view.OnRemoveButtonClicked -= RemoveFromController;
+            _view.OnMainButtonClicked -= SelectSelf;
+            _view.OnSearchButtonClicked -= SearchWithData;
+            _view.OnSearchButtonClicked -= _view.ToggleVisual;
 
             UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
@@ -100,7 +83,7 @@ namespace Ludwell.Scene
 
             _currentSelection?.SetButtonsStyle(DisplayStyle.None);
             _currentSelection = _view;
-            _currentSelection?.SetButtonsStyle(DisplayStyle.Flex);
+            _currentSelection.SetButtonsStyle(DisplayStyle.Flex);
         }
 
         private void InitializeDropdown(AttachToPanelEvent _)
