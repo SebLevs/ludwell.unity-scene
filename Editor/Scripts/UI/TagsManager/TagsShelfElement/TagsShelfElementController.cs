@@ -1,26 +1,70 @@
-using System;
+using System.IO;
+using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.Scene
 {
-    public class TagsShelfElementController
+    public class TagsShelfElementController : VisualElement
     {
-        private Tag _data;
+        private static readonly string UxmlPath =
+            Path.Combine("UI", nameof(TagsShelfElementView), nameof(TagsShelfElementView) + "Uxml");
 
-        private TagsShelfController _tagShelfController;
+        private static readonly string UssPath =
+            Path.Combine("UI", nameof(TagsShelfElementView), nameof(TagsShelfElementView) + "Uss");
+
+        private static TagsShelfElementView _currentSelection;
+
+        private const string RemoveButtonName = "button-remove";
+        private const string MainButtonName = "button-main";
+        private const string SearchButtonName = "button-search";
+
+        private readonly Button _mainButton;
+
+        private readonly TagsShelfElementView _view;
+
+        private Tag _data;
 
         private string _listingStrategyName = "tag";
         private DropdownSearchField _dropdownSearchField;
 
-        public TagsShelfElementController(VisualElement view)
+        private TagsShelfController _tagShelfController;
+
+        public string Value => _mainButton.text;
+
+        public TagsShelfElementController()
         {
-            view.RegisterCallback<AttachToPanelEvent>(_ =>
-            {
-                _dropdownSearchField = view.FindInAncestors<DropdownSearchField>();
-                _listingStrategyName = _dropdownSearchField.HasSearchStrategy(_listingStrategyName)
-                    ? _listingStrategyName
-                    : DropdownSearchField.DefaultSearchName;
-            });
+            this.AddHierarchyFromUxml(UxmlPath);
+            this.AddStyleFromUss(UssPath);
+
+            _mainButton = this.Q<Button>(MainButtonName);
+
+            _view = new TagsShelfElementView(this);
+            _view.SetButtonsStyle(DisplayStyle.None);
+
+            var removeButton = this.Q<Button>(RemoveButtonName);
+            removeButton.clicked += RemoveFromController;
+
+            _mainButton.clicked += SelectSelf;
+
+            var searchButton = this.Q<Button>(SearchButtonName);
+            searchButton.clicked += SearchWithData;
+            searchButton.clicked += _view.ToggleVisual;
+
+            RegisterCallback<AttachToPanelEvent>(InitializeDropdown);
+        }
+
+        ~TagsShelfElementController()
+        {
+            var removeButton = this.Q<Button>(RemoveButtonName);
+            removeButton.clicked -= RemoveFromController;
+
+            _mainButton.clicked -= SelectSelf;
+
+            var searchButton = this.Q<Button>(SearchButtonName);
+            searchButton.clicked -= SearchWithData;
+            searchButton.clicked -= _view.ToggleVisual;
+
+            UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
 
         public void SetTagShelfController(TagsShelfController tagsShelfController)
@@ -28,33 +72,46 @@ namespace Ludwell.Scene.Editor
             _tagShelfController = tagsShelfController;
         }
 
-        public void RemoveFromController()
+        public void UpdateCache(Tag tag)
+        {
+            if (_data != null)
+            {
+                _data.OnValueChanged -= _view.SetValue;
+            }
+
+            _data = tag;
+
+            _view.SetValue(_data.Name);
+            _data.OnValueChanged += _view.SetValue;
+        }
+
+        private void RemoveFromController()
         {
             _tagShelfController.Remove(_data as TagWithSubscribers);
         }
 
-        public void UpdateTag(Tag tag)
+        private void SelectSelf()
         {
-            _data = tag;
+            if (_currentSelection == _view)
+            {
+                _currentSelection.ToggleVisual();
+                return;
+            }
+
+            _currentSelection?.SetButtonsStyle(DisplayStyle.None);
+            _currentSelection = _view;
+            _currentSelection?.SetButtonsStyle(DisplayStyle.Flex);
         }
 
-        public void SetValue(TagsShelfElementView view)
+        private void InitializeDropdown(AttachToPanelEvent _)
         {
-            view.SetValue(_data.Name);
+            _dropdownSearchField = this.FindInAncestors<DropdownSearchField>();
+            _listingStrategyName = _dropdownSearchField.HasSearchStrategy(_listingStrategyName)
+                ? _listingStrategyName
+                : DropdownSearchField.DefaultSearchName;
         }
 
-        public void AddValueChangedCallback(Action<string> callback)
-        {
-            _data.OnValueChanged += callback;
-        }
-
-        public void RemoveValueChangedCallback(Action<string> callback)
-        {
-            if (_data == null) return;
-            _data.OnValueChanged -= callback;
-        }
-
-        public void SearchWithData()
+        private void SearchWithData()
         {
             _dropdownSearchField.ListWithStrategy(_listingStrategyName, _data.Name);
         }

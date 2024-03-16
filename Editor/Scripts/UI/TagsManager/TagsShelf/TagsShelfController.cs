@@ -66,15 +66,15 @@ namespace Ludwell.Scene.Editor
             return _data.Tags.Contains(tag);
         }
 
-        private TagsShelfElementView ConstructTagElement(Tag tag)
+        private TagsShelfElementController ConstructTagElement(Tag tag)
         {
-            TagsShelfElementView tagsShelfElementView = new();
-            tagsShelfElementView.UpdateCache(tag);
-            tagsShelfElementView.SetTagShelfController(this);
-            return tagsShelfElementView;
+            TagsShelfElementController tagsShelfElementController = new();
+            tagsShelfElementController.UpdateCache(tag);
+            tagsShelfElementController.SetTagShelfController(this);
+            return tagsShelfElementController;
         }
 
-        private IEnumerable<TagsShelfElementView> ConstructTagElements(List<Tag> tags)
+        private IEnumerable<TagsShelfElementController> ConstructTagElements(List<Tag> tags)
         {
             return tags.Select(ConstructTagElement);
         }

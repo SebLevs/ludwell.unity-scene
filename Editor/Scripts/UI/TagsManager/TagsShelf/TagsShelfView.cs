@@ -31,9 +31,9 @@ namespace Ludwell.Scene
             _root.Q(IconButtonName).tooltip = value;
         }
 
-        public void Add(TagsShelfElementView tagShelfElementView)
+        public void Add(TagsShelfElementController tagShelfElementController)
         {
-            _container.Add(tagShelfElementView);
+            _container.Add(tagShelfElementController);
             Sort();
 
             if (ElementsCount > 1) return;
@@ -57,7 +57,7 @@ namespace Ludwell.Scene
             _notTaggedLabel.style.display = displayStyle;
         }
 
-        public void Populate(IEnumerable<TagsShelfElementView> tagElements)
+        public void Populate(IEnumerable<TagsShelfElementController> tagElements)
         {
             foreach (var tag in tagElements)
             {
@@ -71,8 +71,8 @@ namespace Ludwell.Scene
         {
             _container.Sort((a, b) =>
             {
-                var aValue = (a as TagsShelfElementView).Value;
-                var bValue = (b as TagsShelfElementView).Value;
+                var aValue = (a as TagsShelfElementController).Value;
+                var bValue = (b as TagsShelfElementController).Value;
                 return string.Compare(aValue, bValue, StringComparison.InvariantCulture);
             });
         }
