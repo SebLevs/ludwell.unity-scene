@@ -27,10 +27,5 @@ namespace Ludwell.Scene
             
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneDataController>();
         }
-
-        // public void OnDestroy()
-        // {
-        //     rootVisualElement.Q<ViewManager>().Reset();
-        // }
     }
 }

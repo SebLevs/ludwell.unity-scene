@@ -45,7 +45,7 @@
     margin-bottom: 0;
 }
 
-#foldout__core {
+#foldout__core-scenes {
     border-top-width: 1px;
     border-left-color: rgb(80, 80, 80);
     border-right-color: rgb(80, 80, 80);

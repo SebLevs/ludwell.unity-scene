@@ -9,6 +9,9 @@ namespace Ludwell.Scene
     {
         private const string MainMenuButtonsName = "main-menu__buttons";
         private const string MainMenuObjectFieldName = "launcher__main-menu";
+        
+        private const string FoldoutStartingSceneName = "foldout__starting-scene";
+        private const string FoldoutCoreScenesName = "foldout__core-scenes";
 
         private readonly ViewManager _viewManager;
         
@@ -22,13 +25,15 @@ namespace Ludwell.Scene
             _view = new SceneDataView(_root, UpdateStartingScene, UpdatePersistentScene, UpdateLoadingScene);
             
             InitMainMenuButtons();
-            
+
+            CloseFoldouts();
+
             _quickLoadController = new QuickLoadController(_root);
 
             _viewManager = parent.Root().Q<ViewManager>();
             _viewManager.Add(this);
         }
-        
+
         public void Show(ViewArgs args)
         {
             _view.Show();
@@ -76,6 +81,12 @@ namespace Ludwell.Scene
                 if (objectField.value == null) return;
                 SceneDataManagerEditorApplication.OpenScene(objectField.value as SceneData);
             });
+        }
+        
+        private void CloseFoldouts()
+        {
+            _root.Q<Foldout>(FoldoutStartingSceneName).value = false;
+            _root.Q<Foldout>(FoldoutCoreScenesName).value = false;
         }
     }
 }
