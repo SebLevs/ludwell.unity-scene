@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
     public class TagsManagerController : IViewable
     {
         private readonly ViewManager _viewManager;
-        
+
         private readonly VisualElement _root;
         private readonly TagsManagerView _view;
         private readonly TagsShelfController _tagsShelfController;
@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
         {
             _root = parent.Q(nameof(TagsManagerView));
             _view = new TagsManagerView(_root);
-            
+
             _viewManager = _root.Root().Q<ViewManager>();
             _viewManager.Add(this);
 
@@ -111,12 +111,12 @@ namespace Ludwell.Scene.Editor
 
         private void ReturnToPreviousView()
         {
-            _viewManager.TransitionToFirstViewOfType<SceneDataController>();
+            _viewManager.TransitionToPreviousView();
         }
 
         private void InitializeReturnEvent()
         {
-            _root.RegisterCallback<AttachToPanelEvent>(_ => _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn));
+            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
         }
 
         private void OnKeyUpReturn(KeyUpEvent evt)
@@ -213,7 +213,8 @@ namespace Ludwell.Scene.Editor
         {
             _root.RegisterCallback<MouseUpEvent>(evt =>
             {
-                var tagsManagerElement = ((VisualElement)evt.target).GetFirstAncestorOfType<TagsManagerElementController>();
+                var tagsManagerElement =
+                    ((VisualElement)evt.target).GetFirstAncestorOfType<TagsManagerElementController>();
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)
                 {
                     SortTags();

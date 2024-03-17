@@ -13,6 +13,7 @@ namespace Ludwell.Scene
         
         private readonly Dictionary<Type, IViewable> _views = new();
 
+        private Stack<IViewable> _previousViews = new();
         private IViewable _currentView;
 
         public void Reset()
@@ -35,9 +36,24 @@ namespace Ludwell.Scene
         {
             if (_currentView != null && _currentView.GetType() == typeof(T)) return;
 
+            if (_currentView != null)
+            { 
+                _previousViews.Push(_currentView);
+            }
+            
             _currentView?.Hide();
             _currentView = _views[typeof(T)];
             _currentView.Show(showArgs);
+        }
+
+        public void TransitionToPreviousView(ViewArgs showArgs = null)
+        {
+            if (_previousViews.Count == 0) return;
+
+            var previousView = _previousViews.Pop();
+            _currentView.Hide();
+            _currentView = previousView;
+            previousView.Show(showArgs);
         }
     }
 }
