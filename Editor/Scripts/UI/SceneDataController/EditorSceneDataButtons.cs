@@ -13,11 +13,13 @@ namespace Ludwell.Scene
 
     public class EditorSceneDataButtons : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<EditorSceneDataButtons, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<EditorSceneDataButtons, UxmlTraits>
+        {
+        }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
-            UxmlIntAttributeDescription m_buttonSize = new() { name = "buttonSize", defaultValue = 32};
+            UxmlIntAttributeDescription m_buttonSize = new() { name = "buttonSize", defaultValue = 32 };
             UxmlColorAttributeDescription m_loadIconColor = new() { name = "loadIconColor" };
             UxmlColorAttributeDescription m_openIconColor = new() { name = "openIconColor" };
 
@@ -32,8 +34,11 @@ namespace Ludwell.Scene
             }
         }
 
-        private static readonly string ButtonUxmlPath = Path.Combine("Uxml", "Common", "button__open-load");
-        private static readonly string ButtonUssPath = Path.Combine("Uss", "Common", "button__open-load");
+        private static readonly string ButtonUxmlPath =
+            Path.Combine("UI", nameof(EditorSceneDataButtons), "Uxml_" + nameof(EditorSceneDataButtons));
+
+        private static readonly string ButtonUssPath =
+            Path.Combine("UI", nameof(EditorSceneDataButtons), "Uss_" + nameof(EditorSceneDataButtons));
 
         private readonly Button _loadButton;
         private readonly Button _openButton;

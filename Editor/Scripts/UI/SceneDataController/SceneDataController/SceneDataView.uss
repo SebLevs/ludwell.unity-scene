@@ -1,0 +1,58 @@
+#scene-selection {
+    width: 80%;
+}
+
+#header-text {
+    flex-grow: 1;
+}
+
+#main-menu__buttons > #button__load {
+    margin-right: 2px;
+}
+
+#main-menu__buttons > #button__open {
+    margin-left: 2px;
+}
+
+#button__open > #icon {
+    background-image: resource('Sprites/icon_open');
+}
+
+.foldout > Toggle {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 20px;
+    background-color: rgb(37, 37, 37);
+}
+
+.foldout > Toggle > VisualElement > #unity-checkmark {
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.foldout > #unity-content {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#foldout__core-scenes {
+    border-top-width: 1px;
+    border-left-color: rgb(80, 80, 80);
+    border-right-color: rgb(80, 80, 80);
+    border-top-color: rgb(80, 80, 80);
+    border-bottom-color: rgb(80, 80, 80);
+}
+
+#QuickLoadView {
+    flex-grow: 1;
+}

@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="core-scene" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/SceneDataController/core-scene.uxml?fileID=9197481963319205126&amp;guid=5f9b25b9ce92eb54596cf40af535b054&amp;type=3#core-scene" />
+    <ui:Template name="QuickLoadView" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/QuickLoad/QuickLoadView.uxml?fileID=9197481963319205126&amp;guid=14480c97d71de344c9818775c93f888a&amp;type=3#QuickLoadView" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/SceneDataController/SceneDataView.uss?fileID=7433441132597879392&amp;guid=6d52c786db684094a8788aa48687b6b4&amp;type=3#SceneDataView" />
+    <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; display: flex;">
+        <ui:Foldout text="Starting Scene" name="foldout__starting-scene" class="foldout">
+            <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 8px; margin-bottom: 8px; align-self: stretch; align-items: center;">
+                <Ludwell.Scene.EditorSceneDataButtons name="main-menu__buttons" loadIconColor="#00C30CFF" openIconColor="#00C1C3FF" buttonSize="32" style="flex-direction: row; padding-left: 4px; padding-right: 4px; padding-top: 0; padding-bottom: 4px;" />
+                <uie:ObjectField name="scene-selection" type="Ludwell.Scene.SceneData, ludwell.scene" style="-unity-text-align: middle-center; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+            </ui:VisualElement>
+        </ui:Foldout>
+        <ui:Foldout text="Core Scenes" name="foldout__core-scenes" class="foldout">
+            <ui:Instance template="core-scene" name="core-scene__persistent" class="core-scene__above" />
+            <ui:Instance template="core-scene" name="core-scene__loading">
+                <AttributeOverrides element-name="scene-selection" label="Loading scene" />
+            </ui:Instance>
+        </ui:Foldout>
+        <ui:Instance template="QuickLoadView" name="QuickLoadView" />
+    </ui:VisualElement>
+</ui:UXML>
