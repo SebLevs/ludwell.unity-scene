@@ -8,15 +8,18 @@ namespace Ludwell.Scene
 {
     public class DropdownListView : ListView
     {
-        public new class UxmlFactory : UxmlFactory<DropdownListView, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<DropdownListView, UxmlTraits>
+        {
+        }
 
-        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownListView));
+        private static readonly string UssPath =
+            Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownListView));
 
         private ListViewHandler<DropdownVisualElement, DropdownData> _listViewHandler;
         private readonly List<DropdownData> _data = new();
-        
+
         private float _heightDifference = -1;
-        
+
         private const float _maxHeight = 200;
 
         public DropdownListView()
@@ -29,7 +32,7 @@ namespace Ludwell.Scene
         }
 
         public int Count => itemsSource.Count;
-        
+
         public bool IsHidden => style.display == DisplayStyle.None;
 
         private DropdownSearchField _owner;
@@ -38,7 +41,7 @@ namespace Ludwell.Scene
         {
             _owner = dropdownSearchField;
         }
-        
+
         public void Show()
         {
             style.display = DisplayStyle.Flex;
@@ -73,7 +76,7 @@ namespace Ludwell.Scene
         public void PlaceUnder(VisualElement target)
         {
             TryCacheHeightDifference(target);
-            
+
             var absolutePosition = target.LocalToWorld(Vector2.zero);
             style.left = absolutePosition.x;
             style.top = absolutePosition.y + target.resolvedStyle.height - _heightDifference;
@@ -95,12 +98,10 @@ namespace Ludwell.Scene
         {
             style.maxHeight = _maxHeight;
             style.position = Position.Absolute;
-            this.Q<Scroller>().style.backgroundColor = new StyleColor(new Color(0.2627451f, 0.2627451f, 0.2627451f, 1f));
-            
-            RegisterCallback<GeometryChangedEvent>(_ =>
-            {
-                style.width = _owner.resolvedStyle.width;
-            });
+            this.Q<Scroller>().style.backgroundColor =
+                new StyleColor(new Color(0.2627451f, 0.2627451f, 0.2627451f, 1f));
+
+            RegisterCallback<GeometryChangedEvent>(_ => { style.width = _owner.resolvedStyle.width; });
         }
     }
 }

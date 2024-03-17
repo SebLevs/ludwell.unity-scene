@@ -5,11 +5,14 @@ namespace Ludwell.Scene
 {
     public class DropdownVisualElement : VisualElement, IListViewVisualElement<DropdownData>
     {
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(DropdownSearchField), nameof(DropdownVisualElement));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownVisualElement));
+        private static readonly string UxmlPath =
+            Path.Combine("UI", nameof(DropdownSearchField), "Uxml_" + nameof(DropdownVisualElement));
+
+        private static readonly string UssPath =
+            Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownVisualElement));
 
         private readonly Button _button;
-        
+
         private DropdownData _cache;
 
         public DropdownVisualElement()

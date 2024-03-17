@@ -8,16 +8,16 @@ namespace Ludwell.Scene.Editor
     public class QuickLoadElementView : VisualElement, IListViewVisualElement<QuickLoadElementData>
     {
         private static readonly string UxmlPath =
-            Path.Combine("Uxml", nameof(SceneDataController), nameof(QuickLoadElementView));
+            Path.Combine("UI", nameof(QuickLoadElementView), "Uxml_" + nameof(QuickLoadElementView));
 
         private static readonly string UssPath =
-            Path.Combine("Uss", nameof(SceneDataController), nameof(QuickLoadElementView));
+            Path.Combine("UI", nameof(QuickLoadElementView), "Uss_" + nameof(QuickLoadElementView));
 
         private static readonly string HeaderContentUxmlPath =
-            Path.Combine("Uxml", nameof(SceneDataController), "quick-load-element__header-content");
+            Path.Combine("UI", nameof(QuickLoadElementView), "Uxml_" + "quick-load-element__header-content");
 
         private static readonly string HeaderContentUssPath =
-            Path.Combine("Uss", nameof(SceneDataController), "quick-load-element__header-content");
+            Path.Combine("UI", nameof(QuickLoadElementView), "Uss_" + "quick-load-element__header-content");
 
         private const string FoldoutName = "root__foldout";
         private const string FoldoutTextFieldName = "foldout-text-field";

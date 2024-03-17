@@ -23,8 +23,8 @@ namespace Ludwell.Scene
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("Uxml", nameof(DropdownSearchField), nameof(DropdownSearchField));
-        private static readonly string UssPath = Path.Combine("Uss", nameof(DropdownSearchField), nameof(DropdownSearchField));
+        private static readonly string UxmlPath = Path.Combine("UI", nameof(DropdownSearchField), "Uxml_" + nameof(DropdownSearchField));
+        private static readonly string UssPath = Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownSearchField));
 
         private const string SearchFieldName = "toolbar-search-field";
         private const string DefaultSearchIcon = "icon_search";

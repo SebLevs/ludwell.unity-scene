@@ -16,10 +16,10 @@ namespace Ludwell.Scene.Editor
         public Action<string> OnValueChanged;
 
         private static readonly string UxmlPath =
-            Path.Combine("UI", nameof(TagsManagerElementView), nameof(TagsManagerElementView) + "Uxml");
+            Path.Combine("UI", nameof(TagsManagerElementView), "Uxml_" + nameof(TagsManagerElementView));
 
         private static readonly string UssPath =
-            Path.Combine("UI", nameof(TagsManagerElementView), nameof(TagsManagerElementView) + "Uss");
+            Path.Combine("UI", nameof(TagsManagerElementView), "Uss_" + nameof(TagsManagerElementView));
 
         private readonly TagsManagerElementView _view;
 

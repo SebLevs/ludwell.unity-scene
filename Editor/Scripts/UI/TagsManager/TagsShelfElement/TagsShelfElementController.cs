@@ -7,10 +7,10 @@ namespace Ludwell.Scene
     public class TagsShelfElementController : VisualElement
     {
         private static readonly string UxmlPath =
-            Path.Combine("UI", nameof(TagsShelfElementView), nameof(TagsShelfElementView) + "Uxml");
+            Path.Combine("UI", nameof(TagsShelfElementView), "Uxml_" + nameof(TagsShelfElementView));
 
         private static readonly string UssPath =
-            Path.Combine("UI", nameof(TagsShelfElementView), nameof(TagsShelfElementView) + "Uss");
+            Path.Combine("UI", nameof(TagsShelfElementView), "Uss_" + nameof(TagsShelfElementView));
 
         private static TagsShelfElementView _currentSelection;
 
