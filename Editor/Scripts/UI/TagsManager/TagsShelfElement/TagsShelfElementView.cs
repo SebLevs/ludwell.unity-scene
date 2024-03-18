@@ -43,16 +43,16 @@ namespace Ludwell.Scene.Editor
             _mainButton.text = text;
         }
 
-        public void SetButtonsStyle(DisplayStyle displayStyle)
-        {
-            _removeButton.style.display = displayStyle;
-            _searchButton.style.display = displayStyle;
-        }
+        // public void SetButtonsStyle(DisplayStyle displayStyle)
+        // {
+        //     _removeButton.style.display = displayStyle;
+        //     _searchButton.style.display = displayStyle;
+        // }
 
         public void ToggleVisual()
         {
             var reverseDisplay = GetReverseDisplayStyle();
-            SetButtonsStyle(reverseDisplay);
+            // SetButtonsStyle(reverseDisplay);
         }
 
         private DisplayStyle GetReverseDisplayStyle()

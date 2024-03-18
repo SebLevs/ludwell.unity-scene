@@ -63,7 +63,6 @@ namespace Ludwell.Scene.Editor
         public void UpdateTagsContainer()
         {
             _tagsShelfController.UpdateData(_data);
-            _tagsShelfController.PopulateContainer();
         }
 
         public void SetIsOpen(QuickLoadElementView view)

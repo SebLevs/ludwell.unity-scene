@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -10,19 +10,22 @@ namespace Ludwell.Scene.Editor
 
         private readonly TagsShelfView _view;
 
-        public int IndexOf(TagWithSubscribers tagWithSubscribers) => _data.Tags.IndexOf(tagWithSubscribers);
+        private ListViewHandler<TagsShelfElementController, Tag> _listViewHandler;
 
         public TagsShelfController(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
         {
+            _listViewHandler = new ListViewHandler<TagsShelfElementController, Tag>(parent.Q<ListView>(), _data.Tags);
+            _listViewHandler.OnItemMade += OnItemMadeSetTagShelfController;
+            PreventWheelCallbackPropagation();
+            
             _view = new TagsShelfView(parent, onOptionClicked);
         }
 
         public void Add(TagWithSubscribers tag)
         {
             if (Contains(tag)) return;
-            _data.Tags.Add(tag);
+            _listViewHandler.ListView.itemsSource.Add(tag);
             tag.AddSubscriber(_data);
-            _view.Add(ConstructTagElement(tag));
             Sort();
 
             DataFetcher.SaveEveryScriptableDelayed();
@@ -31,29 +34,24 @@ namespace Ludwell.Scene.Editor
         public void Remove(TagWithSubscribers tagWithSubscribers)
         {
             if (!Contains(tagWithSubscribers)) return;
-
-            _view.RemoveAt(IndexOf(tagWithSubscribers));
-            _data.Tags.Remove(tagWithSubscribers);
+            
+            _listViewHandler.ListView.itemsSource.Remove(tagWithSubscribers);
             tagWithSubscribers.RemoveSubscriber(_data);
-
+            
+            _listViewHandler.ForceRebuild();
             DataFetcher.SaveEveryScriptableDelayed();
         }
 
         private void Sort()
         {
-            _data.Tags.Sort();
-            _view.Sort();
+            ((List<Tag>)_listViewHandler.ListView.itemsSource).Sort();
+            _listViewHandler.ForceRebuild();
         }
 
         public void UpdateData(TagSubscriberWithTags data)
         {
-            _data = data;
-        }
-
-        public void PopulateContainer()
-        {
-            _view.ClearContainer();
-            _view.Populate(ConstructTagElements(_data.Tags));
+            _listViewHandler.ListView.itemsSource = data.Tags;
+            _listViewHandler.ForceRebuild();
         }
 
         public void OverrideIconTooltip(string value)
@@ -63,20 +61,30 @@ namespace Ludwell.Scene.Editor
 
         private bool Contains(Tag tag)
         {
-            return _data.Tags.Contains(tag);
+            return _listViewHandler.ListView.itemsSource.Contains(tag);
         }
-
-        private TagsShelfElementController ConstructTagElement(Tag tag)
+        
+        private void OnItemMadeSetTagShelfController(TagsShelfElementController controller)
         {
-            TagsShelfElementController tagsShelfElementController = new();
-            tagsShelfElementController.UpdateCache(tag);
-            tagsShelfElementController.SetTagShelfController(this);
-            return tagsShelfElementController;
+            controller.SetTagShelfController(this);
         }
-
-        private IEnumerable<TagsShelfElementController> ConstructTagElements(List<Tag> tags)
-        {
-            return tags.Select(ConstructTagElement);
+        
+        private void PreventWheelCallbackPropagation()  
+        {  
+            var scroller = _listViewHandler.ListView.Q<Scroller>();  
+            _listViewHandler.ListView.RegisterCallback<WheelEvent>(evt =>  
+            {  
+                if (scroller.style.display == DisplayStyle.None) return;
+                if (evt.delta.y < 0 && Mathf.Approximately(scroller.value, scroller.lowValue))  
+                {            
+                    evt.StopPropagation();  
+                }        
+                else if (evt.delta.y > 0 && Mathf.Approximately(scroller.value, scroller.highValue))  
+                {            
+                    evt.StopPropagation();  
+                } 
+                
+            });
         }
     }
 }

@@ -19,9 +19,9 @@
     align-items: center;
     padding-top: 2px;
     padding-bottom: 2px;
-    padding-left: 3px;
-    padding-right: 3px;
-    flex-grow: 1;
+    padding-left: 2px;
+    padding-right: 2px;
+    width: 80%;
 }
 
 #icon {
@@ -46,4 +46,6 @@
     -unity-text-align: middle-center;
     text-overflow: ellipsis;
     min-width: 60px;
+    flex-grow: 1;
+    flex-shrink: 0;
 }

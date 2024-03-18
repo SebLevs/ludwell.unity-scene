@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    public class TagsShelfElementController : VisualElement
+    public class TagsShelfElementController : VisualElement, IListViewVisualElement<Tag>
     {
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsShelfElementView), "Uxml_" + nameof(TagsShelfElementView));
@@ -23,8 +23,6 @@ namespace Ludwell.Scene
 
         private TagsShelfController _tagShelfController;
 
-        public string Value => _view.Value;
-
         public TagsShelfElementController()
         {
             this.AddHierarchyFromUxml(UxmlPath);
@@ -35,7 +33,7 @@ namespace Ludwell.Scene
             _view.OnMainButtonClicked += SelectSelf;
             _view.OnSearchButtonClicked += SearchWithData;
             _view.OnSearchButtonClicked += _view.ToggleVisual;
-            _view.SetButtonsStyle(DisplayStyle.None);
+            // _view.SetButtonsStyle(DisplayStyle.None);
 
             RegisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
@@ -49,23 +47,10 @@ namespace Ludwell.Scene
 
             UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
-
+        
         public void SetTagShelfController(TagsShelfController tagsShelfController)
         {
             _tagShelfController = tagsShelfController;
-        }
-
-        public void UpdateCache(Tag tag)
-        {
-            if (_data != null)
-            {
-                _data.OnValueChanged -= _view.SetValue;
-            }
-
-            _data = tag;
-
-            _view.SetValue(_data.Name);
-            _data.OnValueChanged += _view.SetValue;
         }
 
         private void RemoveFromController()
@@ -81,9 +66,9 @@ namespace Ludwell.Scene
                 return;
             }
 
-            _currentSelection?.SetButtonsStyle(DisplayStyle.None);
+            // _currentSelection?.SetButtonsStyle(DisplayStyle.None);
             _currentSelection = _view;
-            _currentSelection.SetButtonsStyle(DisplayStyle.Flex);
+            // _currentSelection.SetButtonsStyle(DisplayStyle.Flex);
         }
 
         private void InitializeDropdown(AttachToPanelEvent _)
@@ -97,6 +82,29 @@ namespace Ludwell.Scene
         private void SearchWithData()
         {
             _dropdownSearchField.ListWithStrategy(_listingStrategyName, _data.Name);
+        }
+
+        public void CacheData(Tag data)
+        {
+            if (_data != null)
+            {
+                _data.OnValueChanged -= _view.SetValue;
+            }
+
+            _data = data;
+
+            _view.SetValue(_data.Name);
+            _data.OnValueChanged += _view.SetValue;
+        }
+
+        public void BindElementToCachedData()
+        {
+            _data.Name = _view.Value;
+        }
+
+        public void SetElementFromCachedData()
+        {
+            _view.SetValue(_data.Name);
         }
     }
 }

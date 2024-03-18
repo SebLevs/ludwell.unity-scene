@@ -6,7 +6,6 @@
                 <ui:VisualElement name="icon" />
             </ui:Button>
         </ui:Label>
-        <ui:Label tabindex="-1" text="Not tagged" display-tooltip-when-elided="true" name="not-tagged" style="-unity-text-align: middle-center;" />
-        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="tags-container" />
+        <ui:ListView name="tags-container" fixed-item-height="24" />
     </ui:VisualElement>
 </ui:UXML>
