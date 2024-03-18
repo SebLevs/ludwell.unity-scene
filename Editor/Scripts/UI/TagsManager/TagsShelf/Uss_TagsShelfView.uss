@@ -65,4 +65,5 @@ Scroller {
     background-color: rgba(0, 0, 0, 0);
     position: absolute;
     right: 0;
+    height: 100%;
 }
