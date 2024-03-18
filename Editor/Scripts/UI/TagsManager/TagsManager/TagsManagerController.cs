@@ -16,6 +16,8 @@ namespace Ludwell.Scene.Editor
 
     public class TagsManagerController : IViewable
     {
+        private const string TagElementsContainerName = "tag-elements-container";
+        
         private readonly ViewManager _viewManager;
 
         private readonly VisualElement _root;
@@ -133,7 +135,7 @@ namespace Ludwell.Scene.Editor
         {
             _listViewHandler =
                 new ListViewHandler<TagsManagerElementController, TagWithSubscribers>(
-                    _root.Q<ListView>(),
+                    _root.Q<ListView>(TagElementsContainerName),
                     DataFetcher.GetTagContainer().Tags);
 
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
@@ -188,6 +190,7 @@ namespace Ludwell.Scene.Editor
 
         private void OnItemMadeRegisterEvents(TagsManagerElementController controller)
         {
+            SetPreviousTargetedElement(controller);
             controller.OnAdd += AddTagToShelf;
             controller.OnRemove += RemoveTagFromShelf;
             controller.OnValueChanged += OnControllerTextEditEnd;
@@ -211,8 +214,10 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeTagSorting()
         {
-            _root.RegisterCallback<MouseUpEvent>(evt =>
+            _root.parent.RegisterCallback<MouseUpEvent>(evt =>
             {
+                if (_root.style.display == DisplayStyle.None) return;
+
                 var tagsManagerElement =
                     ((VisualElement)evt.target).GetFirstAncestorOfType<TagsManagerElementController>();
                 if (_previousTarget != null && _previousTarget != tagsManagerElement)

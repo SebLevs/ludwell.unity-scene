@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -12,12 +13,12 @@ namespace Ludwell.Scene
         private const string IconButtonName = "tags__button-add";
 
         private Button _optionsButton;
-        private VisualElement _container;
+        private ScrollView _container;
         private Label _notTaggedLabel;
 
         private VisualElement _root;
 
-        private int ElementsCount => _container.contentContainer.childCount;
+        private int ElementsCount => _container.childCount;
 
         public TagsShelfView(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
         {
@@ -37,7 +38,7 @@ namespace Ludwell.Scene
             Sort();
 
             if (ElementsCount > 1) return;
-            SetNotTaggedLabelDisplay(DisplayStyle.None);
+            HandleUntaggedState();
         }
 
         public void RemoveAt(int index)
@@ -49,12 +50,7 @@ namespace Ludwell.Scene
         public void ClearContainer()
         {
             _container.Clear();
-            SetNotTaggedLabelDisplay(DisplayStyle.None);
-        }
-
-        private void SetNotTaggedLabelDisplay(DisplayStyle displayStyle)
-        {
-            _notTaggedLabel.style.display = displayStyle;
+            HandleUntaggedState();
         }
 
         public void Populate(IEnumerable<TagsShelfElementController> tagElements)
@@ -80,13 +76,14 @@ namespace Ludwell.Scene
         private void SetReferences()
         {
             _optionsButton = _root.Q<Button>(AddButtonName);
-            _container = _root.Q<VisualElement>(TagsContainerName);
+            _container = _root.Q<ScrollView>(TagsContainerName);
             _notTaggedLabel = _root.Q<Label>(NotTaggedName);
         }
 
         private void HandleUntaggedState()
         {
             _notTaggedLabel.style.display = ElementsCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _container.style.display = ElementsCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
 }
