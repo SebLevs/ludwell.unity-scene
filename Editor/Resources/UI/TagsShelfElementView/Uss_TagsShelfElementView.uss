@@ -1,23 +1,27 @@
-.button-left {
-    margin-right: -3px;
-    margin-left: 2px;
+.button {
+    margin-right: 0;
     padding-left: 4px;
     padding-right: 4px;
     padding-top: 4px;
     padding-bottom: 4px;
-    width: 19px;
-    height: 19px;
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
 }
 
-.button-right {
-    margin-left: -3px;
-    margin-right: 2px;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    width: 19px;
-    height: 19px;
+#tag {
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: row;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
+    flex-grow: 1;
 }
 
 #icon {
@@ -30,14 +34,16 @@
 }
 
 #button-main {
-    margin-left: 3px;
-    margin-right: 3px;
+    margin-left: 0;
+    margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 4px;
     padding-right: 4px;
     padding-top: 2px;
     padding-bottom: 2px;
-    min-width: 32px;
-    height: 19px;
+    height: 20px;
+    -unity-text-align: middle-center;
+    text-overflow: ellipsis;
+    min-width: 60px;
 }

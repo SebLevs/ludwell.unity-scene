@@ -50,7 +50,7 @@ namespace Ludwell.Scene.Editor
             _data = data;
         }
 
-        public void PopulateContainer()
+        public void Populate()
         {
             _view.ClearContainer();
             _view.Populate(ConstructTagElements(_data.Tags));

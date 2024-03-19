@@ -1,0 +1,69 @@
+#not-tagged {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 65px;
+}
+
+#tags__button-add {
+    width: 16px;
+    height: 16px;
+    left: -25px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#icon {
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    height: 100%;
+    background-image: resource('Sprites/icon_settings');
+}
+
+#tags-container {
+    width: 100%;
+    height: 65px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#unity-content-container {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-self: center;
+    overflow: hidden;
+    width: 80%;
+}
+
+Scroller {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    right: 0;
+    height: 100%;
+}
