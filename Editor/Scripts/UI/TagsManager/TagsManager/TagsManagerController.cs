@@ -75,7 +75,7 @@ namespace Ludwell.Scene.Editor
         private void BuildTagsController(TagSubscriberWithTags tagSubscriberWithTags)
         {
             _tagsShelfController.UpdateData(tagSubscriberWithTags);
-            _tagsShelfController.PopulateContainer();
+            _tagsShelfController.Populate();
         }
 
         private void AddTagToShelf(TagWithSubscribers tag)

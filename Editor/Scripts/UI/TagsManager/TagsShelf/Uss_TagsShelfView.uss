@@ -45,12 +45,12 @@
 }
 
 #unity-content-container {
-    width: 85%;
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
     align-self: center;
-    flex-shrink: 0;
+    overflow: hidden;
+    width: 80%;
 }
 
 Scroller {
