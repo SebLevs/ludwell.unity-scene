@@ -6,6 +6,10 @@
     flex-grow: 1;
 }
 
+#main-menu__buttons {
+    padding-bottom: 2px;
+}
+
 #main-menu__buttons > #button__load {
     margin-right: 2px;
 }

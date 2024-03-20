@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.Scene
 {
     [Serializable]
     public class QuickLoadElementData : TagSubscriberWithTags, IComparable

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     public class DropdownData
     {

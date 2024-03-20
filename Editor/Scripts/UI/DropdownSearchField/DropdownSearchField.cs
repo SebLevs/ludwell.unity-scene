@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Ludwell.Scene.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     /// <summary>
     /// Default behaviour on value changed is to list the element by name<br/>
@@ -23,8 +22,11 @@ namespace Ludwell.Scene
         {
         }
 
-        private static readonly string UxmlPath = Path.Combine("UI", nameof(DropdownSearchField), "Uxml_" + nameof(DropdownSearchField));
-        private static readonly string UssPath = Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownSearchField));
+        private static readonly string UxmlPath =
+            Path.Combine("UI", nameof(DropdownSearchField), "Uxml_" + nameof(DropdownSearchField));
+
+        private static readonly string UssPath =
+            Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownSearchField));
 
         private const string SearchFieldName = "toolbar-search-field";
         private const string DefaultSearchIcon = "icon_search";
@@ -164,7 +166,7 @@ namespace Ludwell.Scene
                 _searchField.value = listFromValue;
             }
         }
-        
+
         public void RebuildActiveListing()
         {
             if (!IsListing) return;
