@@ -11,6 +11,12 @@ namespace Ludwell.Scene.Editor
             if (EditorApplication.isPlaying) return;
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData));
         }
+        
+        public static void OpenScene(string path)
+        {
+            if (EditorApplication.isPlaying) return;
+            EditorSceneManager.OpenScene(path);
+        }
 
         public static void OpenSceneAdditive(SceneData sceneData)
         {

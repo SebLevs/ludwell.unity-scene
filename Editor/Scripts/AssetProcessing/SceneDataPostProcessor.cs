@@ -20,7 +20,7 @@ namespace Ludwell.Scene.Editor
 
             if (!sceneData) return false;
 
-            SceneDataManagerEditorApplication.OpenScene(sceneData);
+            SceneDataManagerEditorApplication.OpenScene(Path.ChangeExtension(path, ".unity"));
 
             return true;
         }
