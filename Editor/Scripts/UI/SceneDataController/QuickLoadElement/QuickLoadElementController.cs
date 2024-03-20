@@ -12,11 +12,21 @@ namespace Ludwell.Scene.Editor
 
         private QuickLoadElementData _data = new();
 
+        private VisualElement _view;
+
         public QuickLoadElementController(VisualElement view)
         {
+            _view = view;
             _tagsShelfController = new TagsShelfController(view, _ => InitializeViewTransition());
 
             view.RegisterCallback<AttachToPanelEvent>(_ => { _viewManager = view.Root().Q<ViewManager>(); });
+
+            view.Q<Toggle>().RegisterCallback<MouseUpEvent>(SaveQuickLoadElements);
+        }
+
+        ~QuickLoadElementController()
+        {
+            _view.Q<Toggle>().UnregisterCallback<MouseUpEvent>(SaveQuickLoadElements);
         }
 
         public void LoadScene(SceneData sceneData)
@@ -81,6 +91,11 @@ namespace Ludwell.Scene.Editor
         private void InitializeViewTransition()
         {
             _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_data));
+        }
+        
+        private void SaveQuickLoadElements(MouseUpEvent evt)
+        {
+            DataFetcher.SaveQuickLoadElementsDelayed();
         }
     }
 }

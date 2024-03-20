@@ -48,21 +48,21 @@ namespace Ludwell.Scene
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             coreScenes.LaunchScene = evt.newValue as SceneData;
-            DataFetcher.SaveEveryScriptable();
+            DataFetcher.SaveCoreScenes();
         }
         
         private void UpdatePersistentScene(ChangeEvent<Object> evt)
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             coreScenes.PersistentScene = evt.newValue as SceneData;
-            DataFetcher.SaveEveryScriptable();
+            DataFetcher.SaveCoreScenes();
         }
         
         private void UpdateLoadingScene(ChangeEvent<Object> evt)
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             coreScenes.LoadingScene = evt.newValue as SceneData;
-            DataFetcher.SaveEveryScriptable();
+            DataFetcher.SaveCoreScenes();
         }
 
         private void InitMainMenuButtons()

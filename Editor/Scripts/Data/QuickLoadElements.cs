@@ -21,7 +21,6 @@ namespace Ludwell.Scene.Editor
             });
 
             Elements.Sort();
-            DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
@@ -31,10 +30,10 @@ namespace Ludwell.Scene.Editor
             {
                 var element = Elements[index];
                 if (element.SceneData != sceneData) continue;
+                element.RemoveFromAllTags();
                 Elements.Remove(element);
             }
 
-            DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
@@ -47,7 +46,6 @@ namespace Ludwell.Scene.Editor
                 element.Name = newName;
             }
 
-            DataFetcher.SaveEveryScriptableDelayed();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }

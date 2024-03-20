@@ -16,7 +16,6 @@ namespace Ludwell.Scene.Editor
             {
                 if (isOpen == value) return;
                 isOpen = value;
-                DataFetcher.SaveEveryScriptableDelayed();
             }
         }
 
@@ -26,7 +25,6 @@ namespace Ludwell.Scene.Editor
             set
             {
                 sceneData = value;
-                DataFetcher.SaveEveryScriptableDelayed();
             }
         }
 

@@ -71,7 +71,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.SaveAssetIfDirty(settings);
 
             if (!shouldSave) return;
-            DataFetcher.SaveEveryScriptable();
+            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
