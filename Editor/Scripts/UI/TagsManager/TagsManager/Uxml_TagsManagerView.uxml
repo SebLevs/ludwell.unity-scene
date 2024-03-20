@@ -5,7 +5,7 @@
         <ui:Label tabindex="-1" text="Name of element with tags" display-tooltip-when-elided="true" name="reference-name" />
         <ui:Instance template="TagsShelfView" name="TagsShelfView" />
         <ui:VisualElement name="search-field__background" class="search-field__background">
-            <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" class="DropdownSearchField" />
+            <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
         </ui:VisualElement>
         <ui:VisualElement name="listview-container" class="listview-container">
             <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" name="tag-elements-container" class="listview-container__ListView" />

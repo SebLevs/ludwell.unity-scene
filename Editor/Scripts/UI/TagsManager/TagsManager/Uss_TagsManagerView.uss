@@ -60,7 +60,7 @@
     align-self: center;
 }
 
-#DropdownSearchField > #search-field > VisualElement > #toolbar-search-field {
+#DropdownSearchField > #search-field > #toolbar-search-field {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top-width: 0;

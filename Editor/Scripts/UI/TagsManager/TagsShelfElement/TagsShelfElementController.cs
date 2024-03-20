@@ -1,8 +1,7 @@
 using System.IO;
-using Ludwell.Scene.Editor;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     public class TagsShelfElementController : VisualElement
     {

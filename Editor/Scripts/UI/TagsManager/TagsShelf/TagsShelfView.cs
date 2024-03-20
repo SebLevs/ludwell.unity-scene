@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     public class TagsShelfView
     {

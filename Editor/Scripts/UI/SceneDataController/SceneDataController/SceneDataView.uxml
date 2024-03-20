@@ -5,7 +5,7 @@
     <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; display: flex;">
         <ui:Foldout text="Starting Scene" name="foldout__starting-scene" class="foldout">
             <ui:VisualElement name="launcher__main-menu" style="flex-grow: 1; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 8px; margin-bottom: 8px; align-self: stretch; align-items: center;">
-                <Ludwell.Scene.EditorSceneDataButtons name="main-menu__buttons" loadIconColor="#00C30CFF" openIconColor="#00C1C3FF" buttonSize="32" style="flex-direction: row; padding-left: 4px; padding-right: 4px; padding-top: 0; padding-bottom: 4px;" />
+                <Ludwell.Scene.Editor.EditorSceneDataButtons loadIconColor="#00C30CFF" openIconColor="#00C1C3FF" buttonSize="20" name="main-menu__buttons" style="flex-direction: row;" />
                 <uie:ObjectField name="scene-selection" type="Ludwell.Scene.SceneData, ludwell.scene" style="-unity-text-align: middle-center; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
             </ui:VisualElement>
         </ui:Foldout>

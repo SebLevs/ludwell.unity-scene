@@ -23,6 +23,11 @@
     font-size: 12px;
 }
 
+#EditorSceneDataButtons {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 #button__load {
     margin-right: 2px;
 }

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/Uss/SceneDataController/QuickLoadController.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#QuickLoadController" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/QuickLoad/QuickLoadView.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#QuickLoadView" />
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement name="header-content">
             <ui:VisualElement name="header__load">
@@ -9,7 +9,7 @@
                 <ui:Button name="button__close-all" display-tooltip-when-elided="true" tooltip="Close all" class="button__close-all" style="left: 0;">
                     <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
                 </ui:Button>
-                <Ludwell.Scene.DropdownSearchField name="DropdownSearchField" />
+                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" />

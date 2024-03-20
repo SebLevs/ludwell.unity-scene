@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-namespace Ludwell.Scene
+namespace Ludwell.Scene.Editor
 {
     public class SceneDataManagerEditorApplication
     {
