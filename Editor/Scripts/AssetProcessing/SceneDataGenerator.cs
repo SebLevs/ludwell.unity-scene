@@ -35,6 +35,7 @@ namespace Ludwell.Scene.Editor
             }
 
             EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
+            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.Refresh();
         }
 
