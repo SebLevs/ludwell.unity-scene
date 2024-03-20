@@ -77,7 +77,7 @@ namespace Ludwell.Scene.Editor
         {
             if (importedAssets.Count <= 0) return false;
             if (_isHandlingImport) return false;
-
+            
             _isHandlingImport = true;
             var shouldSave = false;
 

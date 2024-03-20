@@ -63,6 +63,8 @@ namespace Ludwell.Scene.Editor
             {
                 item.SetIsOpen(false);
             }
+            
+            DataFetcher.SaveQuickLoadElementsDelayed();
         }
 
         private void InitializeListViewHandler(ListView listView)
@@ -77,7 +79,7 @@ namespace Ludwell.Scene.Editor
                     element.RemoveFromAllTags();
                 }
 
-                DataFetcher.SaveEveryScriptableDelayed();
+                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             };
         }
 

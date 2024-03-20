@@ -7,9 +7,14 @@ namespace Ludwell.Scene.Editor
     public static class DataFetcher
     {
         private static CoreScenes _coreScenes;
+
         private static QuickLoadElements _quickLoadElements;
+        private static DelayedEditorUpdateAction _delayedSaveQuickLoadElements;
+
         private static TagContainer _tagContainer;
-        private static DelayedEditorUpdateAction _delayedEditorUpdateAction;
+        private static DelayedEditorUpdateAction _delayedSaveTagContainer;
+
+        private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
 
         public static CoreScenes GetCoreScenes()
         {
@@ -19,7 +24,7 @@ namespace Ludwell.Scene.Editor
 
         public static QuickLoadElements GetQuickLoadElements()
         {
-            CacheLoaderSceneData();
+            CacheQuickLoadData();
             return _quickLoadElements;
         }
 
@@ -29,25 +34,50 @@ namespace Ludwell.Scene.Editor
             return _tagContainer;
         }
 
-        public static void SaveEveryScriptable()
+        public static void SaveCoreScenes()
         {
             CacheCoreScenes();
             EditorUtility.SetDirty(_coreScenes);
             AssetDatabase.SaveAssetIfDirty(_coreScenes);
-            
-            CacheLoaderSceneData();
+        }
+
+        public static void SaveTagContainerDelayed()
+        {
+            _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveCoreScenes);
+            _delayedSaveTagContainer.StartOrRefresh();
+        }
+
+        public static void SaveQuickLoadElements()
+        {
+            CacheQuickLoadData();
             EditorUtility.SetDirty(_quickLoadElements);
             AssetDatabase.SaveAssetIfDirty(_quickLoadElements);
+        }
 
+        public static void SaveQuickLoadElementsDelayed()
+        {
+            _delayedSaveQuickLoadElements ??= new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElements);
+            _delayedSaveQuickLoadElements.StartOrRefresh();
+        }
+
+        public static void SaveTagContainer()
+        {
             CacheTagContainer();
             EditorUtility.SetDirty(_tagContainer);
             AssetDatabase.SaveAssetIfDirty(_tagContainer);
         }
 
-        public static void SaveEveryScriptableDelayed()
+        public static void SaveQuickLoadElementsAndTagContainerDelayed()
         {
-            _delayedEditorUpdateAction ??= new DelayedEditorUpdateAction(0.5f, SaveEveryScriptable);
-            _delayedEditorUpdateAction.StartOrRefresh();
+            _delayedSaveQuickLoadElementsAndTagContainer ??=
+                new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElementsAndTagContainer);
+            _delayedSaveQuickLoadElementsAndTagContainer.StartOrRefresh();
+        }
+
+        private static void SaveQuickLoadElementsAndTagContainer()
+        {
+            SaveQuickLoadElements();
+            SaveTagContainer();
         }
 
         private static void CacheCoreScenes()
@@ -58,11 +88,12 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private static void CacheLoaderSceneData()
+        private static void CacheQuickLoadData()
         {
             if (!_quickLoadElements)
             {
-                _quickLoadElements = Resources.Load<QuickLoadElements>(Path.Combine("Scriptables", nameof(QuickLoadElements)));
+                _quickLoadElements =
+                    Resources.Load<QuickLoadElements>(Path.Combine("Scriptables", nameof(QuickLoadElements)));
             }
         }
 

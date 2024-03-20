@@ -78,7 +78,7 @@ namespace Ludwell.Scene.Editor
         private void UpdateDataValue(string value)
         {
             _data.Name = value;
-            DataFetcher.SaveEveryScriptableDelayed();
+            DataFetcher.SaveTagContainerDelayed();
         }
         
         private void AddAction()

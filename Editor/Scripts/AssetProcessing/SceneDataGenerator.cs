@@ -35,6 +35,7 @@ namespace Ludwell.Scene.Editor
             }
 
             EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
+            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.Refresh();
         }
 
@@ -71,7 +72,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.SaveAssetIfDirty(settings);
 
             if (!shouldSave) return;
-            DataFetcher.SaveEveryScriptable();
+            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

@@ -102,7 +102,7 @@ namespace Ludwell.Scene.Editor
         private void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             RemoveTagFromShelf(tag);
-            DataFetcher.SaveEveryScriptable();
+            DataFetcher.SaveTagContainer();
             _listViewHandler.ForceRebuild();
         }
 
@@ -155,7 +155,7 @@ namespace Ludwell.Scene.Editor
                     RemoveTagFromAllSubscribers(tag);
                 }
 
-                DataFetcher.SaveEveryScriptable();
+                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             };
         }
 
@@ -235,7 +235,7 @@ namespace Ludwell.Scene.Editor
         private void SortTags()
         {
             _tagContainer.Tags.Sort();
-            DataFetcher.SaveEveryScriptableDelayed();
+            DataFetcher.SaveTagContainerDelayed();
             _listViewHandler.ForceRebuild();
         }
     }

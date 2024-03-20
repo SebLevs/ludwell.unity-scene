@@ -6,29 +6,8 @@ namespace Ludwell.Scene.Editor
     [Serializable]
     public class QuickLoadElementData : TagSubscriberWithTags, IComparable
     {
-        [SerializeField] private bool isOpen = true;
-        [SerializeField] private SceneData sceneData;
-
-        public bool IsOpen
-        {
-            get => isOpen;
-            set
-            {
-                if (isOpen == value) return;
-                isOpen = value;
-                DataFetcher.SaveEveryScriptableDelayed();
-            }
-        }
-
-        public SceneData SceneData
-        {
-            get => sceneData;
-            set
-            {
-                sceneData = value;
-                DataFetcher.SaveEveryScriptableDelayed();
-            }
-        }
+        [HideInInspector] public SceneData SceneData;
+        [HideInInspector] public bool IsOpen = true;
 
         public int CompareTo(object obj)
         {
