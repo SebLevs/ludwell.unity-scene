@@ -24,7 +24,7 @@ namespace Ludwell.Scene.Editor
 
             if (!absolutePath.Contains("/Assets/"))
             {
-                Debug.LogWarning($"Suspicious action | Path was outside the Asset folder. | {absolutePath}");
+                Debug.LogWarning($"Suspicious action | Path was outside the Asset folder | {absolutePath}");
 
                 var quickLoadElements = DataFetcher.GetQuickLoadElements();
                 for (var index = quickLoadElements.Elements.Count - 1; index >= 0; index--)
