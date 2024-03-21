@@ -8,6 +8,7 @@ namespace Ludwell.Scene
     {
         [HideInInspector] public SceneData SceneData;
         [HideInInspector] public bool IsOpen = true;
+        [HideInInspector] public bool IsOutsideAssetsFolder;
 
         public int CompareTo(object obj)
         {

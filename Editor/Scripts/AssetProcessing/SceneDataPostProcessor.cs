@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
@@ -20,7 +21,7 @@ namespace Ludwell.Scene.Editor
 
             if (!sceneData) return false;
 
-            SceneDataManagerEditorApplication.OpenScene(sceneData);
+            SceneDataManagerEditorApplication.OpenScene(Path.ChangeExtension(path, ".unity"));
 
             return true;
         }
@@ -32,7 +33,7 @@ namespace Ludwell.Scene.Editor
             string[] movedFromAssetPaths)
         {
             if (!TryHandleMove(movedAssets, movedFromAssetPaths) && !TryHandleImport(importedAssets)) return;
-            
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -58,6 +59,8 @@ namespace Ludwell.Scene.Editor
 
                 shouldSave = true;
 
+                var quickLoadElements = DataFetcher.GetQuickLoadElements();
+
                 var oppositeExtension = movedAssets[index].EndsWith(".unity") ? ".asset" : ".unity";
 
                 var oppositeOldPathFull = Path.ChangeExtension(movedFromAssetPaths[index], oppositeExtension);
@@ -66,7 +69,12 @@ namespace Ludwell.Scene.Editor
 
                 var oldAssetName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
                 var newAssetName = Path.GetFileNameWithoutExtension(movedAssets[index]);
-                DataFetcher.GetQuickLoadElements().UpdateElement(oldAssetName, newAssetName);
+                quickLoadElements.UpdateElement(oldAssetName, newAssetName);
+
+                var assetPath = Path.ChangeExtension(movedAssets[index], ".asset");
+                var sceneDataAtNewPath = AssetDatabase.LoadAssetAtPath<SceneData>(assetPath);
+                var element = quickLoadElements.Elements.First(x => x.SceneData == sceneDataAtNewPath);
+                HandleAssetOutsideAssetsFolder(element);
             }
 
             _isHandlingMove = false;
@@ -77,7 +85,7 @@ namespace Ludwell.Scene.Editor
         {
             if (importedAssets.Count <= 0) return false;
             if (_isHandlingImport) return false;
-            
+
             _isHandlingImport = true;
             var shouldSave = false;
 
@@ -114,7 +122,8 @@ namespace Ludwell.Scene.Editor
 
             var myAsset = ScriptableObject.CreateInstance<SceneData>();
             AssetDatabase.CreateAsset(myAsset, sceneDataPath);
-            DataFetcher.GetQuickLoadElements().AddElement(myAsset);
+            var element = DataFetcher.GetQuickLoadElements().AddElement(myAsset);
+            HandleAssetOutsideAssetsFolder(element);
         }
 
         private static void CreateSceneAsset(string sceneDataPath)
@@ -128,7 +137,16 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.SaveScene(newScene, scenePath);
 
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
-            DataFetcher.GetQuickLoadElements().AddElement(sceneData);
+            var element = DataFetcher.GetQuickLoadElements().AddElement(sceneData);
+            HandleAssetOutsideAssetsFolder(element);
+        }
+
+        private static void HandleAssetOutsideAssetsFolder(QuickLoadElementData element)
+        {
+            var path = AssetDatabase.GetAssetPath(element.SceneData);
+            element.IsOutsideAssetsFolder = !path.Contains("Assets/");
+
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
     }
 }

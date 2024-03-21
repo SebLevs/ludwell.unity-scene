@@ -12,16 +12,19 @@ namespace Ludwell.Scene
         [field: SerializeField]
         public List<QuickLoadElementData> Elements { get; set; } = new();
 
-        public void AddElement(SceneData sceneData)
+        public QuickLoadElementData AddElement(SceneData sceneData)
         {
-            Elements.Add(new QuickLoadElementData()
+            var element = new QuickLoadElementData
             {
                 Name = sceneData.Name,
                 SceneData = sceneData
-            });
+            };
 
+            Elements.Add(element);
             Elements.Sort();
             Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
+
+            return element;
         }
 
         public void RemoveElement(SceneData sceneData)

@@ -25,10 +25,12 @@ namespace Ludwell.Scene.Editor
         private const string MainSceneName = "main-scene";
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
+        private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
         private Foldout _foldout;
         private TextField _foldoutText;
         private ObjectField _sceneData;
+        private VisualElement _iconAssetOutsideAssets;
 
         private QuickLoadElementController _controller;
 
@@ -37,6 +39,9 @@ namespace Ludwell.Scene.Editor
         public void SetName(string text) => _foldoutText.value = text;
 
         public void SetSceneData(SceneData sceneData) => _sceneData.value = sceneData;
+
+        public void SetIconAssetOutsideAssets(bool state) =>
+            _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
 
         public QuickLoadElementView()
         {
@@ -67,6 +72,7 @@ namespace Ludwell.Scene.Editor
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
             _foldoutText = this.Q<TextField>(FoldoutTextFieldName);
+            _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
         }
 
         public void CacheData(QuickLoadElementData data)
@@ -86,6 +92,7 @@ namespace Ludwell.Scene.Editor
             _controller.SetIsOpen(this);
             _controller.SetName(this);
             _controller.SetSceneData(this);
+            _controller.SetIconAssetOutsideAssets(this);
 
             _controller.UpdateTagsContainer();
         }

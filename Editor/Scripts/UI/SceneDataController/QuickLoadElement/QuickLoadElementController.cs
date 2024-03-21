@@ -87,6 +87,11 @@ namespace Ludwell.Scene.Editor
         {
             view.SetSceneData(_data.SceneData);
         }
+        
+        public void SetIconAssetOutsideAssets(QuickLoadElementView view)
+        {
+            view.SetIconAssetOutsideAssets(_data.IsOutsideAssetsFolder);
+        }
 
         private void InitializeViewTransition()
         {
