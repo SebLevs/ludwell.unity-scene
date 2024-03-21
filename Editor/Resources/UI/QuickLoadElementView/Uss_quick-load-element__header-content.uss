@@ -57,7 +57,7 @@
     width: 16px;
     height: 16px;
     align-self: center;
-    background-image: resource('Sprites/icon_warning');
+    background-image: resource('Sprites/icon__asset-outside-assets');
     -unity-background-image-tint-color: rgb(226, 183, 78);
     position: absolute;
     right: -32px;
