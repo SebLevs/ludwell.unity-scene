@@ -11,7 +11,7 @@ namespace Ludwell.Scene.Editor
             if (EditorApplication.isPlaying) return;
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData));
         }
-        
+
         public static void OpenScene(string path)
         {
             if (EditorApplication.isPlaying) return;
@@ -26,9 +26,7 @@ namespace Ludwell.Scene.Editor
         private static string GetSceneAssetPath(SceneData sceneData)
         {
             var fullPath = AssetDatabase.GetAssetPath(sceneData);
-            var directory = Path.GetDirectoryName(fullPath);
-            var name = Path.GetFileNameWithoutExtension(fullPath);
-            return Path.Combine(directory, name + ".unity");
+            return Path.ChangeExtension(fullPath, ".unity");
         }
 
         public static void LoadScene(SceneData sceneData)

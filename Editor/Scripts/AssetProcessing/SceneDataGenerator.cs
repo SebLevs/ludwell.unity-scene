@@ -17,31 +17,57 @@ namespace Ludwell.Scene.Editor
 
         public static void CreateSceneAssetAtPath()
         {
-            var absolutePath = EditorUtility.SaveFilePanel("Select Folder", "Assets", "New Scene", "unity");
+            var absolutePath = EditorUtility.SaveFilePanel(
+                "Select Folder", "Assets", "New Scene", "unity");
 
             if (string.IsNullOrEmpty(absolutePath)) return;
 
-            var projectPath = Application.dataPath.Replace("/Assets", "");
-            if (!absolutePath.StartsWith(projectPath))
+            if (!absolutePath.Contains("/Assets/"))
             {
-                Debug.LogError($"Operation cancelled | Invalid path | {absolutePath}");
-                return;
-            }
+                Debug.LogWarning($"Suspicious action | Path was outside the Asset folder. | {absolutePath}");
 
-            var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
-            if (sceneData)
+                var quickLoadElements = DataFetcher.GetQuickLoadElements();
+                for (var index = quickLoadElements.Elements.Count - 1; index >= 0; index--)
+                {
+                    var sceneDataAtIndex = AssetDatabase.GetAssetPath(quickLoadElements.Elements[index].SceneData);
+                    var sceneAssetPath = Path.ChangeExtension(sceneDataAtIndex, ".unity");
+
+                    var normalizedAbsolutePath = Path.GetFullPath(absolutePath)
+                        .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                    var normalizedSceneAssetPath = Path.GetFullPath(sceneAssetPath)
+                        .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+                    if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    DataFetcher.GetQuickLoadElements().RemoveElement(quickLoadElements.Elements[index].SceneData);
+                }
+            }
+            else
             {
-                DataFetcher.GetQuickLoadElements().RemoveElement(sceneData);
+                var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
+                if (sceneData)
+                {
+                    DataFetcher.GetQuickLoadElements().RemoveElement(sceneData);
+                }
             }
 
             EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
+
+            if (!absolutePath.Contains("/Assets/"))
+            {
+                File.Delete(absolutePath + ".meta");
+            }
+
             DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.Refresh();
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
         public static void GenerateSceneData()
         {
-            var settings = Resources.Load<SceneDataManagerSettings>(Path.Combine("Scriptables", nameof(SceneDataManagerSettings)));
+            var settings =
+                Resources.Load<SceneDataManagerSettings>(Path.Combine("Scriptables", nameof(SceneDataManagerSettings)));
 
             if (!settings.GenerateSceneData) return;
 
