@@ -4,7 +4,7 @@
         <Ludwell.Scene.Editor.EditorSceneDataButtons name="EditorSceneDataButtons" buttonSize="20" loadIconColor="#00C30CFF" openIconColor="#00C1C3FF" />
         <ui:VisualElement name="scene-container">
             <ui:TextField value="Scene Loader Element" name="foldout-text-field" />
-            <ui:VisualElement tooltip="Packaged scene" name="icon__package-scene" />
+            <ui:VisualElement tooltip="This asset is not from the Assets folder." name="icon__package-scene" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
