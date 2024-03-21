@@ -24,11 +24,11 @@
     align-self: center;
 }
 
-#foldout-text-field {
+#scene-container > #foldout-text-field {
     width: 100%;
 }
 
-#foldout-text-field > #unity-text-input {
+#scene-container > #foldout-text-field > #unity-text-input {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-top-right-radius: 0;
@@ -46,7 +46,7 @@
     border-bottom-width: 0;
 }
 
-#foldout-text-field > #unity-text-input > TextElement {
+#scene-container > #foldout-text-field > #unity-text-input > TextElement {
     -unity-text-align: middle-center;
     padding-left: 8px;
     padding-right: 8px;
