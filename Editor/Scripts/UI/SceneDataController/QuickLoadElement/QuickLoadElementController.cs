@@ -64,6 +64,7 @@ namespace Ludwell.Scene.Editor
         public void SelectSceneDataInProject()
         {
             Selection.activeObject = _data.SceneData;
+            EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
         public void UpdateTagsContainer()
