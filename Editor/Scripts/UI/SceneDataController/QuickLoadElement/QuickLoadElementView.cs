@@ -1,5 +1,4 @@
 using System.IO;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,25 +19,21 @@ namespace Ludwell.Scene.Editor
             Path.Combine("UI", nameof(QuickLoadElementView), "Uss_" + "quick-load-element__header-content");
 
         private const string FoldoutName = "root__foldout";
-        private const string FoldoutTextFieldName = "foldout-text-field";
         private const string ToggleBottomName = "toggle-bottom";
-        private const string MainSceneName = "main-scene";
+        private const string SceneDataName = "scene-data";
         private const string LoadButtonName = "button__load";
         private const string OpenButtonName = "button__open";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
         private Foldout _foldout;
-        private TextField _foldoutText;
-        private ObjectField _sceneData;
+        private Button _sceneDataName;
         private VisualElement _iconAssetOutsideAssets;
 
         private QuickLoadElementController _controller;
 
         public void SetIsOpen(bool value) => _foldout.value = value;
 
-        public void SetName(string text) => _foldoutText.value = text;
-
-        public void SetSceneData(SceneData sceneData) => _sceneData.value = sceneData;
+        public void SetSceneData(SceneData sceneData) => _sceneDataName.text = sceneData.name;
 
         public void SetIconAssetOutsideAssets(bool state) =>
             _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
@@ -56,14 +51,11 @@ namespace Ludwell.Scene.Editor
 
             RegisterLoadButtonEvents();
             RegisterOpenButtonEvents();
-
-            PreventFoldoutToggleFromKeyPress();
         }
 
         private void SetReferences()
         {
             _foldout = this.Q<Foldout>(FoldoutName);
-            _sceneData = this.Q<ObjectField>(MainSceneName);
         }
 
         private void InitializeAndReferenceFoldoutTextField()
@@ -71,7 +63,7 @@ namespace Ludwell.Scene.Editor
             var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
-            _foldoutText = this.Q<TextField>(FoldoutTextFieldName);
+            _sceneDataName = this.Q<Button>(SceneDataName);
             _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
         }
 
@@ -83,14 +75,13 @@ namespace Ludwell.Scene.Editor
         public void BindElementToCachedData()
         {
             _foldout.RegisterValueChangedCallback(_controller.UpdateIsOpen);
-            _foldoutText.RegisterValueChangedCallback(_controller.UpdateName);
-            _sceneData.RegisterValueChangedCallback(_controller.UpdateSceneData);
+            _sceneDataName.RegisterValueChangedCallback(_controller.UpdateName);
+            _sceneDataName.clicked += _controller.SelectSceneDataInProject;
         }
 
         public void SetElementFromCachedData()
         {
             _controller.SetIsOpen(this);
-            _controller.SetName(this);
             _controller.SetSceneData(this);
             _controller.SetIconAssetOutsideAssets(this);
 
@@ -100,13 +91,13 @@ namespace Ludwell.Scene.Editor
         private void RegisterLoadButtonEvents()
         {
             var loadButton = this.Q(LoadButtonName).Q<Button>();
-            loadButton.RegisterCallback<ClickEvent>(_ => _controller.LoadScene(_sceneData.value as SceneData));
+            loadButton.RegisterCallback<ClickEvent>(_ => _controller.LoadScene());
         }
 
         private void RegisterOpenButtonEvents()
         {
             var openButton = this.Q(OpenButtonName).Q<Button>();
-            openButton.RegisterCallback<ClickEvent>(_ => _controller.OpenScene(_sceneData.value as SceneData));
+            openButton.RegisterCallback<ClickEvent>(_ => _controller.OpenScene());
         }
 
         private void RegisterStyleEvents()
@@ -116,20 +107,6 @@ namespace Ludwell.Scene.Editor
                 var borderTopWidth = evt.newValue ? 1 : 0;
                 this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
             });
-        }
-
-        private void PreventFoldoutToggleFromKeyPress()
-        {
-            var foldoutTextField = this.Q<TextField>(FoldoutTextFieldName);
-            foldoutTextField.RegisterCallback<KeyDownEvent>(evt =>
-            {
-                evt.StopPropagation();
-                if (evt.currentTarget != foldoutTextField) return;
-                if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
-                SetIsOpen(!_foldout.value);
-            });
-
-            foldoutTextField.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
         }
     }
 }
