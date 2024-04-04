@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -29,22 +28,22 @@ namespace Ludwell.Scene.Editor
             _view.Q<Toggle>().UnregisterCallback<MouseUpEvent>(SaveQuickLoadElements);
         }
 
-        public void LoadScene(SceneData sceneData)
+        public void LoadScene()
         {
-            SceneDataManagerEditorApplication.OpenScene(sceneData);
+            SceneDataManagerEditorApplication.OpenScene(_data.SceneData);
 
             var persistentScene = DataFetcher.GetCoreScenes().PersistentScene;
             if (persistentScene)
             {
-                SceneDataManagerEditorApplication.OpenSceneAdditive(sceneData);
+                SceneDataManagerEditorApplication.OpenSceneAdditive(_data.SceneData);
             }
 
             EditorApplication.isPlaying = true;
         }
 
-        public void OpenScene(SceneData sceneData)
+        public void OpenScene()
         {
-            SceneDataManagerEditorApplication.OpenScene(sceneData);
+            SceneDataManagerEditorApplication.OpenScene(_data.SceneData);
         }
 
         public void UpdateData(QuickLoadElementData data)
@@ -61,10 +60,11 @@ namespace Ludwell.Scene.Editor
         {
             _data.Name = evt.newValue;
         }
-
-        public void UpdateSceneData(ChangeEvent<Object> evt)
+        
+        public void SelectSceneDataInProject()
         {
-            _data.SceneData = evt.newValue as SceneData;
+            Selection.activeObject = _data.SceneData;
+            EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
         public void UpdateTagsContainer()
@@ -76,11 +76,6 @@ namespace Ludwell.Scene.Editor
         public void SetIsOpen(QuickLoadElementView view)
         {
             view.SetIsOpen(_data.IsOpen);
-        }
-
-        public void SetName(QuickLoadElementView view)
-        {
-            view.SetName(_data.Name);
         }
 
         public void SetSceneData(QuickLoadElementView view)

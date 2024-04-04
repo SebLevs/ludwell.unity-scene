@@ -39,13 +39,19 @@ namespace Ludwell.Scene.Editor
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
-            var selectedElementData = _listViewHandler.GetSelectedElementData();
+            // var selectedElementData = _listViewHandler.GetSelectedElementData();
+            var selectedElementData = _listViewHandler.GetSelectedElementData() != null
+                ? _listViewHandler.GetSelectedElementData()
+                : _listViewHandler.GetLastData();
 
-            var elementToDelete = selectedElementData != null
-                ? AssetDatabase.GetAssetPath(selectedElementData.SceneData)
-                : AssetDatabase.GetAssetPath(_listViewHandler.GetLastData().SceneData);
+            var sceneDataPath = AssetDatabase.GetAssetPath(selectedElementData.SceneData);
 
-            AssetDatabase.DeleteAsset(elementToDelete);
+            AssetDatabase.DeleteAsset(sceneDataPath);
+            
+            if (selectedElementData.IsOutsideAssetsFolder)
+            {
+                Debug.LogWarning($"Suspicious delete action | Path was outside the Assets folder | {sceneDataPath}");
+            }
 
             _listViewHandler.ForceRebuild();
         }
@@ -63,7 +69,7 @@ namespace Ludwell.Scene.Editor
             {
                 item.SetIsOpen(false);
             }
-            
+
             DataFetcher.SaveQuickLoadElementsDelayed();
         }
 
@@ -124,6 +130,7 @@ namespace Ludwell.Scene.Editor
         {
             _listView.Rebuild();
             _dropdownSearchField.RebuildActiveListing();
+            AssetDatabase.Refresh();
         }
 
         private List<IListable> ListTag(string searchFieldValue, IList boundItemSource)

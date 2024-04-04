@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/QuickLoadElementView/Uss_quick-load-element__header-content.uss?fileID=7433441132597879392&amp;guid=4bfd3b37c0e4b8740bb5e59e00ba37c7&amp;type=3#Uss_quick-load-element__header-content" />
-    <ui:VisualElement name="scene-loader-element__header-content" style="flex-grow: 1; align-items: center; justify-content: center; flex-direction: column; margin-left: -32px;">
+    <ui:VisualElement name="scene-loader-element__header-content" style="flex-grow: 1; align-items: center; justify-content: center; flex-direction: column; margin-left: -32px; margin-bottom: -3px;">
         <Ludwell.Scene.Editor.EditorSceneDataButtons name="EditorSceneDataButtons" buttonSize="20" loadIconColor="#00C30CFF" openIconColor="#00C1C3FF" />
         <ui:VisualElement name="scene-container">
-            <ui:TextField value="Scene Loader Element" name="foldout-text-field" />
+            <ui:Button text="Scene data name" display-tooltip-when-elided="true" name="scene-data" style="display: flex;" />
             <ui:VisualElement tooltip="This asset is located outside the Assets folder." name="icon__package-scene" />
         </ui:VisualElement>
     </ui:VisualElement>
