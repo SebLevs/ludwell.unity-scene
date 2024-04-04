@@ -40,7 +40,7 @@ namespace Ludwell.Scene.Editor
                     if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    DataFetcher.GetQuickLoadElements().RemoveElement(quickLoadElements.Elements[index].SceneData);
+                    DataFetcher.GetQuickLoadElements().Remove(quickLoadElements.Elements[index].SceneData);
                 }
             }
             else
@@ -48,7 +48,7 @@ namespace Ludwell.Scene.Editor
                 var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
                 if (sceneData)
                 {
-                    DataFetcher.GetQuickLoadElements().RemoveElement(sceneData);
+                    DataFetcher.GetQuickLoadElements().Remove(sceneData);
                 }
             }
 
@@ -59,9 +59,7 @@ namespace Ludwell.Scene.Editor
                 File.Delete(absolutePath + ".meta");
             }
 
-            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.Refresh();
-            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
         }
 
         public static void GenerateSceneData()
@@ -90,7 +88,7 @@ namespace Ludwell.Scene.Editor
                 shouldSave = true;
                 sceneData = ScriptableObject.CreateInstance<SceneData>();
                 AssetDatabase.CreateAsset(sceneData, path);
-                DataFetcher.GetQuickLoadElements().AddElement(sceneData);
+                DataFetcher.GetQuickLoadElements().Add(sceneData);
             }
 
             settings.GenerateSceneData = false;

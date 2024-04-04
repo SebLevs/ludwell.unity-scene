@@ -130,6 +130,7 @@ namespace Ludwell.Scene.Editor
         {
             _listView.Rebuild();
             _dropdownSearchField.RebuildActiveListing();
+            AssetDatabase.Refresh();
         }
 
         private List<IListable> ListTag(string searchFieldValue, IList boundItemSource)

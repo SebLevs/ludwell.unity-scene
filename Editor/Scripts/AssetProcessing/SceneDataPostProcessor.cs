@@ -104,6 +104,7 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
+            DataFetcher.SaveQuickLoadElementsDelayed();
             _isHandlingImport = false;
 
             return shouldSave;
@@ -116,13 +117,13 @@ namespace Ludwell.Scene.Editor
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
             if (sceneData)
             {
-                DataFetcher.GetQuickLoadElements().AddElement(sceneData);
+                DataFetcher.GetQuickLoadElements().Add(sceneData);
                 return;
             }
 
             var myAsset = ScriptableObject.CreateInstance<SceneData>();
             AssetDatabase.CreateAsset(myAsset, sceneDataPath);
-            var element = DataFetcher.GetQuickLoadElements().AddElement(myAsset);
+            var element = DataFetcher.GetQuickLoadElements().AddWithoutNotify(myAsset);
             HandleAssetOutsideAssetsFolder(element);
         }
 
@@ -137,7 +138,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.SaveScene(newScene, scenePath);
 
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
-            var element = DataFetcher.GetQuickLoadElements().AddElement(sceneData);
+            var element = DataFetcher.GetQuickLoadElements().AddWithoutNotify(sceneData);
             HandleAssetOutsideAssetsFolder(element);
         }
 

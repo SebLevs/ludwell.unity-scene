@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
             var directoryName = Path.GetDirectoryName(assetPath);
             var assetName = Path.GetFileNameWithoutExtension(assetPath);
             var SceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.Combine(directoryName, assetName + ".asset"));
-            DataFetcher.GetQuickLoadElements().RemoveElement(SceneData);
+            DataFetcher.GetQuickLoadElements().Remove(SceneData);
             DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
 
             var otherSpecifier = assetPath.EndsWith(".unity") ? ".asset" : ".unity";
