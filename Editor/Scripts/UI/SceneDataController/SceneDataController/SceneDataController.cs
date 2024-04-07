@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,7 +8,7 @@ namespace Ludwell.Scene.Editor
     public class SceneDataController : IViewable
     {
         private const string MainMenuButtonsName = "main-menu__buttons";
-        private const string MainMenuObjectFieldName = "launcher__main-menu";
+        private const string MainMenuObjectFieldName = "launcher__starting-scene";
         
         private const string FoldoutStartingSceneName = "foldout__starting-scene";
         private const string FoldoutCoreScenesName = "foldout__core-scenes";
@@ -72,16 +73,35 @@ namespace Ludwell.Scene.Editor
             mainMenuButtons.AddAction(ButtonType.Load, () =>
             {
                 if (objectField.value == null) return;
-                SceneDataManagerEditorApplication.LoadScene(objectField.value as SceneData);
-            });
+                SceneDataManagerEditorApplication.OpenScene(objectField.value as SceneData);
 
+                var persistentScene = DataFetcher.GetCoreScenes().PersistentScene;
+                SceneDataManagerEditorApplication.OpenSceneAdditive(persistentScene);
+                EditorApplication.EnterPlaymode();
+
+                EditorApplication.playModeStateChanged += OnEnteredEditModeRemovePersistent;
+            });
+            
             mainMenuButtons.AddAction(ButtonType.Open, () =>
             {
                 if (objectField.value == null) return;
                 SceneDataManagerEditorApplication.OpenScene(objectField.value as SceneData);
             });
         }
-        
+
+        private void OnEnteredEditModeRemovePersistent(PlayModeStateChange obj)
+        {
+            if (obj != PlayModeStateChange.EnteredEditMode) return;
+            RemovePersistentScene();
+        }
+
+        private void RemovePersistentScene()
+        {
+            EditorApplication.playModeStateChanged -= OnEnteredEditModeRemovePersistent;
+            var persistentScene = DataFetcher.GetCoreScenes().PersistentScene;
+            SceneDataManagerEditorApplication.CloseScene(persistentScene, true);
+        }
+
         private void CloseFoldouts()
         {
             _root.Q<Foldout>(FoldoutStartingSceneName).value = false;

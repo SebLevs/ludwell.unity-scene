@@ -1,6 +1,7 @@
 using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
@@ -22,25 +23,23 @@ namespace Ludwell.Scene.Editor
         {
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData), OpenSceneMode.Additive);
         }
-
+        
+        /// <summary>
+        /// Close a scene from the hierarchy.
+        /// </summary>
+        /// <param name="sceneData">The scene to close.</param>
+        /// <param name="isRemove">Should the scene be removed from the hierarchy.</param>
+        public static void CloseScene(SceneData sceneData, bool isRemove)
+        {
+            if (!EditorSceneManager.GetSceneByName(sceneData.Name).isLoaded) return;
+            var scene = SceneManager.GetSceneByName(sceneData.Name);
+            EditorSceneManager.CloseScene(scene, isRemove);
+        }
+        
         private static string GetSceneAssetPath(SceneData sceneData)
         {
             var fullPath = AssetDatabase.GetAssetPath(sceneData);
             return Path.ChangeExtension(fullPath, ".unity");
-        }
-
-        public static void LoadScene(SceneData sceneData)
-        {
-            if (EditorApplication.isPlaying)
-            {
-                EditorApplication.isPlaying = false;
-            }
-
-            EditorApplication.delayCall += () =>
-            {
-                OpenScene(sceneData);
-                EditorApplication.isPlaying = true;
-            };
         }
     }
 }

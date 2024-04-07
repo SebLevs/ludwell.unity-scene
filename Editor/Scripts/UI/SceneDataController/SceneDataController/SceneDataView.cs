@@ -6,7 +6,7 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneDataView
     {
-        private const string StartingObjectFieldName = "launcher__main-menu";
+        private const string StartingObjectFieldName = "launcher__starting-scene";
         private const string PersistentObjectFieldName = "core-scene__persistent";
         private const string LoadingObjectFieldName = "core-scene__loading";
 
