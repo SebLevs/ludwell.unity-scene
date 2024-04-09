@@ -47,7 +47,7 @@ namespace Ludwell.Scene.Editor
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             var mainMenuObjectField = _root.Q(StartingObjectFieldName).Q<ObjectField>();
-            mainMenuObjectField.value = coreScenes.LaunchScene;
+            mainMenuObjectField.value = coreScenes.StartingScene;
             mainMenuObjectField.RegisterValueChangedCallback(_onStartingSceneChanged);
         }
 
@@ -55,7 +55,7 @@ namespace Ludwell.Scene.Editor
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             var mainMenuObjectField = _root.Q(PersistentObjectFieldName).Q<ObjectField>();
-            mainMenuObjectField.value = coreScenes.LaunchScene;
+            mainMenuObjectField.value = coreScenes.PersistentScene;
             mainMenuObjectField.RegisterValueChangedCallback(_onPersistentSceneChanged);
         }
 
@@ -63,7 +63,7 @@ namespace Ludwell.Scene.Editor
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             var mainMenuObjectField = _root.Q(LoadingObjectFieldName).Q<ObjectField>();
-            mainMenuObjectField.value = coreScenes.LaunchScene;
+            mainMenuObjectField.value = coreScenes.LoadingScene;
             mainMenuObjectField.RegisterValueChangedCallback(_onLoadingSceneChanged);
         }
     }

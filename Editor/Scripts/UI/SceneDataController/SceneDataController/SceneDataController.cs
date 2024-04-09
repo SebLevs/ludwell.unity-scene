@@ -52,7 +52,7 @@ namespace Ludwell.Scene.Editor
         private void UpdateStartingScene(ChangeEvent<Object> evt)
         {
             var coreScenes = DataFetcher.GetCoreScenes();
-            coreScenes.LaunchScene = evt.newValue as SceneData;
+            coreScenes.StartingScene = evt.newValue as SceneData;
             DataFetcher.SaveCoreScenes();
         }
 
