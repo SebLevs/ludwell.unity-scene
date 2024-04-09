@@ -63,6 +63,11 @@
     border-bottom-color: rgb(80, 80, 80);
 }
 
+#core-scene__loading > #core-scene__container {
+    padding-bottom: 0;
+    border-bottom-width: 0;
+}
+
 #QuickLoadView {
     flex-grow: 1;
 }
