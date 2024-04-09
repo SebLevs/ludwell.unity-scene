@@ -52,6 +52,7 @@
 }
 
 .ButtonWithIcon > #icon {
+    -unity-background-image-tint-color: rgb(196, 196, 196);
 }
 
 #foldout__core-scenes {

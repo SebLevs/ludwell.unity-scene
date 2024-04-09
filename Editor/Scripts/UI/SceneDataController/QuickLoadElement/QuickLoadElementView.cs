@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -62,7 +63,7 @@ namespace Ludwell.Scene.Editor
         {
             var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
             headerContent.AddStyleFromUss(HeaderContentUssPath);
-            this.Q<Toggle>().Q<VisualElement>().Add(headerContent);
+            this.Q<Toggle>().Children().First().Add(headerContent);
             _sceneDataName = this.Q<Button>(SceneDataName);
             _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
         }
