@@ -39,7 +39,6 @@ namespace Ludwell.Scene.Editor
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
-            // var selectedElementData = _listViewHandler.GetSelectedElementData();
             var selectedElementData = _listViewHandler.GetSelectedElementData() != null
                 ? _listViewHandler.GetSelectedElementData()
                 : _listViewHandler.GetLastData();

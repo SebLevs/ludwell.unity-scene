@@ -6,22 +6,6 @@
     flex-grow: 1;
 }
 
-#main-menu__buttons {
-    padding-bottom: 2px;
-}
-
-#main-menu__buttons > #button__load {
-    margin-right: 2px;
-}
-
-#main-menu__buttons > #button__open {
-    margin-left: 2px;
-}
-
-#button__open > #icon {
-    background-image: resource('Sprites/icon_open');
-}
-
 .foldout > Toggle {
     margin-left: 0;
     margin-right: 0;
@@ -47,6 +31,27 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+#starting-scene__buttons {
+    flex-direction: row;
+    margin-bottom: 2px;
+}
+
+.ButtonWithIcon {
+    width: 20px;
+    height: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.ButtonWithIcon > #icon {
 }
 
 #foldout__core-scenes {

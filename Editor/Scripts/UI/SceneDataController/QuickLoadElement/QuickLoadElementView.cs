@@ -21,8 +21,8 @@ namespace Ludwell.Scene.Editor
         private const string FoldoutName = "root__foldout";
         private const string ToggleBottomName = "toggle-bottom";
         private const string SceneDataName = "scene-data";
-        private const string LoadButtonName = "button__load";
-        private const string OpenButtonName = "button__open";
+        private const string LoadSceneButtonName = "button__load";
+        private const string OpenSceneButtonName = "button__open";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
         private Foldout _foldout;
@@ -49,8 +49,8 @@ namespace Ludwell.Scene.Editor
             InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
 
-            RegisterLoadButtonEvents();
-            RegisterOpenButtonEvents();
+            InitializeLoadButton();
+            InitializeOpenButton();
         }
 
         private void SetReferences()
@@ -88,16 +88,16 @@ namespace Ludwell.Scene.Editor
             _controller.UpdateTagsContainer();
         }
 
-        private void RegisterLoadButtonEvents()
+        private void InitializeLoadButton()
         {
-            var loadButton = this.Q(LoadButtonName).Q<Button>();
-            loadButton.RegisterCallback<ClickEvent>(_ => _controller.LoadScene());
+            var loadSceneButton = this.Q<DualStateButton>(LoadSceneButtonName);
+            _controller.InitializeLoadButton(loadSceneButton);
         }
 
-        private void RegisterOpenButtonEvents()
+        private void InitializeOpenButton()
         {
-            var openButton = this.Q(OpenButtonName).Q<Button>();
-            openButton.RegisterCallback<ClickEvent>(_ => _controller.OpenScene());
+            var openSceneButton = this.Q<ButtonWithIcon>(OpenSceneButtonName);
+            _controller.InitializeOpenButton(openSceneButton);
         }
 
         private void RegisterStyleEvents()

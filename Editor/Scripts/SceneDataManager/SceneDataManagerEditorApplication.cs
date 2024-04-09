@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataManagerEditorApplication
+    public static class SceneDataManagerEditorApplication
     {
         public static void OpenScene(SceneData sceneData)
         {
@@ -21,9 +21,10 @@ namespace Ludwell.Scene.Editor
 
         public static void OpenSceneAdditive(SceneData sceneData)
         {
+            if (!sceneData) return;
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData), OpenSceneMode.Additive);
         }
-        
+
         /// <summary>
         /// Close a scene from the hierarchy.
         /// </summary>
@@ -31,11 +32,12 @@ namespace Ludwell.Scene.Editor
         /// <param name="isRemove">Should the scene be removed from the hierarchy.</param>
         public static void CloseScene(SceneData sceneData, bool isRemove)
         {
+            if (!sceneData) return;
             if (!EditorSceneManager.GetSceneByName(sceneData.Name).isLoaded) return;
             var scene = SceneManager.GetSceneByName(sceneData.Name);
             EditorSceneManager.CloseScene(scene, isRemove);
         }
-        
+
         private static string GetSceneAssetPath(SceneData sceneData)
         {
             var fullPath = AssetDatabase.GetAssetPath(sceneData);

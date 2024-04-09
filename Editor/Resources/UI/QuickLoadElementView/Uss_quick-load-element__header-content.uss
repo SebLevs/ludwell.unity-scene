@@ -8,23 +8,10 @@
     margin-top: 0;
     margin-bottom: 0;
     width: 100%;
-}
-
-#EditorSceneDataButtons {
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding-left: 2px;
-    padding-right: 2px;
-    padding-top: 2px;
-    padding-bottom: 4px;
-}
-
-#button__load {
-    margin-right: 2px;
-}
-
-#button__open {
-    margin-left: 2px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
 }
 
 #scene-container {
@@ -32,7 +19,7 @@
     width: 40%;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     align-self: center;
 }
 
@@ -61,7 +48,7 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-width: 0;
-    padding-right: 9px;
+    padding-right: 8px;
     padding-left: 8px;
     margin-left: 0;
     margin-right: 0;
@@ -81,4 +68,24 @@
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 0;
+}
+
+#buttons-container {
+    flex-direction: row;
+}
+
+.ButtonWithIcon {
+    width: 20px;
+    height: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.ButtonWithIcon > #icon {
 }
