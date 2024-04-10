@@ -6,7 +6,7 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneDataView
     {
-        private const string StartingObjectFieldName = "launcher__main-menu";
+        private const string StartingObjectFieldName = "launcher__starting-scene";
         private const string PersistentObjectFieldName = "core-scene__persistent";
         private const string LoadingObjectFieldName = "core-scene__loading";
 
@@ -47,7 +47,7 @@ namespace Ludwell.Scene.Editor
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             var mainMenuObjectField = _root.Q(StartingObjectFieldName).Q<ObjectField>();
-            mainMenuObjectField.value = coreScenes.LaunchScene;
+            mainMenuObjectField.value = coreScenes.StartingScene;
             mainMenuObjectField.RegisterValueChangedCallback(_onStartingSceneChanged);
         }
 
@@ -55,16 +55,16 @@ namespace Ludwell.Scene.Editor
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             var mainMenuObjectField = _root.Q(PersistentObjectFieldName).Q<ObjectField>();
-            mainMenuObjectField.value = coreScenes.LaunchScene;
             mainMenuObjectField.RegisterValueChangedCallback(_onPersistentSceneChanged);
+            mainMenuObjectField.value = coreScenes.PersistentScene;
         }
 
         private void InitializeLoadingSceneCallback()
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             var mainMenuObjectField = _root.Q(LoadingObjectFieldName).Q<ObjectField>();
-            mainMenuObjectField.value = coreScenes.LaunchScene;
             mainMenuObjectField.RegisterValueChangedCallback(_onLoadingSceneChanged);
+            mainMenuObjectField.value = coreScenes.LoadingScene;
         }
     }
 }

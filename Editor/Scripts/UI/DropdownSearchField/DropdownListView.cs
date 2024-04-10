@@ -84,14 +84,12 @@ namespace Ludwell.Scene.Editor
 
         private void TryCacheHeightDifference(VisualElement target)
         {
-            if (_heightDifference <= -1)
-            {
-                var rootHeight = target.Root().resolvedStyle.height;
-                var rootVisualElement = target.Root()
-                    .FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
-                var rootVisualElementHeight = rootVisualElement.resolvedStyle.height;
-                _heightDifference = rootHeight - rootVisualElementHeight;
-            }
+            // if (_heightDifference <= -1)
+            if (_heightDifference > -1) return;
+            var rootHeight = target.Root().resolvedStyle.height;
+            var rootVisualElement = target.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
+            var rootVisualElementHeight = rootVisualElement.resolvedStyle.height;
+            _heightDifference = rootHeight - rootVisualElementHeight;
         }
 
         private void SetStyle()

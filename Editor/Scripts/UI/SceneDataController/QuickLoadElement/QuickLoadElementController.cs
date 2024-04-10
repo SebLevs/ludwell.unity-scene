@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -28,22 +29,25 @@ namespace Ludwell.Scene.Editor
             _view.Q<Toggle>().UnregisterCallback<MouseUpEvent>(SaveQuickLoadElements);
         }
 
-        public void LoadScene()
+        public void InitializeLoadButton(DualStateButton dualStateButton)
         {
-            SceneDataManagerEditorApplication.OpenScene(_data.SceneData);
+            var stateOne = new DualStateButtonState(
+                dualStateButton,
+                LoadScene,
+                Resources.Load<Sprite>(SpritesPath.LoadIcon));
 
-            var persistentScene = DataFetcher.GetCoreScenes().PersistentScene;
-            if (persistentScene)
-            {
-                SceneDataManagerEditorApplication.OpenSceneAdditive(_data.SceneData);
-            }
+            var stateTwo = new DualStateButtonState(
+                dualStateButton,
+                EditorApplication.ExitPlaymode,
+                Resources.Load<Sprite>(SpritesPath.StopIcon));
 
-            EditorApplication.isPlaying = true;
+            dualStateButton.Initialize(stateOne, stateTwo);
         }
-
-        public void OpenScene()
+        
+        public void InitializeOpenButton(ButtonWithIcon buttonWithIcon)
         {
-            SceneDataManagerEditorApplication.OpenScene(_data.SceneData);
+            buttonWithIcon.SetIcon(Resources.Load<Sprite>(SpritesPath.OpenIcon));
+            buttonWithIcon.clicked += OpenScene;
         }
 
         public void UpdateData(QuickLoadElementData data)
@@ -96,6 +100,25 @@ namespace Ludwell.Scene.Editor
         private void SaveQuickLoadElements(MouseUpEvent evt)
         {
             DataFetcher.SaveQuickLoadElementsDelayed();
+        }
+        
+        private void LoadScene()
+        {
+            QuickLoadSceneDataManager.LoadScene(_data.SceneData);
+            EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
+        }
+
+        private void OnExitPlayModeSwitchToStateOne(PlayModeStateChange obj)
+        {
+            if (obj != PlayModeStateChange.ExitingPlayMode) return;
+            EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
+            var dualStateButton = _view.Q<DualStateButton>();
+            dualStateButton.SwitchState(dualStateButton.StateOne);
+        }
+
+        private void OpenScene()
+        {
+            SceneDataManagerEditorApplication.OpenScene(_data.SceneData);
         }
     }
 }

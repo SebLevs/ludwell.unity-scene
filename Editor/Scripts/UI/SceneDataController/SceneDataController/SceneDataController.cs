@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,24 +7,33 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneDataController : IViewable
     {
-        private const string MainMenuButtonsName = "main-menu__buttons";
-        private const string MainMenuObjectFieldName = "launcher__main-menu";
-        
+        private const string StartingSceneObjectFieldName = "launcher__starting-scene";
+        private const string LoadSceneButtonName = "button__load";
+        private const string OpenSceneButtonName = "button__open";
+
         private const string FoldoutStartingSceneName = "foldout__starting-scene";
         private const string FoldoutCoreScenesName = "foldout__core-scenes";
 
         private readonly ViewManager _viewManager;
-        
+
         private readonly VisualElement _root;
         private SceneDataView _view;
         private readonly QuickLoadController _quickLoadController;
+
+        private ObjectField _startingSceneObjectField;
+
+        private DualStateButton _loadSceneButton;
+        private ButtonWithIcon _openSceneButton;
 
         public SceneDataController(VisualElement parent)
         {
             _root = parent.Q(nameof(SceneDataView));
             _view = new SceneDataView(_root, UpdateStartingScene, UpdatePersistentScene, UpdateLoadingScene);
-            
-            InitMainMenuButtons();
+
+            _startingSceneObjectField = _root.Q(StartingSceneObjectFieldName).Q<ObjectField>();
+            InitializeLoadButton();
+            InitializeOpenButton();
+            SetButtonsEnable(DataFetcher.GetCoreScenes().StartingScene);
 
             CloseFoldouts();
 
@@ -45,18 +55,26 @@ namespace Ludwell.Scene.Editor
 
         private void UpdateStartingScene(ChangeEvent<Object> evt)
         {
+            SetButtonsEnable(evt.newValue != null);
+
             var coreScenes = DataFetcher.GetCoreScenes();
-            coreScenes.LaunchScene = evt.newValue as SceneData;
+            coreScenes.StartingScene = evt.newValue as SceneData;
             DataFetcher.SaveCoreScenes();
         }
-        
+
+        private void SetButtonsEnable(bool state)
+        {
+            _loadSceneButton.SetEnabled(state);
+            _openSceneButton.SetEnabled(state);
+        }
+
         private void UpdatePersistentScene(ChangeEvent<Object> evt)
         {
             var coreScenes = DataFetcher.GetCoreScenes();
             coreScenes.PersistentScene = evt.newValue as SceneData;
             DataFetcher.SaveCoreScenes();
         }
-        
+
         private void UpdateLoadingScene(ChangeEvent<Object> evt)
         {
             var coreScenes = DataFetcher.GetCoreScenes();
@@ -64,24 +82,51 @@ namespace Ludwell.Scene.Editor
             DataFetcher.SaveCoreScenes();
         }
 
-        private void InitMainMenuButtons()
+        private void InitializeLoadButton()
         {
-            var mainMenuButtons = _root.Q<EditorSceneDataButtons>(MainMenuButtonsName);
-            var objectField = _root.Q(MainMenuObjectFieldName).Q<ObjectField>();
+            _loadSceneButton = _root.Q<DualStateButton>(LoadSceneButtonName);
 
-            mainMenuButtons.AddAction(ButtonType.Load, () =>
-            {
-                if (objectField.value == null) return;
-                SceneDataManagerEditorApplication.LoadScene(objectField.value as SceneData);
-            });
+            var stateOne = new DualStateButtonState(
+                _loadSceneButton,
+                LoadScene,
+                Resources.Load<Sprite>(SpritesPath.LoadIcon));
 
-            mainMenuButtons.AddAction(ButtonType.Open, () =>
-            {
-                if (objectField.value == null) return;
-                SceneDataManagerEditorApplication.OpenScene(objectField.value as SceneData);
-            });
+            var stateTwo = new DualStateButtonState(
+                _loadSceneButton,
+                EditorApplication.ExitPlaymode,
+                Resources.Load<Sprite>(SpritesPath.StopIcon));
+
+            _loadSceneButton.Initialize(stateOne, stateTwo);
         }
-        
+
+        private void InitializeOpenButton()
+        {
+            _openSceneButton = _root.Q<ButtonWithIcon>(OpenSceneButtonName);
+            _openSceneButton.SetIcon(Resources.Load<Sprite>(SpritesPath.OpenIcon));
+            _openSceneButton.clicked += OpenScene;
+        }
+
+        private void LoadScene()
+        {
+            if (_startingSceneObjectField.value == null) return;
+            QuickLoadSceneDataManager.LoadScene(_startingSceneObjectField.value as SceneData);
+            EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
+        }
+
+        private void OnExitPlayModeSwitchToStateOne(PlayModeStateChange obj)
+        {
+            if (obj != PlayModeStateChange.ExitingPlayMode) return;
+            EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
+            var dualStateButton = _root.Q<DualStateButton>();
+            dualStateButton.SwitchState(dualStateButton.StateOne);
+        }
+
+        private void OpenScene()
+        {
+            if (_startingSceneObjectField.value == null) return;
+            SceneDataManagerEditorApplication.OpenScene(_startingSceneObjectField.value as SceneData);
+        }
+
         private void CloseFoldouts()
         {
             _root.Q<Foldout>(FoldoutStartingSceneName).value = false;
