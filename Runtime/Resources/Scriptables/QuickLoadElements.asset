@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be9c8f6f376f8245a5159bf7a5b7f39, type: 3}
   m_Name: QuickLoadElements
   m_EditorClassIdentifier: 
-  <Elements>k__BackingField: []
+  <Elements>k__BackingField:
+  - _name: Persistent
+    <Tags>k__BackingField: []
+    SceneData: {fileID: 11400000, guid: d551b43ec42b5aa4a88df9dc4cce078e, type: 2}
+    IsOpen: 1
+    IsOutsideAssetsFolder: 0
