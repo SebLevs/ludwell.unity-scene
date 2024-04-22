@@ -1,0 +1,110 @@
+#reference-name {
+    -unity-text-align: middle-center;
+    font-size: 12px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    align-self: stretch;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 0;
+    text-overflow: ellipsis;
+    -unity-font-style: bold;
+}
+
+#button__return {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+}
+
+#button__return > #icon {
+    background-image: resource('Sprites/icon_arrow-left');
+    flex-grow: 1;
+}
+
+#tab__headers {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.tab-button {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom-width: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 50%;
+}
+
+#tab__containers {
+    background-color: rgba(0, 0, 0, 0);
+    flex-grow: 1;
+}
+
+#container__data {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+#container__data > #title__data {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 2px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-center;
+    text-overflow: ellipsis;
+}
+
+#container__data > #visualization__data {
+    height: 100%;
+}
+
+#data {
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 2px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 80%;
+    align-self: center;
+}
+
+#data > Label {
+    display: none;
+}

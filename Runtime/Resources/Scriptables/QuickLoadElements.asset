@@ -18,3 +18,8 @@ MonoBehaviour:
     SceneData: {fileID: 11400000, guid: d551b43ec42b5aa4a88df9dc4cce078e, type: 2}
     IsOpen: 1
     IsOutsideAssetsFolder: 0
+  - _name: Persistent
+    <Tags>k__BackingField: []
+    SceneData: {fileID: 11400000, guid: d551b43ec42b5aa4a88df9dc4cce078e, type: 2}
+    IsOpen: 0
+    IsOutsideAssetsFolder: 0

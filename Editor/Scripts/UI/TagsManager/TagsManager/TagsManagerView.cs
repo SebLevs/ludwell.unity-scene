@@ -6,14 +6,14 @@ namespace Ludwell.Scene.Editor
     {
         private const string ReferenceName = "reference-name";
 
-        private Label _referenceName;
-
         private VisualElement _root;
+        
+        private Label _referenceName;
 
         public TagsManagerView(VisualElement root)
         {
             _root = root;
-            SetReferences();
+            _referenceName = _root.Q<Label>(ReferenceName);
         }
 
         public void Show()
@@ -29,11 +29,6 @@ namespace Ludwell.Scene.Editor
         public void SetReferenceText(string value)
         {
             _referenceName.text = value;
-        }
-
-        private void SetReferences()
-        {
-            _referenceName = _root.Q<Label>(ReferenceName);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
     public class TagsManagerController : IViewable
     {
         private const string TagElementsContainerName = "tag-elements-container";
-        
+
         private readonly ViewManager _viewManager;
 
         private readonly VisualElement _root;

@@ -6,18 +6,23 @@ namespace Ludwell.Scene.Editor
 {
     public class QuickLoadElementController
     {
+        private const string DataPresetSectionName = "preset__data";
+
+        private QuickLoadElementData _model = new();
+        private VisualElement _view;
+        
         private ViewManager _viewManager;
 
         private readonly TagsShelfController _tagsShelfController;
-
-        private QuickLoadElementData _data = new();
-
-        private VisualElement _view;
+        private readonly PresetSectionController _sectionController;
 
         public QuickLoadElementController(VisualElement view)
         {
             _view = view;
-            _tagsShelfController = new TagsShelfController(view, _ => InitializeViewTransition());
+            _tagsShelfController = new TagsShelfController(view, _ => TransitionViewToTagsManager());
+
+            _sectionController =
+                new PresetSectionController(_model, view.Q(DataPresetSectionName), TransitionViewToDataPreset);
 
             view.RegisterCallback<AttachToPanelEvent>(_ => { _viewManager = view.Root().Q<ViewManager>(); });
 
@@ -43,7 +48,7 @@ namespace Ludwell.Scene.Editor
 
             dualStateButton.Initialize(stateOne, stateTwo);
         }
-        
+
         public void InitializeOpenButton(ButtonWithIcon buttonWithIcon)
         {
             buttonWithIcon.SetIcon(Resources.Load<Sprite>(SpritesPath.OpenIcon));
@@ -52,59 +57,65 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateData(QuickLoadElementData data)
         {
-            _data = data;
+            _model = data;
         }
 
         public void UpdateIsOpen(ChangeEvent<bool> evt)
         {
-            _data.IsOpen = evt.newValue;
+            _model.IsOpen = evt.newValue;
         }
 
         public void UpdateName(ChangeEvent<string> evt)
         {
-            _data.Name = evt.newValue;
+            _model.Name = evt.newValue;
         }
-        
+
         public void SelectSceneDataInProject()
         {
-            Selection.activeObject = _data.SceneData;
+            Selection.activeObject = _model.SceneData;
             EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
         public void UpdateTagsContainer()
         {
-            _tagsShelfController.UpdateData(_data);
+            _tagsShelfController.UpdateData(_model);
             _tagsShelfController.Populate();
         }
 
         public void SetIsOpen(QuickLoadElementView view)
         {
-            view.SetIsOpen(_data.IsOpen);
+            view.SetIsOpen(_model.IsOpen);
         }
 
         public void SetSceneData(QuickLoadElementView view)
         {
-            view.SetSceneData(_data.SceneData);
-        }
-        
-        public void SetIconAssetOutsideAssets(QuickLoadElementView view)
-        {
-            view.SetIconAssetOutsideAssets(_data.IsOutsideAssetsFolder);
+            view.SetSceneData(_model.SceneData);
         }
 
-        private void InitializeViewTransition()
+        public void SetIconAssetOutsideAssets(QuickLoadElementView view)
         {
-            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_data));
+            view.SetIconAssetOutsideAssets(_model.IsOutsideAssetsFolder);
         }
-        
+
+        private void TransitionViewToTagsManager()
+        {
+            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_model));
+        }
+
+        private void TransitionViewToDataPreset()
+        {
+            _viewManager.TransitionToFirstViewOfType<PresetManagerController>(
+                new PresetManagerViewArgs(_model));
+        }
+
         private void SaveQuickLoadElements(MouseUpEvent evt)
         {
             DataFetcher.SaveQuickLoadElementsDelayed();
         }
-        
+
         private void LoadScene()
         {
-            QuickLoadSceneDataManager.LoadScene(_data.SceneData);
+            QuickLoadSceneDataManager.LoadScene(_model.SceneData);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
         }
 
@@ -118,7 +129,7 @@ namespace Ludwell.Scene.Editor
 
         private void OpenScene()
         {
-            SceneDataManagerEditorApplication.OpenScene(_data.SceneData);
+            SceneDataManagerEditorApplication.OpenScene(_model.SceneData);
         }
     }
 }

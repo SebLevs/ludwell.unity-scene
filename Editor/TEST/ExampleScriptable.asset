@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c357d5c5b45c5f346b702ab189661a91, type: 3}
   m_Name: ExampleScriptable
   m_EditorClassIdentifier: 
-  _integerValue: 19
+  amIFucked: 11
+  _integerValue: 35
   _stringArray: []
   _exampleSerializedClass:
-    _stringValue: khjhj
-    _integerArray: 
+    _stringValue: aaa
+    _integerArray: 57040000

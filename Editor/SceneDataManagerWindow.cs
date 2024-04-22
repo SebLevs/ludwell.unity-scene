@@ -9,6 +9,7 @@ namespace Ludwell.Scene.Editor
         [SerializeField] private VisualTreeAsset visualTreeAsset;
 
         private TagsManagerController _tagsManagerController;
+        private PresetManagerController _presetManagerController;
         private SceneDataController _sceneDataController;
 
         [MenuItem("Tools/Scene Data Manager")]
@@ -22,8 +23,9 @@ namespace Ludwell.Scene.Editor
             visualTreeAsset.CloneTree(rootVisualElement);
 
             _tagsManagerController = new TagsManagerController(rootVisualElement);
+            _presetManagerController = new PresetManagerController(rootVisualElement);
             _sceneDataController = new SceneDataController(rootVisualElement);
-            
+
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneDataController>();
         }
     }

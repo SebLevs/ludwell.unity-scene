@@ -12,3 +12,8 @@ ScrollView > VisualElement > VisualElement > Label {
     flex-grow: 1;
     display: none;
 }
+
+#PresetManagerView {
+    flex-grow: 1;
+    display: none;
+}

@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/QuickLoadElementView/Uss_quick-load-element__section-header.uss?fileID=7433441132597879392&amp;guid=c5b1af805da5fe140981b52d9e4d9690&amp;type=3#Uss_quick-load-element__section-header" />
+    <ui:VisualElement name="section-header">
+        <ui:VisualElement name="header">
+            <ui:Button name="button" tooltip="Settings" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; display: flex;">
+                <ui:VisualElement name="icon" />
+            </ui:Button>
+            <ui:Label tabindex="-1" text="Tags " display-tooltip-when-elided="true" name="title" style="-unity-text-align: middle-center;" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="No Foo Bar selected" display-tooltip-when-elided="true" name="section-selection" />
+    </ui:VisualElement>
+</ui:UXML>

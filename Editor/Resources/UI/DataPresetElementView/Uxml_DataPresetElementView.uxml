@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/DataPresetElementView/Uss_DataPresetElementView.uss?fileID=7433441132597879392&amp;guid=caa0dc64e6a006548a6fc5b95658f342&amp;type=3#Uss_DataPresetElementView" />
+    <ui:VisualElement name="DataPresetElementView" style="background-color: rgba(0, 0, 0, 0); height: 100%;">
+        <uie:ObjectField label="Object Field" name="data" />
+        <ui:VisualElement name="data-visualization" style="background-color: rgba(0, 0, 0, 0); height: 100%;" />
+    </ui:VisualElement>
+</ui:UXML>
