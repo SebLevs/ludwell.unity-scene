@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetSlider/DataPresetSliderView.uss?fileID=7433441132597879392&amp;guid=c0f71db75b0cb0f4e86c10c2a9bd0fda&amp;type=3#DataPresetSliderView" />
+</ui:UXML>

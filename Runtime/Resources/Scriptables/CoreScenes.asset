@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3728ab5556a7eb24d8c81e38305c00f9, type: 3}
   m_Name: CoreScenes
   m_EditorClassIdentifier: Editor:Ludwell.Scene.Editor:CoreScenes
-  LaunchScene: {fileID: 0}
-  PersistentScene: {fileID: 0}
-  LoadingScene: {fileID: 0}
+  StartingScene: {fileID: 11400000, guid: 6d73e40f501ae884488d43870607a9a9, type: 2}
+  PersistentScene: {fileID: 11400000, guid: d551b43ec42b5aa4a88df9dc4cce078e, type: 2}
+  LoadingScene: {fileID: 11400000, guid: 6e8cc42205c5a994583bf56e12fa0516, type: 2}

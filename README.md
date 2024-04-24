@@ -2,8 +2,15 @@ Scene Data Manager
 
 ---
 
-# Characteristics
-## This package...
-- Offers a way to more easily quick load or play a scene with or without other scenes dependencies.
-- Does not offer a way to load scenes at runtime.
-- Generates SceneData scriptable objects automatically when a new scene file (.unity) is created. This is to facilitate the loading of scenes at runtime.
+# IMPORTANT - PACKAGE IN PRODUCTION
+- Some features may not work as intended.
+- Some features may be missing.
+- Some features may be changed or deleted without any prior warning.
+- Bugs may occur.
+
+
+# Purpose of the package
+- Offer a way to easily create, delete, tag, and manage scene assets.
+- Offer a way to quickly open and load scenes at editor time without having to find the assets in folders.
+- Offer an easy access to core scenes: Starting, Persistent, Loading through code. 
+- Provide a convienient boost in production and testing (in production).

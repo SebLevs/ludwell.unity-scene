@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/PresetManagerView.uss?fileID=7433441132597879392&amp;guid=8613d2c7511e3a443b714c42d949df7f&amp;type=3#PresetManagerView" />
+    <ui:VisualElement name="Preset" focusable="true" style="flex-grow: 1;">
+        <ui:Label tabindex="-1" text="Name of referenced element" display-tooltip-when-elided="true" name="reference-name">
+            <ui:Button name="button__return" tooltip="Return" style="width: 16px; height: 16px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; left: -50%; position: relative;">
+                <ui:VisualElement name="icon" />
+            </ui:Button>
+        </ui:Label>
+        <ui:VisualElement name="container__data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%;">
+            <ui:VisualElement name="search-field__background" class="search-field__background">
+                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
+            </ui:VisualElement>
+            <ui:VisualElement name="content-container" class="listview-container" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
