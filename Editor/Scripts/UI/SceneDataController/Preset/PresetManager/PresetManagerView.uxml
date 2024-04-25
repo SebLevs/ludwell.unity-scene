@@ -7,10 +7,53 @@
             </ui:Button>
         </ui:Label>
         <ui:VisualElement name="container__data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%;">
-            <ui:VisualElement name="search-field__background" class="search-field__background">
-                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
+            <ui:VisualElement name="search-section__background" class="search-field__background">
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: center;">
+                    <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
+                </ui:VisualElement>
+                <ui:VisualElement name="buttons" style="background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement name="up-down" class="buttons-container">
+                        <ui:Button text="+" display-tooltip-when-elided="true" name="up" class="navigation-button" />
+                        <ui:VisualElement name="indexation" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                            <ui:TextField picking-mode="Ignore" name="current-index" value="00" />
+                            <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" />
+                            <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" />
+                        </ui:VisualElement>
+                        <ui:Button text="-" display-tooltip-when-elided="true" name="down" class="navigation-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="left-right" class="buttons-container">
+                        <ui:Button text="+" display-tooltip-when-elided="true" name="left" class="navigation-button" />
+                        <ui:VisualElement name="indexation" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                            <ui:TextField picking-mode="Ignore" name="current-index" value="00" />
+                            <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
+                            <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
+                        </ui:VisualElement>
+                        <ui:Button text="-" display-tooltip-when-elided="true" name="right" class="navigation-button" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="content-container" class="listview-container" />
+            <ui:VisualElement name="content-container" class="listview-container">
+                <ui:VisualElement name="current-selection">
+                    <ui:Label tabindex="-1" text="Current selection title" display-tooltip-when-elided="true" name="title" />
+                </ui:VisualElement>
+                <ui:VisualElement name="horizontal-layout" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                    <ui:VisualElement name="left-space" />
+                    <ui:VisualElement name="preset-view" style="flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(37, 37, 37); border-right-color: rgb(37, 37, 37); border-top-color: rgb(37, 37, 37); border-bottom-color: rgb(37, 37, 37); border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px;">
+                        <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
+                            <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+                        </ui:VisualElement>
+                        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="class-content" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="add-remove__element" style="flex-direction: column; justify-content: center;">
+                        <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add an element" class="element-button" />
+                        <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove an element" class="element-button" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="add-remove__row" class="buttons-container">
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
+                    <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
