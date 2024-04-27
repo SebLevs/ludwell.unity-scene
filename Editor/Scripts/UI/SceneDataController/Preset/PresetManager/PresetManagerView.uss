@@ -105,7 +105,7 @@
 
 #slash {
     -unity-text-align: middle-center;
-    margin-right: -1px;
+    margin-right: 1px;
     margin-left: 1px;
     padding-left: 0;
     padding-right: 0;
@@ -133,8 +133,23 @@
     justify-content: center;
 }
 
+#icon {
+    align-self: center;
+    width: 16px;
+    height: 16px;
+}
+
+.button__all {
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
 .navigation-button {
-    margin-left: 4px;
+    margin-left: 2px;
     border-left-width: 1px;
     border-right-width: 1px;
     border-bottom-width: 0;
@@ -147,15 +162,16 @@
     padding-top: 0;
     padding-bottom: 0;
     bottom: 0.5px;
-    width: 20px;
+    width: 24px;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
-    margin-top: 1px;
+    margin-top: 0;
     border-top-width: 1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     margin-bottom: 0;
-    height: 16px;
+    height: 20px;
+    margin-right: 2px;
 }
 
 .buttons-container {
@@ -244,6 +260,7 @@
     -unity-text-align: middle-center;
     justify-content: flex-end;
     -unity-font-style: bold;
+    align-items: center;
 }
 
 #left-space {
@@ -256,6 +273,18 @@
     margin-right: 2px;
     margin-top: 2px;
     margin-bottom: 2px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-left-color: rgb(18, 18, 18);
+    border-right-color: rgb(18, 18, 18);
+    border-top-color: rgb(18, 18, 18);
+    border-bottom-color: rgb(18, 18, 18);
 }
 
 #reference-content {

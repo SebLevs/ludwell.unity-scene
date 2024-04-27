@@ -13,32 +13,40 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="buttons" style="background-color: rgba(0, 0, 0, 0);">
                     <ui:VisualElement name="up-down" class="buttons-container">
-                        <ui:Button text="+" display-tooltip-when-elided="true" name="up" class="navigation-button" />
-                        <ui:VisualElement name="indexation" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <ui:Button display-tooltip-when-elided="true" name="up" class="navigation-button button__all">
+                            <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;); rotate: 90deg;" />
+                        </ui:Button>
+                        <ui:VisualElement name="indexation" tooltip="Rows" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                             <ui:TextField picking-mode="Ignore" name="current-index" value="00" />
                             <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" />
                             <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" />
                         </ui:VisualElement>
-                        <ui:Button text="-" display-tooltip-when-elided="true" name="down" class="navigation-button" />
+                        <ui:Button display-tooltip-when-elided="true" name="down" class="navigation-button button__all">
+                            <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;); rotate: 270deg;" />
+                        </ui:Button>
                     </ui:VisualElement>
                     <ui:VisualElement name="left-right" class="buttons-container">
-                        <ui:Button text="+" display-tooltip-when-elided="true" name="left" class="navigation-button" />
-                        <ui:VisualElement name="indexation" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <ui:Button display-tooltip-when-elided="true" name="left" class="navigation-button button__all">
+                            <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;);" />
+                        </ui:Button>
+                        <ui:VisualElement name="indexation" tooltip="Elements in current row" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                             <ui:TextField picking-mode="Ignore" name="current-index" value="00" />
                             <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
                             <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
                         </ui:VisualElement>
-                        <ui:Button text="-" display-tooltip-when-elided="true" name="right" class="navigation-button" />
+                        <ui:Button display-tooltip-when-elided="true" name="right" class="navigation-button button__all">
+                            <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;); rotate: 180deg;" />
+                        </ui:Button>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="content-container" class="listview-container">
                 <ui:VisualElement name="current-selection">
-                    <ui:Label tabindex="-1" text="Current selection title" display-tooltip-when-elided="true" name="title" />
+                    <ui:Label tabindex="-1" text="Current selection title" display-tooltip-when-elided="true" name="title" tooltip="Title for this row" />
                 </ui:VisualElement>
                 <ui:VisualElement name="horizontal-layout" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                     <ui:VisualElement name="left-space" />
-                    <ui:VisualElement name="preset-view" style="flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(37, 37, 37); border-right-color: rgb(37, 37, 37); border-top-color: rgb(37, 37, 37); border-bottom-color: rgb(37, 37, 37); border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px;">
+                    <ui:VisualElement name="preset-view" style="flex-grow: 1;">
                         <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
                             <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
                         </ui:VisualElement>
