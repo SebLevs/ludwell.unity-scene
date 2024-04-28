@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/Uss_PresetManagerView_V2.uss?fileID=7433441132597879392&amp;guid=87ba3c68f0828664e932a0520a51e218&amp;type=3#Uss_PresetManagerView_V2" />
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetElement/Uss_DataPresetElementView.uss?fileID=7433441132597879392&amp;guid=c0f71db75b0cb0f4e86c10c2a9bd0fda&amp;type=3#Uss_DataPresetElementView" />
-    <ui:VisualElement name="Preset" focusable="true" style="flex-grow: 1;">
+    <ui:VisualElement name="Preset" focusable="true">
         <ui:VisualElement name="referenced-quick-load-element">
             <ui:Label tabindex="-1" text="Name of referenced element" display-tooltip-when-elided="true" name="reference-name" />
             <ui:Button name="button__return" tooltip="Return" class="button__all">

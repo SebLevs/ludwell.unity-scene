@@ -18,6 +18,11 @@ MonoBehaviour:
     SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
     IsOpen: 1
     IsOutsideAssetsFolder: 0
+  - _name: laksjdjkasd
+    <Tags>k__BackingField: []
+    SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
+    IsOpen: 1
+    IsOutsideAssetsFolder: 0
   - _name: main menu
     <Tags>k__BackingField:
     - name: bjbjk
