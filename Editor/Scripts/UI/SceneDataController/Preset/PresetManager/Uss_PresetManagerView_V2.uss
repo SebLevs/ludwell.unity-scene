@@ -54,6 +54,14 @@
 #current-selection {
     justify-content: center;
     align-items: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(26, 26, 26);
+    border-right-color: rgb(26, 26, 26);
+    border-top-color: rgb(26, 26, 26);
+    border-bottom-color: rgb(26, 26, 26);
+    background-color: rgb(62, 62, 62);
 }
 
 #current-selection > #label {
@@ -78,9 +86,6 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-width: 0;
 }
 
 #current-selection > #label > #unity-text-input > TextElement {
@@ -105,16 +110,13 @@
 
 #DropdownSearchField > #search-field > #toolbar-search-field {
     height: 20px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top-width: 0;
 }
 
 #indexation {
     justify-content: center;
     align-items: center;
     position: absolute;
-    right: -52px;
+    right: 3px;
     height: 20px;
 }
 
@@ -127,7 +129,7 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    width: 20px;
+    width: 16px;
     background-color: rgb(42, 42, 42);
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
@@ -162,10 +164,7 @@
     padding-bottom: 0;
     -unity-text-align: middle-center;
     white-space: nowrap;
-}
-
-#current-index > Label {
-    display: none;
+    font-size: 10px;
 }
 
 #slash {
@@ -176,15 +175,17 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
+    font-size: 10px;
 }
 
 #count {
-    width: 20px;
+    width: 16px;
     -unity-text-align: middle-center;
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
+    font-size: 10px;
 }
 
 #buttons {

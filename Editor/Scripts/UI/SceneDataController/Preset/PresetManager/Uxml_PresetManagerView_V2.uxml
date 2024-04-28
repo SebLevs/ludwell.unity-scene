@@ -10,17 +10,15 @@
         </ui:VisualElement>
         <ui:VisualElement name="container__data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%;">
             <ui:VisualElement name="search-section__background" class="search-field__background">
-                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField">
-                    <ui:VisualElement name="indexation" tooltip="Presets" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-                        <ui:TextField picking-mode="Ignore" name="current-index" value="00" tooltip="Jump to preset container" />
-                        <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
-                        <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
-                    </ui:VisualElement>
-                </Ludwell.Scene.Editor.DropdownSearchField>
+                <ui:Label tabindex="-1" text="Preset management" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; padding-top: 2px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;" />
+                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
                 <ui:VisualElement name="buttons" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                     <ui:Button display-tooltip-when-elided="true" name="add" text="+" tooltip="Add preset" class="button__all" />
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove preset" class="navigation-button button__all" />
                 </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:ListView focusable="true" name="content-container" show-add-remove-footer="true" virtualization-method="DynamicHeight" style="display: none;" />
+            <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
                 <ui:VisualElement name="current-selection" style="flex-direction: row;">
                     <ui:Button display-tooltip-when-elided="true" name="previous" tooltip="Previous preset" class="button__all">
                         <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;);" />
@@ -29,20 +27,40 @@
                     <ui:Button display-tooltip-when-elided="true" name="next" tooltip="Next preset" class="navigation-button button__all">
                         <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;); rotate: 180deg;" />
                     </ui:Button>
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:ListView focusable="true" name="content-container" show-add-remove-footer="true" virtualization-method="DynamicHeight" style="display: none;" />
-            <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
-                <ui:Foldout name="preset" focusable="true" text="asdasdasd">
-                    <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
-                        <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+                    <ui:VisualElement name="indexation" tooltip="Presets" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; display: none;">
+                        <ui:TextField picking-mode="Ignore" name="current-index" value="00" tooltip="Jump to preset container" />
+                        <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
+                        <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="class-content" style="flex-grow: 1;" />
-                </ui:Foldout>
-                <ui:VisualElement name="add-remove__row" class="buttons-container">
-                    <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
-                    <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
                 </ui:VisualElement>
+                <ui:Foldout name="preset" focusable="true" text="asdasdasd">
+                    <ui:VisualElement name="preset-content-container" style="background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
+                            <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="class-content" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout name="preset" focusable="true" text="asdasdasd">
+                    <ui:VisualElement name="preset-content-container" style="background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
+                            <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="class-content" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout name="preset" focusable="true" text="asdasdasd">
+                    <ui:VisualElement name="preset-content-container" style="background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
+                            <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="class-content" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+            </ui:VisualElement>
+            <ui:VisualElement name="add-remove__row" class="buttons-container">
+                <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
+                <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
