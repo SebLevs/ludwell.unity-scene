@@ -1,0 +1,49 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/Uss_PresetManagerView_V2.uss?fileID=7433441132597879392&amp;guid=87ba3c68f0828664e932a0520a51e218&amp;type=3#Uss_PresetManagerView_V2" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetElement/Uss_DataPresetElementView.uss?fileID=7433441132597879392&amp;guid=c0f71db75b0cb0f4e86c10c2a9bd0fda&amp;type=3#Uss_DataPresetElementView" />
+    <ui:VisualElement name="Preset" focusable="true" style="flex-grow: 1;">
+        <ui:VisualElement name="referenced-quick-load-element">
+            <ui:Label tabindex="-1" text="Name of referenced element" display-tooltip-when-elided="true" name="reference-name" />
+            <ui:Button name="button__return" tooltip="Return" class="button__all">
+                <ui:VisualElement name="icon" />
+            </ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement name="container__data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%;">
+            <ui:VisualElement name="search-section__background" class="search-field__background">
+                <ui:VisualElement name="buttons" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:Button display-tooltip-when-elided="true" name="add" text="+" tooltip="Add preset" class="button__all" />
+                    <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove preset" class="navigation-button button__all" />
+                </ui:VisualElement>
+                <ui:VisualElement name="current-selection" style="flex-direction: row;">
+                    <ui:Button display-tooltip-when-elided="true" name="previous" tooltip="Previous preset" class="button__all">
+                        <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;);" />
+                    </ui:Button>
+                    <ui:TextField picking-mode="Ignore" value="Current preset label" name="label" />
+                    <ui:Button display-tooltip-when-elided="true" name="next" tooltip="Next preset" class="navigation-button button__all">
+                        <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;); rotate: 180deg;" />
+                    </ui:Button>
+                </ui:VisualElement>
+                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField">
+                    <ui:VisualElement name="indexation" tooltip="Presets" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <ui:TextField picking-mode="Ignore" name="current-index" value="00" tooltip="Jump to preset container" />
+                        <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
+                        <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
+                    </ui:VisualElement>
+                </Ludwell.Scene.Editor.DropdownSearchField>
+            </ui:VisualElement>
+            <ui:ListView focusable="true" name="content-container" show-add-remove-footer="true" virtualization-method="DynamicHeight" style="display: none;" />
+            <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
+                <ui:Foldout name="preset" focusable="true" text="asdasdasd">
+                    <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
+                        <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="class-content" style="flex-grow: 1;" />
+                </ui:Foldout>
+                <ui:VisualElement name="add-remove__row" class="buttons-container">
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
+                    <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

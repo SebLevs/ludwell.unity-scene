@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Template name="SceneDataController" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/SceneDataController/SceneDataView.uxml?fileID=9197481963319205126&amp;guid=f120eb9dee03458419fb91ddff14e2fc&amp;type=3#SceneDataView" />
     <ui:Template name="TagsManagerView" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/TagsManager/TagsManager/Uxml_TagsManagerView.uxml?fileID=9197481963319205126&amp;guid=7fc55af2aad5c8c43b3a5135fee454cb&amp;type=3#Uxml_TagsManagerView" />
-    <ui:Template name="PresetManagerView" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/PresetSection/Manager/PresetManagerView.uxml?fileID=9197481963319205126&amp;guid=5678d5a3ff593ef439c24f5f30ed3d2c&amp;type=3#PresetManagerView" />
+    <ui:Template name="Uxml_PresetManagerView_V2" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/Uxml_PresetManagerView_V2.uxml?fileID=9197481963319205126&amp;guid=57e9a949289fb7f43a0842ce5a3766d6&amp;type=3#Uxml_PresetManagerView_V2" />
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/UI/EditorWindow/SceneDataManagerWindow.uss?fileID=7433441132597879392&amp;guid=084f846459e63874ab1c3bd6f0a92815&amp;type=3#SceneDataManagerWindow" />
     <ui:VisualElement name="root" style="flex-grow: 1; flex-direction: column; overflow: visible;">
         <Ludwell.Scene.ViewManager />
         <ui:VisualElement name="views" style="background-color: rgb(56, 56, 56); flex-grow: 1; position: relative; flex-wrap: nowrap; flex-basis: 100%; flex-shrink: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 100%;">
             <ui:Instance template="SceneDataController" name="SceneDataView" />
             <ui:Instance template="TagsManagerView" name="TagsManagerView" />
-            <ui:Instance template="PresetManagerView" name="PresetManagerView" />
+            <ui:Instance template="Uxml_PresetManagerView_V2" name="PresetManagerView" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

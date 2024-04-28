@@ -24,6 +24,11 @@ MonoBehaviour:
     SceneData: {fileID: 11400000, guid: 6d73e40f501ae884488d43870607a9a9, type: 2}
     IsOpen: 0
     IsOutsideAssetsFolder: 0
+  - _name: main menu
+    <Tags>k__BackingField: []
+    SceneData: {fileID: 11400000, guid: 6d73e40f501ae884488d43870607a9a9, type: 2}
+    IsOpen: 1
+    IsOutsideAssetsFolder: 0
   - _name: persistent
     <Tags>k__BackingField: []
     SceneData: {fileID: 11400000, guid: d551b43ec42b5aa4a88df9dc4cce078e, type: 2}
@@ -32,5 +37,5 @@ MonoBehaviour:
   - _name: po
     <Tags>k__BackingField: []
     SceneData: {fileID: 11400000, guid: 6e8cc42205c5a994583bf56e12fa0516, type: 2}
-    IsOpen: 0
+    IsOpen: 1
     IsOutsideAssetsFolder: 0
