@@ -52,8 +52,6 @@
     height: 20px;
     justify-content: center;
     align-items: center;
-    margin-top: 4px;
-    margin-bottom: 4px;
 }
 
 #current-selection > #label {
@@ -67,6 +65,9 @@
     padding-bottom: 0;
     width: 60%;
     height: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-width: 0;
 }
 
 #current-selection > #label > #unity-text-input {
@@ -78,6 +79,9 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-width: 0;
 }
 
 #current-selection > #label > #unity-text-input > TextElement {
@@ -98,11 +102,13 @@
     width: 60%;
     align-self: center;
     flex-direction: row;
-    padding-bottom: 4px;
 }
 
 #DropdownSearchField > #search-field > #toolbar-search-field {
     height: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-width: 0;
 }
 
 #indexation {
@@ -186,7 +192,7 @@
     flex-direction: row;
     justify-content: center;
     padding-top: 4px;
-    padding-bottom: 0;
+    padding-bottom: 4px;
     width: 80%;
     align-self: center;
 }
@@ -200,8 +206,8 @@
     border-bottom-left-radius: 2px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     padding-left: 2px;
     padding-right: 2px;
     padding-top: 2px;
@@ -212,6 +218,7 @@
     margin-bottom: 0;
     align-items: center;
     justify-content: center;
+    -unity-font-style: bold;
 }
 
 #icon {

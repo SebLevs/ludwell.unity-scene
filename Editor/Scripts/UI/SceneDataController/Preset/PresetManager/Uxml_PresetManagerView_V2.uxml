@@ -10,6 +10,13 @@
         </ui:VisualElement>
         <ui:VisualElement name="container__data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%;">
             <ui:VisualElement name="search-section__background" class="search-field__background">
+                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField">
+                    <ui:VisualElement name="indexation" tooltip="Presets" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <ui:TextField picking-mode="Ignore" name="current-index" value="00" tooltip="Jump to preset container" />
+                        <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
+                        <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
+                    </ui:VisualElement>
+                </Ludwell.Scene.Editor.DropdownSearchField>
                 <ui:VisualElement name="buttons" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                     <ui:Button display-tooltip-when-elided="true" name="add" text="+" tooltip="Add preset" class="button__all" />
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove preset" class="navigation-button button__all" />
@@ -23,13 +30,6 @@
                         <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_arrow-left&apos;); rotate: 180deg;" />
                     </ui:Button>
                 </ui:VisualElement>
-                <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField">
-                    <ui:VisualElement name="indexation" tooltip="Presets" style="background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-                        <ui:TextField picking-mode="Ignore" name="current-index" value="00" tooltip="Jump to preset container" />
-                        <ui:Label tabindex="-1" text="/" display-tooltip-when-elided="true" name="slash" class="current-index__texts" />
-                        <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
-                    </ui:VisualElement>
-                </Ludwell.Scene.Editor.DropdownSearchField>
             </ui:VisualElement>
             <ui:ListView focusable="true" name="content-container" show-add-remove-footer="true" virtualization-method="DynamicHeight" style="display: none;" />
             <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
