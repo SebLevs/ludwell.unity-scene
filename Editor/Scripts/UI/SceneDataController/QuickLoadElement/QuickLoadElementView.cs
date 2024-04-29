@@ -46,17 +46,13 @@ namespace Ludwell.Scene.Editor
 
             _controller = new QuickLoadElementController(this);
 
-            SetReferences();
+            _foldout = this.Q<Foldout>(FoldoutName);
+
             InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
 
             InitializeLoadButton();
             InitializeOpenButton();
-        }
-
-        private void SetReferences()
-        {
-            _foldout = this.Q<Foldout>(FoldoutName);
         }
 
         private void InitializeAndReferenceFoldoutTextField()
