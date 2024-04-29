@@ -58,14 +58,6 @@
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove" class="button__all selection-buttons" />
                 </ui:VisualElement>
                 <ui:ListView focusable="true" name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-border="false" show-bound-collection-size="false" style="display: flex;" />
-                <ui:Foldout name="preset" focusable="true" text="asdasdasd" style="display: none;">
-                    <ui:VisualElement name="preset-content-container" style="background-color: rgba(0, 0, 0, 0);">
-                        <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
-                            <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="class-content" style="flex-grow: 1;" />
-                    </ui:VisualElement>
-                </ui:Foldout>
                 <ui:VisualElement name="add-remove__row" class="buttons-container">
                     <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
                     <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
