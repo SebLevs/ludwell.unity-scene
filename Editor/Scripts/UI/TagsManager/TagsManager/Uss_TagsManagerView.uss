@@ -52,7 +52,8 @@
 }
 
 #tags__button-add > #icon {
-    background-image: resource('Sprites/icon_arrow-left');
+    background-image: resource('Sprites/icon_open');
+    scale: -1 1;
 }
 
 #DropdownSearchField {

@@ -21,12 +21,12 @@ MonoBehaviour:
   - _name: laksjdjkasd
     <Tags>k__BackingField: []
     SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
-    IsOpen: 1
+    IsOpen: 0
     IsOutsideAssetsFolder: 0
   - _name: laksjdjkasd
     <Tags>k__BackingField: []
     SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
-    IsOpen: 1
+    IsOpen: 0
     IsOutsideAssetsFolder: 0
   - _name: main menu
     <Tags>k__BackingField:
@@ -37,7 +37,7 @@ MonoBehaviour:
   - _name: main menu
     <Tags>k__BackingField: []
     SceneData: {fileID: 11400000, guid: 6d73e40f501ae884488d43870607a9a9, type: 2}
-    IsOpen: 1
+    IsOpen: 0
     IsOutsideAssetsFolder: 0
   - _name: persistent
     <Tags>k__BackingField: []
@@ -47,5 +47,5 @@ MonoBehaviour:
   - _name: po
     <Tags>k__BackingField: []
     SceneData: {fileID: 11400000, guid: 6e8cc42205c5a994583bf56e12fa0516, type: 2}
-    IsOpen: 1
+    IsOpen: 0
     IsOutsideAssetsFolder: 0

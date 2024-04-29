@@ -21,6 +21,11 @@
     padding-bottom: 0;
     border-bottom-width: 1px;
     background-color: rgb(62, 62, 62);
+    height: 20px;
+}
+
+#preset > Toggle > VisualElement > Label {
+    -unity-font-style: bold;
 }
 
 #preset > #unity-content {

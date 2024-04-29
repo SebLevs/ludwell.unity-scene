@@ -2,11 +2,13 @@
     flex-grow: 1;
 }
 
-#referenced-quick-load-element {
-    justify-content: center;
+#container__top {
+    justify-content: flex-start;
     align-items: center;
-    align-self: center;
-    flex-direction: row;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
 }
 
 #reference-name {
@@ -16,19 +18,78 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 8px;
-    padding-bottom: 8px;
     text-overflow: ellipsis;
     -unity-font-style: bold;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
 }
 
-#button__return {
-    position: absolute;
-    left: -22px;
+#preset-label-container {
     justify-content: center;
     align-items: center;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+#preset-label-container > #label {
+    -unity-text-align: middle-center;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 20px;
+}
+
+#preset-label-container > #button__return {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    left: -22px;
+}
+
+#selected-element-container {
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    display: none;
+}
+
+#selected-element-container > Label {
+    -unity-text-align: middle-center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#selected-element-container > #behaviours {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#selected-element-container__null {
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+#selected-element-container__null > Label {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-center;
 }
 
 #button__return > #icon {
@@ -37,69 +98,21 @@
 }
 
 #container__data {
-    flex-grow: 1;
-    background-color: rgb(70, 70, 70);
 }
 
 #search-section__background {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
     border-top-width: 1px;
+    border-bottom-width: 1px;
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
     border-top-color: rgb(0, 0, 0);
     border-bottom-color: rgb(0, 0, 0);
-    background-color: rgb(70, 70, 70);
-    border-bottom-width: 1px;
-}
-
-#current-selection {
-    justify-content: center;
-    align-items: center;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(26, 26, 26);
-    border-right-color: rgb(26, 26, 26);
-    border-top-color: rgb(26, 26, 26);
-    border-bottom-color: rgb(26, 26, 26);
-    background-color: rgb(62, 62, 62);
-}
-
-#current-selection > #label {
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    width: 60%;
-    height: 20px;
-}
-
-#current-selection > #label > #unity-text-input {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-#current-selection > #label > #unity-text-input > TextElement {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 2px;
-    padding-right: 2px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    -unity-text-align: middle-center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 #DropdownSearchField {
@@ -135,6 +148,8 @@
     border-bottom-left-radius: 2px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+    align-items: center;
+    justify-content: center;
 }
 
 #current-index > #unity-text-input {
@@ -164,7 +179,8 @@
     padding-bottom: 0;
     -unity-text-align: middle-center;
     white-space: nowrap;
-    font-size: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 #slash {
@@ -175,7 +191,6 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    font-size: 10px;
 }
 
 #count {
@@ -185,16 +200,32 @@
     padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    font-size: 10px;
 }
 
 #buttons {
     flex-direction: row;
-    justify-content: center;
     padding-top: 4px;
-    padding-bottom: 4px;
-    width: 80%;
+    width: 60%;
     align-self: center;
+    justify-content: space-around;
+}
+
+#add-remove {
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: flex-end;
+    padding-right: 4px;
+    border-right-width: 1px;
+    border-left-color: rgb(36, 36, 36);
+    border-right-color: rgb(36, 36, 36);
+    border-top-color: rgb(36, 36, 36);
+    border-bottom-color: rgb(36, 36, 36);
+}
+
+#previous-next {
+    flex-direction: row;
+    flex-grow: 1;
+    padding-left: 4px;
 }
 
 .button__all {
@@ -226,11 +257,93 @@
     align-self: stretch;
 }
 
-.buttons-container {
+#content-container {
+    margin-bottom: 2px;
+    min-height: 100px;
+    flex-grow: 1;
+}
+
+#selection {
+    flex-grow: 1;
+    height: 20px;
     flex-direction: row;
-    justify-content: center;
-    align-self: center;
+    max-height: 20px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+#selection > #current-selection-label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-grow: 1;
+}
+
+#selection > #current-selection-label > #unity-text-input {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#selection > #current-selection-label > #unity-text-input > TextElement {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    -unity-text-align: middle-center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.selection-buttons {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 20px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    height: initial;
+}
+
+#content-container > #list-view {
+    flex-grow: 1;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(8, 8, 8);
     align-items: center;
+    justify-content: center;
+}
+
+#add-remove__row {
+    align-self: center;
+    flex-direction: row;
 }
 
 .row-button {
@@ -251,22 +364,11 @@
     border-bottom-color: rgb(18, 18, 18);
     border-left-width: 1px;
     border-right-width: 1px;
-    border-top-width: 1px;
+    border-top-width: 0;
     border-bottom-width: 1px;
-    border-top-left-radius: 2px;
+    border-top-left-radius: 0;
     border-bottom-left-radius: 2px;
-    border-top-right-radius: 2px;
+    border-top-right-radius: 0;
     border-bottom-right-radius: 2px;
     -unity-font-style: bold;
-}
-
-#content-container {
-    margin-bottom: 2px;
-    min-height: 100px;
-    flex-grow: 1;
-}
-
-#add-remove__row {
-    justify-content: flex-end;
-    align-self: center;
 }
