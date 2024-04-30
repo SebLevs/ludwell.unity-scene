@@ -27,6 +27,10 @@ namespace Ludwell.Scene.Editor
             {
                 DataFetcher.GetTagContainer().Tags.Clear();
                 DataFetcher.GetQuickLoadElements().Elements.Clear();
+                var coreScenes = DataFetcher.GetCoreScenes();
+                coreScenes.LoadingScene = null;
+                coreScenes.StartingScene = null;
+                coreScenes.PersistentScene = null;
             }
 
             GUILayout.Space(2);
