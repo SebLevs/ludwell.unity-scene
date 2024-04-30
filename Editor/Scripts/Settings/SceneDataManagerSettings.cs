@@ -29,7 +29,24 @@ namespace Ludwell.Scene.Editor
                 DataFetcher.GetQuickLoadElements().Elements.Clear();
             }
 
-            GUILayout.Space(4);
+            GUILayout.Space(2);
+            
+            if (GUILayout.Button("Populate Data"))
+            {
+                var assetGuids = AssetDatabase.FindAssets("t:SceneData");
+                foreach (var guid in assetGuids)
+                {
+                    var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                    var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(assetPath);
+                    var element = DataFetcher.GetQuickLoadElements().Add(sceneData);
+                    
+                    var path = AssetDatabase.GetAssetPath(sceneData);
+                    element.IsOutsideAssetsFolder = !path.Contains("Assets/");
+                    Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
+                }
+            }
+            
+            GUILayout.Space(2);
 
             if (GUILayout.Button("Generate Scene Data"))
             {
