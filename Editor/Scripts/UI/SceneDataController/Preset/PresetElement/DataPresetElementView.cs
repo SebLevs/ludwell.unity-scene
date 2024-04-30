@@ -1,37 +1,22 @@
-using System.IO;
-using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class DataPresetElementView : VisualElement
+    public class DataPresetElementView
     {
-        private static readonly string UxmlPath =
-            Path.Combine("UI", nameof(DataPresetElementView), "Uxml_" + nameof(DataPresetElementView));
-
-        private static readonly string UssPath =
-            Path.Combine("UI", nameof(DataPresetElementView), "Uss_" + nameof(DataPresetElementView));
+        private VisualElement _view;
         
-        private const string ReferencedAssetName = "reference";
-        private const string ClassContentName = "class-content";
-
         private Toggle _toggle;
-        private ObjectField _objectField;
-        private VisualElement _classContentContainer;
 
-        private DataPresetElementController _controller;
-        
-        public DataPresetElementView()
+        public DataPresetElementView(VisualElement parent)
         {
-            this.AddHierarchyFromUxml(UxmlPath);
-            this.AddStyleFromUss(UssPath);
+            _view = parent.Q(nameof(DataPresetElementView));
+            _toggle = _view.Q<Toggle>();
+        }
 
-            _controller = new DataPresetElementController(this);
-
-            _toggle = this.Q<Toggle>();
-            _objectField = this.Q<ObjectField>(ReferencedAssetName);
-            _classContentContainer = this.Q<VisualElement>(ClassContentName);
+        public void UpdateToggleLabel(string value)
+        {
+            _toggle.label = value;
         }
     }
 }

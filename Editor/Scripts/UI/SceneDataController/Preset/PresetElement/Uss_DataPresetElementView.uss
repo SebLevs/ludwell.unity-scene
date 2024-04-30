@@ -1,4 +1,4 @@
-#preset {
+#DataPresetElementView {
     border-left-color: rgb(26, 26, 26);
     border-right-color: rgb(26, 26, 26);
     border-top-color: rgb(26, 26, 26);
@@ -6,7 +6,7 @@
     border-bottom-width: 1px;
 }
 
-#preset > Toggle {
+#DataPresetElementView > Toggle {
     border-left-color: rgb(48, 48, 48);
     border-right-color: rgb(48, 48, 48);
     border-top-color: rgb(48, 48, 48);
@@ -24,7 +24,7 @@
     height: 20px;
 }
 
-#preset > Toggle > VisualElement > Label {
+#DataPresetElementView > Toggle > VisualElement > Label {
     -unity-font-style: bold;
     padding-left: 0;
     padding-right: 0;
@@ -36,7 +36,7 @@
     margin-bottom: 0;
 }
 
-#preset > #unity-content {
+#DataPresetElementView > #unity-content {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
