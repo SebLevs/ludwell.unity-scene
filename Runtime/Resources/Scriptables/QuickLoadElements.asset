@@ -12,40 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be9c8f6f376f8245a5159bf7a5b7f39, type: 3}
   m_Name: QuickLoadElements
   m_EditorClassIdentifier: 
-  <Elements>k__BackingField:
-  - _name: laksjdjkasd
-    <Tags>k__BackingField: []
-    SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
-    IsOpen: 1
-    IsOutsideAssetsFolder: 0
-  - _name: laksjdjkasd
-    <Tags>k__BackingField: []
-    SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
-    IsOpen: 0
-    IsOutsideAssetsFolder: 0
-  - _name: laksjdjkasd
-    <Tags>k__BackingField: []
-    SceneData: {fileID: 11400000, guid: 42bc02379d52bb14bbc5cbd23366947b, type: 2}
-    IsOpen: 0
-    IsOutsideAssetsFolder: 0
-  - _name: main menu
-    <Tags>k__BackingField:
-    - name: bjbjk
-    SceneData: {fileID: 11400000, guid: 6d73e40f501ae884488d43870607a9a9, type: 2}
-    IsOpen: 0
-    IsOutsideAssetsFolder: 0
-  - _name: main menu
-    <Tags>k__BackingField: []
-    SceneData: {fileID: 11400000, guid: 6d73e40f501ae884488d43870607a9a9, type: 2}
-    IsOpen: 0
-    IsOutsideAssetsFolder: 0
-  - _name: persistent
-    <Tags>k__BackingField: []
-    SceneData: {fileID: 11400000, guid: d551b43ec42b5aa4a88df9dc4cce078e, type: 2}
-    IsOpen: 0
-    IsOutsideAssetsFolder: 0
-  - _name: po
-    <Tags>k__BackingField: []
-    SceneData: {fileID: 11400000, guid: 6e8cc42205c5a994583bf56e12fa0516, type: 2}
-    IsOpen: 0
-    IsOutsideAssetsFolder: 0
+  <Elements>k__BackingField: []

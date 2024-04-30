@@ -23,6 +23,14 @@ namespace Ludwell.Scene.Editor
 
         private static void GenerateSceneDataButton(SceneDataManagerSettings baseScript)
         {
+            if (GUILayout.Button("Clear Data"))
+            {
+                DataFetcher.GetTagContainer().Tags.Clear();
+                DataFetcher.GetQuickLoadElements().Elements.Clear();
+            }
+
+            GUILayout.Space(4);
+
             if (GUILayout.Button("Generate Scene Data"))
             {
                 baseScript.GenerateSceneData = true;
