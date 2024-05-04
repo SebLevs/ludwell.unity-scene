@@ -339,6 +339,15 @@
     border-bottom-color: rgb(8, 8, 8);
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+
+#content-container > #list-view > ScrollView {
+    flex-grow: 1;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(8, 8, 8);
+    align-items: center;
+    justify-content: center;
 }
 
 #add-remove__row {

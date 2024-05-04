@@ -1,7 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/DataPresetElementView/Uss_DataPresetElementView.uss?fileID=7433441132597879392&amp;guid=caa0dc64e6a006548a6fc5b95658f342&amp;type=3#Uss_DataPresetElementView" />
-    <ui:VisualElement name="DataPresetElementView" style="background-color: rgba(0, 0, 0, 0); height: 100%;">
-        <uie:ObjectField label="Object Field" name="data" />
-        <ui:VisualElement name="data-visualization" style="background-color: rgba(0, 0, 0, 0); height: 100%;" />
-    </ui:VisualElement>
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/DataPresetElementView/Uss_DataPresetElementView.uss?fileID=7433441132597879392&amp;guid=c0f71db75b0cb0f4e86c10c2a9bd0fda&amp;type=3#Uss_DataPresetElementView" />
+    <ui:Foldout name="DataPresetElementView" focusable="true" text="Asset Name" style="display: flex;">
+        <ui:VisualElement name="preset-content-container" style="background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement name="reference-content" style="justify-content: center; align-items: center;">
+                <uie:ObjectField label="Object Field" name="reference" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
+            </ui:VisualElement>
+            <ui:VisualElement name="class-content" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:Foldout>
 </ui:UXML>

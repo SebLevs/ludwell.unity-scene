@@ -16,7 +16,7 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateToggleLabel(string value)
         {
-            _toggle.label = value;
+            _toggle.text = value;
         }
     }
 }

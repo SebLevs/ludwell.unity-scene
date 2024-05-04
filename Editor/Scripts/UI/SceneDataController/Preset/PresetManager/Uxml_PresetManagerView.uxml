@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/Uss_PresetManagerView_V2.uss?fileID=7433441132597879392&amp;guid=87ba3c68f0828664e932a0520a51e218&amp;type=3#Uss_PresetManagerView_V2" />
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetElement/Uss_DataPresetElementView.uss?fileID=7433441132597879392&amp;guid=c0f71db75b0cb0f4e86c10c2a9bd0fda&amp;type=3#Uss_DataPresetElementView" />
+    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/Uss_PresetManagerView.uss?fileID=7433441132597879392&amp;guid=87ba3c68f0828664e932a0520a51e218&amp;type=3#Uss_PresetManagerView" />
     <ui:VisualElement name="Preset" focusable="true">
         <ui:VisualElement name="container__top" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
             <ui:Label tabindex="-1" text="Name of referenced element" display-tooltip-when-elided="true" name="reference-name" />
@@ -57,8 +56,8 @@
                     <ui:TextField picking-mode="Ignore" value="Current preset label" name="current-selection-label" />
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove" class="button__all selection-buttons" />
                 </ui:VisualElement>
-                <ui:ListView focusable="true" name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-border="false" show-bound-collection-size="false" style="display: flex;" />
-                <ui:VisualElement name="add-remove__row" class="buttons-container">
+                <ui:ListView focusable="true" name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-border="false" show-add-remove-footer="true" show-bound-collection-size="false" style="display: flex;" />
+                <ui:VisualElement name="add-remove__row" class="buttons-container" style="display: none;">
                     <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
                     <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
                 </ui:VisualElement>
