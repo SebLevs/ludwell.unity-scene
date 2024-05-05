@@ -28,12 +28,10 @@ namespace Ludwell.Scene
     [Serializable]
     public class Preset
     {
-        [HideInInspector] public PresetJsonDataListing SelectedPreset;
-        [HideInInspector] public List<PresetJsonDataListing> Presets = new();
-
-        public string GetSelectedPresetLabel => SelectedPreset.Label;
+        [HideInInspector] public PresetListing SelectedPreset;
+        [HideInInspector] public List<PresetListing> Presets = new();
         
-        public PresetJsonDataListing GetValidDataPreset()
+        public PresetListing GetValidDataPreset()
         {
             if (SelectedPreset != null) return SelectedPreset;
             return Presets.Any() ? Presets[0] : null;
@@ -41,7 +39,7 @@ namespace Ludwell.Scene
     }
 
     [Serializable]
-    public class PresetJsonDataListing : IComparable
+    public class PresetListing : IComparable
     {
         public string Label = "Not labeled";
         public List<JsonData> JsonDataListing = new();
@@ -74,7 +72,7 @@ namespace Ludwell.Scene
         {
             if (obj == null) return 1;
 
-            var otherAsType = obj as PresetJsonDataListing;
+            var otherAsType = obj as PresetListing;
             return string.Compare(Label, otherAsType.Label, StringComparison.Ordinal);
         }
     }

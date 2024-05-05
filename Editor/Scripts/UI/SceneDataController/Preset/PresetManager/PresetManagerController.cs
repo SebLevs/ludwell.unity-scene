@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
 
     public class PresetManagerController : IViewable
     {
-        private const string CurrentSelectionLabelName = "current-selection-label";
+        private const string CurrentSelectionLabelName = "opened-label";
         
         private ViewManager _viewManager;
 
@@ -27,8 +27,8 @@ namespace Ludwell.Scene.Editor
         
         private ListViewHandler<DataPresetElementController, JsonData> _selectedPresetlistViewHandler;
 
-        private TextField _currentSelectionLabel;
-        private PresetJsonDataListing _openedPreset;
+        private TextField _openedSelectionLabel;
+        private PresetListing _openedPreset;
 
         public PresetManagerController(VisualElement parent)
         {
@@ -38,8 +38,8 @@ namespace Ludwell.Scene.Editor
             _viewManager = _root.Root().Q<ViewManager>();
             _viewManager.Add(this);
             
-            _currentSelectionLabel = _root.Q<TextField>(CurrentSelectionLabelName);
-            _currentSelectionLabel.RegisterValueChangedCallback(OnCurrentSelectionLabelChanged);
+            _openedSelectionLabel = _root.Q<TextField>(CurrentSelectionLabelName);
+            _openedSelectionLabel.RegisterValueChangedCallback(OnCurrentSelectionLabelChanged);
             
             InitializeReturnEvent();
         }
@@ -57,16 +57,7 @@ namespace Ludwell.Scene.Editor
             var presetManagerViewArgs = (PresetManagerViewArgs)args;
             _view.SetReferenceText(presetManagerViewArgs.QuickLoadElementData.Name);
             _model = presetManagerViewArgs.Preset;
-            _openedPreset = _model.GetValidDataPreset();
-
-            if (_model != null)
-            {
-                _currentSelectionLabel.value = _model.GetSelectedPresetLabel;
-            }
-
-            _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
-                _root.Q<ListView>(),
-                presetManagerViewArgs.QuickLoadElementData.DataPreset.GetValidDataPreset().JsonDataListing);
+            OpenPresetListing(_model.GetValidDataPreset());
         }
 
         public void Hide()
@@ -92,6 +83,17 @@ namespace Ludwell.Scene.Editor
         private void ReturnToPreviousView()
         {
             _viewManager.TransitionToPreviousView();
+        }
+
+        private void OpenPresetListing(PresetListing preset)
+        {
+            _openedPreset = preset;
+            
+            _openedSelectionLabel.value = _openedPreset.Label;
+            
+            _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
+                _root.Q<ListView>(),
+                _openedPreset.JsonDataListing);
         }
     }
 }

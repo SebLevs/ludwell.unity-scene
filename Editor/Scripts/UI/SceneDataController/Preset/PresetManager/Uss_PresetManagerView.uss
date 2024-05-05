@@ -17,7 +17,7 @@
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 8px;
     text-overflow: ellipsis;
     -unity-font-style: bold;
     padding-bottom: 0;
@@ -29,7 +29,7 @@
 #preset-label-container {
     justify-content: center;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 0;
     margin-bottom: 4px;
 }
 
@@ -123,7 +123,7 @@
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
-    padding-bottom: 2px;
+    padding-bottom: 4px;
 }
 
 #DropdownSearchField {
@@ -274,7 +274,7 @@
     flex-grow: 1;
 }
 
-#selection {
+#listing {
     flex-grow: 1;
     height: 20px;
     flex-direction: row;
@@ -286,7 +286,7 @@
     border-bottom-color: rgb(0, 0, 0);
 }
 
-#selection > #current-selection-label {
+#listing > #opened-label {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -294,7 +294,7 @@
     flex-grow: 1;
 }
 
-#selection > #current-selection-label > #unity-text-input {
+#listing > #opened-label > #unity-text-input {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -313,7 +313,7 @@
     border-bottom-right-radius: 0;
 }
 
-#selection > #current-selection-label > #unity-text-input > TextElement {
+#listing > #opened-label > #unity-text-input > TextElement {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;

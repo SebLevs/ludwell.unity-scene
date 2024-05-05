@@ -50,11 +50,11 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
-                <ui:VisualElement name="selection" style="background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement name="listing" style="background-color: rgba(0, 0, 0, 0);">
                     <ui:Button display-tooltip-when-elided="true" name="select" tooltip="Select" class="button__all selection-buttons">
                         <ui:VisualElement name="icon" style="flex-grow: 1; background-image: resource(&apos;Sprites/icon_select&apos;);" />
                     </ui:Button>
-                    <ui:TextField picking-mode="Ignore" value="Current preset label" name="current-selection-label" />
+                    <ui:TextField picking-mode="Ignore" value="Current preset label" name="opened-label" />
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove" class="button__all selection-buttons" />
                 </ui:VisualElement>
                 <ui:ListView focusable="true" name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-border="false" show-add-remove-footer="true" show-bound-collection-size="false" style="display: flex;" />
