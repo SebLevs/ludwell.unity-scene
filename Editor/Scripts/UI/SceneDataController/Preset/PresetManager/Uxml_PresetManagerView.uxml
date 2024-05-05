@@ -12,8 +12,8 @@
             <ui:VisualElement name="selected-element-container" style="display: flex;">
                 <ui:Label tabindex="-1" text="Preset name" display-tooltip-when-elided="true" name="selected-element-label" />
                 <ui:VisualElement name="behaviours">
-                    <ui:Button display-tooltip-when-elided="true" name="deselect" tooltip="Deselect" text="x" class="button__all">
-                        <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0);" />
+                    <ui:Button display-tooltip-when-elided="true" name="deselect" tooltip="Deselect" class="button__all">
+                        <ui:VisualElement name="icon" style="background-image: resource(&apos;Sprites/icon_deselect&apos;);" />
                     </ui:Button>
                     <ui:Button display-tooltip-when-elided="true" name="show" tooltip="Show" class="navigation-button button__all">
                         <ui:VisualElement name="icon" style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_search&apos;);" />
@@ -52,7 +52,7 @@
             <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
                 <ui:VisualElement name="selection" style="background-color: rgba(0, 0, 0, 0);">
                     <ui:Button display-tooltip-when-elided="true" name="select" tooltip="Select" class="button__all selection-buttons">
-                        <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;Sprites/icon_tag&apos;);" />
+                        <ui:VisualElement name="icon" style="flex-grow: 1; background-image: resource(&apos;Sprites/icon_select&apos;);" />
                     </ui:Button>
                     <ui:TextField picking-mode="Ignore" value="Current preset label" name="current-selection-label" />
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove" class="button__all selection-buttons" />
