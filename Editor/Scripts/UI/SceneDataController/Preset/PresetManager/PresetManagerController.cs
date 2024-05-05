@@ -13,19 +13,32 @@ namespace Ludwell.Scene.Editor
 
         public QuickLoadElementData QuickLoadElementData { get; }
         public Preset Preset { get; }
+
+        public void SetSelectedPresetListing(PresetListing presetListing)
+        {
+            Preset.SelectedPreset = presetListing;
+        }
+
+        public PresetListing GetSelectedPresetListing()
+        {
+            return Preset.SelectedPreset;
+        }
     }
 
     public class PresetManagerController : IViewable
     {
-        private const string CurrentSelectionLabelName = "opened-label";
-        
+        private const string OpenedPresetListingName = "opened-listing__label";
+        private const string SelectedPresetLabelName = "selected-preset__label";
+
         private ViewManager _viewManager;
 
-        private Preset _model;
+        private PresetManagerViewArgs _model;
         private PresetManagerView _view;
         private VisualElement _root;
-        
+
         private ListViewHandler<DataPresetElementController, JsonData> _selectedPresetlistViewHandler;
+
+        private Label _selectedPresetLabel;
 
         private TextField _openedSelectionLabel;
         private PresetListing _openedPreset;
@@ -33,20 +46,28 @@ namespace Ludwell.Scene.Editor
         public PresetManagerController(VisualElement parent)
         {
             _root = parent.Q(nameof(PresetManagerView));
-            _view = new PresetManagerView(_root, ReturnToPreviousView);
+            _view = new PresetManagerView(_root, ReturnToPreviousView, DeselectPresetListing, SelectPresetListing);
 
             _viewManager = _root.Root().Q<ViewManager>();
             _viewManager.Add(this);
-            
-            _openedSelectionLabel = _root.Q<TextField>(CurrentSelectionLabelName);
+
+            _selectedPresetLabel = _root.Q<Label>(SelectedPresetLabelName);
+
+
+            _openedSelectionLabel = _root.Q<TextField>(OpenedPresetListingName);
             _openedSelectionLabel.RegisterValueChangedCallback(OnCurrentSelectionLabelChanged);
-            
-            InitializeReturnEvent();
+
+            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
         }
 
         private void OnCurrentSelectionLabelChanged(ChangeEvent<string> evt)
         {
-            _openedPreset.Label = evt.newValue;
+            _openedPreset.Label = evt.newValue; // todo: place into view
+
+            if (_openedPreset == _model.Preset.SelectedPreset)
+            {
+                // todo: change selection label from view here
+            }
             // todo: delayed save
         }
 
@@ -54,10 +75,21 @@ namespace Ludwell.Scene.Editor
         {
             _view.Show();
 
-            var presetManagerViewArgs = (PresetManagerViewArgs)args;
-            _view.SetReferenceText(presetManagerViewArgs.QuickLoadElementData.Name);
-            _model = presetManagerViewArgs.Preset;
-            OpenPresetListing(_model.GetValidDataPreset());
+            _model = (PresetManagerViewArgs)args;
+            _view.SetReferenceText(_model.QuickLoadElementData.Name);
+
+            if (_model.Preset.SelectedPreset == null)
+            {
+                _view.ShowNullSelectionContainer();
+            }
+            else
+            {
+                _view.ShowSelectionContainer();
+            }
+
+            var validPreset = _model.Preset.GetValidDataPreset();
+            if (validPreset == null) return;
+            OpenPresetListing(validPreset);
         }
 
         public void Hide()
@@ -65,9 +97,9 @@ namespace Ludwell.Scene.Editor
             _view.Hide();
         }
 
-        private void InitializeReturnEvent()
+        private void ReturnToPreviousView()
         {
-            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
+            _viewManager.TransitionToPreviousView();
         }
 
         private void OnKeyUpReturn(KeyUpEvent evt)
@@ -80,20 +112,27 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private void ReturnToPreviousView()
-        {
-            _viewManager.TransitionToPreviousView();
-        }
-
         private void OpenPresetListing(PresetListing preset)
         {
             _openedPreset = preset;
-            
-            _openedSelectionLabel.value = _openedPreset.Label;
-            
+
+            _openedSelectionLabel.value = _openedPreset.Label; // todo: place into view
+
             _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
                 _root.Q<ListView>(),
                 _openedPreset.JsonDataListing);
+        }
+
+        private void SelectPresetListing()
+        {
+            _model.SetSelectedPresetListing(_openedPreset);
+            _selectedPresetLabel.text = _model.GetSelectedPresetListing().Label;
+        }
+
+        private void DeselectPresetListing()
+        {
+            _model.SetSelectedPresetListing(null);
+            _selectedPresetLabel.text = "";
         }
     }
 }
