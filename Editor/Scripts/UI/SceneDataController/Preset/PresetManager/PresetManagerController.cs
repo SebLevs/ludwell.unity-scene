@@ -27,9 +27,6 @@ namespace Ludwell.Scene.Editor
 
     public class PresetManagerController : IViewable
     {
-        private const string OpenedPresetListingName = "opened-listing__label";
-        private const string SelectedPresetLabelName = "selected-preset__label";
-
         private ViewManager _viewManager;
 
         private PresetManagerViewArgs _model;
@@ -38,37 +35,33 @@ namespace Ludwell.Scene.Editor
 
         private ListViewHandler<DataPresetElementController, JsonData> _selectedPresetlistViewHandler;
 
-        private Label _selectedPresetLabel;
-
-        private TextField _openedSelectionLabel;
         private PresetListing _openedPreset;
 
         public PresetManagerController(VisualElement parent)
         {
             _root = parent.Q(nameof(PresetManagerView));
-            _view = new PresetManagerView(_root, ReturnToPreviousView, DeselectPresetListing, SelectPresetListing);
+            _view = new PresetManagerView(_root, 
+                ReturnToPreviousView, 
+                DeselectPresetListing, 
+                SelectPresetListing, 
+                OnCurrentSelectionLabelChanged);
 
             _viewManager = _root.Root().Q<ViewManager>();
             _viewManager.Add(this);
-
-            _selectedPresetLabel = _root.Q<Label>(SelectedPresetLabelName);
-
-
-            _openedSelectionLabel = _root.Q<TextField>(OpenedPresetListingName);
-            _openedSelectionLabel.RegisterValueChangedCallback(OnCurrentSelectionLabelChanged);
 
             _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
         }
 
         private void OnCurrentSelectionLabelChanged(ChangeEvent<string> evt)
         {
-            _openedPreset.Label = evt.newValue; // todo: place into view
+            _openedPreset.Label = evt.newValue;
 
             if (_openedPreset == _model.Preset.SelectedPreset)
             {
-                // todo: change selection label from view here
+                _view.SetSelectedPresetText(_openedPreset.Label);
             }
-            // todo: delayed save
+
+            DataFetcher.SaveQuickLoadElementsDelayed();
         }
 
         public void Show(ViewArgs args)
@@ -76,7 +69,7 @@ namespace Ludwell.Scene.Editor
             _view.Show();
 
             _model = (PresetManagerViewArgs)args;
-            _view.SetReferenceText(_model.QuickLoadElementData.Name);
+            _view.SetQuickLoadElementReferenceText(_model.QuickLoadElementData.Name);
 
             if (_model.Preset.SelectedPreset == null)
             {
@@ -116,7 +109,7 @@ namespace Ludwell.Scene.Editor
         {
             _openedPreset = preset;
 
-            _openedSelectionLabel.value = _openedPreset.Label; // todo: place into view
+            _view.SetOpenedPresetText(_openedPreset.Label);
 
             _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
                 _root.Q<ListView>(),
@@ -126,13 +119,13 @@ namespace Ludwell.Scene.Editor
         private void SelectPresetListing()
         {
             _model.SetSelectedPresetListing(_openedPreset);
-            _selectedPresetLabel.text = _model.GetSelectedPresetListing().Label;
+            _view.SetSelectedPresetText(_model.GetSelectedPresetListing().Label);
         }
 
         private void DeselectPresetListing()
         {
             _model.SetSelectedPresetListing(null);
-            _selectedPresetLabel.text = "";
+            _view.SetSelectedPresetText(string.Empty);
         }
     }
 }

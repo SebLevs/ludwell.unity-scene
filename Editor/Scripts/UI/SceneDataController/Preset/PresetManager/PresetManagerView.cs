@@ -10,7 +10,7 @@ namespace Ludwell.Scene.Editor
 
         private const string ReturnButtonName = "button__return";
         private readonly Button _returnButton;
-        private readonly Action _returnButtonBehaviour;
+        private readonly Action _onReturnClicked;
 
         private const string SelectedPresetContainerName = "selected-preset-container";
         private readonly VisualElement _selectedPresetContainer;
@@ -19,42 +19,50 @@ namespace Ludwell.Scene.Editor
 
         private const string DeselectButtonName = "deselect";
         private readonly Button _deselectButton;
-        private readonly Action _deselectButtonBehaviour;
+        private readonly Action _onDeselectClicked;
         
         private const string SelectButtonName = "select";
         private readonly Button _selectButton;
-        private readonly Action _selectButtonBehaviour;
+        private readonly Action _onSelectClicked;
 
         private const string AddButtonName = "add";
         private readonly Button _addButton;
 
         private const string RemoveButtonName = "remove";
         private readonly Button _removeButton;
-
+        
+        private const string SelectedPresetLabelName = "selected-preset__label";
+        private readonly Label _selectedPresetLabel;
+        
+        private const string OpenedPresetTextFieldName = "opened-listing__label";
+        private readonly TextField _openedPresetTextField;
+        private readonly EventCallback<ChangeEvent<string>> _onOpenedPresetTextFieldValueChanged;
+        
         private VisualElement _root;
 
         public PresetManagerView(VisualElement root, 
-            Action returnButtonBehaviour,
-            Action deselectButtonButtonBehaviour,
-            Action selectButtonButtonBehaviour)
+            Action onReturnClicked,
+            Action onDeselectClicked,
+            Action onSelectClicked,
+            EventCallback<ChangeEvent<string>> onOpenedTextFieldValueChangedValueChanged)
         {
             _root = root;
 
             _referenceName = _root.Q<Label>(ReferenceName);
 
             _returnButton = _root.Q<Button>(ReturnButtonName);
-            _returnButtonBehaviour = returnButtonBehaviour;
+            _onReturnClicked = onReturnClicked;
             _returnButton.clicked += ExecuteReturnButtonClicked;
 
             _selectedPresetContainer = _root.Q<VisualElement>(SelectedPresetContainerName);
             _selectedPresetContainerNull = _root.Q<VisualElement>(SelectedPresetContainerNullName);
 
             _deselectButton = _root.Q<Button>(DeselectButtonName);
-            _deselectButtonBehaviour += deselectButtonButtonBehaviour;
+            _onDeselectClicked += onDeselectClicked;
             _deselectButton.clicked += ExecuteDeselectButtonClicked;
             
             _selectButton = _root.Q<Button>(SelectButtonName);
-            _selectButtonBehaviour += selectButtonButtonBehaviour;
+            _onSelectClicked += onSelectClicked;
             _selectButton.clicked += ExecuteSelectButtonClicked;
 
             _addButton = _root.Q<Button>(AddButtonName);
@@ -62,6 +70,11 @@ namespace Ludwell.Scene.Editor
 
             _removeButton = _root.Q<Button>(RemoveButtonName);
             _removeButton.clicked += ExecuteRemoveButtonClicked;
+            
+            _selectedPresetLabel = _root.Q<Label>(SelectedPresetLabelName);
+            _openedPresetTextField = _root.Q<TextField>(OpenedPresetTextFieldName);
+            _onOpenedPresetTextFieldValueChanged = onOpenedTextFieldValueChangedValueChanged;
+            _openedPresetTextField.RegisterValueChangedCallback(ExecuteOpenedPresetValueChangedCallback);
         }
 
         ~PresetManagerView()
@@ -70,6 +83,8 @@ namespace Ludwell.Scene.Editor
 
             _deselectButton.clicked -= ExecuteDeselectButtonClicked;
             _selectButton.clicked -= ExecuteSelectButtonClicked;
+
+            _openedPresetTextField.UnregisterValueChangedCallback(ExecuteOpenedPresetValueChangedCallback);
         }
 
         public void Show()
@@ -94,25 +109,35 @@ namespace Ludwell.Scene.Editor
             _selectedPresetContainerNull.style.display = DisplayStyle.Flex;
         }
 
-        public void SetReferenceText(string value)
+        public void SetQuickLoadElementReferenceText(string value)
         {
             _referenceName.text = value;
+        }
+        
+        public void SetSelectedPresetText(string value)
+        {
+            _selectedPresetLabel.text = value;
+        }
+        
+        public void SetOpenedPresetText(string value)
+        {
+            _openedPresetTextField.value = value;
         }
 
         private void ExecuteReturnButtonClicked()
         {
-            _returnButtonBehaviour?.Invoke();
+            _onReturnClicked?.Invoke();
         }
         
         private void ExecuteDeselectButtonClicked()
         {
-            _deselectButtonBehaviour?.Invoke();
+            _onDeselectClicked?.Invoke();
             ShowNullSelectionContainer();
         }
 
         private void ExecuteSelectButtonClicked()
         {
-            _selectButtonBehaviour?.Invoke();
+            _onSelectClicked?.Invoke();
             ShowSelectionContainer();
         }
 
@@ -124,6 +149,11 @@ namespace Ludwell.Scene.Editor
         private void ExecuteRemoveButtonClicked()
         {
             //_listViewHandler.ListView.itemsSource.removeAt();
+        }
+
+        private void ExecuteOpenedPresetValueChangedCallback(ChangeEvent<string> evt)
+        {
+            _onOpenedPresetTextFieldValueChanged?.Invoke(evt);
         }
     }
 }
