@@ -10,7 +10,7 @@ namespace Ludwell.Scene.Editor
 
         private QuickLoadElementData _model = new();
         private VisualElement _view;
-        
+
         private ViewManager _viewManager;
 
         private readonly TagsShelfController _tagsShelfController;
@@ -95,6 +95,14 @@ namespace Ludwell.Scene.Editor
         public void SetIconAssetOutsideAssets(QuickLoadElementView view)
         {
             view.SetIconAssetOutsideAssets(_model.IsOutsideAssetsFolder);
+        }
+
+        public void SetSelectedDataPreset(QuickLoadElementView view)
+        {
+            // todo: refactor into a preset container MVC for both here and manager?
+            view.SetSelectedDataPreset(_model.DataPreset.SelectedPreset == null
+                ? "No data preset selected"
+                : _model.DataPreset.SelectedPreset.Label);
         }
 
         private void TransitionViewToTagsManager()

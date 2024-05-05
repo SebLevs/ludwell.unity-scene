@@ -25,12 +25,15 @@ namespace Ludwell.Scene.Editor
         private const string LoadSceneButtonName = "button__load";
         private const string OpenSceneButtonName = "button__open";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
+        private const string DataPresetLabelName = "section-selection";
 
-        private Foldout _foldout;
+        private readonly Foldout _foldout;
+        private readonly QuickLoadElementController _controller;
+        
         private Button _sceneDataName;
         private VisualElement _iconAssetOutsideAssets;
 
-        private QuickLoadElementController _controller;
+        private Label _dataPresetLabel;
 
         public void SetIsOpen(bool value) => _foldout.value = value;
 
@@ -38,6 +41,8 @@ namespace Ludwell.Scene.Editor
 
         public void SetIconAssetOutsideAssets(bool state) =>
             _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
+
+        public void SetSelectedDataPreset(string value) => _dataPresetLabel.text = value;
 
         public QuickLoadElementView()
         {
@@ -47,6 +52,8 @@ namespace Ludwell.Scene.Editor
             _controller = new QuickLoadElementController(this);
 
             _foldout = this.Q<Foldout>(FoldoutName);
+
+            _dataPresetLabel = this.Q<Label>(DataPresetLabelName);
 
             InitializeAndReferenceFoldoutTextField();
             RegisterStyleEvents();
@@ -81,6 +88,7 @@ namespace Ludwell.Scene.Editor
             _controller.SetIsOpen(this);
             _controller.SetSceneData(this);
             _controller.SetIconAssetOutsideAssets(this);
+            _controller.SetSelectedDataPreset(this);
 
             _controller.UpdateTagsContainer();
         }
