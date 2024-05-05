@@ -105,7 +105,7 @@ namespace Ludwell.Scene.Editor
         private void TransitionViewToDataPreset()
         {
             _viewManager.TransitionToFirstViewOfType<PresetManagerController>(
-                new PresetManagerViewArgs(_model));
+                new PresetManagerViewArgs(_model, _model.DataPreset));
         }
 
         private void SaveQuickLoadElements(MouseUpEvent evt)

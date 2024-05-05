@@ -115,6 +115,17 @@
     border-bottom-color: rgb(0, 0, 0);
 }
 
+#container__data > #search-section__background > Label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 2px;
+}
+
 #DropdownSearchField {
     width: 60%;
     align-self: center;

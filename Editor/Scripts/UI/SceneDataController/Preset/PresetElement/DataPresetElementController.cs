@@ -34,15 +34,11 @@ namespace Ludwell.Scene.Editor
             _classContent = this.Q<VisualElement>(ClassContentName);
         }
 
-        private void UpdateSelection(ChangeEvent<Object> evt)
+        private void UpdateSelection(ChangeEvent<Object> evt) // todo: cleanup
         {
             _classContent.Clear();
 
-            if (evt.newValue == null)
-            {
-                Debug.LogError("was null");
-                return;
-            }
+            if (evt.newValue == null) return;
 
             var copy = Object.Instantiate(evt.newValue); // todo: make it work for json files?
 
@@ -69,14 +65,10 @@ namespace Ludwell.Scene.Editor
                 // todo: wait N time and save the json
                 var json = JsonUtility.ToJson(copy);
                 _model.JsonData.Json = json;
-                Debug.LogError(json);
 
                 // LOG TEST
                 // var fromJson = DeserializeScriptableObject(copy, json);
                 // Debug.LogError((fromJson as ExampleScriptable).amIFucked);
-
-                // todo: transfer into a quick load behaviour
-                // CopyData(copy, evt.newValue);
             });
             
             _classContent.Add(container);
@@ -105,13 +97,6 @@ namespace Ludwell.Scene.Editor
             var fromJson = ScriptableObject.CreateInstance(copy.GetType());
             JsonUtility.FromJsonOverwrite(json, fromJson);
             return fromJson;
-        }
-
-        private void CopyData(Object source, Object target)
-        {
-            var originalName = target.name;
-            EditorUtility.CopySerializedIfDifferent(source, target);
-            target.name = originalName;
         }
     }
 }

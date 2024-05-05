@@ -26,6 +26,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="container__data" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%;">
             <ui:VisualElement name="search-section__background" class="search-field__background">
+                <ui:Label tabindex="-1" text="Preset management" display-tooltip-when-elided="true" style="-unity-text-align: middle-center;" />
                 <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField">
                     <ui:VisualElement name="indexation" tooltip="Presets" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; display: flex; right: -41px;">
                         <ui:TextField picking-mode="Ignore" name="current-index" value="00" tooltip="Jump to preset container" max-length="2" />
