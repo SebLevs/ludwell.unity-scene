@@ -59,7 +59,7 @@
     display: none;
 }
 
-#selected-preset-container > selectedpreset__label {
+#selected-preset-container > #selected-preset__label {
     -unity-text-align: middle-center;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -75,7 +75,7 @@
     align-items: center;
 }
 
-#selected-element-container__null {
+#selected-preset-container__null {
     width: 80%;
     align-items: center;
     justify-content: center;
@@ -84,7 +84,7 @@
     padding-bottom: 4px;
 }
 
-#selected-element-container__null > Label {
+#selected-preset-container__null > Label {
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
