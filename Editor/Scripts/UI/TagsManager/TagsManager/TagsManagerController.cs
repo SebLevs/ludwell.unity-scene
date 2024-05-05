@@ -38,7 +38,7 @@ namespace Ludwell.Scene.Editor
             _viewManager = _root.Root().Q<ViewManager>();
             _viewManager.Add(this);
 
-            _tagsShelfController = new TagsShelfController(_root, _ => ReturnToPreviousView());
+            _tagsShelfController = new TagsShelfController(_root, ReturnToPreviousView);
 
             _tagContainer = DataFetcher.GetTagContainer();
 

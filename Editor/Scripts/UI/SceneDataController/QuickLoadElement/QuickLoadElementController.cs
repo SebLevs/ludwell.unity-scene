@@ -19,7 +19,7 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController(VisualElement view)
         {
             _view = view;
-            _tagsShelfController = new TagsShelfController(view, _ => TransitionViewToTagsManager());
+            _tagsShelfController = new TagsShelfController(view, TransitionViewToTagsManager);
 
             _sectionController =
                 new PresetSectionController(_model, view.Q(DataPresetSectionName), TransitionViewToDataPreset);

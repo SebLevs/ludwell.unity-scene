@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UIElements;
@@ -12,7 +13,7 @@ namespace Ludwell.Scene.Editor
 
         public int IndexOf(TagWithSubscribers tagWithSubscribers) => _data.Tags.IndexOf(tagWithSubscribers);
 
-        public TagsShelfController(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
+        public TagsShelfController(VisualElement parent, Action onOptionClicked)
         {
             _view = new TagsShelfView(parent, onOptionClicked);
         }

@@ -11,6 +11,8 @@ namespace Ludwell.Scene.Editor
         private const string NotTaggedName = "not-tagged";
         private const string IconButtonName = "tags__button-add";
 
+        private readonly Action _onOptionClicked;
+
         private Button _optionsButton;
         private ScrollView _container;
         private Label _notTaggedLabel;
@@ -19,11 +21,17 @@ namespace Ludwell.Scene.Editor
 
         private int ElementsCount => _container.childCount;
 
-        public TagsShelfView(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
+        public TagsShelfView(VisualElement parent, Action onOptionClicked)
         {
             _root = parent.Q(nameof(TagsShelfView));
             SetReferences();
-            _optionsButton.RegisterCallback(onOptionClicked);
+            _onOptionClicked = onOptionClicked;
+            _optionsButton.clicked += ExecuteOptionBehaviour;
+        }
+
+        ~TagsShelfView()
+        {
+            _optionsButton.clicked -= ExecuteOptionBehaviour;
         }
 
         public void OverrideIconTooltip(string value)
@@ -83,6 +91,11 @@ namespace Ludwell.Scene.Editor
         {
             _notTaggedLabel.style.display = ElementsCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
             _container.style.display = ElementsCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        private void ExecuteOptionBehaviour()
+        {
+            _onOptionClicked?.Invoke();
         }
     }
 }
