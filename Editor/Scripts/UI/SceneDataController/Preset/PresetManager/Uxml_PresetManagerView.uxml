@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/Preset/PresetManager/Uss_PresetManagerView.uss?fileID=7433441132597879392&amp;guid=87ba3c68f0828664e932a0520a51e218&amp;type=3#Uss_PresetManagerView" />
     <ui:VisualElement name="Preset" focusable="true">
-        <ui:VisualElement name="container__top" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="container__top" style="background-color: rgba(0, 0, 0, 0);">
             <ui:Label tabindex="-1" text="Name of referenced element" display-tooltip-when-elided="true" name="reference-name" />
             <ui:VisualElement name="preset-label-container" style="background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center;">
                 <ui:Label tabindex="-1" text="Preset" display-tooltip-when-elided="true" name="label" />
@@ -34,7 +34,7 @@
                         <ui:Label tabindex="-1" text="00" display-tooltip-when-elided="true" name="count" class="current-index__texts" />
                     </ui:VisualElement>
                 </Ludwell.Scene.Editor.DropdownSearchField>
-                <ui:VisualElement name="buttons" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement name="buttons" style="background-color: rgba(0, 0, 0, 0);">
                     <ui:VisualElement name="add-remove">
                         <ui:Button display-tooltip-when-elided="true" name="add" text="+" tooltip="Add preset" class="button__all" />
                         <ui:Button name="remove" text="-" tooltip="Remove current preset" display-tooltip-when-elided="true" class="button__all" />
@@ -49,7 +49,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="content-container" class="listview-container" style="display: flex;">
+            <ui:VisualElement name="content-container" class="listview-container">
                 <ui:VisualElement name="listing" style="background-color: rgba(0, 0, 0, 0);">
                     <ui:Button display-tooltip-when-elided="true" name="select" tooltip="Select" class="button__all selection-buttons">
                         <ui:VisualElement name="icon" style="flex-grow: 1; background-image: resource(&apos;Sprites/icon_select&apos;);" />
@@ -57,11 +57,14 @@
                     <ui:TextField picking-mode="Ignore" value="Current preset label" name="opened-listing__label" />
                     <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove" class="button__all selection-buttons" />
                 </ui:VisualElement>
-                <ui:ListView focusable="true" name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-border="false" show-add-remove-footer="true" show-bound-collection-size="false" style="display: flex;" />
+                <ui:ListView name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="true" show-bound-collection-size="false" />
                 <ui:VisualElement name="add-remove__row" class="buttons-container" style="display: none;">
                     <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
                     <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
                 </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="content-container__empty" style="background-color: rgba(0, 0, 0, 0); display: none;">
+                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

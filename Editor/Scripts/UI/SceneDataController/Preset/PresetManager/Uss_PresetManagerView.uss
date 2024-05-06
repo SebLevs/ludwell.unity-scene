@@ -1,5 +1,4 @@
 #Preset {
-    flex-grow: 1;
 }
 
 #container__top {
@@ -55,7 +54,7 @@
     width: 80%;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    height: 40px;
     display: none;
 }
 
@@ -79,7 +78,7 @@
     width: 80%;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    height: 40px;
     padding-top: 4px;
     padding-bottom: 4px;
 }
@@ -128,12 +127,15 @@
 
 #DropdownSearchField {
     width: 60%;
-    align-self: center;
     flex-direction: row;
+    align-items: center;
+    align-self: center;
+}
+
+#DropdownSearchField > #search-field {
 }
 
 #DropdownSearchField > #search-field > #toolbar-search-field {
-    height: 20px;
 }
 
 #indexation {
@@ -218,12 +220,11 @@
     padding-top: 4px;
     width: 60%;
     align-self: center;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 #add-remove {
     flex-direction: row;
-    flex-grow: 1;
     justify-content: flex-end;
     padding-right: 4px;
     border-right-width: 1px;
@@ -235,7 +236,6 @@
 
 #previous-next {
     flex-direction: row;
-    flex-grow: 1;
     padding-left: 4px;
 }
 
@@ -270,15 +270,11 @@
 
 #content-container {
     margin-bottom: 2px;
-    min-height: 100px;
-    flex-grow: 1;
 }
 
 #listing {
-    flex-grow: 1;
     height: 20px;
     flex-direction: row;
-    max-height: 20px;
     border-bottom-width: 1px;
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
@@ -345,20 +341,21 @@
 }
 
 #content-container > #list-view {
-    flex-grow: 1;
     border-bottom-width: 1px;
     border-bottom-color: rgb(8, 8, 8);
     align-items: center;
     justify-content: center;
-    width: 100%;
+    flex-grow: 1;
 }
 
 #content-container > #list-view > ScrollView {
-    flex-grow: 1;
     border-bottom-width: 1px;
     border-bottom-color: rgb(8, 8, 8);
     align-items: center;
     justify-content: center;
+}
+
+#content-container > #list-view > #unity-list-view__footer {
 }
 
 #add-remove__row {
@@ -391,4 +388,17 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 2px;
     -unity-font-style: bold;
+}
+
+#content-container__empty {
+    justify-content: center;
+    flex-grow: 1;
+}
+
+#content-container__empty > Label {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-center;
 }

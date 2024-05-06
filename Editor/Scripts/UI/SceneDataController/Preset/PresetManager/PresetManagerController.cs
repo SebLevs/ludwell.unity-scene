@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -90,8 +89,8 @@ namespace Ludwell.Scene.Editor
                 return; 
             }
             
-            // todo: Show the listing feedback
             _view.SetRemoveButtonEnabled(true);
+            _view.SetPresetListingEnabled(true);
             OpenPresetListing(validPreset);
         }
 
@@ -138,8 +137,14 @@ namespace Ludwell.Scene.Editor
         {
             _model.Preset.PresetListings.Add(new PresetListing());
             OpenPresetListing(_model.Preset.PresetListings[^1]);
+            
             // todo: update 00/00 in view
+            _view.SetCurrentIndex(_model.Preset.PresetListings.Count.ToString());
+            _view.SetCount(_model.Preset.PresetListings.Count.ToString());
+            
+            // if (_model.Preset.PresetListings.Count != 1) return;
             _view.SetRemoveButtonEnabled(true);
+            _view.SetPresetListingEnabled(true);
         }
 
         private void RemovePresetListing()
@@ -156,13 +161,16 @@ namespace Ludwell.Scene.Editor
             if (_model.Preset.PresetListings.Count > 0)
             {
                 OpenPresetListing(_model.Preset.PresetListings[^1]);
+                _view.SetCurrentIndex(_model.Preset.PresetListings.Count.ToString());
             }
             else
             {
                 _view.SetRemoveButtonEnabled(false);
+                _view.SetPresetListingEnabled(false);
             }
             
             // todo: update 00/00 in view
+            _view.SetCount(_model.Preset.PresetListings.Count.ToString());
         }
 
         private void ShowPreviousPresetListing()

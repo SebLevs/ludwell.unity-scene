@@ -48,8 +48,21 @@ namespace Ludwell.Scene.Editor
         private readonly TextField _openedPresetTextField;
         private readonly EventCallback<ChangeEvent<string>> _onOpenedPresetTextFieldValueChanged;
         
+        private const string ContentContainerName = "content-container";
+        private readonly VisualElement _contentContainer;
+        
+        private const string ContentContainerNullName = "content-container__null";
+        private readonly VisualElement _contentContainerNull;
+        
+        private const string CurrentIndexName = "current-index";
+        private readonly TextField _currentIndex;
+        
+        private const string CountName = "count";
+        private readonly Label _count;
+        
         private VisualElement _root;
 
+        // todo: refactor to remove constructor parameters
         public PresetManagerView(VisualElement root, 
             Action onReturnClicked,
             Action onDeselectClicked,
@@ -99,6 +112,12 @@ namespace Ludwell.Scene.Editor
             _openedPresetTextField = _root.Q<TextField>(OpenedPresetTextFieldName);
             _onOpenedPresetTextFieldValueChanged = onOpenedTextFieldValueChangedValueChanged;
             _openedPresetTextField.RegisterValueChangedCallback(ExecuteOpenedPresetValueChangedCallback);
+            
+            _contentContainer = _root.Q<VisualElement>(ContentContainerName);
+            _contentContainerNull = _root.Q<VisualElement>(ContentContainerNullName);
+            
+            _currentIndex = _root.Q<TextField>(CurrentIndexName);
+            _count = _root.Q<Label>(CountName);
         }
 
         ~PresetManagerView()
@@ -134,6 +153,16 @@ namespace Ludwell.Scene.Editor
             ShowNullSelectionContainer();
         }
         
+        public void SetPresetListingEnabled(bool state)
+        {
+            if (state)
+            {
+                ShowContentContainer();
+                return;
+            }
+            ShowNullContentContainer();
+        }
+        
         public void SetRemoveButtonEnabled(bool state)
         {
             _removeButton.SetEnabled(state);
@@ -148,12 +177,22 @@ namespace Ludwell.Scene.Editor
         {
             _selectedPresetLabel.text = value;
         }
+
+        public void SetCurrentIndex(string value)
+        {
+            _currentIndex.value = value;
+        }
+
+        public void SetCount(string value)
+        {
+            _count.text = value;
+        }
         
         public void SetOpenedPresetText(string value)
         {
             _openedPresetTextField.value = value;
         }
-
+        
         private void ExecuteReturnButtonClicked()
         {
             _onReturnClicked?.Invoke();
@@ -169,6 +208,18 @@ namespace Ludwell.Scene.Editor
         {
             _onSelectClicked?.Invoke();
             ShowSelectionContainer();
+        }
+        
+        private void ShowContentContainer()
+        {
+            _contentContainerNull.style.display = DisplayStyle.None;
+            _contentContainer.style.display = DisplayStyle.Flex;
+        }
+
+        private void ShowNullContentContainer()
+        {
+            _contentContainer.style.display = DisplayStyle.None;
+            _contentContainerNull.style.display = DisplayStyle.Flex;
         }
         
         private void ShowSelectionContainer()
