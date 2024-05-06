@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene
@@ -28,13 +29,13 @@ namespace Ludwell.Scene
     [Serializable]
     public class Preset
     {
-        [HideInInspector] public PresetListing SelectedPreset;
-        [HideInInspector] public List<PresetListing> Presets = new();
+        [HideInInspector] public PresetListing SelectedPresetListing;
+        [HideInInspector] public List<PresetListing> PresetListings = new();
         
         public PresetListing GetValidDataPreset()
         {
-            if (SelectedPreset != null) return SelectedPreset;
-            return Presets.Any() ? Presets[0] : null;
+            if (SelectedPresetListing != null) return SelectedPresetListing;
+            return PresetListings.Any() ? PresetListings[0] : null;
         }
     }
 
@@ -44,6 +45,7 @@ namespace Ludwell.Scene
         public string Label = "Not labeled";
         public List<JsonData> JsonDataListing = new();
 
+        // todo: replace + button with this
         public void AddToSelectedPreset(string json)
         {
             // var data = JsonConvert.DeserializeObject<dynamic>(json);
@@ -58,6 +60,7 @@ namespace Ludwell.Scene
             JsonDataListing.Add(new JsonData { Json = json });
         }
 
+        // todo: replace - button with this
         public void RemoveFromSelectedPreset(string json)
         {
             foreach (var dataPreset in JsonDataListing)

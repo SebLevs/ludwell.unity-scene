@@ -27,9 +27,19 @@ namespace Ludwell.Scene.Editor
 
         private const string AddButtonName = "add";
         private readonly Button _addButton;
+        private readonly Action _onAddClicked;
 
         private const string RemoveButtonName = "remove";
         private readonly Button _removeButton;
+        private readonly Action _onRemoveClicked;
+        
+        private const string PreviousButtonName = "previous";
+        private readonly Button _previousButton;
+        private readonly Action _onPreviousClicked;
+
+        private const string NextButtonName = "next";
+        private readonly Button _nextButton;
+        private readonly Action _onNextClicked;
         
         private const string SelectedPresetLabelName = "selected-preset__label";
         private readonly Label _selectedPresetLabel;
@@ -44,6 +54,10 @@ namespace Ludwell.Scene.Editor
             Action onReturnClicked,
             Action onDeselectClicked,
             Action onSelectClicked,
+            Action onAddClicked, 
+            Action onRemoveClicked, 
+            Action onPreviousClicked, 
+            Action onNextClicked, 
             EventCallback<ChangeEvent<string>> onOpenedTextFieldValueChangedValueChanged)
         {
             _root = root;
@@ -66,10 +80,20 @@ namespace Ludwell.Scene.Editor
             _selectButton.clicked += ExecuteSelectButtonClicked;
 
             _addButton = _root.Q<Button>(AddButtonName);
+            _onAddClicked += onAddClicked;
             _addButton.clicked += ExecuteAddButtonClicked;
 
             _removeButton = _root.Q<Button>(RemoveButtonName);
+            _onRemoveClicked += onRemoveClicked;
             _removeButton.clicked += ExecuteRemoveButtonClicked;
+            
+            _previousButton = _root.Q<Button>(PreviousButtonName);
+            _onPreviousClicked += onPreviousClicked;
+            _previousButton.clicked += ExecutePreviousButtonClicked;
+
+            _nextButton = _root.Q<Button>(NextButtonName);
+            _onNextClicked += onNextClicked;
+            _nextButton.clicked += ExecuteNextButtonClicked;
             
             _selectedPresetLabel = _root.Q<Label>(SelectedPresetLabelName);
             _openedPresetTextField = _root.Q<TextField>(OpenedPresetTextFieldName);
@@ -83,6 +107,9 @@ namespace Ludwell.Scene.Editor
 
             _deselectButton.clicked -= ExecuteDeselectButtonClicked;
             _selectButton.clicked -= ExecuteSelectButtonClicked;
+            
+            _previousButton.clicked -= ExecutePreviousButtonClicked;
+            _nextButton.clicked -= ExecuteNextButtonClicked;
 
             _openedPresetTextField.UnregisterValueChangedCallback(ExecuteOpenedPresetValueChangedCallback);
         }
@@ -97,16 +124,19 @@ namespace Ludwell.Scene.Editor
             _root.style.display = DisplayStyle.None;
         }
         
-        public void ShowSelectionContainer()
+        public void SetSelectedPresetEnabled(bool state)
         {
-            _selectedPresetContainerNull.style.display = DisplayStyle.None;
-            _selectedPresetContainer.style.display = DisplayStyle.Flex;
+            if (state)
+            {
+                ShowSelectionContainer();
+                return;
+            }
+            ShowNullSelectionContainer();
         }
-
-        public void ShowNullSelectionContainer()
+        
+        public void SetRemoveButtonEnabled(bool state)
         {
-            _selectedPresetContainer.style.display = DisplayStyle.None;
-            _selectedPresetContainerNull.style.display = DisplayStyle.Flex;
+            _removeButton.SetEnabled(state);
         }
 
         public void SetQuickLoadElementReferenceText(string value)
@@ -140,15 +170,37 @@ namespace Ludwell.Scene.Editor
             _onSelectClicked?.Invoke();
             ShowSelectionContainer();
         }
+        
+        private void ShowSelectionContainer()
+        {
+            _selectedPresetContainerNull.style.display = DisplayStyle.None;
+            _selectedPresetContainer.style.display = DisplayStyle.Flex;
+        }
+
+        private void ShowNullSelectionContainer()
+        {
+            _selectedPresetContainer.style.display = DisplayStyle.None;
+            _selectedPresetContainerNull.style.display = DisplayStyle.Flex;
+        }
 
         private void ExecuteAddButtonClicked()
         {
-            // _listViewHandler.ListView.itemsSource.Add();
+            _onAddClicked?.Invoke();
         }
 
         private void ExecuteRemoveButtonClicked()
         {
-            //_listViewHandler.ListView.itemsSource.removeAt();
+            _onRemoveClicked?.Invoke();
+        }
+        
+        private void ExecutePreviousButtonClicked()
+        {
+            _onPreviousClicked?.Invoke();
+        }
+        
+        private void ExecuteNextButtonClicked()
+        {
+            _onNextClicked?.Invoke();
         }
 
         private void ExecuteOpenedPresetValueChangedCallback(ChangeEvent<string> evt)

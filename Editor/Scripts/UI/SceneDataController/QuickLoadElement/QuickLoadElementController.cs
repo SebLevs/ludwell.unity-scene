@@ -100,9 +100,9 @@ namespace Ludwell.Scene.Editor
         public void SetSelectedDataPreset(QuickLoadElementView view)
         {
             // todo: refactor into a preset container MVC for both here and manager?
-            view.SetSelectedDataPreset(_model.DataPreset.SelectedPreset == null
+            view.SetSelectedDataPreset(_model.DataPreset.SelectedPresetListing == null
                 ? "No data preset selected"
-                : _model.DataPreset.SelectedPreset.Label);
+                : _model.DataPreset.SelectedPresetListing.Label);
         }
 
         private void TransitionViewToTagsManager()

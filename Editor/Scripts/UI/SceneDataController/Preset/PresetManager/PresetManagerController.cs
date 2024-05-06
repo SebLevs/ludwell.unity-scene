@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,12 +17,12 @@ namespace Ludwell.Scene.Editor
 
         public void SetSelectedPresetListing(PresetListing presetListing)
         {
-            Preset.SelectedPreset = presetListing;
+            Preset.SelectedPresetListing = presetListing;
         }
 
         public PresetListing GetSelectedPresetListing()
         {
-            return Preset.SelectedPreset;
+            return Preset.SelectedPresetListing;
         }
     }
 
@@ -44,10 +45,18 @@ namespace Ludwell.Scene.Editor
                 ReturnToPreviousView, 
                 DeselectPresetListing, 
                 SelectPresetListing, 
+                AddPresetListing, 
+                RemovePresetListing, 
+                ShowPreviousPresetListing, 
+                ShowNextPresetListing, 
                 OnCurrentSelectionLabelChanged);
-
+            
             _viewManager = _root.Root().Q<ViewManager>();
             _viewManager.Add(this);
+            
+            _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
+                _root.Q<ListView>(),
+                null);
 
             _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
         }
@@ -56,7 +65,7 @@ namespace Ludwell.Scene.Editor
         {
             _openedPreset.Label = evt.newValue;
 
-            if (_openedPreset == _model.Preset.SelectedPreset)
+            if (_openedPreset == _model.Preset.SelectedPresetListing)
             {
                 _view.SetSelectedPresetText(_openedPreset.Label);
             }
@@ -71,17 +80,18 @@ namespace Ludwell.Scene.Editor
             _model = (PresetManagerViewArgs)args;
             _view.SetQuickLoadElementReferenceText(_model.QuickLoadElementData.Name);
 
-            if (_model.Preset.SelectedPreset == null)
-            {
-                _view.ShowNullSelectionContainer();
-            }
-            else
-            {
-                _view.ShowSelectionContainer();
-            }
+            _view.SetSelectedPresetEnabled(_model.Preset.SelectedPresetListing != null);
 
             var validPreset = _model.Preset.GetValidDataPreset();
-            if (validPreset == null) return;
+            if (validPreset == null) 
+            {
+                // todo: Show an empty feedback like for list views
+                _view.SetRemoveButtonEnabled(false);
+                return; 
+            }
+            
+            // todo: Show the listing feedback
+            _view.SetRemoveButtonEnabled(true);
             OpenPresetListing(validPreset);
         }
 
@@ -111,15 +121,63 @@ namespace Ludwell.Scene.Editor
 
             _view.SetOpenedPresetText(_openedPreset.Label);
 
-            _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
-                _root.Q<ListView>(),
-                _openedPreset.JsonDataListing);
+            // _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
+            //     _root.Q<ListView>(),
+            //     _openedPreset.JsonDataListing);
+
+            _selectedPresetlistViewHandler.ListView.itemsSource = preset.JsonDataListing;
         }
 
         private void SelectPresetListing()
         {
             _model.SetSelectedPresetListing(_openedPreset);
             _view.SetSelectedPresetText(_model.GetSelectedPresetListing().Label);
+        }
+        
+        private void AddPresetListing()
+        {
+            _model.Preset.PresetListings.Add(new PresetListing());
+            OpenPresetListing(_model.Preset.PresetListings[^1]);
+            // todo: update 00/00 in view
+            _view.SetRemoveButtonEnabled(true);
+        }
+
+        private void RemovePresetListing()
+        {
+            if (_openedPreset == _model.GetSelectedPresetListing())
+            {
+                _model.Preset.SelectedPresetListing = null;
+                _view.SetSelectedPresetEnabled(false);
+            }
+            
+            var index = _model.Preset.PresetListings.IndexOf(_openedPreset);
+            _model.Preset.PresetListings.RemoveAt(index);
+
+            if (_model.Preset.PresetListings.Count > 0)
+            {
+                OpenPresetListing(_model.Preset.PresetListings[^1]);
+            }
+            else
+            {
+                _view.SetRemoveButtonEnabled(false);
+            }
+            
+            // todo: update 00/00 in view
+        }
+
+        private void ShowPreviousPresetListing()
+        {
+            
+        }
+
+        private void ShowNextPresetListing()
+        {
+            
+        }
+
+        private void JumpToPresetListing(int index)
+        {
+            // todo: set logic for 00/00 item
         }
 
         private void DeselectPresetListing()
