@@ -14,7 +14,7 @@ namespace Ludwell.Scene
         [HideInInspector] public bool IsOpen = true;
         [HideInInspector] public bool IsOutsideAssetsFolder;
 
-        [HideInInspector] public Preset DataPreset;
+        [HideInInspector] public Preset DataPreset = new();
 
         public int CompareTo(object obj)
         {
