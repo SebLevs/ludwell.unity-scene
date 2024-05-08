@@ -188,6 +188,12 @@ namespace Ludwell.Scene.Editor
             _count.text = value;
         }
         
+        public void SetEmptyCount()
+        {
+            SetCurrentIndex("-");
+            SetCount("0");
+        }
+        
         public void SetOpenedPresetText(string value)
         {
             _openedPresetTextField.value = value;

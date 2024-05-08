@@ -13,6 +13,10 @@ namespace Ludwell.Scene.Editor
 
         public QuickLoadElementData QuickLoadElementData { get; }
         public Preset Preset { get; }
+        
+        public int IndexOf(PresetListing presetListing) => Preset.PresetListings.IndexOf(presetListing);
+
+        public int PresetListingCount => Preset.PresetListings.Count;
 
         public void SetSelectedPresetListing(PresetListing presetListing)
         {
@@ -86,6 +90,7 @@ namespace Ludwell.Scene.Editor
             {
                 _view.SetRemoveButtonEnabled(false);
                 _view.SetPresetListingVisualState(false);
+                _view.SetEmptyCount();
                 return;
             }
             
@@ -114,17 +119,20 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private void OpenPresetListing(PresetListing preset)
+        private void OpenPresetListing(PresetListing presetListing)
         {
-            _openedPreset = preset;
+            _openedPreset = presetListing;
 
             _view.SetOpenedPresetText(_openedPreset.Label);
+
+            var index = _model.IndexOf(presetListing) + 1;
+            _view.SetCurrentIndex(index.ToString());
 
             // _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
             //     _root.Q<ListView>(),
             //     _openedPreset.JsonDataListing);
 
-            _selectedPresetlistViewHandler.ListView.itemsSource = preset.JsonDataListing;
+            _selectedPresetlistViewHandler.ListView.itemsSource = presetListing.JsonDataListing;
         }
 
         private void SelectPresetListing()
@@ -139,8 +147,7 @@ namespace Ludwell.Scene.Editor
             presetListings.Add(new PresetListing());
             
             OpenPresetListing(_model.Preset.PresetListings[^1]);
-            _view.SetCurrentIndex(_model.Preset.PresetListings.Count.ToString());
-            _view.SetCount(_model.Preset.PresetListings.Count.ToString());
+            _view.SetCount(_model.PresetListingCount.ToString());
             
             if (presetListings.Count != 1) return;
             _view.SetRemoveButtonEnabled(true);
@@ -162,16 +169,14 @@ namespace Ludwell.Scene.Editor
             if (presetListings.Count > 0)
             {
                 OpenPresetListing(presetListings[^1]);
-                _view.SetCurrentIndex(presetListings.Count.ToString());
+                _view.SetCount(presetListings.Count.ToString());
             }
             else
             {
                 _view.SetRemoveButtonEnabled(false);
                 _view.SetPresetListingVisualState(false);
-                _view.SetCurrentIndex("-");
+                _view.SetEmptyCount();
             }
-            
-            _view.SetCount(presetListings.Count.ToString());
         }
 
         private void ShowPreviousPresetListing()
