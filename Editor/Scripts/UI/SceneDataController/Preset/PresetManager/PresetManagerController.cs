@@ -79,18 +79,18 @@ namespace Ludwell.Scene.Editor
             _model = (PresetManagerViewArgs)args;
             _view.SetQuickLoadElementReferenceText(_model.QuickLoadElementData.Name);
 
-            _view.SetSelectedPresetEnabled(_model.Preset.SelectedPresetListing != null);
+            _view.SetSelectedPresetVisualState(_model.Preset.SelectedPresetListing != null);
 
             var validPreset = _model.Preset.GetValidDataPreset();
             if (validPreset == null) 
             {
-                // todo: Show an empty feedback like for list views
                 _view.SetRemoveButtonEnabled(false);
-                return; 
+                _view.SetPresetListingVisualState(false);
+                return;
             }
             
             _view.SetRemoveButtonEnabled(true);
-            _view.SetPresetListingEnabled(true);
+            _view.SetPresetListingVisualState(true);
             OpenPresetListing(validPreset);
         }
 
@@ -135,42 +135,43 @@ namespace Ludwell.Scene.Editor
         
         private void AddPresetListing()
         {
-            _model.Preset.PresetListings.Add(new PresetListing());
-            OpenPresetListing(_model.Preset.PresetListings[^1]);
+            var presetListings = _model.Preset.PresetListings;
+            presetListings.Add(new PresetListing());
             
-            // todo: update 00/00 in view
+            OpenPresetListing(_model.Preset.PresetListings[^1]);
             _view.SetCurrentIndex(_model.Preset.PresetListings.Count.ToString());
             _view.SetCount(_model.Preset.PresetListings.Count.ToString());
             
-            // if (_model.Preset.PresetListings.Count != 1) return;
+            if (presetListings.Count != 1) return;
             _view.SetRemoveButtonEnabled(true);
-            _view.SetPresetListingEnabled(true);
+            _view.SetPresetListingVisualState(true);
         }
 
         private void RemovePresetListing()
         {
             if (_openedPreset == _model.GetSelectedPresetListing())
             {
-                _model.Preset.SelectedPresetListing = null;
-                _view.SetSelectedPresetEnabled(false);
+                _model.Preset.ClearSelection();
+                _view.SetSelectedPresetVisualState(false);
             }
             
-            var index = _model.Preset.PresetListings.IndexOf(_openedPreset);
-            _model.Preset.PresetListings.RemoveAt(index);
+            var presetListings = _model.Preset.PresetListings;
+            var index = presetListings.IndexOf(_openedPreset);
+            presetListings.RemoveAt(index);
 
-            if (_model.Preset.PresetListings.Count > 0)
+            if (presetListings.Count > 0)
             {
-                OpenPresetListing(_model.Preset.PresetListings[^1]);
-                _view.SetCurrentIndex(_model.Preset.PresetListings.Count.ToString());
+                OpenPresetListing(presetListings[^1]);
+                _view.SetCurrentIndex(presetListings.Count.ToString());
             }
             else
             {
                 _view.SetRemoveButtonEnabled(false);
-                _view.SetPresetListingEnabled(false);
+                _view.SetPresetListingVisualState(false);
+                _view.SetCurrentIndex("-");
             }
             
-            // todo: update 00/00 in view
-            _view.SetCount(_model.Preset.PresetListings.Count.ToString());
+            _view.SetCount(presetListings.Count.ToString());
         }
 
         private void ShowPreviousPresetListing()

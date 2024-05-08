@@ -36,6 +36,11 @@ namespace Ludwell.Scene
             if (SelectedPresetListing != null) return SelectedPresetListing;
             return PresetListings.Any() ? PresetListings[0] : null;
         }
+
+        public void ClearSelection()
+        {
+            SelectedPresetListing = null;
+        }
     }
 
     [Serializable]

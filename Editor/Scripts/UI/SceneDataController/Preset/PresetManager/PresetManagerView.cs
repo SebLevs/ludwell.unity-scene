@@ -51,8 +51,8 @@ namespace Ludwell.Scene.Editor
         private const string ContentContainerName = "content-container";
         private readonly VisualElement _contentContainer;
         
-        private const string ContentContainerNullName = "content-container__null";
-        private readonly VisualElement _contentContainerNull;
+        private const string ContentContainerEmptyName = "content-container__empty";
+        private readonly VisualElement _contentContainerEmpty;
         
         private const string CurrentIndexName = "current-index";
         private readonly TextField _currentIndex;
@@ -114,7 +114,7 @@ namespace Ludwell.Scene.Editor
             _openedPresetTextField.RegisterValueChangedCallback(ExecuteOpenedPresetValueChangedCallback);
             
             _contentContainer = _root.Q<VisualElement>(ContentContainerName);
-            _contentContainerNull = _root.Q<VisualElement>(ContentContainerNullName);
+            _contentContainerEmpty = _root.Q<VisualElement>(ContentContainerEmptyName);
             
             _currentIndex = _root.Q<TextField>(CurrentIndexName);
             _count = _root.Q<Label>(CountName);
@@ -143,7 +143,7 @@ namespace Ludwell.Scene.Editor
             _root.style.display = DisplayStyle.None;
         }
         
-        public void SetSelectedPresetEnabled(bool state)
+        public void SetSelectedPresetVisualState(bool state)
         {
             if (state)
             {
@@ -153,7 +153,7 @@ namespace Ludwell.Scene.Editor
             ShowNullSelectionContainer();
         }
         
-        public void SetPresetListingEnabled(bool state)
+        public void SetPresetListingVisualState(bool state)
         {
             if (state)
             {
@@ -212,14 +212,14 @@ namespace Ludwell.Scene.Editor
         
         private void ShowContentContainer()
         {
-            _contentContainerNull.style.display = DisplayStyle.None;
+            _contentContainerEmpty.style.display = DisplayStyle.None;
             _contentContainer.style.display = DisplayStyle.Flex;
         }
 
         private void ShowNullContentContainer()
         {
             _contentContainer.style.display = DisplayStyle.None;
-            _contentContainerNull.style.display = DisplayStyle.Flex;
+            _contentContainerEmpty.style.display = DisplayStyle.Flex;
         }
         
         private void ShowSelectionContainer()
