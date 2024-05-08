@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,7 @@ namespace Ludwell.Scene.Editor
         public Preset Preset { get; }
         
         public int IndexOf(PresetListing presetListing) => Preset.PresetListings.IndexOf(presetListing);
+        public int IndexOfPlusOne(PresetListing presetListing) => Preset.PresetListings.IndexOf(presetListing) + 1;
 
         public int PresetListingCount => Preset.PresetListings.Count;
 
@@ -122,17 +124,11 @@ namespace Ludwell.Scene.Editor
         private void OpenPresetListing(PresetListing presetListing)
         {
             _openedPreset = presetListing;
-
             _view.SetOpenedPresetText(_openedPreset.Label);
-
-            var index = _model.IndexOf(presetListing) + 1;
-            _view.SetCurrentIndex(index.ToString());
-
-            // _selectedPresetlistViewHandler = new ListViewHandler<DataPresetElementController, JsonData>(
-            //     _root.Q<ListView>(),
-            //     _openedPreset.JsonDataListing);
-
             _selectedPresetlistViewHandler.ListView.itemsSource = presetListing.JsonDataListing;
+            
+            var index = _model.IndexOfPlusOne(presetListing);
+            _view.SetCurrentIndex(index.ToString());
         }
 
         private void SelectPresetListing()
@@ -181,17 +177,38 @@ namespace Ludwell.Scene.Editor
 
         private void ShowPreviousPresetListing()
         {
+            var index = _model.IndexOf(_openedPreset);
+            OpenPresetListing(_model.Preset.PresetListings[index]);
             
+            if (index + 1 > 1) return;
+            // todo: prevent click on previous arrow
         }
 
         private void ShowNextPresetListing()
         {
+            var index = _model.IndexOf(_openedPreset);
+            OpenPresetListing(_model.Preset.PresetListings[index]);
             
+            if (index + 1 < _model.PresetListingCount) return;
+            // todo: prevent click on next arrow
         }
 
         private void JumpToPresetListing(int index)
         {
-            // todo: set logic for 00/00 item
+            if (_model.PresetListingCount == 0)
+            {
+                _view.SetEmptyCount();
+                return;
+            }
+            
+            if (index > _model.PresetListingCount || index < 1)
+            {
+                var openedPresetIndex = _model.IndexOf(_openedPreset) + 1;
+                _view.SetCurrentIndex(openedPresetIndex.ToString());
+                return;
+            }
+            
+            OpenPresetListing(_model.Preset.PresetListings[index - 1]);
         }
 
         private void DeselectPresetListing()
