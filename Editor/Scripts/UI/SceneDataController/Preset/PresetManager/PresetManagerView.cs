@@ -167,6 +167,16 @@ namespace Ludwell.Scene.Editor
         {
             _removeButton.SetEnabled(state);
         }
+        
+        public void SetPreviousButtonEnabled(bool state)
+        {
+            _previousButton.SetEnabled(state);
+        }
+        
+        public void SetNextButtonEnabled(bool state)
+        {
+            _nextButton.SetEnabled(state);
+        }
 
         public void SetQuickLoadElementReferenceText(string value)
         {
