@@ -31,8 +31,6 @@
 #container__top > #preset-label-container {
     justify-content: center;
     align-items: center;
-    margin-top: 0;
-    margin-bottom: 4px;
 }
 
 #container__top > #preset-label-container > #label {
@@ -57,8 +55,8 @@
     width: 80%;
     align-items: center;
     justify-content: center;
-    height: 40px;
     display: none;
+    height: 40px;
 }
 
 #container__top > #selected-preset-container > #selected-preset__label {
