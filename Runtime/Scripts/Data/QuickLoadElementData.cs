@@ -28,13 +28,19 @@ namespace Ludwell.Scene
     [Serializable]
     public class Preset
     {
-        [HideInInspector] public PresetListing SelectedPresetListing;
+        [field: HideInInspector] public PresetListing SelectedPresetListing { get; private set; } = null;
         [HideInInspector] public List<PresetListing> PresetListings = new();
         
-        public PresetListing GetValidDataPreset()
+        public void SetSelectedPresetListing(PresetListing presetListing)
+        {
+            SelectedPresetListing = presetListing;
+        }
+
+        public PresetListing GetValidDataPresetListings()
         {
             if (SelectedPresetListing != null) return SelectedPresetListing;
-            return PresetListings.Any() ? PresetListings[0] : null;
+            if (PresetListings.Count > 0) return PresetListings[0];
+            return null;
         }
 
         public void ClearSelection()

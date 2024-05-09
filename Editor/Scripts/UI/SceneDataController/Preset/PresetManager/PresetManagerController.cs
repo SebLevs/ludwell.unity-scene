@@ -20,7 +20,7 @@ namespace Ludwell.Scene.Editor
 
         public void SetSelectedPresetListing(PresetListing presetListing)
         {
-            Preset.SelectedPresetListing = presetListing;
+            Preset.SetSelectedPresetListing(presetListing);
         }
 
         public PresetListing GetSelectedPresetListing()
@@ -81,25 +81,26 @@ namespace Ludwell.Scene.Editor
             _view.Show();
 
             _model = (PresetManagerViewArgs)args;
-            
+
             _view.SetQuickLoadElementReferenceText(_model.QuickLoadElementData.Name);
 
-            _view.SetSelectedPresetVisualState(_model.Preset.SelectedPresetListing != null);
-
-            var validPreset = _model.Preset.GetValidDataPreset();
-            if (validPreset == null) 
+            if (_model.PresetListingCount == 0)
             {
+                _view.SetSelectedPresetVisualState(false);
                 _view.SetRemoveButtonEnabled(false);
-                _view.SetPresetListingVisualState(false);
                 _view.SetEmptyCount();
                 _view.SetPreviousButtonEnabled(false);
                 _view.SetNextButtonEnabled(false);
+                _view.SetPresetListingVisualState(false);
                 return;
             }
-            
+
             _view.SetRemoveButtonEnabled(true);
             _view.SetPresetListingVisualState(true);
+
+            var validPreset = _model.Preset.GetValidDataPresetListings();
             OpenPresetListing(validPreset);
+            _view.SetCount(_model.PresetListingCount.ToString());
         }
 
         public void Hide()
@@ -125,14 +126,16 @@ namespace Ludwell.Scene.Editor
         private void OpenPresetListing(PresetListing presetListing)
         {
             _openedPreset = presetListing;
+
             _view.SetOpenedPresetText(_openedPreset.Label);
-            _selectedPresetlistViewHandler.ListView.itemsSource = presetListing.JsonDataListing;
             
             var indexPlusOne = _model.IndexOf(presetListing) + 1;
             _view.SetCurrentIndex(indexPlusOne.ToString());
             
             _view.SetNextButtonEnabled(indexPlusOne != _model.PresetListingCount);
             _view.SetPreviousButtonEnabled(indexPlusOne != 1);
+
+            _selectedPresetlistViewHandler.ListView.itemsSource = presetListing.JsonDataListing;
         }
 
         private void SelectPresetListing()
@@ -156,7 +159,6 @@ namespace Ludwell.Scene.Editor
 
         private void RemovePresetListing()
         {
-            Debug.LogError("Fix this jumping to the last item even after next of previous or jump");
             if (_openedPreset == _model.GetSelectedPresetListing())
             {
                 _model.Preset.ClearSelection();
@@ -165,12 +167,13 @@ namespace Ludwell.Scene.Editor
             
             var presetListings = _model.Preset.PresetListings;
             var index = presetListings.IndexOf(_openedPreset);
-            // var validJumpToIndex = _model.IndexOf(_openedPreset) == 1 ? 1 : ;
+            var validJumpToIndex = presetListings.Count == 1 ? 1 : _model.PresetListingCount - 1;
             presetListings.RemoveAt(index);
 
             if (presetListings.Count > 0)
             {
-                OpenPresetListing(presetListings[index]); // todo: fix index jump here
+                var trueIndex = index <= presetListings.Count - 1 ? index : presetListings.Count - 1; 
+                OpenPresetListing(presetListings[trueIndex]);
                 _view.SetCount(presetListings.Count.ToString());
             }
             else
