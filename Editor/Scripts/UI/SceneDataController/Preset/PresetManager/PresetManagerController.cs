@@ -50,8 +50,8 @@ namespace Ludwell.Scene.Editor
                 SelectPresetListing, 
                 AddPresetListing, 
                 RemovePresetListing, 
-                ShowPreviousPresetListing, 
-                ShowNextPresetListing, 
+                OpenPreviousPresetListing, 
+                OpenNextPresetListing, 
                 OnCurrentSelectionLabelChanged);
             
             _viewManager = _root.Root().Q<ViewManager>();
@@ -62,6 +62,15 @@ namespace Ludwell.Scene.Editor
                 null);
 
             _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
+            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyLeftOpenPrevious);
+            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyRightOpenNext);
+        }
+
+        ~ PresetManagerController()
+        {
+            _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
+            _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyLeftOpenPrevious);
+            _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyRightOpenNext);
         }
 
         private void OnCurrentSelectionLabelChanged(ChangeEvent<string> evt)
@@ -111,16 +120,6 @@ namespace Ludwell.Scene.Editor
         private void ReturnToPreviousView()
         {
             _viewManager.TransitionToPreviousView();
-        }
-
-        private void OnKeyUpReturn(KeyUpEvent evt)
-        {
-            if (_root.style.display == DisplayStyle.None) return;
-
-            if (evt.keyCode == KeyCode.Escape)
-            {
-                ReturnToPreviousView();
-            }
         }
 
         private void OpenPresetListing(PresetListing presetListing)
@@ -184,13 +183,13 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private void ShowPreviousPresetListing()
+        private void OpenPreviousPresetListing()
         {
             var index = _model.IndexOf(_openedPreset) - 1;
             OpenPresetListing(_model.Preset.PresetListings[index]);
         }
 
-        private void ShowNextPresetListing()
+        private void OpenNextPresetListing()
         {
             var index = _model.IndexOf(_openedPreset) + 1;
             OpenPresetListing(_model.Preset.PresetListings[index]);
@@ -218,6 +217,36 @@ namespace Ludwell.Scene.Editor
         {
             _model.SetSelectedPresetListing(null);
             _view.SetSelectedPresetText(string.Empty);
+        }
+
+        private void OnKeyUpReturn(KeyUpEvent evt)
+        {
+            if (_root.style.display == DisplayStyle.None) return;
+
+            if (evt.keyCode == KeyCode.Escape)
+            {
+                ReturnToPreviousView();
+            }
+        }
+
+        private void OnKeyLeftOpenPrevious(KeyUpEvent evt)
+        {
+            if (_root.style.display == DisplayStyle.None) return;
+            if (evt.keyCode != KeyCode.LeftArrow) return;
+            
+            Debug.LogError(_model.IndexOf(_openedPreset));
+            if (_model.IndexOf(_openedPreset) == 0) return;
+            OpenPreviousPresetListing();
+        }
+
+        private void OnKeyRightOpenNext(KeyUpEvent evt)
+        {
+            if (_root.style.display == DisplayStyle.None) return;
+            if (evt.keyCode != KeyCode.RightArrow) return;
+            
+            Debug.LogError(_model.IndexOf(_openedPreset));
+            if (_model.IndexOf(_openedPreset) == _model.PresetListingCount - 1) return;
+            OpenNextPresetListing();
         }
     }
 }
