@@ -123,8 +123,13 @@ namespace Ludwell.Scene.Editor
 
         private void LoadScene()
         {
+            // todo: set data here
+            Debug.LogError("OnEnterPlayModeChangePreset");
+            _model.DataPreset.SetPresetListings();
+            
             QuickLoadSceneDataManager.LoadScene(_model.SceneData);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
+            EditorApplication.playModeStateChanged += OnExitPlayModeResetPreset;
         }
 
         private void OnExitPlayModeSwitchToStateOne(PlayModeStateChange obj)
@@ -133,6 +138,16 @@ namespace Ludwell.Scene.Editor
             EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
             var dualStateButton = _view.Q<DualStateButton>();
             dualStateButton.SwitchState(dualStateButton.StateOne);
+        }
+
+        private void OnExitPlayModeResetPreset(PlayModeStateChange obj)
+        {
+            if (obj != PlayModeStateChange.ExitingPlayMode) return;
+            EditorApplication.playModeStateChanged -= OnExitPlayModeResetPreset;
+
+            Debug.LogError("OnExitPlayModeResetPreset");
+            // todo: reset data here
+            _model.DataPreset.RevertPresetListings();
         }
 
         private void OpenScene()

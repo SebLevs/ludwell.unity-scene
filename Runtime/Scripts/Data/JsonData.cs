@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene
@@ -10,13 +11,20 @@ namespace Ludwell.Scene
         public Object Original;
         public string Json;
 
-        private void CopyDataToOriginal(Object source)
+        public void CopyDataToOriginal() // Object source
         {
             // todo: cache the original values
             // todo: reapply original values when play mode has exited
-            EditorUtility.CopySerializedIfDifferent(source, Original);
+            
+            var fromJson = ScriptableObject.CreateInstance(Original.GetType());
+            
+            Debug.LogError($"deserialized: {fromJson.GetType()}");
+            Debug.LogError(Json);
+            Debug.LogError(fromJson);
+            
+            EditorUtility.CopySerializedIfDifferent(fromJson, Original);
+            fromJson.name = Original.name;
         }
-
 
         // CACHE
         private void CopyData(Object source, Object target)

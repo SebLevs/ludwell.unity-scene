@@ -57,8 +57,8 @@
             <ui:TextField picking-mode="Ignore" value="Current preset label" name="opened-listing__label" />
             <ui:Button display-tooltip-when-elided="true" name="remove" text="-" tooltip="Remove" class="button__all selection-buttons" />
         </ui:VisualElement>
-        <ui:ListView name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="false" show-bound-collection-size="false" />
-        <ui:VisualElement name="add-remove__row" style="display: flex;">
+        <ui:ListView name="list-view" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="true" show-bound-collection-size="false" />
+        <ui:VisualElement name="add-remove__row" style="display: none;">
             <ui:Button text="+" display-tooltip-when-elided="true" name="add" tooltip="Add a row" class="row-button" />
             <ui:Button text="-" display-tooltip-when-elided="true" name="remove" tooltip="Remove a row" class="row-button" />
         </ui:VisualElement>

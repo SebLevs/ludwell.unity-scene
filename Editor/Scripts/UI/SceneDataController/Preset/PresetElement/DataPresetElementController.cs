@@ -65,6 +65,7 @@ namespace Ludwell.Scene.Editor
                 // todo: wait N time and save the json
                 var json = JsonUtility.ToJson(copy);
                 _model.JsonData.Json = json;
+                
 
                 // LOG TEST
                 // var fromJson = DeserializeScriptableObject(copy, json);

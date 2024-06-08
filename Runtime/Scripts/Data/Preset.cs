@@ -18,13 +18,29 @@ namespace Ludwell.Scene
         public PresetListing GetValidDataPresetListings()
         {
             if (SelectedPresetListing != null) return SelectedPresetListing;
-            if (PresetListings.Count > 0) return PresetListings[0];
-            return null;
+            return PresetListings.Count > 0 ? PresetListings[0] : null;
         }
 
         public void ClearSelection()
         {
             SelectedPresetListing = null;
+        }
+
+        public void SetPresetListings()
+        {
+            foreach (var presetListing in SelectedPresetListing.JsonDataListing)
+            {
+                Debug.LogError("Copy to original: " + presetListing.Original.name);
+                presetListing.CopyDataToOriginal();
+            }
+        }
+
+        public void RevertPresetListings()
+        {
+            foreach (var presetListing in SelectedPresetListing.JsonDataListing)
+            {
+                Debug.LogError("Revert: " +presetListing.Original.name);
+            }
         }
     }
 }
