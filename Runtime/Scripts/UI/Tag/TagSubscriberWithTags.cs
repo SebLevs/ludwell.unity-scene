@@ -9,12 +9,18 @@ namespace Ludwell.Scene
     {
         [field: SerializeField] public List<Tag> Tags { get; set; } = new();
 
+        public void Clear()
+        {
+            Tags.Clear();
+        }
+
         public void RemoveFromAllTags()
         {
             foreach (var tag in Tags)
             {
-                (tag as TagWithSubscribers).RemoveSubscriber(this);
+                (tag as TagWithSubscribers)?.RemoveSubscriber(this);
             }
+
             Tags.Clear();
         }
     }

@@ -23,13 +23,51 @@ namespace Ludwell.Scene.Editor
 
         private static void GenerateSceneDataButton(SceneDataManagerSettings baseScript)
         {
-            if (GUILayout.Button("Generate Scene Data"))
+            if (GUILayout.Button("Clear"))
+            {
+                DataFetcher.GetTagContainer().Tags.Clear();
+                DataFetcher.GetQuickLoadElements().Elements.Clear();
+                var coreScenes = DataFetcher.GetCoreScenes();
+                coreScenes.LoadingScene = null;
+                coreScenes.StartingScene = null;
+                coreScenes.PersistentScene = null;
+                
+                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                AssetDatabase.Refresh();
+            }
+
+            GUILayout.Space(2);
+
+            if (GUILayout.Button("Repopulate Quick Load"))
+            {
+                DataFetcher.GetTagContainer().Tags.Clear();
+                DataFetcher.GetQuickLoadElements().Elements.Clear();
+
+                var assetGuids = AssetDatabase.FindAssets("t:SceneData");
+                foreach (var guid in assetGuids)
+                {
+                    var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                    var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(assetPath);
+                    var element = DataFetcher.GetQuickLoadElements().Add(sceneData);
+
+                    var path = AssetDatabase.GetAssetPath(sceneData);
+                    element.IsOutsideAssetsFolder = !path.Contains("Assets/");
+                    Signals.Dispatch<UISignals.RefreshView>();
+                }
+                
+                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                AssetDatabase.Refresh();
+            }
+
+            GUILayout.Space(2);
+
+            if (GUILayout.Button("Generate SceneData assets"))
             {
                 baseScript.GenerateSceneData = true;
                 SceneDataGenerator.GenerateSceneData();
             }
 
-            GUILayout.Space(8);
+            EditorPainter.DrawSeparatorLine();
         }
     }
 }

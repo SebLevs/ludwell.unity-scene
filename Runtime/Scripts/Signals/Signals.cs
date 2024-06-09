@@ -7,6 +7,13 @@ namespace Ludwell.Scene
     {
         private static Dictionary<string, List<Action>> _signals = new();
 
+        public static void Clear<T>()
+        {
+            const string type = nameof(T);
+            if (!_signals.ContainsKey(type)) return;
+            _signals.Remove(type);
+        }
+
         public static void Add<T>(Action action) where T : ISignal
         {
             const string type = nameof(T);
@@ -31,7 +38,7 @@ namespace Ludwell.Scene
         {
             const string type = nameof(T);
             _signals[type].Remove(action);
-            
+
             if (_signals[type].Count > 0) return;
             _signals.Remove(type);
         }

@@ -24,14 +24,14 @@ namespace Ludwell.Scene.Editor
             var root = parent.Q(nameof(QuickLoadView));
             _view = new QuickLoadView(root, CloseAll, SceneDataGenerator.CreateSceneAssetAtPath, DeleteSelection);
 
-            _quickLoadElements = DataFetcher.GetQuickLoadElements();
-
             _listView = root.Q<ListView>();
+            _dropdownSearchField = root.Q<DropdownSearchField>();
+
+            _quickLoadElements = DataFetcher.GetQuickLoadElements();
 
             InitializeListViewHandler(root.Q<ListView>());
             InitializeSearchField(root, root.Q<DropdownSearchField>());
             InitializeListViewKeyUpEvents();
-            InitializeForceRebuildSignal(root);
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>
@@ -46,7 +46,7 @@ namespace Ludwell.Scene.Editor
             var sceneDataPath = AssetDatabase.GetAssetPath(selectedElementData.SceneData);
 
             AssetDatabase.DeleteAsset(sceneDataPath);
-            
+
             if (selectedElementData.IsOutsideAssetsFolder)
             {
                 Debug.LogWarning($"Suspicious delete action | Path was outside the Assets folder | {sceneDataPath}");
@@ -118,18 +118,10 @@ namespace Ludwell.Scene.Editor
             DeleteSelection();
         }
 
-        private void InitializeForceRebuildSignal(VisualElement root)
+        public void ForceRebuildListView()
         {
-            _listView = root.Q<ListView>();
-            _dropdownSearchField = root.Q<DropdownSearchField>();
-            Signals.Add<UISignals.RefreshQuickLoadListView>(ForceRebuildListView);
-        }
-
-        private void ForceRebuildListView()
-        {
-            _listView.Rebuild();
+            _listViewHandler.ForceRebuild();
             _dropdownSearchField.RebuildActiveListing();
-            AssetDatabase.Refresh();
         }
 
         private List<IListable> ListTag(string searchFieldValue, IList boundItemSource)
