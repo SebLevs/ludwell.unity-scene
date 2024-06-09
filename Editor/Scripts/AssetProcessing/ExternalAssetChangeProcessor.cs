@@ -62,7 +62,7 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
-            Signals.Dispatch<UISignals.RefreshQuickLoadListView>(); // todo: refresh current view instead of quick load. ie.tag view
+            Signals.Dispatch<UISignals.RefreshView>();
             DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
@@ -90,7 +90,7 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
-            Signals.Dispatch<UISignals.RefreshQuickLoadListView>(); // todo: refresh current view instead of quick load. ie.tag view
+            Signals.Dispatch<UISignals.RefreshView>();
             DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
         }
     }

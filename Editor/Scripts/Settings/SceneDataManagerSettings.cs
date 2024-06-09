@@ -52,7 +52,7 @@ namespace Ludwell.Scene.Editor
 
                     var path = AssetDatabase.GetAssetPath(sceneData);
                     element.IsOutsideAssetsFolder = !path.Contains("Assets/");
-                    Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
+                    Signals.Dispatch<UISignals.RefreshView>();
                 }
                 
                 DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();

@@ -14,11 +14,9 @@ namespace Ludwell.Scene.Editor
         public TagSubscriberWithTags TagSubscriberWithTags { get; }
     }
 
-    public class TagsManagerController : IViewable
+    public class TagsManagerController : AViewable
     {
         private const string TagElementsContainerName = "tag-elements-container";
-        
-        private readonly ViewManager _viewManager;
 
         private readonly VisualElement _root;
         private readonly TagsManagerView _view;
@@ -30,13 +28,10 @@ namespace Ludwell.Scene.Editor
 
         private TagsManagerElementController _previousTarget;
 
-        public TagsManagerController(VisualElement parent)
+        public TagsManagerController(VisualElement parent) : base(parent)
         {
             _root = parent.Q(nameof(TagsManagerView));
             _view = new TagsManagerView(_root);
-
-            _viewManager = _root.Root().Q<ViewManager>();
-            _viewManager.Add(this);
 
             _tagsShelfController = new TagsShelfController(_root, _ => ReturnToPreviousView());
 
@@ -59,16 +54,20 @@ namespace Ludwell.Scene.Editor
             _tagContainer.OnRemove -= RemoveInvalidTagElement;
         }
 
-        public void Show(ViewArgs args)
+        protected override void Show(ViewArgs args)
         {
+            Signals.Add<UISignals.RefreshView>(_tagsShelfController.Populate);
+            Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             var tagsManagerViewArgs = (TagsManagerViewArgs)args;
             _view.Show();
             _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.Name);
             BuildTagsController(tagsManagerViewArgs.TagSubscriberWithTags);
         }
 
-        public void Hide()
+        protected override void Hide()
         {
+            Signals.Remove<UISignals.RefreshView>(_tagsShelfController.Populate);
+            Signals.Remove<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             _view.Hide();
         }
 
@@ -109,11 +108,6 @@ namespace Ludwell.Scene.Editor
         private void SetViewReturnIconTooltip()
         {
             _tagsShelfController.OverrideIconTooltip("Return");
-        }
-
-        private void ReturnToPreviousView()
-        {
-            _viewManager.TransitionToPreviousView();
         }
 
         private void InitializeReturnEvent()

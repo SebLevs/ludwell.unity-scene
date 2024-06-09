@@ -2,10 +2,11 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataController : IViewable
+    public class SceneDataController : AViewable
     {
         private const string StartingSceneObjectFieldName = "launcher__starting-scene";
         private const string LoadSceneButtonName = "button__load";
@@ -25,7 +26,7 @@ namespace Ludwell.Scene.Editor
         private DualStateButton _loadSceneButton;
         private ButtonWithIcon _openSceneButton;
 
-        public SceneDataController(VisualElement parent)
+        public SceneDataController(VisualElement parent) : base(parent)
         {
             _root = parent.Q(nameof(SceneDataView));
             _view = new SceneDataView(_root, UpdateStartingScene, UpdatePersistentScene, UpdateLoadingScene);
@@ -38,17 +39,16 @@ namespace Ludwell.Scene.Editor
             CloseFoldouts();
 
             _quickLoadController = new QuickLoadController(_root);
-
-            _viewManager = parent.Root().Q<ViewManager>();
-            _viewManager.Add(this);
+            OnShow = AddRefreshViewSignal;
+            OnHide = RemoveRefreshViewSignal;
         }
 
-        public void Show(ViewArgs args)
+        protected override void Show(ViewArgs args)
         {
             _view.Show();
         }
 
-        public void Hide()
+        protected override void Hide()
         {
             _view.Hide();
         }
@@ -131,6 +131,16 @@ namespace Ludwell.Scene.Editor
         {
             _root.Q<Foldout>(FoldoutStartingSceneName).value = false;
             _root.Q<Foldout>(FoldoutCoreScenesName).value = false;
+        }
+
+        private void AddRefreshViewSignal()
+        {
+            Signals.Add<UISignals.RefreshView>(_quickLoadController.ForceRebuildListView);
+        }
+
+        private void RemoveRefreshViewSignal()
+        {
+            Signals.Remove<UISignals.RefreshView>(_quickLoadController.ForceRebuildListView);
         }
     }
 }

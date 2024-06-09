@@ -23,8 +23,13 @@ namespace Ludwell.Scene.Editor
 
             _tagsManagerController = new TagsManagerController(rootVisualElement);
             _sceneDataController = new SceneDataController(rootVisualElement);
-            
+
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneDataController>();
+        }
+
+        private void OnDestroy()
+        {
+            Signals.Clear<UISignals.RefreshView>();
         }
     }
 }

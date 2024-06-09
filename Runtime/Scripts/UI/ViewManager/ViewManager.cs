@@ -4,17 +4,16 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
 {
-    
     public class ViewManager : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<ViewManager>
         {
         }
-        
-        private readonly Dictionary<Type, IViewable> _views = new();
 
-        private Stack<IViewable> _previousViews = new();
-        private IViewable _currentView;
+        private readonly Dictionary<Type, AViewable> _views = new();
+
+        private Stack<AViewable> _previousViews = new();
+        private AViewable _currentView;
 
         public void Reset()
         {
@@ -22,28 +21,28 @@ namespace Ludwell.Scene
             _views.Clear();
         }
 
-        public void Add(IViewable view)
+        public void Add(AViewable view)
         {
             _views.Add(view.GetType(), view);
         }
 
-        public void Remove(IViewable view)
+        public void Remove(AViewable view)
         {
             _views.Remove(view.GetType());
         }
 
-        public void TransitionToFirstViewOfType<T>(ViewArgs showArgs = null) where T : IViewable
+        public void TransitionToFirstViewOfType<T>(ViewArgs showArgs = null) where T : AViewable
         {
             if (_currentView != null && _currentView.GetType() == typeof(T)) return;
 
             if (_currentView != null)
-            { 
+            {
                 _previousViews.Push(_currentView);
             }
-            
-            _currentView?.Hide();
+
+            _currentView?.HideView();
             _currentView = _views[typeof(T)];
-            _currentView.Show(showArgs);
+            _currentView.ShowView(showArgs);
         }
 
         public void TransitionToPreviousView(ViewArgs showArgs = null)
@@ -51,9 +50,9 @@ namespace Ludwell.Scene
             if (_previousViews.Count == 0) return;
 
             var previousView = _previousViews.Pop();
-            _currentView.Hide();
+            _currentView.HideView();
             _currentView = previousView;
-            previousView.Show(showArgs);
+            previousView.ShowView(showArgs);
         }
     }
 }
