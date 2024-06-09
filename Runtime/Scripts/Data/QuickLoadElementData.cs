@@ -14,8 +14,8 @@ namespace Ludwell.Scene
         {
             if (obj == null) return 1;
 
-            var otherAsType = obj as QuickLoadElementData;
-            return string.Compare(Name, otherAsType.Name, StringComparison.Ordinal);
+            var otherAsType = (QuickLoadElementData)obj;
+            return string.Compare(Name, otherAsType.Name, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
