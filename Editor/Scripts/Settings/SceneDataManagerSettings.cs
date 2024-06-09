@@ -31,6 +31,9 @@ namespace Ludwell.Scene.Editor
                 coreScenes.LoadingScene = null;
                 coreScenes.StartingScene = null;
                 coreScenes.PersistentScene = null;
+                
+                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                AssetDatabase.Refresh();
             }
 
             GUILayout.Space(2);
@@ -51,6 +54,9 @@ namespace Ludwell.Scene.Editor
                     element.IsOutsideAssetsFolder = !path.Contains("Assets/");
                     Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
                 }
+                
+                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                AssetDatabase.Refresh();
             }
 
             GUILayout.Space(2);
