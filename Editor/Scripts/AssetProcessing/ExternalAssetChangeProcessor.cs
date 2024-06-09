@@ -3,17 +3,10 @@ using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    // todo: this class is trash, find better solution to handle scriptable object changes outside of unity
-    [InitializeOnLoad]
+    // todo: this class is trash, find better solution to handle external modifications such as git discard
     public class ExternalAssetChangeProcessor : AssetPostprocessor
     {
-        private static bool _isHandlingBookKeeping;
-
-        static ExternalAssetChangeProcessor()
-        {
-            SolveTags();
-            SolveQuickLoadElements();
-        }
+        public static bool IsImportCauseInternal;
 
         private static void OnPostprocessAllAssets(
             string[] importedAssets,
@@ -21,10 +14,13 @@ namespace Ludwell.Scene.Editor
             string[] movedAssets,
             string[] movedFromAssetPaths)
         {
+            if (IsImportCauseInternal)
+            {
+                IsImportCauseInternal = false;
+                return;
+            }
+            
             if (importedAssets.Length <= 0) return;
-            if (_isHandlingBookKeeping) return;
-
-            _isHandlingBookKeeping = true;
 
             foreach (var asset in importedAssets)
             {
@@ -35,21 +31,17 @@ namespace Ludwell.Scene.Editor
                 {
                     SolveQuickLoadElements();
                 }
-                else if (importedAsset is not TagContainer)
+                else if (importedAsset is TagContainer)
                 {
                     SolveTags();
                 }
             }
-
-            _isHandlingBookKeeping = false;
         }
 
         public static void SolveQuickLoadElements()
         {
             var quickLoadElements = DataFetcher.GetQuickLoadElements().Elements;
             var tags = DataFetcher.GetTagContainer().Tags;
-
-            Debug.LogError("QuickLoadElements");
 
             if (quickLoadElements.Count == 0)
             {
@@ -70,15 +62,14 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
-            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>(); // todo: refresh current view instead of quick load. ie.tag view
+            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
         public static void SolveTags()
         {
             var quickLoadElements = DataFetcher.GetQuickLoadElements().Elements;
             var tags = DataFetcher.GetTagContainer().Tags;
-
-            Debug.LogError("TagContainer");
 
             if (tags.Count == 0)
             {
@@ -99,7 +90,8 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
-            Signals.Dispatch<UISignals.RefreshQuickLoadListView>();
+            Signals.Dispatch<UISignals.RefreshQuickLoadListView>(); // todo: refresh current view instead of quick load. ie.tag view
+            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
         }
     }
 }

@@ -33,9 +33,8 @@ namespace Ludwell.Scene.Editor
             string[] movedFromAssetPaths)
         {
             if (!TryHandleMove(movedAssets, movedFromAssetPaths) && !TryHandleImport(importedAssets)) return;
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            
+            DataFetcher.SaveQuickLoadElementsDelayed();
         }
 
         private static bool TryHandleMove(IReadOnlyList<string> movedAssets, IReadOnlyList<string> movedFromAssetPaths)
@@ -104,7 +103,6 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
-            DataFetcher.SaveQuickLoadElementsDelayed();
             _isHandlingImport = false;
 
             return shouldSave;

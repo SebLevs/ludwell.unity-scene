@@ -36,6 +36,7 @@ namespace Ludwell.Scene.Editor
 
         public static void SaveCoreScenes()
         {
+            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
             CacheCoreScenes();
             EditorUtility.SetDirty(_coreScenes);
             AssetDatabase.SaveAssetIfDirty(_coreScenes);
@@ -49,9 +50,11 @@ namespace Ludwell.Scene.Editor
 
         public static void SaveQuickLoadElements()
         {
+            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
             CacheQuickLoadData();
             EditorUtility.SetDirty(_quickLoadElements);
             AssetDatabase.SaveAssetIfDirty(_quickLoadElements);
+            AssetDatabase.Refresh();
         }
 
         public static void SaveQuickLoadElementsDelayed()
@@ -62,6 +65,7 @@ namespace Ludwell.Scene.Editor
 
         public static void SaveTagContainer()
         {
+            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
             CacheTagContainer();
             EditorUtility.SetDirty(_tagContainer);
             AssetDatabase.SaveAssetIfDirty(_tagContainer);
