@@ -33,7 +33,7 @@ namespace Ludwell.Scene.Editor
             string[] movedFromAssetPaths)
         {
             if (!TryHandleMove(movedAssets, movedFromAssetPaths) && !TryHandleImport(importedAssets)) return;
-            
+
             DataFetcher.SaveQuickLoadElementsDelayed();
         }
 

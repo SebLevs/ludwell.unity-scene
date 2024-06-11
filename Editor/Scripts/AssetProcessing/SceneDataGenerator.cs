@@ -65,7 +65,7 @@ namespace Ludwell.Scene.Editor
         public static void GenerateSceneData()
         {
             var settings =
-                Resources.Load<SceneDataManagerSettings>(Path.Combine("Scriptables", nameof(SceneDataManagerSettings)));
+                (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings));
 
             if (!settings.GenerateSceneData) return;
 

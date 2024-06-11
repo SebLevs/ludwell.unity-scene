@@ -23,7 +23,7 @@ namespace Ludwell.Scene.Editor
             var otherSpecifier = assetPath.EndsWith(".unity") ? ".asset" : ".unity";
             AssetDatabase.DeleteAsset(Path.Combine(directoryName, assetName + otherSpecifier));
             AssetDatabase.DeleteAsset(assetPath);
-            
+
             _isHandling = false;
 
             return AssetDeleteResult.DidDelete;

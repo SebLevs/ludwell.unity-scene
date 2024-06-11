@@ -1,6 +1,4 @@
-using System.IO;
 using UnityEditor;
-using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
@@ -88,7 +86,7 @@ namespace Ludwell.Scene.Editor
         {
             if (!_coreScenes)
             {
-                _coreScenes = Resources.Load<CoreScenes>(Path.Combine("Scriptables", nameof(CoreScenes)));
+                _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes));
             }
         }
 
@@ -96,8 +94,7 @@ namespace Ludwell.Scene.Editor
         {
             if (!_quickLoadElements)
             {
-                _quickLoadElements =
-                    Resources.Load<QuickLoadElements>(Path.Combine("Scriptables", nameof(QuickLoadElements)));
+                _quickLoadElements = (QuickLoadElements)ResourcesSolver.EnsureAssetExistence(typeof(QuickLoadElements));
             }
         }
 
@@ -105,7 +102,7 @@ namespace Ludwell.Scene.Editor
         {
             if (!_tagContainer)
             {
-                _tagContainer = Resources.Load<TagContainer>(Path.Combine("Scriptables", nameof(TagContainer)));
+                _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer));
             }
         }
     }
