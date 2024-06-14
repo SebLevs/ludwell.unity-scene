@@ -25,7 +25,7 @@ namespace Ludwell.Scene.Editor
             "Resources"
         };
 
-        private static readonly Dictionary<string, (Type, string[])> ScriptableAssets = new()
+        public static readonly Dictionary<string, (Type, string[])> ScriptableAssets = new()
         {
             { nameof(SceneDataManagerSettings), (typeof(SceneDataManagerSettings), EditorPath) },
             { nameof(CoreScenes), (typeof(CoreScenes), RuntimePath) },
@@ -46,15 +46,23 @@ namespace Ludwell.Scene.Editor
         public static ScriptableObject EnsureAssetExistence(Type type)
         {
             if (!ScriptableAssets.TryGetValue(type.Name, out var tuple)) return null;
+
             var assetPath = Path.Combine(TryCreatePath(tuple.Item2), type.Name + ".asset");
-
             var existsAtPath = AssetDatabase.LoadAssetAtPath(assetPath, type);
-
             if (existsAtPath) return (ScriptableObject)existsAtPath;
+
+            var objects = Resources.FindObjectsOfTypeAll(type);
+            if (objects.Length > 0) return (ScriptableObject)objects[0];
+
+            // todo: This is heavy. Investigate race condition where assets not in memory for Resources. above.
+            var foundObject = AssetDatabase.FindAssets($"t:{type.Name}");
+            if (foundObject != null)
+            {
+                return AssetDatabase.LoadAssetAtPath<ScriptableObject>(AssetDatabase.GUIDToAssetPath(foundObject[0]));
+            }
 
             var scriptable = ScriptableObject.CreateInstance(type);
             AssetDatabase.CreateAsset(scriptable, assetPath);
-
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
@@ -89,36 +97,14 @@ namespace Ludwell.Scene.Editor
             string[] movedFromAssetPaths)
         {
             if (_isHandlingMove) return;
-            if (HandleDeletedAssets(deletedAssets)) return;
             HandleMovedAssets(movedAssets, movedFromAssetPaths);
         }
 
-        private static bool HandleDeletedAssets(string[] deletedAssets)
+        private static void HandleMovedAssets(string[] movedAssets, string[] movedFromAssetPaths)
         {
-            if (deletedAssets.Length == 0) return false;
+            if (movedAssets.Length == 0) return;
 
-            if (_isHandlingMove) return false;
-            _isHandlingMove = true;
-
-            foreach (var deletedAsset in deletedAssets)
-            {
-                if (!deletedAsset.EndsWith(".asset")) continue;
-
-                var fileName = Path.GetFileNameWithoutExtension(deletedAsset);
-                if (!ScriptableAssets.ContainsKey(fileName)) return false;
-                Debug.LogWarning($"Suspicious action | Asset is required | {fileName}");
-                EnsureAssetExistence(ScriptableAssets[fileName].Item1);
-            }
-
-            _isHandlingMove = false;
-            return true;
-        }
-
-        private static bool HandleMovedAssets(string[] movedAssets, string[] movedFromAssetPaths)
-        {
-            if (movedAssets.Length == 0) return false;
-
-            if (_isHandlingMove) return false;
+            if (_isHandlingMove) return;
             _isHandlingMove = true;
 
             for (var index = 0; index < movedAssets.Length; index++)
@@ -126,15 +112,61 @@ namespace Ludwell.Scene.Editor
                 var asset = movedAssets[index];
                 if (!asset.EndsWith(".asset")) continue;
 
-                var fileName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
-                if (!ScriptableAssets.ContainsKey(fileName)) continue;
+                var previousFileName = Path.GetFileNameWithoutExtension(movedFromAssetPaths[index]);
+                if (!ScriptableAssets.ContainsKey(previousFileName)) continue;
 
-                Debug.LogWarning($"Suspicious action | Asset must remain at its initial path | {fileName}");
+                var newFileName = Path.GetFileNameWithoutExtension(asset);
+                if (newFileName != previousFileName)
+                {
+                    Debug.LogWarning(
+                        $"Suspicious action | Resource asset must follow naming convention | {newFileName} > {previousFileName}");
+                    AssetDatabase.RenameAsset(asset, previousFileName);
+                    continue;
+                }
+
+                if (asset.Contains("Resources")) continue;
+                Debug.LogWarning(
+                    $"Suspicious action | Resource asset must remain in a Resources folder | {previousFileName}");
                 AssetDatabase.MoveAsset(asset, movedFromAssetPaths[index]);
-                AssetDatabase.DeleteAsset(asset);
             }
 
-            return _isHandlingMove = false;
+            _isHandlingMove = false;
+        }
+    }
+
+    public class ResourcesModificationProcessor : AssetModificationProcessor
+    {
+        private static AssetDeleteResult OnWillDeleteAsset(string assetPath, RemoveAssetOptions options)
+        {
+            if (assetPath.EndsWith(".asset"))
+            {
+                var fileName = Path.GetFileNameWithoutExtension(assetPath);
+                if (!ResourcesSolver.ScriptableAssets.ContainsKey(fileName))
+                {
+                    return AssetDeleteResult.DidNotDelete;
+                }
+
+                Debug.LogWarning($"Suspicious action | Asset is required | {fileName}");
+                return AssetDeleteResult.DidDelete;
+            }
+
+            var guids = AssetDatabase.FindAssets($"t:{nameof(ScriptableObject)}", new[] { assetPath });
+
+            if (guids.Length == 0)
+            {
+                return AssetDeleteResult.DidNotDelete;
+            }
+
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var fileName = Path.GetFileNameWithoutExtension(path);
+                if (!ResourcesSolver.ScriptableAssets.ContainsKey(fileName)) continue;
+                Debug.LogWarning($"Suspicious action | Asset is required | {fileName}");
+                return AssetDeleteResult.DidDelete;
+            }
+
+            return AssetDeleteResult.DidNotDelete;
         }
     }
 }
