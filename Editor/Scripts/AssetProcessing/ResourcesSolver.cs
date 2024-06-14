@@ -33,8 +33,6 @@ namespace Ludwell.Scene.Editor
             { nameof(TagContainer), (typeof(TagContainer), EditorPath) }
         };
 
-        private static bool _isHandlingMove;
-
         static ResourcesSolver()
         {
             ResourcesFetcher.GetSceneDataManagerSettings();
@@ -102,9 +100,6 @@ namespace Ludwell.Scene.Editor
         {
             if (movedAssets.Length == 0) return;
 
-            if (_isHandlingMove) return;
-            _isHandlingMove = true;
-
             for (var index = 0; index < movedAssets.Length; index++)
             {
                 var asset = movedAssets[index];
@@ -127,8 +122,6 @@ namespace Ludwell.Scene.Editor
                     $"Suspicious action | Resource asset must remain in a Resources folder | {previousFileName}");
                 AssetDatabase.MoveAsset(asset, movedFromAssetPaths[index]);
             }
-
-            _isHandlingMove = false;
         }
     }
 
