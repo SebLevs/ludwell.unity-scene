@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Ludwell.Scene
 {
-    // [CreateAssetMenu(fileName = "QuickLoadData", menuName = "SceneDataManager/QuickLoadData")]
     [Serializable]
     public class QuickLoadElements : ScriptableObject
     {
