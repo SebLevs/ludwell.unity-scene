@@ -99,7 +99,7 @@ namespace Ludwell.Scene.Editor
         
         private void SaveQuickLoadElements(MouseUpEvent evt)
         {
-            DataFetcher.SaveQuickLoadElementsDelayed();
+            ResourcesFetcher.SaveQuickLoadElementsDelayed();
         }
         
         private void LoadScene()

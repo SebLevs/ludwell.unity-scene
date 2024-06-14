@@ -1,11 +1,11 @@
-using System.IO;
 using UnityEditor;
-using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    public static class DataFetcher
+    public static class ResourcesFetcher
     {
+        private static SceneDataManagerSettings _settings;
+        
         private static CoreScenes _coreScenes;
 
         private static QuickLoadElements _quickLoadElements;
@@ -16,6 +16,13 @@ namespace Ludwell.Scene.Editor
 
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
 
+        public static SceneDataManagerSettings GetSceneDataManagerSettings()
+        {
+            if (_settings) return _settings;
+            _settings = (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings));
+            return _settings;
+        }
+        
         public static CoreScenes GetCoreScenes()
         {
             CacheCoreScenes();
@@ -86,27 +93,20 @@ namespace Ludwell.Scene.Editor
 
         private static void CacheCoreScenes()
         {
-            if (!_coreScenes)
-            {
-                _coreScenes = Resources.Load<CoreScenes>(Path.Combine("Scriptables", nameof(CoreScenes)));
-            }
+            if (_coreScenes) return;
+            _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes));
         }
 
         private static void CacheQuickLoadData()
         {
-            if (!_quickLoadElements)
-            {
-                _quickLoadElements =
-                    Resources.Load<QuickLoadElements>(Path.Combine("Scriptables", nameof(QuickLoadElements)));
-            }
+            if (_quickLoadElements) return;
+            _quickLoadElements = (QuickLoadElements)ResourcesSolver.EnsureAssetExistence(typeof(QuickLoadElements));
         }
 
         private static void CacheTagContainer()
         {
-            if (!_tagContainer)
-            {
-                _tagContainer = Resources.Load<TagContainer>(Path.Combine("Scriptables", nameof(TagContainer)));
-            }
+            if (_tagContainer) return;
+            _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer));
         }
     }
 }

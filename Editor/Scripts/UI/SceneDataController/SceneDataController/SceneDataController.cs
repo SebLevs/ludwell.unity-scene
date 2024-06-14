@@ -34,7 +34,7 @@ namespace Ludwell.Scene.Editor
             _startingSceneObjectField = _root.Q(StartingSceneObjectFieldName).Q<ObjectField>();
             InitializeLoadButton();
             InitializeOpenButton();
-            SetButtonsEnable(DataFetcher.GetCoreScenes().StartingScene);
+            SetButtonsEnable(ResourcesFetcher.GetCoreScenes().StartingScene);
 
             CloseFoldouts();
 
@@ -57,9 +57,9 @@ namespace Ludwell.Scene.Editor
         {
             SetButtonsEnable(evt.newValue != null);
 
-            var coreScenes = DataFetcher.GetCoreScenes();
+            var coreScenes = ResourcesFetcher.GetCoreScenes();
             coreScenes.StartingScene = evt.newValue as SceneData;
-            DataFetcher.SaveCoreScenes();
+            ResourcesFetcher.SaveCoreScenes();
         }
 
         private void SetButtonsEnable(bool state)
@@ -70,16 +70,16 @@ namespace Ludwell.Scene.Editor
 
         private void UpdatePersistentScene(ChangeEvent<Object> evt)
         {
-            var coreScenes = DataFetcher.GetCoreScenes();
+            var coreScenes = ResourcesFetcher.GetCoreScenes();
             coreScenes.PersistentScene = evt.newValue as SceneData;
-            DataFetcher.SaveCoreScenes();
+            ResourcesFetcher.SaveCoreScenes();
         }
 
         private void UpdateLoadingScene(ChangeEvent<Object> evt)
         {
-            var coreScenes = DataFetcher.GetCoreScenes();
+            var coreScenes = ResourcesFetcher.GetCoreScenes();
             coreScenes.LoadingScene = evt.newValue as SceneData;
-            DataFetcher.SaveCoreScenes();
+            ResourcesFetcher.SaveCoreScenes();
         }
 
         private void InitializeLoadButton()

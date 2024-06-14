@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Ludwell.Scene
 {
-    // [CreateAssetMenu(fileName = "TagContainer", menuName = "SceneDataManager/TagContainer")]
     [Serializable]
     public class TagContainer : ScriptableObject
     {
