@@ -27,7 +27,7 @@ namespace Ludwell.Scene.Editor
             _listView = root.Q<ListView>();
             _dropdownSearchField = root.Q<DropdownSearchField>();
 
-            _quickLoadElements = DataFetcher.GetQuickLoadElements();
+            _quickLoadElements = ResourcesFetcher.GetQuickLoadElements();
 
             InitializeListViewHandler(root.Q<ListView>());
             InitializeSearchField(root, root.Q<DropdownSearchField>());
@@ -69,7 +69,7 @@ namespace Ludwell.Scene.Editor
                 item.SetIsOpen(false);
             }
 
-            DataFetcher.SaveQuickLoadElementsDelayed();
+            ResourcesFetcher.SaveQuickLoadElementsDelayed();
         }
 
         private void InitializeListViewHandler(ListView listView)
@@ -84,7 +84,7 @@ namespace Ludwell.Scene.Editor
                     element.RemoveFromAllTags();
                 }
 
-                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             };
         }
 

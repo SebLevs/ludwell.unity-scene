@@ -37,10 +37,10 @@ namespace Ludwell.Scene.Editor
 
         static ResourcesSolver()
         {
-            EnsureAssetExistence(typeof(SceneDataManagerSettings));
-            EnsureAssetExistence(typeof(QuickLoadElements));
-            EnsureAssetExistence(typeof(TagContainer));
-            EnsureAssetExistence(typeof(CoreScenes));
+            ResourcesFetcher.GetSceneDataManagerSettings();
+            ResourcesFetcher.GetQuickLoadElements();
+            ResourcesFetcher.GetTagContainer();
+            ResourcesFetcher.GetCoreScenes();
         }
 
         public static ScriptableObject EnsureAssetExistence(Type type)
@@ -54,7 +54,6 @@ namespace Ludwell.Scene.Editor
             var objects = Resources.FindObjectsOfTypeAll(type);
             if (objects.Length > 0) return (ScriptableObject)objects[0];
 
-            // todo: This is heavy. Investigate race condition where assets not in memory for Resources. above.
             var foundObject = AssetDatabase.FindAssets($"t:{type.Name}");
             if (foundObject != null)
             {
@@ -96,7 +95,6 @@ namespace Ludwell.Scene.Editor
             string[] movedAssets,
             string[] movedFromAssetPaths)
         {
-            if (_isHandlingMove) return;
             HandleMovedAssets(movedAssets, movedFromAssetPaths);
         }
 

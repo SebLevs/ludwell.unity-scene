@@ -7,6 +7,7 @@ namespace Ludwell.Scene.Editor
     public class SceneDataManagerSettings : ScriptableObject
     {
         [HideInInspector] public bool GenerateSceneData = true;
+        [HideInInspector] public bool GenerateResources = true;
     }
 
     [CustomEditor(typeof(SceneDataManagerSettings))]
@@ -25,14 +26,14 @@ namespace Ludwell.Scene.Editor
         {
             if (GUILayout.Button("Clear"))
             {
-                DataFetcher.GetTagContainer().Tags.Clear();
-                DataFetcher.GetQuickLoadElements().Elements.Clear();
-                var coreScenes = DataFetcher.GetCoreScenes();
+                ResourcesFetcher.GetTagContainer().Tags.Clear();
+                ResourcesFetcher.GetQuickLoadElements().Elements.Clear();
+                var coreScenes = ResourcesFetcher.GetCoreScenes();
                 coreScenes.LoadingScene = null;
                 coreScenes.StartingScene = null;
                 coreScenes.PersistentScene = null;
                 
-                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
                 AssetDatabase.Refresh();
             }
 
@@ -40,22 +41,22 @@ namespace Ludwell.Scene.Editor
 
             if (GUILayout.Button("Repopulate Quick Load"))
             {
-                DataFetcher.GetTagContainer().Tags.Clear();
-                DataFetcher.GetQuickLoadElements().Elements.Clear();
+                ResourcesFetcher.GetTagContainer().Tags.Clear();
+                ResourcesFetcher.GetQuickLoadElements().Elements.Clear();
 
                 var assetGuids = AssetDatabase.FindAssets("t:SceneData");
                 foreach (var guid in assetGuids)
                 {
                     var assetPath = AssetDatabase.GUIDToAssetPath(guid);
                     var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(assetPath);
-                    var element = DataFetcher.GetQuickLoadElements().Add(sceneData);
+                    var element = ResourcesFetcher.GetQuickLoadElements().Add(sceneData);
 
                     var path = AssetDatabase.GetAssetPath(sceneData);
                     element.IsOutsideAssetsFolder = !path.Contains("Assets/");
                     Signals.Dispatch<UISignals.RefreshView>();
                 }
                 
-                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
                 AssetDatabase.Refresh();
             }
 

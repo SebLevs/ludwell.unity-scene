@@ -35,7 +35,7 @@ namespace Ludwell.Scene.Editor
 
             _tagsShelfController = new TagsShelfController(_root, _ => ReturnToPreviousView());
 
-            _tagContainer = DataFetcher.GetTagContainer();
+            _tagContainer = ResourcesFetcher.GetTagContainer();
 
             SetViewReturnIconTooltip();
 
@@ -101,7 +101,7 @@ namespace Ludwell.Scene.Editor
         private void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             RemoveTagFromShelf(tag);
-            DataFetcher.SaveTagContainer();
+            ResourcesFetcher.SaveTagContainer();
             _listViewHandler.ForceRebuild();
         }
 
@@ -130,7 +130,7 @@ namespace Ludwell.Scene.Editor
             _listViewHandler =
                 new ListViewHandler<TagsManagerElementController, TagWithSubscribers>(
                     _root.Q<ListView>(TagElementsContainerName),
-                    DataFetcher.GetTagContainer().Tags);
+                    ResourcesFetcher.GetTagContainer().Tags);
 
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
 
@@ -149,7 +149,7 @@ namespace Ludwell.Scene.Editor
                     RemoveTagFromAllSubscribers(tag);
                 }
 
-                DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             };
         }
 
@@ -229,7 +229,7 @@ namespace Ludwell.Scene.Editor
         private void SortTags()
         {
             _tagContainer.Tags.Sort();
-            DataFetcher.SaveTagContainerDelayed();
+            ResourcesFetcher.SaveTagContainerDelayed();
             _listViewHandler.ForceRebuild();
         }
     }

@@ -26,7 +26,7 @@ namespace Ludwell.Scene.Editor
             {
                 Debug.LogWarning($"Suspicious action | Path was outside the Assets folder | {absolutePath}");
 
-                var quickLoadElements = DataFetcher.GetQuickLoadElements();
+                var quickLoadElements = ResourcesFetcher.GetQuickLoadElements();
                 for (var index = quickLoadElements.Elements.Count - 1; index >= 0; index--)
                 {
                     var sceneDataAtIndex = AssetDatabase.GetAssetPath(quickLoadElements.Elements[index].SceneData);
@@ -40,7 +40,7 @@ namespace Ludwell.Scene.Editor
                     if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    DataFetcher.GetQuickLoadElements().Remove(quickLoadElements.Elements[index].SceneData);
+                    ResourcesFetcher.GetQuickLoadElements().Remove(quickLoadElements.Elements[index].SceneData);
                 }
             }
             else
@@ -48,7 +48,7 @@ namespace Ludwell.Scene.Editor
                 var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
                 if (sceneData)
                 {
-                    DataFetcher.GetQuickLoadElements().Remove(sceneData);
+                    ResourcesFetcher.GetQuickLoadElements().Remove(sceneData);
                 }
             }
 
@@ -68,6 +68,7 @@ namespace Ludwell.Scene.Editor
                 (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings));
 
             if (!settings.GenerateSceneData) return;
+            Debug.LogError("GENERATE SCENE DATA");
 
             List<string> paths = new();
 
@@ -88,7 +89,7 @@ namespace Ludwell.Scene.Editor
                 shouldSave = true;
                 sceneData = ScriptableObject.CreateInstance<SceneData>();
                 AssetDatabase.CreateAsset(sceneData, path);
-                DataFetcher.GetQuickLoadElements().Add(sceneData);
+                ResourcesFetcher.GetQuickLoadElements().Add(sceneData);
             }
 
             settings.GenerateSceneData = false;
@@ -96,7 +97,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.SaveAssetIfDirty(settings);
 
             if (!shouldSave) return;
-            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

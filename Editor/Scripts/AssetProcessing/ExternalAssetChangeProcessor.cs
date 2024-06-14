@@ -40,8 +40,8 @@ namespace Ludwell.Scene.Editor
 
         public static void SolveQuickLoadElements()
         {
-            var quickLoadElements = DataFetcher.GetQuickLoadElements().Elements;
-            var tags = DataFetcher.GetTagContainer().Tags;
+            var quickLoadElements = ResourcesFetcher.GetQuickLoadElements().Elements;
+            var tags = ResourcesFetcher.GetTagContainer().Tags;
 
             if (quickLoadElements.Count == 0)
             {
@@ -63,13 +63,13 @@ namespace Ludwell.Scene.Editor
             }
 
             Signals.Dispatch<UISignals.RefreshView>();
-            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
         public static void SolveTags()
         {
-            var quickLoadElements = DataFetcher.GetQuickLoadElements().Elements;
-            var tags = DataFetcher.GetTagContainer().Tags;
+            var quickLoadElements = ResourcesFetcher.GetQuickLoadElements().Elements;
+            var tags = ResourcesFetcher.GetTagContainer().Tags;
 
             if (tags.Count == 0)
             {
@@ -91,7 +91,7 @@ namespace Ludwell.Scene.Editor
             }
 
             Signals.Dispatch<UISignals.RefreshView>();
-            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
         }
     }
 }

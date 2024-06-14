@@ -22,8 +22,8 @@ namespace Ludwell.Scene.Editor
                 _isHandling = false;
                 return AssetDeleteResult.DidNotDelete;
             }
-            DataFetcher.GetQuickLoadElements().Remove(sceneData);
-            DataFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesFetcher.GetQuickLoadElements().Remove(sceneData);
+            ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
 
             var otherSpecifier = assetPath.EndsWith(".unity") ? ".asset" : ".unity";
             AssetDatabase.DeleteAsset(Path.Combine(directoryName, assetName + otherSpecifier));
