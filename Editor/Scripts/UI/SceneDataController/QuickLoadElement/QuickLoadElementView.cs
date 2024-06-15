@@ -25,16 +25,19 @@ namespace Ludwell.Scene.Editor
         private const string LoadSceneButtonName = "button__load";
         private const string OpenSceneButtonName = "button__open";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
+        
+        private const string TextFieldUnselectedClass = "scene-data__unselected";
+        private const string TextFieldSelectedClass = "scene-data__selected";
 
         private Foldout _foldout;
-        private Button _sceneDataName;
+        private TextField _sceneDataTextField;
         private VisualElement _iconAssetOutsideAssets;
 
-        private QuickLoadElementController _controller;
-
+        private readonly QuickLoadElementController _controller;
+        
         public void SetIsOpen(bool value) => _foldout.value = value;
 
-        public void SetSceneData(SceneData sceneData) => _sceneDataName.text = sceneData.name;
+        public void SetSceneData(SceneData sceneData) => _sceneDataTextField.value = sceneData.name;
 
         public void SetIconAssetOutsideAssets(bool state) =>
             _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
@@ -46,26 +49,43 @@ namespace Ludwell.Scene.Editor
 
             _controller = new QuickLoadElementController(this);
 
-            SetReferences();
-            InitializeAndReferenceFoldoutTextField();
-            RegisterStyleEvents();
+            InitializeFoldout();
+            InitializeFoldoutTextField();
 
             InitializeLoadButton();
             InitializeOpenButton();
         }
 
-        private void SetReferences()
+        private void InitializeFoldout()
         {
             _foldout = this.Q<Foldout>(FoldoutName);
+            
+            _foldout.RegisterValueChangedCallback(evt =>
+            {
+                var borderTopWidth = evt.newValue ? 1 : 0;
+                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
+            });
         }
 
-        private void InitializeAndReferenceFoldoutTextField()
+        private void InitializeFoldoutTextField()
         {
             var headerContent = Resources.Load<VisualTreeAsset>(HeaderContentUxmlPath).CloneTree().ElementAt(0);
             headerContent.AddStyleFromUss(HeaderContentUssPath);
             this.Q<Toggle>().Children().First().Add(headerContent);
-            _sceneDataName = this.Q<Button>(SceneDataName);
+            _sceneDataTextField = this.Q<TextField>(SceneDataName);
             _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
+            
+            _sceneDataTextField.RegisterCallback<ClickEvent>(evt =>
+            {
+                _sceneDataTextField.RemoveFromClassList(TextFieldUnselectedClass);
+                _sceneDataTextField.AddToClassList(TextFieldSelectedClass);
+            });
+            
+            _sceneDataTextField.RegisterCallback<BlurEvent>(evt =>
+            {
+                _sceneDataTextField.RemoveFromClassList(TextFieldSelectedClass);
+                _sceneDataTextField.AddToClassList(TextFieldUnselectedClass);
+            });
         }
 
         public void CacheData(QuickLoadElementData data)
@@ -76,8 +96,7 @@ namespace Ludwell.Scene.Editor
         public void BindElementToCachedData()
         {
             _foldout.RegisterValueChangedCallback(_controller.UpdateIsOpen);
-            _sceneDataName.RegisterValueChangedCallback(_controller.UpdateName);
-            _sceneDataName.clicked += _controller.SelectSceneDataInProject;
+            _sceneDataTextField.RegisterValueChangedCallback(UpdateAndSaveAssetName);
         }
 
         public void SetElementFromCachedData()
@@ -88,7 +107,7 @@ namespace Ludwell.Scene.Editor
 
             _controller.UpdateTagsContainer();
         }
-
+        
         private void InitializeLoadButton()
         {
             var loadSceneButton = this.Q<DualStateButton>(LoadSceneButtonName);
@@ -101,13 +120,16 @@ namespace Ludwell.Scene.Editor
             _controller.InitializeOpenButton(openSceneButton);
         }
 
-        private void RegisterStyleEvents()
+        private void UpdateAndSaveAssetName(ChangeEvent<string> evt)
         {
-            _foldout.RegisterValueChangedCallback(evt =>
-            {
-                var borderTopWidth = evt.newValue ? 1 : 0;
-                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
-            });
+            _controller.UpdateAndSaveAssetName(evt.newValue);
+        }
+        
+        public void FocusTextField()
+        {
+            Debug.LogError("Focus text field");
+            // _sceneDataTextField.textSelection.selectIndex = _sceneDataTextField.value.Length;
+            _sceneDataTextField.textSelection.SelectNone();
         }
     }
 }

@@ -32,6 +32,8 @@ namespace Ludwell.Scene.Editor
             InitializeListViewHandler(root.Q<ListView>());
             InitializeSearchField(root, root.Q<DropdownSearchField>());
             InitializeListViewKeyUpEvents();
+
+            ResourcesFetcher.QuickLoadController = this;
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>
@@ -53,6 +55,17 @@ namespace Ludwell.Scene.Editor
             }
 
             _listViewHandler.ForceRebuild();
+        }
+
+        // todo: delete when either service or DI is implemented
+        public void ScrollToItemIndex(int index)
+        {
+            _listViewHandler.ListView.ScrollToItem(index);
+            _listViewHandler.ListView.SetSelection(index);
+            Debug.LogError(_listViewHandler.ListView.ElementAt(index));
+            if (_listViewHandler.ListView.ElementAt(index) is not QuickLoadElementView selectedElement) return;
+            selectedElement.Focus();
+            selectedElement.FocusTextField();
         }
 
         private void CloseAll()

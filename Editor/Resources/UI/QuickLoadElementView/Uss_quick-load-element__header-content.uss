@@ -39,8 +39,7 @@
     right: -32px;
 }
 
-#scene-data {
-    background-color: rgb(42, 42, 42);
+.scene-data__unselected {
     width: 100%;
     border-left-color: rgb(13, 13, 13);
     border-right-color: rgb(13, 13, 13);
@@ -54,12 +53,36 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-width: 0;
-    padding-right: 8px;
-    padding-left: 8px;
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.scene-data__selected {
+    width: 100%;
+    border-left-color: rgb(100, 100, 100);
+    border-right-color: rgb(100, 100, 100);
+    border-top-color: rgb(100, 100, 100);
+    border-bottom-color: rgb(100, 100, 100);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
     padding-top: 0;
     padding-bottom: 0;
 }
@@ -74,6 +97,30 @@
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 0;
+}
+
+#scene-data > Label {
+    display: none;
+}
+
+#scene-data > #unity-text-input {
+    padding-right: 8px;
+    padding-left: 8px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    -unity-text-align: middle-center;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .ButtonWithIcon {
