@@ -15,6 +15,8 @@ namespace Ludwell.Scene
         where TData : new()
     {
         public ListView ListView { get; }
+        
+        private readonly Dictionary<int, TVisualElement> _visibleElements = new();
 
         public Action<TVisualElement> OnItemMade;
 
@@ -24,6 +26,7 @@ namespace Ludwell.Scene
             ListView.itemsSource = data;
             ListView.makeItem = CreateElement;
             ListView.bindItem = OnElementScrollIntoView;
+            ListView.unbindItem = OnElementScrollOutOfView;
             ListView.itemsAdded += _ => ForceRebuild();
             ListView.itemsRemoved += _ => ForceRebuild();
 
@@ -47,6 +50,13 @@ namespace Ludwell.Scene
             var lastIndex = ListView.itemsSource.Count - 1;
             return (TData)ListView.itemsSource[lastIndex];
         }
+        
+        /// <returns>Note that the provided VisualElement might not be in view.</returns>
+        public TVisualElement GetVisualElementAt(int index)
+        {
+            _visibleElements.TryGetValue(index, out var value);
+            return value;
+        }
 
         public void RemoveSelectedElement()
         {
@@ -69,13 +79,19 @@ namespace Ludwell.Scene
 
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
-            var elementAsDataType = element as IListViewVisualElement<TData>;
+            var elementAsDataType = element as TVisualElement;
+            _visibleElements.Add(index, elementAsDataType);
 
             ListView.itemsSource[index] ??= new TData();
 
             elementAsDataType?.CacheData((TData)ListView.itemsSource[index]);
             elementAsDataType?.BindElementToCachedData();
             elementAsDataType?.SetElementFromCachedData();
+        }
+
+        private void OnElementScrollOutOfView(VisualElement element, int index)
+        {
+            _visibleElements.Remove(index);
         }
     }
 }

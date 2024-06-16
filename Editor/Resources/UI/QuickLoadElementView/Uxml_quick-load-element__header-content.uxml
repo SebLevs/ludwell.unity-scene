@@ -7,7 +7,7 @@
             <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open" class="ButtonWithIcon" />
         </ui:VisualElement>
         <ui:VisualElement name="scene-container">
-            <ui:Button text="Scene data name" display-tooltip-when-elided="true" name="scene-data" style="display: flex;" />
+            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" name="scene-data" class="scene-data__unselected" style="display: flex;" />
             <ui:VisualElement tooltip="This asset is located outside the Assets folder." name="icon__package-scene" />
         </ui:VisualElement>
     </ui:VisualElement>
