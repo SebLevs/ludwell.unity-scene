@@ -29,6 +29,7 @@ namespace Ludwell.Scene.Editor
                 RefreshDelayedAction();
             }
         }
+
         private void Start()
         {
             _startTime = Time.realtimeSinceStartup;
@@ -40,7 +41,7 @@ namespace Ludwell.Scene.Editor
         {
             _startTime = Time.realtimeSinceStartup;
         }
-        
+
         public void Stop()
         {
             EditorApplication.update -= DelayedAction;

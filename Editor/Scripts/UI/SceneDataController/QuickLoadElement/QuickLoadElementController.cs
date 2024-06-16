@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,7 +17,7 @@ namespace Ludwell.Scene.Editor
         private DelayedEditorUpdateAction _updateAssetNameDelayed;
 
         private string _cachedUpatedName;
-        
+
         public QuickLoadElementController(VisualElement view)
         {
             _view = view;
@@ -26,14 +25,13 @@ namespace Ludwell.Scene.Editor
 
             view.RegisterCallback<AttachToPanelEvent>(_ => { _viewManager = view.Root().Q<ViewManager>(); });
 
-            view.Q<Toggle>().RegisterCallback<MouseUpEvent>(SaveQuickLoadElements);
-            
-            _updateAssetNameDelayed = new DelayedEditorUpdateAction(0.5f, UpdateAndSaveAssetDelayed);
-        }
+            _view.Q<Toggle>().RegisterValueChangedCallback(evt =>
+            {
+                if (evt.newValue == _model.IsOpen) return;
+                ResourcesFetcher.SaveQuickLoadElementsDelayed();
+            });
 
-        ~QuickLoadElementController()
-        {
-            _view.Q<Toggle>().UnregisterCallback<MouseUpEvent>(SaveQuickLoadElements);
+            _updateAssetNameDelayed = new DelayedEditorUpdateAction(1f, UpdateAndSaveAssetDelayed);
         }
 
         public void InitializeLoadButton(DualStateButton dualStateButton)
@@ -50,7 +48,7 @@ namespace Ludwell.Scene.Editor
 
             dualStateButton.Initialize(stateOne, stateTwo);
         }
-        
+
         public void InitializeOpenButton(ButtonWithIcon buttonWithIcon)
         {
             buttonWithIcon.SetIcon(Resources.Load<Sprite>(SpritesPath.OpenIcon));
@@ -72,19 +70,19 @@ namespace Ludwell.Scene.Editor
         {
             _model.Name = evt.newValue;
         }
-        
+
         public void SelectSceneDataInProject(ClickEvent evt)
         {
             Selection.activeObject = _model.SceneData;
             EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
-        public void UpdateTagsContainer() 
+        public void UpdateTagsContainer()
         {
             _tagsShelfController.UpdateData(_model);
             _tagsShelfController.Populate();
         }
-        
+
         public void UpdateAndSaveAssetName(string value)
         {
             if (value == _model.SceneData.name) return;
@@ -93,7 +91,7 @@ namespace Ludwell.Scene.Editor
             _updateAssetNameDelayed.StartOrRefresh();
         }
 
-        private void UpdateAndSaveAssetDelayed() 
+        private void UpdateAndSaveAssetDelayed()
         {
             Debug.LogError("todo: delayed asset name change + save after ");
             Debug.LogError("Change for on blur instead?");
@@ -115,8 +113,8 @@ namespace Ludwell.Scene.Editor
         {
             view.SetSceneData(_model.SceneData);
         }
-        
-        public void SetIconAssetOutsideAssets(QuickLoadElementView view) 
+
+        public void SetIconAssetOutsideAssets(QuickLoadElementView view)
         {
             view.SetIconAssetOutsideAssets(_model.IsOutsideAssetsFolder);
         }
@@ -125,12 +123,7 @@ namespace Ludwell.Scene.Editor
         {
             _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_model));
         }
-        
-        private void SaveQuickLoadElements(MouseUpEvent evt)
-        {
-            ResourcesFetcher.SaveQuickLoadElementsDelayed();
-        }
-        
+
         private void LoadScene()
         {
             QuickLoadSceneDataManager.LoadScene(_model.SceneData);
@@ -150,4 +143,4 @@ namespace Ludwell.Scene.Editor
             SceneDataManagerEditorApplication.OpenScene(_model.SceneData);
         }
     }
-} 
+}

@@ -25,7 +25,7 @@ namespace Ludwell.Scene.Editor
         private const string LoadSceneButtonName = "button__load";
         private const string OpenSceneButtonName = "button__open";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
-        
+
         private const string TextFieldUnselectedClass = "scene-data__unselected";
         private const string TextFieldSelectedClass = "scene-data__selected";
 
@@ -34,7 +34,7 @@ namespace Ludwell.Scene.Editor
         private VisualElement _iconAssetOutsideAssets;
 
         private readonly QuickLoadElementController _controller;
-        
+
         public void SetIsOpen(bool value) => _foldout.value = value;
 
         public void SetSceneData(SceneData sceneData) => _sceneDataTextField.value = sceneData.name;
@@ -54,20 +54,12 @@ namespace Ludwell.Scene.Editor
 
             InitializeLoadButton();
             InitializeOpenButton();
-            
-            _sceneDataTextField.selectAllOnFocus = false;
-            
-            _sceneDataTextField.RegisterCallback<ClickEvent>(_ =>
-            {
-                // _.StopImmediatePropagation();
-                _.StopPropagation();
-            });
         }
 
         private void InitializeFoldout()
         {
             _foldout = this.Q<Foldout>(FoldoutName);
-            
+
             _foldout.RegisterValueChangedCallback(evt =>
             {
                 var borderTopWidth = evt.newValue ? 1 : 0;
@@ -82,13 +74,13 @@ namespace Ludwell.Scene.Editor
             this.Q<Toggle>().Children().First().Add(headerContent);
             _sceneDataTextField = this.Q<TextField>(SceneDataName);
             _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
-            
+
             _sceneDataTextField.RegisterCallback<ClickEvent>(evt =>
             {
                 _sceneDataTextField.RemoveFromClassList(TextFieldUnselectedClass);
                 _sceneDataTextField.AddToClassList(TextFieldSelectedClass);
             });
-            
+
             _sceneDataTextField.RegisterCallback<BlurEvent>(evt =>
             {
                 _sceneDataTextField.RemoveFromClassList(TextFieldSelectedClass);
@@ -115,7 +107,7 @@ namespace Ludwell.Scene.Editor
 
             _controller.UpdateTagsContainer();
         }
-        
+
         private void InitializeLoadButton()
         {
             var loadSceneButton = this.Q<DualStateButton>(LoadSceneButtonName);
@@ -132,12 +124,11 @@ namespace Ludwell.Scene.Editor
         {
             _controller.UpdateAndSaveAssetName(evt.newValue);
         }
-        
+
         public void FocusTextField()
         {
             Debug.LogError($"Focus text field of: {_sceneDataTextField.value}");
             _sceneDataTextField.Focus();
-            _sceneDataTextField.SelectAll();
             var textLength = _sceneDataTextField.text.Length;
             _sceneDataTextField.SelectRange(textLength, textLength);
         }
