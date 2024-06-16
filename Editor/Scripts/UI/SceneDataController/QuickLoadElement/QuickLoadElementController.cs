@@ -80,13 +80,19 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateAndSaveAssetName(string value)
         {
-            if (value == _model.SceneData.name) return;
+            if (value == _cachedUpatedName)
+            {
+                _updateAssetNameDelayed.Stop();
+                return;
+            }
             _cachedUpatedName = value;
             _updateAssetNameDelayed.StartOrRefresh();
         }
 
         private void UpdateAndSaveAssetDelayed()
         {
+            if (_model.SceneData.name == _cachedUpatedName) return;
+            
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _cachedUpatedName);
             ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
             Signals.Dispatch<UISignals.RefreshView>();

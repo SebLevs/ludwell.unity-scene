@@ -60,11 +60,13 @@ namespace Ludwell.Scene.Editor
         {
             _foldout = this.Q<Foldout>(FoldoutName);
 
-            _foldout.RegisterValueChangedCallback(evt =>
-            {
-                var borderTopWidth = evt.newValue ? 1 : 0;
-                this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
-            });
+            _foldout.RegisterValueChangedCallback(ToggleFoldoutStyle);
+        }
+
+        private void ToggleFoldoutStyle(ChangeEvent<bool> evt)
+        {
+            var borderTopWidth = evt.newValue ? 1 : 0;
+            this.Q(ToggleBottomName).style.borderTopWidth = borderTopWidth;
         }
 
         private void InitializeFoldoutTextField()
