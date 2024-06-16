@@ -33,7 +33,7 @@ namespace Ludwell.Scene.Editor
             InitializeSearchField(root, root.Q<DropdownSearchField>());
             InitializeListViewKeyUpEvents();
 
-            ResourcesFetcher.QuickLoadController = this;
+            ResourcesFetcher.QuickLoadController = this; // todo: change for DI or service
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>
