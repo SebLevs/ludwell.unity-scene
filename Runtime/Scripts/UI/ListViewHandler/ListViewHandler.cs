@@ -54,7 +54,8 @@ namespace Ludwell.Scene
         /// <returns>Note that the provided VisualElement might not be in view.</returns>
         public TVisualElement GetVisualElementAt(int index)
         {
-            return _visibleElements[index];
+            _visibleElements.TryGetValue(index, out var value);
+            return value;
         }
 
         public void RemoveSelectedElement()

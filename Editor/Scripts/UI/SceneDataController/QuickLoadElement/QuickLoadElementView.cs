@@ -75,7 +75,7 @@ namespace Ludwell.Scene.Editor
             _sceneDataTextField = this.Q<TextField>(SceneDataName);
             _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
 
-            _sceneDataTextField.RegisterCallback<ClickEvent>(evt =>
+            _sceneDataTextField.RegisterCallback<FocusEvent>(evt =>
             {
                 _sceneDataTextField.RemoveFromClassList(TextFieldUnselectedClass);
                 _sceneDataTextField.AddToClassList(TextFieldSelectedClass);
