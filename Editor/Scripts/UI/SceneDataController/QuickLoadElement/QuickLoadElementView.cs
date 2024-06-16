@@ -127,7 +127,7 @@ namespace Ludwell.Scene.Editor
 
         public void FocusTextField()
         {
-            Debug.LogError($"Focus text field of: {_sceneDataTextField.value}");
+            _sceneDataTextField.Blur();
             _sceneDataTextField.Focus();
             var textLength = _sceneDataTextField.text.Length;
             _sceneDataTextField.SelectRange(textLength, textLength);

@@ -66,11 +66,6 @@ namespace Ludwell.Scene.Editor
             _model.IsOpen = evt.newValue;
         }
 
-        public void UpdateName(ChangeEvent<string> evt)
-        {
-            _model.Name = evt.newValue;
-        }
-
         public void SelectSceneDataInProject(ClickEvent evt)
         {
             Selection.activeObject = _model.SceneData;
@@ -86,15 +81,12 @@ namespace Ludwell.Scene.Editor
         public void UpdateAndSaveAssetName(string value)
         {
             if (value == _model.SceneData.name) return;
-            Debug.LogError("Update and save");
             _cachedUpatedName = value;
             _updateAssetNameDelayed.StartOrRefresh();
         }
 
         private void UpdateAndSaveAssetDelayed()
         {
-            Debug.LogError("todo: delayed asset name change + save after ");
-            Debug.LogError("Change for on blur instead?");
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _cachedUpatedName);
             ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
