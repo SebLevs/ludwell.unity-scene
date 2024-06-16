@@ -87,8 +87,8 @@ namespace Ludwell.Scene.Editor
         
         public void UpdateAndSaveAssetName(string value)
         {
-            // Debug.LogError($"value: {value} | model name: {_model.SceneData.name} | cache: {_cachedUpatedName}");
             if (value == _model.SceneData.name) return;
+            Debug.LogError("Update and save");
             _cachedUpatedName = value;
             _updateAssetNameDelayed.StartOrRefresh();
         }
@@ -96,8 +96,14 @@ namespace Ludwell.Scene.Editor
         private void UpdateAndSaveAssetDelayed() 
         {
             Debug.LogError("todo: delayed asset name change + save after ");
+            Debug.LogError("Change for on blur instead?");
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _cachedUpatedName);
-            SortAndRefocus();
+            ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
+
+            var quickLoadController = ResourcesFetcher.QuickLoadController;
+            var index = ResourcesFetcher.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
+            quickLoadController.ScrollToItemIndex(index);
         }
 
         public void SetIsOpen(QuickLoadElementView view)
@@ -143,17 +149,5 @@ namespace Ludwell.Scene.Editor
         {
             SceneDataManagerEditorApplication.OpenScene(_model.SceneData);
         }
-
-        private void SortAndRefocus()
-        {
-            Debug.LogError("Sort and refocus (scroll to) current element");
-            ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
-
-            var quickLoadController = ResourcesFetcher.QuickLoadController;
-            Debug.LogError($"Quick load: {quickLoadController}");
-            var index = ResourcesFetcher.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
-            quickLoadController.ScrollToItemIndex(index);
-        }  
     }
 } 

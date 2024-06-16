@@ -54,6 +54,14 @@ namespace Ludwell.Scene.Editor
 
             InitializeLoadButton();
             InitializeOpenButton();
+            
+            _sceneDataTextField.selectAllOnFocus = false;
+            
+            _sceneDataTextField.RegisterCallback<ClickEvent>(_ =>
+            {
+                // _.StopImmediatePropagation();
+                _.StopPropagation();
+            });
         }
 
         private void InitializeFoldout()
@@ -127,9 +135,11 @@ namespace Ludwell.Scene.Editor
         
         public void FocusTextField()
         {
-            Debug.LogError("Focus text field");
-            // _sceneDataTextField.textSelection.selectIndex = _sceneDataTextField.value.Length;
-            _sceneDataTextField.textSelection.SelectNone();
+            Debug.LogError($"Focus text field of: {_sceneDataTextField.value}");
+            _sceneDataTextField.Focus();
+            _sceneDataTextField.SelectAll();
+            var textLength = _sceneDataTextField.text.Length;
+            _sceneDataTextField.SelectRange(textLength, textLength);
         }
     }
 }

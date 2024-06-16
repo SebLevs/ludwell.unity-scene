@@ -60,12 +60,10 @@ namespace Ludwell.Scene.Editor
         // todo: delete when either service or DI is implemented
         public void ScrollToItemIndex(int index)
         {
+            Debug.LogError("Scroll to item: todo: delete when either service or DI is implemented");
             _listViewHandler.ListView.ScrollToItem(index);
             _listViewHandler.ListView.SetSelection(index);
-            Debug.LogError(_listViewHandler.ListView.ElementAt(index));
-            if (_listViewHandler.ListView.ElementAt(index) is not QuickLoadElementView selectedElement) return;
-            selectedElement.Focus();
-            selectedElement.FocusTextField();
+            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
         }
 
         private void CloseAll()
