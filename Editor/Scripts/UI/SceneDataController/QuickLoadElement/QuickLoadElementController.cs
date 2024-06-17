@@ -35,6 +35,18 @@ namespace Ludwell.Scene.Editor
             _updateAssetNameDelayed = new DelayedEditorUpdateAction(1f, UpdateAndSaveAssetDelayed);
         }
 
+        public void InitializePingButton(ButtonWithIcon buttonWithIcon)
+        {
+            buttonWithIcon.SetIcon(Resources.Load<Sprite>(SpritesPath.Ping));
+            buttonWithIcon.clicked += SelectSceneDataInProject;
+        }
+
+        public void InitializeDirectoryChangeButton(ButtonWithIcon buttonWithIcon)
+        {
+            buttonWithIcon.SetIcon(Resources.Load<Sprite>(SpritesPath.MoveFile));
+            buttonWithIcon.clicked += ChangeFolder;
+        }
+
         public void InitializeLoadButton(DualStateButton dualStateButton)
         {
             var stateOne = new DualStateButtonState(
@@ -56,36 +68,6 @@ namespace Ludwell.Scene.Editor
             buttonWithIcon.clicked += OpenScene;
         }
 
-        public void InitializeDirectoryChangeButton(ButtonWithIcon buttonWithIcon)
-        {
-            buttonWithIcon.SetIcon(Resources.Load<Sprite>(SpritesPath.MoveFile));
-            buttonWithIcon.clicked += ChangeFolder;
-        }
-
-        private void ChangeFolder()
-        {
-            var sceneAssetPath = AssetDatabase.GetAssetPath(_model.SceneData);
-            var absolutePath = EditorUtility.OpenFolderPanel("Select folder", "Assets", "");
-
-            if (!absolutePath.StartsWith(Application.dataPath))
-            {
-                Debug.LogError(
-                    $"Suspicious action not supported | Path was outside the Assets folder | {absolutePath}");
-                return;
-            }
-
-            var sceneAssetFullPath = Path.GetFullPath(sceneAssetPath);
-            var normalizedSceneAssetPath = Path.GetDirectoryName(sceneAssetFullPath);
-            var normalizedAbsolutePath = Path.GetFullPath(absolutePath);
-
-            if (normalizedSceneAssetPath == normalizedAbsolutePath) return;
-
-            var relativeNewFolderPath = "Assets" + absolutePath[Application.dataPath.Length..];
-            var fileName = Path.GetFileName(sceneAssetPath);
-            var newAssetPath = Path.Combine(relativeNewFolderPath, fileName);
-            AssetDatabase.MoveAsset(sceneAssetPath, newAssetPath);
-        }
-
         public void UpdateData(QuickLoadElementData data)
         {
             _model = data;
@@ -95,12 +77,6 @@ namespace Ludwell.Scene.Editor
         public void UpdateIsOpen(ChangeEvent<bool> evt)
         {
             _model.IsOpen = evt.newValue;
-        }
-
-        public void SelectSceneDataInProject(ClickEvent evt)
-        {
-            Selection.activeObject = _model.SceneData;
-            EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
         public void UpdateTagsContainer()
@@ -119,19 +95,6 @@ namespace Ludwell.Scene.Editor
 
             _cachedUpatedName = value;
             _updateAssetNameDelayed.StartOrRefresh();
-        }
-
-        private void UpdateAndSaveAssetDelayed()
-        {
-            if (_model.SceneData.name == _cachedUpatedName) return;
-
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _cachedUpatedName);
-            ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
-
-            var quickLoadController = ResourcesFetcher.QuickLoadController;
-            var index = ResourcesFetcher.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
-            quickLoadController.ScrollToItemIndex(index);
         }
 
         public void SetIsOpen(QuickLoadElementView view)
@@ -158,6 +121,52 @@ namespace Ludwell.Scene.Editor
         {
             _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_model));
         }
+
+        private void UpdateAndSaveAssetDelayed()
+        {
+            if (_model.SceneData.name == _cachedUpatedName) return;
+
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _cachedUpatedName);
+            ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
+
+            var quickLoadController = ResourcesFetcher.QuickLoadController;
+            var index = ResourcesFetcher.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
+            quickLoadController.ScrollToItemIndex(index);
+        }
+
+        private void SelectSceneDataInProject()
+        {
+            Selection.activeObject = _model.SceneData;
+            EditorGUIUtility.PingObject(Selection.activeObject);
+        }
+
+        private void ChangeFolder()
+        {
+            var sceneAssetPath = AssetDatabase.GetAssetPath(_model.SceneData);
+            var absolutePath = EditorUtility.OpenFolderPanel("Select folder", "Assets", "");
+
+            if (string.IsNullOrEmpty(absolutePath)) return;
+
+            if (!absolutePath.StartsWith(Application.dataPath))
+            {
+                Debug.LogError(
+                    $"Suspicious action not supported | Path was outside the Assets folder | {absolutePath}");
+                return;
+            }
+
+            var sceneAssetFullPath = Path.GetFullPath(sceneAssetPath);
+            var normalizedSceneAssetPath = Path.GetDirectoryName(sceneAssetFullPath);
+            var normalizedAbsolutePath = Path.GetFullPath(absolutePath);
+
+            if (normalizedSceneAssetPath == normalizedAbsolutePath) return;
+
+            var relativeNewFolderPath = "Assets" + absolutePath[Application.dataPath.Length..];
+            var fileName = Path.GetFileName(sceneAssetPath);
+            var newAssetPath = Path.Combine(relativeNewFolderPath, fileName);
+            AssetDatabase.MoveAsset(sceneAssetPath, newAssetPath);
+        }
+
 
         private void LoadScene()
         {
