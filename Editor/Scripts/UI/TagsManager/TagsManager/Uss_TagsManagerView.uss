@@ -163,3 +163,20 @@
 #core-scene__container > #scene-selection > VisualElement > ObjectFieldSelector {
     display: none;
 }
+
+Scroller {
+    height: 100%;
+    position: absolute;
+    right: 0;
+    background-color: rgb(70, 70, 70);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(63, 63, 63);
+    border-right-color: rgb(63, 63, 63);
+    border-top-color: rgb(63, 63, 63);
+    border-bottom-color: rgb(63, 63, 63);
+}
