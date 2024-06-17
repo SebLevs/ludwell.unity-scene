@@ -10,7 +10,7 @@
             <ui:VisualElement name="SpaceBetween" style="width: 16px;" />
             <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open" class="ButtonWithIcon" />
             <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
-            <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open-additive" class="ButtonWithIcon" />
+            <Ludwell.Scene.DualStateButton focusable="true" name="button__open-additive" class="ButtonWithIcon" />
         </ui:VisualElement>
         <ui:VisualElement name="scene-container">
             <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" name="scene-data" class="scene-data__unselected" style="display: flex;" />

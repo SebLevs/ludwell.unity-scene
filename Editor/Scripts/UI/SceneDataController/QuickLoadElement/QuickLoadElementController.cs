@@ -68,6 +68,22 @@ namespace Ludwell.Scene.Editor
             buttonWithIcon.clicked += OpenScene;
         }
 
+        public void InitializeOpenAdditiveButton(DualStateButton button)
+        {
+            Debug.LogError("Implement additive load & unload");
+            var stateOne = new DualStateButtonState(
+                button,
+                OpenSceneAdditive,
+                Resources.Load<Sprite>(SpritesPath.OpenAdditive));
+
+            var stateTwo = new DualStateButtonState(
+                button,
+                RemoveSceneAdditive,
+                Resources.Load<Sprite>(SpritesPath.RemoveAdditive));
+
+            button.Initialize(stateOne, stateTwo);
+        }
+
         public void UpdateData(QuickLoadElementData data)
         {
             _model = data;
@@ -185,6 +201,17 @@ namespace Ludwell.Scene.Editor
         private void OpenScene()
         {
             SceneDataManagerEditorApplication.OpenScene(_model.SceneData);
+        }
+
+        private void OpenSceneAdditive()
+        {
+            Debug.LogError("Open scene additive");
+            SceneDataManagerEditorApplication.OpenSceneAdditive(_model.SceneData);
+        }
+
+        private void RemoveSceneAdditive()
+        {
+            SceneDataManagerEditorApplication.RemoveSceneAdditive(_model.SceneData);
         }
     }
 }

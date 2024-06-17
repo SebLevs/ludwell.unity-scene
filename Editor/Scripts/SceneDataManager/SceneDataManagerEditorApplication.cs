@@ -25,6 +25,14 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData), OpenSceneMode.Additive);
         }
 
+        public static void RemoveSceneAdditive(SceneData sceneData)
+        {
+            if (!sceneData) return;
+            var scene = SceneManager.GetSceneByName(sceneData.name);
+            if (!scene.isLoaded) return;
+            EditorSceneManager.CloseScene(scene, true);
+        }
+
         /// <summary>
         /// Close a scene from the hierarchy.
         /// </summary>
