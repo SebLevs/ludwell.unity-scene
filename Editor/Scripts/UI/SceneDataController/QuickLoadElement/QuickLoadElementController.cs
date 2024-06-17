@@ -149,6 +149,11 @@ namespace Ludwell.Scene.Editor
             view.SetIconAssetOutsideAssets(_model.IsOutsideAssetsFolder);
         }
 
+        public void SetTooltipAsAssetPath(VisualElement element)
+        {
+            element.tooltip = AssetDatabase.GetAssetPath(_model.SceneData);
+        }
+
         private void InitializeViewTransition()
         {
             _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_model));

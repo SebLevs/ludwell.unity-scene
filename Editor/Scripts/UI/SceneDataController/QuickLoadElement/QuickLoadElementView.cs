@@ -34,6 +34,8 @@ namespace Ludwell.Scene.Editor
         private TextField _sceneDataTextField;
         private VisualElement _iconAssetOutsideAssets;
 
+        private ButtonWithIcon _directoryChangeButton;
+
         private readonly QuickLoadElementController _controller;
 
         public void SetIsOpen(bool value) => _foldout.value = value;
@@ -109,6 +111,8 @@ namespace Ludwell.Scene.Editor
             _controller.SetSceneData(this);
             _controller.SetIconAssetOutsideAssets(this);
 
+            _controller.SetTooltipAsAssetPath(_directoryChangeButton);
+
             _controller.UpdateTagsContainer();
         }
 
@@ -126,8 +130,8 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeDirectoryChangeButton()
         {
-            var button = this.Q<ButtonWithIcon>(DirectoryChangeButtonName);
-            _controller.InitializeDirectoryChangeButton(button);
+            _directoryChangeButton = this.Q<ButtonWithIcon>(DirectoryChangeButtonName);
+            _controller.InitializeDirectoryChangeButton(_directoryChangeButton);
         }
 
         private void UpdateAndSaveAssetName(ChangeEvent<string> evt)
