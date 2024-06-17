@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -70,7 +71,7 @@ namespace Ludwell.Scene.Editor
 
         public void InitializeOpenAdditiveButton(DualStateButton button)
         {
-            Debug.LogError("Implement additive load & unload");
+            Debug.LogError("Add switch state condition?");
             var stateOne = new DualStateButtonState(
                 button,
                 OpenSceneAdditive,
@@ -205,12 +206,24 @@ namespace Ludwell.Scene.Editor
 
         private void OpenSceneAdditive()
         {
-            Debug.LogError("Open scene additive");
+            if (Application.isPlaying) return;
+            if (EditorSceneManager.loadedRootSceneCount == 1) return;
+            
             SceneDataManagerEditorApplication.OpenSceneAdditive(_model.SceneData);
         }
 
         private void RemoveSceneAdditive()
         {
+            Debug.LogError("Look for returning to state one when another scene is loaded?");
+            Debug.LogError("Add logic to disable button when in play mode");
+
+            if (EditorApplication.isPlaying) return;
+            
+            if (EditorSceneManager.loadedRootSceneCount == 1)
+            {
+                Debug.LogError("Return to state 1");
+                return;
+            }
             SceneDataManagerEditorApplication.RemoveSceneAdditive(_model.SceneData);
         }
     }
