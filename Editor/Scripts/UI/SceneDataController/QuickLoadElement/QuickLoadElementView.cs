@@ -24,6 +24,7 @@ namespace Ludwell.Scene.Editor
         private const string SceneDataName = "scene-data";
         private const string LoadSceneButtonName = "button__load";
         private const string OpenSceneButtonName = "button__open";
+        private const string DirectoryChangeButtonName = "button__directory-path";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
         private const string TextFieldUnselectedClass = "scene-data__unselected";
@@ -54,6 +55,7 @@ namespace Ludwell.Scene.Editor
 
             InitializeLoadButton();
             InitializeOpenButton();
+            InitializeDirectoryChangeButton();
         }
 
         private void InitializeFoldout()
@@ -112,14 +114,20 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeLoadButton()
         {
-            var loadSceneButton = this.Q<DualStateButton>(LoadSceneButtonName);
-            _controller.InitializeLoadButton(loadSceneButton);
+            var button = this.Q<DualStateButton>(LoadSceneButtonName);
+            _controller.InitializeLoadButton(button);
         }
 
         private void InitializeOpenButton()
         {
-            var openSceneButton = this.Q<ButtonWithIcon>(OpenSceneButtonName);
-            _controller.InitializeOpenButton(openSceneButton);
+            var button = this.Q<ButtonWithIcon>(OpenSceneButtonName);
+            _controller.InitializeOpenButton(button);
+        }
+
+        private void InitializeDirectoryChangeButton()
+        {
+            var button = this.Q<ButtonWithIcon>(DirectoryChangeButtonName);
+            _controller.InitializeDirectoryChangeButton(button);
         }
 
         private void UpdateAndSaveAssetName(ChangeEvent<string> evt)

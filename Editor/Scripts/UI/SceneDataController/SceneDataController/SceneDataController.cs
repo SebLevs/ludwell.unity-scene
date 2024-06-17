@@ -89,12 +89,12 @@ namespace Ludwell.Scene.Editor
             var stateOne = new DualStateButtonState(
                 _loadSceneButton,
                 LoadScene,
-                Resources.Load<Sprite>(SpritesPath.LoadIcon));
+                Resources.Load<Sprite>(SpritesPath.Load));
 
             var stateTwo = new DualStateButtonState(
                 _loadSceneButton,
                 EditorApplication.ExitPlaymode,
-                Resources.Load<Sprite>(SpritesPath.StopIcon));
+                Resources.Load<Sprite>(SpritesPath.Stop));
 
             _loadSceneButton.Initialize(stateOne, stateTwo);
         }
@@ -102,7 +102,7 @@ namespace Ludwell.Scene.Editor
         private void InitializeOpenButton()
         {
             _openSceneButton = _root.Q<ButtonWithIcon>(OpenSceneButtonName);
-            _openSceneButton.SetIcon(Resources.Load<Sprite>(SpritesPath.OpenIcon));
+            _openSceneButton.SetIcon(Resources.Load<Sprite>(SpritesPath.Open));
             _openSceneButton.clicked += OpenScene;
         }
 

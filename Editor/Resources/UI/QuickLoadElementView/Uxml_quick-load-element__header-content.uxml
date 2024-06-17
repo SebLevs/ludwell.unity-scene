@@ -2,6 +2,8 @@
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/QuickLoadElementView/Uss_quick-load-element__header-content.uss?fileID=7433441132597879392&amp;guid=4bfd3b37c0e4b8740bb5e59e00ba37c7&amp;type=3#Uss_quick-load-element__header-content" />
     <ui:VisualElement name="scene-loader-element__header-content" style="margin-left: -40px;">
         <ui:VisualElement name="quick-load__buttons">
+            <Ludwell.Scene.DualStateButton focusable="true" name="button__directory-path" class="ButtonWithIcon" />
+            <ui:VisualElement name="SpaceBetween" style="background-color: rgba(0, 0, 0, 0); width: 4px;" />
             <Ludwell.Scene.DualStateButton focusable="true" name="button__load" class="ButtonWithIcon" />
             <ui:VisualElement name="SpaceBetween" style="background-color: rgba(0, 0, 0, 0); width: 4px;" />
             <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open" class="ButtonWithIcon" />
