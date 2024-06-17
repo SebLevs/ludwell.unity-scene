@@ -24,6 +24,7 @@ namespace Ludwell.Scene.Editor
         private const string SceneDataName = "scene-data";
         private const string LoadSceneButtonName = "button__load";
         private const string OpenSceneButtonName = "button__open";
+        private const string DirectoryChangeButtonName = "button__directory-path";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
         private const string TextFieldUnselectedClass = "scene-data__unselected";
@@ -32,6 +33,8 @@ namespace Ludwell.Scene.Editor
         private Foldout _foldout;
         private TextField _sceneDataTextField;
         private VisualElement _iconAssetOutsideAssets;
+
+        private ButtonWithIcon _directoryChangeButton;
 
         private readonly QuickLoadElementController _controller;
 
@@ -54,6 +57,7 @@ namespace Ludwell.Scene.Editor
 
             InitializeLoadButton();
             InitializeOpenButton();
+            InitializeDirectoryChangeButton();
         }
 
         private void InitializeFoldout()
@@ -107,19 +111,27 @@ namespace Ludwell.Scene.Editor
             _controller.SetSceneData(this);
             _controller.SetIconAssetOutsideAssets(this);
 
+            _controller.SetTooltipAsAssetPath(_directoryChangeButton);
+
             _controller.UpdateTagsContainer();
         }
 
         private void InitializeLoadButton()
         {
-            var loadSceneButton = this.Q<DualStateButton>(LoadSceneButtonName);
-            _controller.InitializeLoadButton(loadSceneButton);
+            var button = this.Q<DualStateButton>(LoadSceneButtonName);
+            _controller.InitializeLoadButton(button);
         }
 
         private void InitializeOpenButton()
         {
-            var openSceneButton = this.Q<ButtonWithIcon>(OpenSceneButtonName);
-            _controller.InitializeOpenButton(openSceneButton);
+            var button = this.Q<ButtonWithIcon>(OpenSceneButtonName);
+            _controller.InitializeOpenButton(button);
+        }
+
+        private void InitializeDirectoryChangeButton()
+        {
+            _directoryChangeButton = this.Q<ButtonWithIcon>(DirectoryChangeButtonName);
+            _controller.InitializeDirectoryChangeButton(_directoryChangeButton);
         }
 
         private void UpdateAndSaveAssetName(ChangeEvent<string> evt)
