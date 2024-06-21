@@ -19,7 +19,10 @@ namespace Ludwell.Scene
         private readonly Dictionary<int, TVisualElement> _visibleElements = new();
 
         public ListView ListView { get; }
-        public IEnumerable<TVisualElement> GetVisualElements() => _visibleElements.Values;
+        
+        public IEnumerable<TVisualElement> VisualElements => _visibleElements.Values;
+        
+        public IEnumerable<TData> Data => (List<TData>)ListView.itemsSource;
 
         public ListViewHandler(ListView listView, List<TData> data)
         {
@@ -40,7 +43,6 @@ namespace Ludwell.Scene
         {
             ListView.Rebuild();
         }
-
 
         public TData GetSelectedElementData()
         {
