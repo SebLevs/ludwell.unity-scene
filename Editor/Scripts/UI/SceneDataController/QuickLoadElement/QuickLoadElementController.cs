@@ -142,7 +142,7 @@ namespace Ludwell.Scene.Editor
         public void SetLoadButtonState()
         {
             if (!EditorApplication.isPlaying) return;
-            if (EditorPrefs.GetInt(CurrentActiveScene) != Model.SceneData.GetInstanceID())
+            if (SessionState.GetInt(CurrentActiveScene, -1) != Model.SceneData.GetInstanceID())
             {
                 _loadButton.SwitchState(_loadButton.StateOne);
                 return;
@@ -251,7 +251,7 @@ namespace Ludwell.Scene.Editor
 
         private void LoadScene()
         {
-            EditorPrefs.SetInt(CurrentActiveScene, Model.SceneData.GetInstanceID());
+            SessionState.SetInt(CurrentActiveScene, Model.SceneData.GetInstanceID());
             QuickLoadSceneDataManager.LoadScene(Model.SceneData);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
         }
@@ -261,9 +261,9 @@ namespace Ludwell.Scene.Editor
             if (obj != PlayModeStateChange.ExitingPlayMode) return;
             EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
 
-            var prefActiveSceneID = EditorPrefs.GetInt(CurrentActiveScene);
+            var prefActiveSceneID = SessionState.GetInt(CurrentActiveScene, -1);
             var modelSceneID = Model.SceneData.GetInstanceID();
-            if (prefActiveSceneID == modelSceneID) EditorPrefs.DeleteKey(CurrentActiveScene);
+            if (prefActiveSceneID == modelSceneID) SessionState.EraseInt(CurrentActiveScene);
             _loadButton.SwitchState(_loadButton.StateOne);
         }
 
