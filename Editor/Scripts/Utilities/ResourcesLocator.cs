@@ -2,7 +2,7 @@ using UnityEditor;
 
 namespace Ludwell.Scene.Editor
 {
-    public static class ResourcesFetcher
+    public static class ResourcesLocator
     {
         private static SceneDataManagerSettings _settings;
         

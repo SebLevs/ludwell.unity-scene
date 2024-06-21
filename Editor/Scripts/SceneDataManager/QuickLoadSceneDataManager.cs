@@ -37,7 +37,7 @@ namespace Ludwell.Scene.Editor
                 SceneDataManagerEditorApplication.OpenScene(_sceneData);
             }
 
-            var persistentScene = ResourcesFetcher.GetCoreScenes().PersistentScene;
+            var persistentScene = ResourcesLocator.GetCoreScenes().PersistentScene;
             if (persistentScene)
             {
                 SceneDataManagerEditorApplication.OpenSceneAdditive(persistentScene);
@@ -60,7 +60,7 @@ namespace Ludwell.Scene.Editor
 
             if (EditorSceneManager.sceneCount == 1) return;
 
-            var persistentScene = ResourcesFetcher.GetCoreScenes().PersistentScene;
+            var persistentScene = ResourcesLocator.GetCoreScenes().PersistentScene;
             if (persistentScene && EditorSceneManager.GetActiveScene().name == persistentScene.Name) return;
 
             SceneDataManagerEditorApplication.CloseScene(persistentScene, true);

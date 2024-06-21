@@ -35,10 +35,10 @@ namespace Ludwell.Scene.Editor
 
         static ResourcesSolver()
         {
-            ResourcesFetcher.GetSceneDataManagerSettings();
-            ResourcesFetcher.GetQuickLoadElements();
-            ResourcesFetcher.GetTagContainer();
-            ResourcesFetcher.GetCoreScenes();
+            ResourcesLocator.GetSceneDataManagerSettings();
+            ResourcesLocator.GetQuickLoadElements();
+            ResourcesLocator.GetTagContainer();
+            ResourcesLocator.GetCoreScenes();
         }
 
         public static ScriptableObject EnsureAssetExistence(Type type)

@@ -25,7 +25,7 @@ namespace Ludwell.Scene.Editor
             _view.Add(ConstructTagElement(tag));
             Sort();
 
-            ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
         public void Remove(TagWithSubscribers tagWithSubscribers)
@@ -36,7 +36,7 @@ namespace Ludwell.Scene.Editor
             _data.Tags.Remove(tagWithSubscribers);
             tagWithSubscribers.RemoveSubscriber(_data);
 
-            ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
         private void Sort()

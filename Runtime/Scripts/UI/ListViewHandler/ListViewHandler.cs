@@ -14,11 +14,12 @@ namespace Ludwell.Scene
         where TVisualElement : VisualElement, IListViewVisualElement<TData>, new()
         where TData : new()
     {
-        public ListView ListView { get; }
-        
+        public Action<TVisualElement> OnItemMade;
+
         private readonly Dictionary<int, TVisualElement> _visibleElements = new();
 
-        public Action<TVisualElement> OnItemMade;
+        public ListView ListView { get; }
+        public IEnumerable<TVisualElement> GetVisualElements() => _visibleElements.Values;
 
         public ListViewHandler(ListView listView, List<TData> data)
         {
@@ -40,6 +41,7 @@ namespace Ludwell.Scene
             ListView.Rebuild();
         }
 
+
         public TData GetSelectedElementData()
         {
             return (TData)ListView.selectedItem;
@@ -50,7 +52,7 @@ namespace Ludwell.Scene
             var lastIndex = ListView.itemsSource.Count - 1;
             return (TData)ListView.itemsSource[lastIndex];
         }
-        
+
         /// <returns>Note that the provided VisualElement might not be in view.</returns>
         public TVisualElement GetVisualElementAt(int index)
         {

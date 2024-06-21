@@ -24,14 +24,14 @@ namespace Ludwell.Scene.Editor
         {
             if (GUILayout.Button("Clear"))
             {
-                ResourcesFetcher.GetTagContainer().Tags.Clear();
-                ResourcesFetcher.GetQuickLoadElements().Elements.Clear();
-                var coreScenes = ResourcesFetcher.GetCoreScenes();
+                ResourcesLocator.GetTagContainer().Tags.Clear();
+                ResourcesLocator.GetQuickLoadElements().Elements.Clear();
+                var coreScenes = ResourcesLocator.GetCoreScenes();
                 coreScenes.LoadingScene = null;
                 coreScenes.StartingScene = null;
                 coreScenes.PersistentScene = null;
                 
-                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
                 AssetDatabase.Refresh();
             }
 
@@ -39,22 +39,22 @@ namespace Ludwell.Scene.Editor
 
             if (GUILayout.Button("Repopulate Quick Load"))
             {
-                ResourcesFetcher.GetTagContainer().Tags.Clear();
-                ResourcesFetcher.GetQuickLoadElements().Elements.Clear();
+                ResourcesLocator.GetTagContainer().Tags.Clear();
+                ResourcesLocator.GetQuickLoadElements().Elements.Clear();
 
                 var assetGuids = AssetDatabase.FindAssets("t:SceneData");
                 foreach (var guid in assetGuids)
                 {
                     var assetPath = AssetDatabase.GUIDToAssetPath(guid);
                     var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(assetPath);
-                    var element = ResourcesFetcher.GetQuickLoadElements().Add(sceneData);
+                    var element = ResourcesLocator.GetQuickLoadElements().Add(sceneData);
 
                     var path = AssetDatabase.GetAssetPath(sceneData);
                     element.IsOutsideAssetsFolder = !path.Contains("Assets/");
                     Signals.Dispatch<UISignals.RefreshView>();
                 }
                 
-                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
                 AssetDatabase.Refresh();
             }
 

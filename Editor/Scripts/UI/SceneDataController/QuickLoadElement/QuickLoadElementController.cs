@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
 
         private ViewManager _viewManager;
 
-        private QuickLoadElementData _model = new();
+        public QuickLoadElementData Model = new();
 
         private readonly QuickLoadElementView _view;
 
@@ -37,8 +37,8 @@ namespace Ludwell.Scene.Editor
 
             _view.Q<Toggle>().RegisterValueChangedCallback(evt =>
             {
-                if (evt.newValue == _model.IsOpen) return;
-                ResourcesFetcher.SaveQuickLoadElementsDelayed();
+                if (evt.newValue == Model.IsOpen) return;
+                ResourcesLocator.SaveQuickLoadElementsDelayed();
             });
 
             _updateAssetNameDelayed = new DelayedEditorUpdateAction(1f, UpdateAndSaveAssetDelayed);
@@ -96,18 +96,18 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateData(QuickLoadElementData data)
         {
-            _model = data;
-            _cacheUpatedName = _model.Name;
+            Model = data;
+            _cacheUpatedName = Model.Name;
         }
 
         public void UpdateIsOpen(ChangeEvent<bool> evt)
         {
-            _model.IsOpen = evt.newValue;
+            Model.IsOpen = evt.newValue;
         }
 
         public void SetTagsContainer()
         {
-            _tagsShelfController.UpdateData(_model);
+            _tagsShelfController.UpdateData(Model);
             _tagsShelfController.Populate();
         }
 
@@ -125,33 +125,33 @@ namespace Ludwell.Scene.Editor
 
         public void SetIsOpen(QuickLoadElementView view)
         {
-            view.SetIsOpen(_model.IsOpen);
+            view.SetIsOpen(Model.IsOpen);
         }
 
         public void SetSceneData(QuickLoadElementView view)
         {
-            view.SetSceneData(_model.SceneData);
+            view.SetSceneData(Model.SceneData);
         }
 
         public void SetIconAssetOutsideAssets(QuickLoadElementView view)
         {
-            view.SetIconAssetOutsideAssets(_model.IsOutsideAssetsFolder);
+            view.SetIconAssetOutsideAssets(Model.IsOutsideAssetsFolder);
         }
 
         public void SetTooltipAsAssetPath(VisualElement element)
         {
-            element.tooltip = AssetDatabase.GetAssetPath(_model.SceneData);
+            element.tooltip = AssetDatabase.GetAssetPath(Model.SceneData);
         }
 
         public void SetDirectoryChangeButton()
         {
             _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
         }
-        
+
         public void SetLoadButtonState()
         {
             if (!EditorApplication.isPlaying) return;
-            if (EditorPrefs.GetInt(CurrentActiveScene) != _model.SceneData.GetInstanceID())
+            if (EditorPrefs.GetInt(CurrentActiveScene) != Model.SceneData.GetInstanceID())
             {
                 _loadButton.SwitchState(_loadButton.StateOne);
                 return;
@@ -169,7 +169,7 @@ namespace Ludwell.Scene.Editor
             }
 
             // todo: optimize
-            var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetOrScenePath(_model.SceneData), ".unity");
+            var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetOrScenePath(Model.SceneData), ".unity");
             var isSceneActiveScene = SceneManager.GetActiveScene() == SceneManager.GetSceneByPath(scenePath);
             if (isSceneActiveScene) _loadedScene = this;
             _view.SetOpenButtonEnable(!isSceneActiveScene);
@@ -178,10 +178,10 @@ namespace Ludwell.Scene.Editor
         public void SolveOpenAdditiveButton()
         {
             _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying);
-            
+
             var sceneCount = SceneManager.sceneCount;
             // todo: optimize
-            var asset = Path.ChangeExtension(AssetDatabase.GetAssetOrScenePath(_model.SceneData), ".unity");
+            var asset = Path.ChangeExtension(AssetDatabase.GetAssetOrScenePath(Model.SceneData), ".unity");
             for (var i = 0; i < sceneCount; i++)
             {
                 var scene = EditorSceneManager.GetSceneAt(i);
@@ -202,33 +202,39 @@ namespace Ludwell.Scene.Editor
             _openAdditiveButton.SwitchState(_openAdditiveButton.StateOne);
         }
 
+        public void SwitchStateOpenAdditive(bool state)
+        {
+            var newState = state ? _openAdditiveButton.StateTwo : _openAdditiveButton.StateOne;
+            _openAdditiveButton.SwitchState(newState);
+        }
+
         private void TransitionViewToTagsManager(ClickEvent _)
         {
-            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_model));
+            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(Model));
         }
 
         private void UpdateAndSaveAssetDelayed()
         {
-            if (_model.SceneData.name == _cacheUpatedName) return;
+            if (Model.SceneData.name == _cacheUpatedName) return;
 
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _cacheUpatedName);
-            ResourcesFetcher.GetQuickLoadElements().Elements.Sort();
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _cacheUpatedName);
+            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
 
-            var quickLoadController = ResourcesFetcher.QuickLoadController;
-            var index = ResourcesFetcher.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
+            var quickLoadController = ResourcesLocator.QuickLoadController;
+            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
             quickLoadController.ScrollToItemIndex(index);
         }
 
         private void SelectSceneDataInProject()
         {
-            Selection.activeObject = _model.SceneData;
+            Selection.activeObject = Model.SceneData;
             EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
         private void ChangeFolder()
         {
-            var sceneAssetPath = AssetDatabase.GetAssetPath(_model.SceneData);
+            var sceneAssetPath = AssetDatabase.GetAssetPath(Model.SceneData);
             var absolutePath = EditorUtility.OpenFolderPanel("Select folder", "Assets", "");
 
             if (string.IsNullOrEmpty(absolutePath)) return;
@@ -254,8 +260,8 @@ namespace Ludwell.Scene.Editor
 
         private void LoadScene()
         {
-            EditorPrefs.SetInt(CurrentActiveScene, _model.SceneData.GetInstanceID());
-            QuickLoadSceneDataManager.LoadScene(_model.SceneData);
+            EditorPrefs.SetInt(CurrentActiveScene, Model.SceneData.GetInstanceID());
+            QuickLoadSceneDataManager.LoadScene(Model.SceneData);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
         }
 
@@ -265,7 +271,7 @@ namespace Ludwell.Scene.Editor
             EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
 
             var prefActiveSceneID = EditorPrefs.GetInt(CurrentActiveScene);
-            var modelSceneID = _model.SceneData.GetInstanceID();
+            var modelSceneID = Model.SceneData.GetInstanceID();
             if (prefActiveSceneID == modelSceneID) EditorPrefs.DeleteKey(CurrentActiveScene);
             _loadButton.SwitchState(_loadButton.StateOne);
         }
@@ -285,18 +291,18 @@ namespace Ludwell.Scene.Editor
             _view.SetOpenAdditiveButtonEnable(false);
             _openAdditiveButton.SwitchState(_openAdditiveButton.StateOne);
 
-            SceneDataManagerEditorApplication.OpenScene(_model.SceneData);
+            SceneDataManagerEditorApplication.OpenScene(Model.SceneData);
             Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void OpenSceneAdditive()
         {
-            SceneDataManagerEditorApplication.OpenSceneAdditive(_model.SceneData);
+            SceneDataManagerEditorApplication.OpenSceneAdditive(Model.SceneData);
         }
 
         private void RemoveSceneAdditive()
         {
-            SceneDataManagerEditorApplication.RemoveSceneAdditive(_model.SceneData);
+            SceneDataManagerEditorApplication.RemoveSceneAdditive(Model.SceneData);
         }
     }
 }
