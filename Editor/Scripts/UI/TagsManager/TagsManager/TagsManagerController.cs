@@ -35,7 +35,7 @@ namespace Ludwell.Scene.Editor
 
             _tagsShelfController = new TagsShelfController(_root, _ => ReturnToPreviousView());
 
-            _tagContainer = ResourcesFetcher.GetTagContainer();
+            _tagContainer = ResourcesLocator.GetTagContainer();
 
             SetViewReturnIconTooltip();
 
@@ -45,17 +45,11 @@ namespace Ludwell.Scene.Editor
 
             // todo: work around for Focus/Blur overlap issue with ListView Rebuild.
             InitializeTagSorting();
-
-            _tagContainer.OnRemove += RemoveInvalidTagElement;
-        }
-
-        ~TagsManagerController()
-        {
-            _tagContainer.OnRemove -= RemoveInvalidTagElement;
         }
 
         protected override void Show(ViewArgs args)
         {
+            _tagContainer.OnRemove += RemoveInvalidTagElement;
             Signals.Add<UISignals.RefreshView>(_tagsShelfController.Populate);
             Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             var tagsManagerViewArgs = (TagsManagerViewArgs)args;
@@ -66,6 +60,7 @@ namespace Ludwell.Scene.Editor
 
         protected override void Hide()
         {
+            _tagContainer.OnRemove -= RemoveInvalidTagElement;
             Signals.Remove<UISignals.RefreshView>(_tagsShelfController.Populate);
             Signals.Remove<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             _view.Hide();
@@ -101,7 +96,7 @@ namespace Ludwell.Scene.Editor
         private void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             RemoveTagFromShelf(tag);
-            ResourcesFetcher.SaveTagContainer();
+            ResourcesLocator.SaveTagContainer();
             _listViewHandler.ForceRebuild();
         }
 
@@ -130,7 +125,7 @@ namespace Ludwell.Scene.Editor
             _listViewHandler =
                 new ListViewHandler<TagsManagerElementController, TagWithSubscribers>(
                     _root.Q<ListView>(TagElementsContainerName),
-                    ResourcesFetcher.GetTagContainer().Tags);
+                    ResourcesLocator.GetTagContainer().Tags);
 
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
 
@@ -149,7 +144,7 @@ namespace Ludwell.Scene.Editor
                     RemoveTagFromAllSubscribers(tag);
                 }
 
-                ResourcesFetcher.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
             };
         }
 
@@ -229,7 +224,7 @@ namespace Ludwell.Scene.Editor
         private void SortTags()
         {
             _tagContainer.Tags.Sort();
-            ResourcesFetcher.SaveTagContainerDelayed();
+            ResourcesLocator.SaveTagContainerDelayed();
             _listViewHandler.ForceRebuild();
         }
     }

@@ -36,7 +36,7 @@ namespace Ludwell.Scene.Editor
             _view.OnValueChanged += OnValueChanged;
 
             var textField = this.Q<TextField>();
-            textField.RegisterCallback<BlurEvent>(_ => ResourcesFetcher.GetTagContainer().HandleUpdatedTag(_data));
+            textField.RegisterCallback<BlurEvent>(_ => ResourcesLocator.GetTagContainer().HandleUpdatedTag(_data));
             textField.RegisterCallback<KeyDownEvent>(OnReturnKeyDownEndTextEdit);
         }
 
@@ -47,7 +47,7 @@ namespace Ludwell.Scene.Editor
             _view.OnValueChanged -= OnValueChanged;
             
             var textField = this.Q<TextField>();
-            textField.UnregisterCallback<BlurEvent>(_ => ResourcesFetcher.GetTagContainer().HandleUpdatedTag(_data));
+            textField.UnregisterCallback<BlurEvent>(_ => ResourcesLocator.GetTagContainer().HandleUpdatedTag(_data));
             textField.UnregisterCallback<KeyDownEvent>(OnReturnKeyDownEndTextEdit);
         }
 
@@ -78,7 +78,7 @@ namespace Ludwell.Scene.Editor
         private void UpdateDataValue(string value)
         {
             _data.Name = value;
-            ResourcesFetcher.SaveTagContainerDelayed();
+            ResourcesLocator.SaveTagContainerDelayed();
         }
         
         private void AddAction()

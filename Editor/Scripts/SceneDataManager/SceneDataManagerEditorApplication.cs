@@ -9,20 +9,24 @@ namespace Ludwell.Scene.Editor
     {
         public static void OpenScene(SceneData sceneData)
         {
-            if (EditorApplication.isPlaying) return;
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData));
         }
 
         public static void OpenScene(string path)
         {
-            if (EditorApplication.isPlaying) return;
             EditorSceneManager.OpenScene(path);
         }
 
         public static void OpenSceneAdditive(SceneData sceneData)
         {
-            if (!sceneData) return;
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData), OpenSceneMode.Additive);
+        }
+
+        public static void RemoveSceneAdditive(SceneData sceneData)
+        {
+            var scene = SceneManager.GetSceneByName(sceneData.name);
+            if (!scene.isLoaded) return;
+            EditorSceneManager.CloseScene(scene, true);
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.CloseScene(scene, isRemove);
         }
 
-        private static string GetSceneAssetPath(SceneData sceneData)
+        public static string GetSceneAssetPath(SceneData sceneData)
         {
             var fullPath = AssetDatabase.GetAssetPath(sceneData);
             return Path.ChangeExtension(fullPath, ".unity");

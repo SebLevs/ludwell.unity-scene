@@ -34,7 +34,7 @@ namespace Ludwell.Scene.Editor
             _startingSceneObjectField = _root.Q(StartingSceneObjectFieldName).Q<ObjectField>();
             InitializeLoadButton();
             InitializeOpenButton();
-            SetButtonsEnable(ResourcesFetcher.GetCoreScenes().StartingScene);
+            SetButtonsEnable(ResourcesLocator.GetCoreScenes().StartingScene);
 
             CloseFoldouts();
 
@@ -45,21 +45,28 @@ namespace Ludwell.Scene.Editor
 
         protected override void Show(ViewArgs args)
         {
+            EditorApplication.playModeStateChanged += HandlePlayModeStateChange;
             _view.Show();
         }
 
         protected override void Hide()
         {
+            EditorApplication.playModeStateChanged -= HandlePlayModeStateChange;
             _view.Hide();
+        }
+
+        private void HandlePlayModeStateChange(PlayModeStateChange playModeStateChange)
+        {
+            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void UpdateStartingScene(ChangeEvent<Object> evt)
         {
             SetButtonsEnable(evt.newValue != null);
 
-            var coreScenes = ResourcesFetcher.GetCoreScenes();
+            var coreScenes = ResourcesLocator.GetCoreScenes();
             coreScenes.StartingScene = evt.newValue as SceneData;
-            ResourcesFetcher.SaveCoreScenes();
+            ResourcesLocator.SaveCoreScenes();
         }
 
         private void SetButtonsEnable(bool state)
@@ -70,16 +77,16 @@ namespace Ludwell.Scene.Editor
 
         private void UpdatePersistentScene(ChangeEvent<Object> evt)
         {
-            var coreScenes = ResourcesFetcher.GetCoreScenes();
+            var coreScenes = ResourcesLocator.GetCoreScenes();
             coreScenes.PersistentScene = evt.newValue as SceneData;
-            ResourcesFetcher.SaveCoreScenes();
+            ResourcesLocator.SaveCoreScenes();
         }
 
         private void UpdateLoadingScene(ChangeEvent<Object> evt)
         {
-            var coreScenes = ResourcesFetcher.GetCoreScenes();
+            var coreScenes = ResourcesLocator.GetCoreScenes();
             coreScenes.LoadingScene = evt.newValue as SceneData;
-            ResourcesFetcher.SaveCoreScenes();
+            ResourcesLocator.SaveCoreScenes();
         }
 
         private void InitializeLoadButton()

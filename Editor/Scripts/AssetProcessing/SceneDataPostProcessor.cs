@@ -34,7 +34,7 @@ namespace Ludwell.Scene.Editor
         {
             if (!TryHandleMove(movedAssets, movedFromAssetPaths) && !TryHandleImport(importedAssets)) return;
 
-            ResourcesFetcher.SaveQuickLoadElementsDelayed();
+            ResourcesLocator.SaveQuickLoadElementsDelayed();
         }
 
         private static bool TryHandleMove(IReadOnlyList<string> movedAssets, IReadOnlyList<string> movedFromAssetPaths)
@@ -58,7 +58,7 @@ namespace Ludwell.Scene.Editor
 
                 shouldSave = true;
 
-                var quickLoadElements = ResourcesFetcher.GetQuickLoadElements();
+                var quickLoadElements = ResourcesLocator.GetQuickLoadElements();
 
                 var oppositeExtension = movedAssets[index].EndsWith(".unity") ? ".asset" : ".unity";
 
@@ -115,13 +115,13 @@ namespace Ludwell.Scene.Editor
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
             if (sceneData)
             {
-                ResourcesFetcher.GetQuickLoadElements().Add(sceneData);
+                ResourcesLocator.GetQuickLoadElements().Add(sceneData);
                 return;
             }
 
             var myAsset = ScriptableObject.CreateInstance<SceneData>();
             AssetDatabase.CreateAsset(myAsset, sceneDataPath);
-            var element = ResourcesFetcher.GetQuickLoadElements().AddWithoutNotify(myAsset);
+            var element = ResourcesLocator.GetQuickLoadElements().AddWithoutNotify(myAsset);
             HandleAssetOutsideAssetsFolder(element);
         }
 
@@ -136,7 +136,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.SaveScene(newScene, scenePath);
 
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
-            var element = ResourcesFetcher.GetQuickLoadElements().AddWithoutNotify(sceneData);
+            var element = ResourcesLocator.GetQuickLoadElements().AddWithoutNotify(sceneData);
             HandleAssetOutsideAssetsFolder(element);
         }
 
