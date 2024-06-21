@@ -41,20 +41,33 @@ namespace Ludwell.Scene.Editor
             ResourcesLocator.GetCoreScenes();
         }
 
-        public static ScriptableObject EnsureAssetExistence(Type type)
+        public static ScriptableObject EnsureAssetExistence(Type type, out bool existed)
         {
-            if (!ScriptableAssets.TryGetValue(type.Name, out var tuple)) return null;
+            if (!ScriptableAssets.TryGetValue(type.Name, out var tuple))
+            {
+                existed = false;
+                return null;
+            }
 
             var assetPath = Path.Combine(TryCreatePath(tuple.Item2), type.Name + ".asset");
             var existsAtPath = AssetDatabase.LoadAssetAtPath(assetPath, type);
-            if (existsAtPath) return (ScriptableObject)existsAtPath;
+            if (existsAtPath)
+            {
+                existed = true;
+                return (ScriptableObject)existsAtPath;
+            }
 
             var objects = Resources.FindObjectsOfTypeAll(type);
-            if (objects.Length > 0) return (ScriptableObject)objects[0];
+            if (objects.Length > 0)
+            {
+                existed = true;
+                return (ScriptableObject)objects[0];
+            }
 
             var foundObject = AssetDatabase.FindAssets($"t:{type.Name}");
-            if (foundObject != null)
+            if (foundObject is { Length: > 0 })
             {
+                existed = true;
                 return AssetDatabase.LoadAssetAtPath<ScriptableObject>(AssetDatabase.GUIDToAssetPath(foundObject[0]));
             }
 
@@ -63,6 +76,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
+            existed = false;
             return (ScriptableObject)AssetDatabase.LoadAssetAtPath(assetPath, type);
         }
 
