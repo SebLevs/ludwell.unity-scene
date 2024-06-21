@@ -5,7 +5,7 @@ namespace Ludwell.Scene.Editor
     public static class ResourcesLocator
     {
         private static SceneDataManagerSettings _settings;
-        
+
         private static CoreScenes _coreScenes;
 
         private static QuickLoadElements _quickLoadElements;
@@ -15,16 +15,17 @@ namespace Ludwell.Scene.Editor
         private static DelayedEditorUpdateAction _delayedSaveTagContainer;
 
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
-        
+
         public static QuickLoadController QuickLoadController; // todo: change for DI or service
 
         public static SceneDataManagerSettings GetSceneDataManagerSettings()
         {
             if (_settings) return _settings;
-            _settings = (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings));
+            _settings = (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings),
+                out var _);
             return _settings;
         }
-        
+
         public static CoreScenes GetCoreScenes()
         {
             CacheCoreScenes();
@@ -96,19 +97,25 @@ namespace Ludwell.Scene.Editor
         private static void CacheCoreScenes()
         {
             if (_coreScenes) return;
-            _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes));
+            _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes), out var _);
         }
 
         private static void CacheQuickLoadData()
         {
             if (_quickLoadElements) return;
-            _quickLoadElements = (QuickLoadElements)ResourcesSolver.EnsureAssetExistence(typeof(QuickLoadElements));
+            _quickLoadElements =
+                (QuickLoadElements)ResourcesSolver.EnsureAssetExistence(typeof(QuickLoadElements), out var existed);
+            // EditorPrefs.SetBool(SceneDataManagerSettings.GenerateSceneDataKey, true);
+            if (!existed)
+            {
+                SceneDataGenerator.PopulateQuickLoadElements();
+            }
         }
 
         private static void CacheTagContainer()
         {
             if (_tagContainer) return;
-            _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer));
+            _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer), out var _);
         }
     }
 }

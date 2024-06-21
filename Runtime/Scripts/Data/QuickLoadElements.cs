@@ -11,6 +11,17 @@ namespace Ludwell.Scene
         [field: SerializeField]
         public List<QuickLoadElementData> Elements { get; set; } = new();
 
+        public bool Contains(SceneData sceneData)
+        {
+            foreach (var element in Elements)
+            {
+                if (element.SceneData != sceneData) continue;
+                return true;
+            }
+
+            return false;
+        }
+        
         public QuickLoadElementData Add(SceneData sceneData)
         {
             var element = AddWithoutNotify(sceneData);
