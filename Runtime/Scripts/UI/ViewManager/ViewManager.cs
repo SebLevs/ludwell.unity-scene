@@ -17,6 +17,7 @@ namespace Ludwell.Scene
 
         public void Reset()
         {
+            _currentView.HideView();
             _currentView = null;
             _views.Clear();
         }

@@ -29,6 +29,7 @@ namespace Ludwell.Scene.Editor
 
         private void OnDestroy()
         {
+            rootVisualElement.Q<ViewManager>().Reset();
             Signals.Clear<UISignals.RefreshView>();
         }
     }

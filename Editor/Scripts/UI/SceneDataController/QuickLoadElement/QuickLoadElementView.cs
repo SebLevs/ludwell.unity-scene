@@ -37,6 +37,8 @@ namespace Ludwell.Scene.Editor
         private VisualElement _iconAssetOutsideAssets;
 
         private ButtonWithIcon _directoryChangeButton;
+        private ButtonWithIcon _openButton;
+        private DualStateButton _openAdditiveButton;
 
         private readonly QuickLoadElementController _controller;
 
@@ -46,6 +48,12 @@ namespace Ludwell.Scene.Editor
 
         public void SetIconAssetOutsideAssets(bool state) =>
             _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
+        
+        public void SetDirectoryChangeButtonEnable(bool state) => _directoryChangeButton.SetEnabled(state);
+        
+        public void SetOpenButtonEnable(bool state) => _openButton.SetEnabled(state);
+        
+        public void SetOpenAdditiveButtonEnable(bool state) => _openAdditiveButton.SetEnabled(state);
 
         public QuickLoadElementView()
         {
@@ -67,7 +75,6 @@ namespace Ludwell.Scene.Editor
         private void InitializeFoldout()
         {
             _foldout = this.Q<Foldout>(FoldoutName);
-
             _foldout.RegisterValueChangedCallback(ToggleFoldoutStyle);
         }
 
@@ -84,6 +91,13 @@ namespace Ludwell.Scene.Editor
             this.Q<Toggle>().Children().First().Add(headerContent);
             _sceneDataTextField = this.Q<TextField>(SceneDataName);
             _iconAssetOutsideAssets = this.Q<VisualElement>(IconAssetOutsideAssetsName);
+
+            _sceneDataTextField.RegisterCallback<KeyDownEvent>(evt =>
+            {
+                // todo: hack fix. Investigate better solution
+                if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
+                SetIsOpen(!_foldout.value);
+            });
 
             _sceneDataTextField.RegisterCallback<FocusEvent>(evt =>
             {
@@ -117,7 +131,12 @@ namespace Ludwell.Scene.Editor
 
             _controller.SetTooltipAsAssetPath(_directoryChangeButton);
 
-            _controller.UpdateTagsContainer();
+            _controller.SetTagsContainer();
+
+            _controller.SetDirectoryChangeButton();
+            _controller.SetLoadButtonState();
+            _controller.SolveOpenButton();
+            _controller.SolveOpenAdditiveButton();
         }
 
         private void InitializePingButton()
@@ -140,14 +159,14 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeOpenButton()
         {
-            var button = this.Q<ButtonWithIcon>(OpenSceneButtonName);
-            _controller.InitializeOpenButton(button);
+            _openButton = this.Q<ButtonWithIcon>(OpenSceneButtonName);
+            _controller.InitializeOpenButton(_openButton);
         }
 
         private void InitializeOpenAdditiveButton()
         {
-            var button = this.Q<DualStateButton>(OpenSceneAdditiveButtonName);
-            _controller.InitializeOpenAdditiveButton(button);
+            _openAdditiveButton = this.Q<DualStateButton>(OpenSceneAdditiveButtonName);
+            _controller.InitializeOpenAdditiveButton(_openAdditiveButton);
         }
 
         private void UpdateAndSaveAssetName(ChangeEvent<string> evt)

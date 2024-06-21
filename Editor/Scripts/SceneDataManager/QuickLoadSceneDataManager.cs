@@ -1,5 +1,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
@@ -29,10 +31,18 @@ namespace Ludwell.Scene.Editor
 
         private static void LoadScene()
         {
-            SceneDataManagerEditorApplication.OpenScene(_sceneData);
+            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(_sceneData);
+            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByPath(path))
+            {
+                SceneDataManagerEditorApplication.OpenScene(_sceneData);
+            }
 
             var persistentScene = ResourcesFetcher.GetCoreScenes().PersistentScene;
-            SceneDataManagerEditorApplication.OpenSceneAdditive(persistentScene);
+            if (persistentScene)
+            {
+                SceneDataManagerEditorApplication.OpenSceneAdditive(persistentScene);
+            }
+
             EditorApplication.EnterPlaymode();
 
             EditorApplication.playModeStateChanged += OnEnteredEditModeRemovePersistent;
@@ -51,7 +61,7 @@ namespace Ludwell.Scene.Editor
             if (EditorSceneManager.sceneCount == 1) return;
 
             var persistentScene = ResourcesFetcher.GetCoreScenes().PersistentScene;
-            if (EditorSceneManager.GetActiveScene().name == persistentScene.Name) return;
+            if (persistentScene && EditorSceneManager.GetActiveScene().name == persistentScene.Name) return;
 
             SceneDataManagerEditorApplication.CloseScene(persistentScene, true);
         }
