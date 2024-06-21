@@ -148,7 +148,7 @@ namespace Ludwell.Scene.Editor
                 var id = item.SceneData.GetInstanceID().ToString();
                 SessionState.SetBool(id, false);
             }
-            
+
             foreach (var item in _listViewHandler.VisualElements)
             {
                 item.SetFoldoutValue(false);

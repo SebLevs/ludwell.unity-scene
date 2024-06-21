@@ -64,7 +64,7 @@ namespace Ludwell.Scene.Editor
         {
             OnRemove?.Invoke();
         }
-        
+
         private void ValueChangedAction(ChangeEvent<string> evt)
         {
             OnValueChanged?.Invoke(evt.newValue);

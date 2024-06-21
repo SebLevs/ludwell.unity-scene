@@ -45,7 +45,7 @@ namespace Ludwell.Scene.Editor
             _view.OnAdd -= AddAction;
             _view.OnRemove -= RemoveAction;
             _view.OnValueChanged -= OnValueChanged;
-            
+
             var textField = this.Q<TextField>();
             textField.UnregisterCallback<BlurEvent>(_ => ResourcesLocator.GetTagContainer().HandleUpdatedTag(_data));
             textField.UnregisterCallback<KeyDownEvent>(OnReturnKeyDownEndTextEdit);
@@ -64,7 +64,7 @@ namespace Ludwell.Scene.Editor
         public void SetElementFromCachedData()
         {
             _view.SetValue(_data.Name);
-            
+
             if (!string.IsNullOrEmpty(_view.Value)) return;
             _view.FocusTextField();
         }
@@ -81,12 +81,12 @@ namespace Ludwell.Scene.Editor
             _data.Name = value;
             if (!wasNameValue) ResourcesLocator.SaveTagContainerDelayed();
         }
-        
+
         private void AddAction()
         {
             OnAdd?.Invoke(_data);
         }
-        
+
         private void RemoveAction()
         {
             OnRemove?.Invoke(_data);
