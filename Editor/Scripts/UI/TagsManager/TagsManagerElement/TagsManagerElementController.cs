@@ -77,8 +77,9 @@ namespace Ludwell.Scene.Editor
 
         private void UpdateDataValue(string value)
         {
+            var wasNameValue = _data.Name == value;
             _data.Name = value;
-            ResourcesLocator.SaveTagContainerDelayed();
+            if (!wasNameValue) ResourcesLocator.SaveTagContainerDelayed();
         }
         
         private void AddAction()
