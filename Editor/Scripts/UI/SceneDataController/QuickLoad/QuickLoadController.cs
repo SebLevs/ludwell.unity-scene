@@ -128,7 +128,7 @@ namespace Ludwell.Scene.Editor
                 Debug.LogWarning($"Suspicious delete action | Path was outside the Assets folder | {sceneDataPath}");
             }
 
-            _listViewHandler.ForceRebuild();
+            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         // todo: delete when either service or DI is implemented
