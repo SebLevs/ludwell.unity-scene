@@ -4,7 +4,7 @@
     <ui:VisualElement name="root">
         <uie:ToolbarSpacer style="flex-basis: 22.5px; width: 100%; flex-shrink: 0; background-color: rgba(71, 71, 71, 0); display: flex;" />
         <ui:VisualElement name="content" style="background-color: rgba(0, 0, 0, 0); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
-            <ui:Foldout name="root__foldout" value="true" focusable="true">
+            <ui:Foldout name="root__foldout" focusable="true">
                 <ui:VisualElement name="content" style="background-color: rgb(63, 63, 63); padding-top: 8px; align-self: stretch; padding-bottom: 8px; border-left-width: 0; border-right-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
                     <ui:Instance template="TagsShelfView" name="TagsShelfView" />
                 </ui:VisualElement>

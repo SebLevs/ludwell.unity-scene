@@ -143,14 +143,9 @@ namespace Ludwell.Scene.Editor
         {
             if (_quickLoadElements == null || _quickLoadElements.Elements == null) return;
 
-            foreach (var element in _quickLoadElements.Elements)
-            {
-                element.IsOpen = false;
-            }
-
             foreach (var item in _listViewHandler.ListView.Query<QuickLoadElementView>().ToList())
             {
-                item.SetIsOpen(false);
+                item.SetFoldoutValue(false);
             }
 
             ResourcesLocator.SaveQuickLoadElementsDelayed();

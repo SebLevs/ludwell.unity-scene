@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -42,7 +43,7 @@ namespace Ludwell.Scene.Editor
 
         public readonly QuickLoadElementController Controller;
 
-        public void SetIsOpen(bool value) => _foldout.value = value;
+        public void SetFoldoutValue(bool value) => _foldout.value = value;
 
         public void SetSceneData(SceneData sceneData) => _sceneDataTextField.value = sceneData.name;
 
@@ -72,12 +73,15 @@ namespace Ludwell.Scene.Editor
             InitializeLoadButton();
             InitializeOpenButton();
             InitializeOpenAdditiveButton();
+
+            _foldout.RegisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
         }
 
         private void InitializeFoldout()
         {
             _foldout = this.Q<Foldout>(FoldoutName);
             _foldout.RegisterValueChangedCallback(ToggleFoldoutStyle);
+            _foldout.value = false;
         }
 
         private void ToggleFoldoutStyle(ChangeEvent<bool> evt)
@@ -98,7 +102,7 @@ namespace Ludwell.Scene.Editor
             {
                 // todo: hack fix. Investigate better solution
                 if (evt.keyCode != KeyCode.Return && evt.keyCode != KeyCode.Space) return;
-                SetIsOpen(!_foldout.value);
+                SetFoldoutValue(!_foldout.value);
             });
 
             _sceneDataTextField.RegisterCallback<FocusEvent>(evt =>
@@ -121,13 +125,12 @@ namespace Ludwell.Scene.Editor
 
         public void BindElementToCachedData()
         {
-            _foldout.RegisterValueChangedCallback(Controller.UpdateIsOpen);
             _sceneDataTextField.RegisterValueChangedCallback(UpdateAndSaveAssetName);
         }
 
         public void SetElementFromCachedData()
         {
-            Controller.SetIsOpen(this);
+            Controller.SetFoldoutValueFromSavedState();
             Controller.SetSceneData(this);
             Controller.SetIconAssetOutsideAssets(this);
 
@@ -147,6 +150,11 @@ namespace Ludwell.Scene.Editor
             _sceneDataTextField.Focus();
             var textLength = _sceneDataTextField.text.Length;
             _sceneDataTextField.SelectRange(textLength, textLength);
+        }
+
+        private void UpdateAndSaveAssetName(ChangeEvent<string> evt)
+        {
+            Controller.UpdateAndSaveAssetName(evt.newValue);
         }
 
         private void InitializePingButton()
@@ -179,9 +187,10 @@ namespace Ludwell.Scene.Editor
             Controller.InitializeOpenAdditiveButton(_openAdditiveButton);
         }
 
-        private void UpdateAndSaveAssetName(ChangeEvent<string> evt)
+        private void SessionStateCacheFoldoutValue(ClickEvent evt)
         {
-            Controller.UpdateAndSaveAssetName(evt.newValue);
+            var id = Controller.Model.SceneData.GetInstanceID().ToString();
+            SessionState.SetBool(id, _foldout.value);
         }
     }
 }

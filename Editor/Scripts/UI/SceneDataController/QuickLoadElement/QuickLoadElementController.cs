@@ -35,13 +35,14 @@ namespace Ludwell.Scene.Editor
 
             view.RegisterCallback<AttachToPanelEvent>(_ => { _viewManager = view.Root().Q<ViewManager>(); });
 
-            _view.Q<Toggle>().RegisterValueChangedCallback(evt =>
-            {
-                if (evt.newValue == Model.IsOpen) return;
-                ResourcesLocator.SaveQuickLoadElementsDelayed();
-            });
-
             _updateAssetNameDelayed = new DelayedEditorUpdateAction(1f, UpdateAndSaveAssetDelayed);
+        }
+
+        public void SetFoldoutValueFromSavedState()
+        {
+            var id = Model.SceneData.GetInstanceID().ToString();
+            var oldState = SessionState.GetBool(id, false);
+            _view.SetFoldoutValue(oldState);
         }
 
         public void InitializePingButton(ButtonWithIcon buttonWithIcon)
@@ -100,11 +101,6 @@ namespace Ludwell.Scene.Editor
             _cacheUpatedName = Model.Name;
         }
 
-        public void UpdateIsOpen(ChangeEvent<bool> evt)
-        {
-            Model.IsOpen = evt.newValue;
-        }
-
         public void SetTagsContainer()
         {
             _tagsShelfController.UpdateData(Model);
@@ -121,11 +117,6 @@ namespace Ludwell.Scene.Editor
 
             _cacheUpatedName = value;
             _updateAssetNameDelayed.StartOrRefresh();
-        }
-
-        public void SetIsOpen(QuickLoadElementView view)
-        {
-            view.SetIsOpen(Model.IsOpen);
         }
 
         public void SetSceneData(QuickLoadElementView view)
