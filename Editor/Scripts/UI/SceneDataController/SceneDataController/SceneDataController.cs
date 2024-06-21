@@ -77,7 +77,6 @@ namespace Ludwell.Scene.Editor
         {
             if (EditorApplication.isPlaying) return;
             _delayedRefreshView.StartOrRefresh();
-            Debug.LogError("Closed");
         }
         
         private void HandleActiveSceneChange(UnityEngine.SceneManagement.Scene arg0, UnityEngine.SceneManagement.Scene arg1)
@@ -93,7 +92,6 @@ namespace Ludwell.Scene.Editor
 
         private void DispatchRefreshView()
         {
-            Debug.LogError("Refresh");
             Signals.Dispatch<UISignals.RefreshView>();
         }
 
