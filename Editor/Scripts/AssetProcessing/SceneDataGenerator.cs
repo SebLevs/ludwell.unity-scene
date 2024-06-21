@@ -13,12 +13,6 @@ namespace Ludwell.Scene.Editor
         static SceneDataGenerator()
         {
             GenerateSceneData();
-            EditorApplication.quitting += AllowSceneDataGeneration;
-        }
-
-        private static void AllowSceneDataGeneration()
-        {
-            EditorPrefs.SetBool(SceneDataManagerSettings.GenerateSceneDataKey, true);
         }
 
         public static void CreateSceneAssetAtPath()
