@@ -71,8 +71,7 @@ namespace Ludwell.Scene.Editor
         public static void GenerateSceneData()
         {
             var settings =
-                (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings),
-                    out var _);
+                (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings), out _);
 
             if (!EditorPrefs.GetBool(SceneDataManagerSettings.GenerateSceneDataKey)) return;
 

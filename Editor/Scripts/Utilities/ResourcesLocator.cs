@@ -97,7 +97,7 @@ namespace Ludwell.Scene.Editor
         private static void CacheCoreScenes()
         {
             if (_coreScenes) return;
-            _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes), out var _);
+            _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes), out _);
         }
 
         private static void CacheQuickLoadData()
@@ -115,7 +115,7 @@ namespace Ludwell.Scene.Editor
         private static void CacheTagContainer()
         {
             if (_tagContainer) return;
-            _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer), out var _);
+            _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer), out _);
         }
     }
 }
