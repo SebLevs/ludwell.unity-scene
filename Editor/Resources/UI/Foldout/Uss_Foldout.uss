@@ -1,3 +1,85 @@
+#root {
+    background-color: rgba(0, 0, 0, 0);
+    height: auto;
+    flex-grow: 1;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgb(20, 20, 20);
+    border-bottom-color: rgb(20, 20, 20);
+    margin-top: 22.5px;
+    margin-bottom: 22.5px;
+}
+
+#header {
+    flex-direction: row;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+#header__container {
+    background-color: rgb(56, 56, 56);
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    width: 100%;
+}
+
+#content__left {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+}
+
+#content__center {
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: column;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+#content__center-top {
+    flex-direction: row;
+    padding-bottom: 2px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#content__right {
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    padding-right: 2px;
+}
+
+#toggle {
+    background-color: rgba(0, 0, 0, 0);
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    position: absolute;
+    align-self: center;
+    margin-left: 8px;
+}
+
+#toggle > #toggle-icon {
+    background-image: url('project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=4154780841294389669&guid=f82ce54408d9b7e48a58d91741b52ce7&type=3#arrow-down');
+    width: 16px;
+    height: 16px;
+}
+
 .icon-rotation__closed {
     transition-duration: 0.1s;
 }
@@ -106,6 +188,7 @@
     border-bottom-color: rgb(0, 0, 0);
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
+    width: 100%;
 }
 
 #title:hover {
@@ -180,4 +263,24 @@
 
 .header-section__row__right {
     align-items: flex-end;
+}
+
+#content {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(63, 63, 63);
+}
+
+#content > #TagsShelfView {
+    flex-grow: 1;
+    align-self: stretch;
+}
+
+#footer {
+    flex-direction: row;
+    height: 22.5px;
+    border-top-width: 1px;
+    border-top-color: rgb(0, 0, 0);
+    background-color: rgb(56, 56, 56);
 }
