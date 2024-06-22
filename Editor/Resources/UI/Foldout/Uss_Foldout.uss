@@ -10,13 +10,13 @@
     margin-bottom: 22.5px;
 }
 
-#header {
+#root > #header {
     flex-direction: row;
     border-bottom-width: 1px;
     border-bottom-color: rgb(0, 0, 0);
 }
 
-#header__container {
+#root > #header > #header__container {
     background-color: rgb(56, 56, 56);
     height: 100%;
     flex-direction: row;
@@ -28,7 +28,7 @@
     width: 100%;
 }
 
-#content__left {
+#root > #header > #header__container > #content__left {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -36,7 +36,7 @@
     height: 100%;
 }
 
-#content__center {
+#root > #header > #header__container > #content__center {
     background-color: rgba(0, 0, 0, 0);
     flex-direction: column;
     padding-left: 8px;
@@ -48,7 +48,7 @@
     justify-content: center;
 }
 
-#content__center-top {
+#root > #header > #header__container > #content__center > #content__center-top {
     flex-direction: row;
     padding-bottom: 2px;
     width: 100%;
@@ -56,7 +56,7 @@
     align-items: center;
 }
 
-#content__right {
+#root > #header > #header__container > #content__right {
     background-color: rgba(0, 0, 0, 0);
     flex-direction: column;
     flex-grow: 1;
@@ -64,7 +64,7 @@
     padding-right: 2px;
 }
 
-#toggle {
+#root > #header > #toggle {
     background-color: rgba(0, 0, 0, 0);
     justify-content: center;
     align-items: center;
@@ -74,7 +74,7 @@
     margin-left: 8px;
 }
 
-#toggle > #toggle-icon {
+#root > #header > #toggle > #toggle-icon {
     background-image: url('project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=4154780841294389669&guid=f82ce54408d9b7e48a58d91741b52ce7&type=3#arrow-down');
     width: 16px;
     height: 16px;
@@ -265,19 +265,19 @@
     align-items: flex-end;
 }
 
-#content {
+#root > #content {
     flex-grow: 1;
     align-items: center;
     justify-content: center;
     background-color: rgb(63, 63, 63);
 }
 
-#content > #TagsShelfView {
+#root > #content > #TagsShelfView {
     flex-grow: 1;
     align-self: stretch;
 }
 
-#footer {
+#root > #footer {
     flex-direction: row;
     height: 22.5px;
     border-top-width: 1px;
