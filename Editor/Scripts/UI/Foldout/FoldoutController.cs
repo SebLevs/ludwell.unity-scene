@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -10,12 +11,8 @@ namespace Ludwell.Scene.Editor
         private FoldoutView _view;
 
         private bool _isOpen;
-
-        public Action<ChangeEvent<string>> OnTitleValueChanged
-        {
-            get => _view.OnTitleValueChanged;
-            set => _view.OnTitleValueChanged += value;
-        }
+        
+        public Action<string> OnTitleValueChanged => _view.OnTitleValueChanged;
 
         public bool IsOpen
         {
@@ -27,8 +24,6 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public void FocusTextField() => _view.FocusTextField();
-
         public string Title
         {
             get => _view.Title.value;
@@ -38,6 +33,10 @@ namespace Ludwell.Scene.Editor
                 _view.Title.value = value;
             }
         }
+        
+        public void FocusTextField() => _view.FocusTextField();
+
+        public TextField TitleTextField => _view.Title;
 
         public FoldoutController(VisualElement root, bool startOpen)
         {
@@ -46,19 +45,13 @@ namespace Ludwell.Scene.Editor
             OnHeaderClickedCallback += _view.ToggleFoldoutStyle;
             _view.OnHeaderClicked += ToggleContentVisibility;
 
-            SetIsOpen(startOpen);
+            IsOpen = startOpen;
             _view.ToggleFoldoutStyle(startOpen);
-        }
-
-        public void SetIsOpen(bool state)
-        {
-            IsOpen = state;
-            _view.SetContentVisibility(IsOpen);
         }
 
         private void ToggleContentVisibility()
         {
-            SetIsOpen(!IsOpen);
+            IsOpen = !IsOpen;
             ExecuteHeaderClickedCallback();
         }
 

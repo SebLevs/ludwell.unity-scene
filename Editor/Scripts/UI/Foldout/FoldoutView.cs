@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -11,7 +12,7 @@ namespace Ludwell.Scene.Editor
         public static readonly string ContentName = "content";
         public static string FooterName = "footer";
 
-        public Action<ChangeEvent<string>> OnTitleValueChanged;
+        public Action<string> OnTitleValueChanged;
         public Action OnHeaderClicked;
         
         public TextField Title;
@@ -28,7 +29,7 @@ namespace Ludwell.Scene.Editor
         private readonly VisualElement _icon;
         private readonly VisualElement _content;
 
-        private void ExecuteTitleValueChangedCallback(ChangeEvent<string> evt) => OnTitleValueChanged?.Invoke(evt);
+        private void ExecuteTitleValueChangedCallback(ChangeEvent<string> evt) => OnTitleValueChanged?.Invoke(evt.newValue);
         
         private void ExecuteHeaderClickedCallback(ClickEvent evt) => OnHeaderClicked?.Invoke();
         
@@ -39,16 +40,26 @@ namespace Ludwell.Scene.Editor
             _header = _root.Q<VisualElement>(HeaderName);
             _header.RegisterCallback<ClickEvent>(ExecuteHeaderClickedCallback);
             
+            
+            _root.RegisterCallback<KeyDownEvent>(_ =>
+            {
+                    Debug.LogError("space");
+                if (_.keyCode == KeyCode.Space)
+                {
+                    ExecuteHeaderClickedCallback(null);
+                }
+            });
+            
             _icon = _root.Q<VisualElement>(ToggleIconName);
             
             Title = _root.Q<TextField>(TitleName);
             Title.RegisterValueChangedCallback(ExecuteTitleValueChangedCallback);
-            Title.RegisterCallback<FocusEvent>(evt =>
+            Title.RegisterCallback<ClickEvent>(_ =>
             {
                 Title.RemoveFromClassList(TextFieldUnselectedClass);
                 Title.AddToClassList(TextFieldSelectedClass);
             });
-            Title.RegisterCallback<BlurEvent>(evt =>
+            Title.RegisterCallback<BlurEvent>(_ =>
             {
                 Title.RemoveFromClassList(TextFieldSelectedClass);
                 Title.AddToClassList(TextFieldUnselectedClass);

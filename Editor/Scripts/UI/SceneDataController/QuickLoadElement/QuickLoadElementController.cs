@@ -19,9 +19,6 @@ namespace Ludwell.Scene.Editor
         private readonly TagsShelfController _tagsShelfController;
         private ViewManager _viewManager;
 
-        private string _cacheUpatedName;
-        private DelayedEditorUpdateAction _updateAssetNameDelayed;
-
         public QuickLoadElementData Model { get; private set; }
 
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
@@ -43,11 +40,18 @@ namespace Ludwell.Scene.Editor
             _view.DirectoryChangeButton.clicked += ChangeFolder;
 
             _foldout = new FoldoutController(this, false);
+            _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(evt =>
+            {
+                if (evt.keyCode == KeyCode.Return) UpdateAndSaveAssetName(_foldout.Title);
+            });
+            _foldout.TitleTextField.RegisterCallback<BlurEvent>(_ =>
+            {
+                if (_foldout.Title == Model.SceneData.name) return;
+                _foldout.Title = Model.SceneData.name;
+            });
 
             _tagsShelfController = new TagsShelfController(this, TransitionViewToTagsManager);
             RegisterCallback<AttachToPanelEvent>(_ => { _viewManager = this.Root().Q<ViewManager>(); });
-
-            _updateAssetNameDelayed = new DelayedEditorUpdateAction(1f, UpdateAndSaveAssetDelayed);
 
             RegisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
         }
@@ -55,24 +59,24 @@ namespace Ludwell.Scene.Editor
         public void CacheData(QuickLoadElementData data)
         {
             Model = data;
-            _cacheUpatedName = Model.Name;
         }
 
         public void BindElementToCachedData()
         {
-            _foldout.OnTitleValueChanged += UpdateAndSaveAssetName;
         }
 
-        public void UpdateAndSaveAssetName(ChangeEvent<string> changeEvent)
+        public void UpdateAndSaveAssetName(string value)
         {
-            if (changeEvent.newValue == _cacheUpatedName)
-            {
-                _updateAssetNameDelayed.Stop();
-                return;
-            }
+            if (value == Model.SceneData.name) return;
+            
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
+            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
 
-            _cacheUpatedName = changeEvent.newValue;
-            _updateAssetNameDelayed.StartOrRefresh();
+            var quickLoadController = ResourcesLocator.QuickLoadController;
+            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
+            quickLoadController.ScrollToItemIndex(index);
+            _foldout.FocusTextField();
         }
 
         public void SolveOpenAdditiveButton()
@@ -270,19 +274,6 @@ namespace Ludwell.Scene.Editor
         private void TransitionViewToTagsManager(ClickEvent _)
         {
             _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(Model));
-        }
-
-        private void UpdateAndSaveAssetDelayed()
-        {
-            if (Model.SceneData.name == _cacheUpatedName) return;
-
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _cacheUpatedName);
-            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
-
-            var quickLoadController = ResourcesLocator.QuickLoadController;
-            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
-            quickLoadController.ScrollToItemIndex(index);
         }
 
         private void SessionStateCacheFoldoutValue(ClickEvent evt)

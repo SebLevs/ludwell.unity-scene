@@ -20,7 +20,7 @@
                         <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.Scene.DualStateButton focusable="true" name="button__directory-path" class="ButtonWithIcon" />
                     </ui:VisualElement>
-                    <ui:TextField picking-mode="Ignore" value="Header title" name="title" />
+                    <ui:TextField picking-mode="Ignore" name="title" class="scene-data__unselected" />
                 </ui:VisualElement>
                 <ui:VisualElement name="content__right">
                     <ui:VisualElement name="top" class="header-section__row header-section__row__right" />
