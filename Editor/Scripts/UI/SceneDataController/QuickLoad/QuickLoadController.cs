@@ -14,7 +14,7 @@ namespace Ludwell.Scene.Editor
         private const string TagIconName = "icon_tag";
 
         private readonly QuickLoadElements _quickLoadElements;
-        private ListViewHandler<QuickLoadElementView, QuickLoadElementData> _listViewHandler;
+        private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
 
         private readonly QuickLoadView _view;
         private ListView _listView;
@@ -41,7 +41,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
         }
 
-        public void Dispose()
+        internal void Dispose()
         {
             EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
@@ -59,7 +59,7 @@ namespace Ludwell.Scene.Editor
                 var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetPath(quickLoadElementView.Model.SceneData),
                     ".unity");
                 if (scenePath != scene.path) continue;
-                quickLoadElementView.Controller.SwitchStateOpenAdditive(true);
+                quickLoadElementView.SwitchOpenAdditiveButtonState(true);
                 return;
             }
         }
@@ -75,7 +75,7 @@ namespace Ludwell.Scene.Editor
                 if (scenePath != scene.path) continue;
                 quickLoadElementView.SetOpenButtonEnable(true);
                 quickLoadElementView.SetOpenAdditiveButtonEnable(true);
-                quickLoadElementView.Controller.SwitchStateOpenAdditive(false);
+                quickLoadElementView.SwitchOpenAdditiveButtonState(false);
                 return;
             }
         }
@@ -97,7 +97,7 @@ namespace Ludwell.Scene.Editor
                 if (scenePath == arg0.path) // previous active scene
                 {
                     quickLoadElementView.SetOpenButtonEnable(true);
-                    quickLoadElementView.Controller.SolveOpenAdditiveButton();
+                    quickLoadElementView.SolveOpenAdditiveButton();
                     if (++count == breakAtCount) return;
                     continue;
                 }
@@ -105,7 +105,7 @@ namespace Ludwell.Scene.Editor
                 if (scenePath != arg1.path) continue; // new active scene
                 quickLoadElementView.SetOpenButtonEnable(false);
                 quickLoadElementView.SetOpenAdditiveButtonEnable(false);
-                quickLoadElementView.Controller.SwitchStateOpenAdditive(false);
+                quickLoadElementView.SwitchOpenAdditiveButtonState(false);
                 if (++count == breakAtCount) return;
             }
         }
@@ -151,7 +151,7 @@ namespace Ludwell.Scene.Editor
 
             foreach (var item in _listViewHandler.VisualElements)
             {
-                item.SetFoldoutValue(false);
+                item.SetOpenState(false);
             }
         }
 

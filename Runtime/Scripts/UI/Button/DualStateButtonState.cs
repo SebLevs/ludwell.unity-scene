@@ -1,4 +1,6 @@
 using System;
+using log4net.Repository;
+using PlasticGui.WorkspaceWindow.Items.LockRules;
 using UnityEngine;
 
 namespace Ludwell.Scene
@@ -10,17 +12,18 @@ namespace Ludwell.Scene
         private DualStateButton _context;
         private Sprite _icon;
 
-        public DualStateButtonState(DualStateButton context, Action onClick, Sprite icon = null)
+        public DualStateButtonState(DualStateButton context, Sprite icon, Action onClick = null)
         {
             _context = context;
-            OnClick = onClick;
             _icon = icon;
+            if (onClick == null) return;
+            OnClick = onClick;
         }
 
         public void Enter()
         {
-            _context.clicked += OnClick;
             _context.SetIcon(_icon);
+            _context.clicked += OnClick;
         }
 
         public void Exit()

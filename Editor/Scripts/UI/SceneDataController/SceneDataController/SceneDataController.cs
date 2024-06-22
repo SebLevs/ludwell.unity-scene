@@ -95,13 +95,13 @@ namespace Ludwell.Scene.Editor
 
             var stateOne = new DualStateButtonState(
                 _loadSceneButton,
-                LoadScene,
-                Resources.Load<Sprite>(SpritesPath.Load));
+                Resources.Load<Sprite>(SpritesPath.Load),
+                LoadScene);
 
             var stateTwo = new DualStateButtonState(
                 _loadSceneButton,
-                EditorApplication.ExitPlaymode,
-                Resources.Load<Sprite>(SpritesPath.Stop));
+                Resources.Load<Sprite>(SpritesPath.Stop),
+                EditorApplication.ExitPlaymode);
 
             _loadSceneButton.Initialize(stateOne, stateTwo);
         }
