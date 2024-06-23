@@ -39,7 +39,7 @@ namespace Ludwell.Scene.Editor
 
             SetViewReturnIconTooltip();
 
-            InitializeReturnEvent();
+            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
             InitializeListViewHandler();
             InitializeDropdownSearchField();
         }
@@ -105,16 +105,10 @@ namespace Ludwell.Scene.Editor
             _tagsShelfController.OverrideIconTooltip("Return");
         }
 
-        private void InitializeReturnEvent()
-        {
-            _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
-        }
-
         private void OnKeyUpReturn(KeyUpEvent evt)
         {
             if (_root.style.display == DisplayStyle.None) return;
-
-            if (evt.keyCode == KeyCode.Escape) ReturnToPreviousView();
+            if (evt.keyCode == KeyCode.Escape && (evt.modifiers & EventModifiers.Control) != 0) ReturnToPreviousView();
         }
 
         private void InitializeListViewHandler()

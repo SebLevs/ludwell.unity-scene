@@ -35,7 +35,17 @@ namespace Ludwell.Scene.Editor
             textField.RegisterCallback<BlurEvent>(SolveBlured);
             textField.RegisterCallback<KeyDownEvent>(evt =>
             {
-                if (evt.keyCode == KeyCode.Return) UpdateAssetName(textField.value);
+                switch (evt.keyCode)
+                {
+                    case KeyCode.Return:
+                        UpdateAssetName(textField.value);
+                        break;
+                    case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
+                    case KeyCode.Escape:
+                        _view.SetValue(_model.Name);
+                        evt.StopPropagation();
+                        break;
+                }
             });
         }
 
@@ -75,6 +85,7 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateAssetName(string value)
         {
+            if (_model.Name == value) return;
             _model.Name = value;
             if (!ResourcesLocator.GetTagContainer().HandleTagValidity(_model)) return; // todo: remove???
             ResourcesLocator.GetTagContainer().Tags.Sort();
