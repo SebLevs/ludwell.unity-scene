@@ -26,10 +26,10 @@ namespace Ludwell.Scene.Editor
 
         private ListViewHandler<TagsManagerElementController, TagWithSubscribers> _listViewHandler;
 
-        private TagsManagerElementController _previousTarget;
-
         public TagsManagerController(VisualElement parent) : base(parent)
         {
+            ResourcesLocator.TagsManagerController = this;
+
             _root = parent.Q(nameof(TagsManagerView));
             _view = new TagsManagerView(_root);
 
@@ -42,9 +42,14 @@ namespace Ludwell.Scene.Editor
             InitializeReturnEvent();
             InitializeListViewHandler();
             InitializeDropdownSearchField();
+        }
 
-            // todo: work around for Focus/Blur overlap issue with ListView Rebuild.
-            InitializeTagSorting();
+        // todo: delete when either service or DI is implemented
+        public void ScrollToItemIndex(int index)
+        {
+            _listViewHandler.ListView.ScrollToItem(index);
+            _listViewHandler.ListView.SetSelection(index);
+            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
         }
 
         protected override void Show(ViewArgs args)
@@ -88,11 +93,6 @@ namespace Ludwell.Scene.Editor
             tag.RemoveFromAllSubscribers();
         }
 
-        private void SetPreviousTargetedElement(TagsManagerElementController target)
-        {
-            _previousTarget = target;
-        }
-
         private void RemoveInvalidTagElement(TagWithSubscribers tag)
         {
             RemoveTagFromShelf(tag);
@@ -114,10 +114,7 @@ namespace Ludwell.Scene.Editor
         {
             if (_root.style.display == DisplayStyle.None) return;
 
-            if (evt.keyCode == KeyCode.Escape)
-            {
-                ReturnToPreviousView();
-            }
+            if (evt.keyCode == KeyCode.Escape) ReturnToPreviousView();
         }
 
         private void InitializeListViewHandler()
@@ -130,13 +127,10 @@ namespace Ludwell.Scene.Editor
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
 
             var listView = _listViewHandler.ListView;
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
 
-            _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
+            listView.itemsRemoved += indexEnumerable =>
             {
-                var itemsSource = _listViewHandler.ListView.itemsSource;
+                var itemsSource = listView.itemsSource;
                 var removedIndexes = indexEnumerable.ToList();
                 foreach (var index in removedIndexes)
                 {
@@ -146,6 +140,10 @@ namespace Ludwell.Scene.Editor
 
                 ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
             };
+
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
@@ -179,16 +177,8 @@ namespace Ludwell.Scene.Editor
 
         private void OnItemMadeRegisterEvents(TagsManagerElementController controller)
         {
-            SetPreviousTargetedElement(controller);
             controller.OnAdd += AddTagToShelf;
             controller.OnRemove += RemoveTagFromShelf;
-            controller.OnValueChanged += OnControllerTextEditEnd;
-        }
-
-        private void OnControllerTextEditEnd(string _)
-        {
-            SortTags();
-            SetPreviousTargetedElement(null);
         }
 
         private void InitializeDropdownSearchField()
@@ -199,33 +189,6 @@ namespace Ludwell.Scene.Editor
             {
                 _listViewHandler.ListView.ScrollToItem(itemIndex);
             });
-        }
-
-        private void InitializeTagSorting()
-        {
-            _root.parent.RegisterCallback<MouseUpEvent>(evt =>
-            {
-                if (_root.style.display == DisplayStyle.None) return;
-
-                var tagsManagerElement =
-                    ((VisualElement)evt.target).GetFirstAncestorOfType<TagsManagerElementController>();
-                if (_previousTarget != null && _previousTarget != tagsManagerElement)
-                {
-                    SortTags();
-                    _previousTarget = null;
-                }
-
-                if (evt.target is not TextElement) return;
-                if (tagsManagerElement == null) return;
-                _previousTarget = tagsManagerElement;
-            });
-        }
-
-        private void SortTags()
-        {
-            _tagContainer.Tags.Sort();
-            ResourcesLocator.SaveTagContainerDelayed();
-            _listViewHandler.ForceRebuild();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Ludwell.Scene.Editor
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
 
         public static QuickLoadController QuickLoadController; // todo: change for DI or service
+        public static TagsManagerController TagsManagerController; // todo: change for DI or service
 
         public static SceneDataManagerSettings GetSceneDataManagerSettings()
         {

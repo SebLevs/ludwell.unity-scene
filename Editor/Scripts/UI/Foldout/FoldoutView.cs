@@ -41,13 +41,10 @@ namespace Ludwell.Scene.Editor
             _header.RegisterCallback<ClickEvent>(ExecuteHeaderClickedCallback);
             
             
-            _root.RegisterCallback<KeyDownEvent>(_ =>
+            _root.RegisterCallback<KeyDownEvent>(evt =>
             {
-                    Debug.LogError("space");
-                if (_.keyCode == KeyCode.Space)
-                {
-                    ExecuteHeaderClickedCallback(null);
-                }
+                if (evt.keyCode != KeyCode.Space) return; 
+                ExecuteHeaderClickedCallback(null);
             });
             
             _icon = _root.Q<VisualElement>(ToggleIconName);

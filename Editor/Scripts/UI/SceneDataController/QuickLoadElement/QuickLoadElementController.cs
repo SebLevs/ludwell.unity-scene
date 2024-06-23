@@ -68,7 +68,7 @@ namespace Ludwell.Scene.Editor
         public void UpdateAndSaveAssetName(string value)
         {
             if (value == Model.SceneData.name) return;
-            
+
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
             ResourcesLocator.GetQuickLoadElements().Elements.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
@@ -224,7 +224,7 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.MoveAsset(sceneAssetPath, newAssetPath);
         }
 
-        internal void LoadScene()
+        private void LoadScene()
         {
             SessionState.SetInt(CurrentActiveScene, Model.SceneData.GetInstanceID());
             QuickLoadSceneDataManager.LoadScene(Model.SceneData);
