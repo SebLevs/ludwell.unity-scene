@@ -276,7 +276,7 @@ namespace Ludwell.Scene.Editor
             _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(Model));
         }
 
-        private void SessionStateCacheFoldoutValue(ClickEvent evt)
+        private void SessionStateCacheFoldoutValue(ClickEvent _)
         {
             var id = Model.SceneData.GetInstanceID().ToString();
             SessionState.SetBool(id, _foldout.IsOpen);

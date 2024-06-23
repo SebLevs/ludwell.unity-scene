@@ -11,6 +11,9 @@ namespace Ludwell.Scene.Editor
         private static readonly string UssPath =
             Path.Combine("UI", "Foldout", "Uss_" + "Foldout");
 
+        private const string OpenAdditiveTooltip = "Open additive";
+        private const string RemoveAdditiveTooltip = "Remove additive";
+
         private const string OpenSceneButtonName = "button__open";
         private const string OpenSceneAdditiveButtonName = "button__open-additive";
         private const string LoadButtonName = "button__load";
@@ -58,6 +61,7 @@ namespace Ludwell.Scene.Editor
         public void SwitchOpenAdditiveButtonState(bool state)
         {
             OpenAdditiveButton.SwitchState(state ? OpenAdditiveButton.StateTwo : OpenAdditiveButton.StateOne);
+            OpenAdditiveButton.tooltip = state ? RemoveAdditiveTooltip : OpenAdditiveTooltip;
         }
 
         public void SwitchLoadButtonState(bool state)
