@@ -113,6 +113,7 @@ namespace Ludwell.Scene.Editor
             var sceneDataPath = Path.ChangeExtension(sceneAssetPath, ".asset");
 
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(sceneDataPath);
+            if (ResourcesLocator.GetQuickLoadElements().Contains(sceneData)) return;
             if (sceneData)
             {
                 ResourcesLocator.GetQuickLoadElements().Add(sceneData);
