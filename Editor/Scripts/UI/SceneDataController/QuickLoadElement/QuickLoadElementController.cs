@@ -79,6 +79,22 @@ namespace Ludwell.Scene.Editor
             _foldout.FocusTextField();
         }
 
+        public void SetElementFromCachedData()
+        {
+            SetFoldoutValueFromSavedState();
+            _foldout.Title = Model.SceneData.Name;
+            _view.SetIconAssetOutsideAssets(Model.IsOutsideAssetsFolder);
+
+            _view.SetPathTooltip(AssetDatabase.GetAssetPath(Model.SceneData));
+
+            SetTagsContainer();
+
+            _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
+            SolveOpenAdditiveButton();
+            SolveOpenButton();
+            SetLoadButtonState();
+        }
+
         public void SolveOpenAdditiveButton()
         {
             _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying);
@@ -106,27 +122,11 @@ namespace Ludwell.Scene.Editor
             _view.SwitchOpenAdditiveButtonState(false);
         }
 
-        public void SetElementFromCachedData()
-        {
-            SetFoldoutValueFromSavedState();
-            _foldout.Title = Model.SceneData.Name;
-            _view.SetIconAssetOutsideAssets(Model.IsOutsideAssetsFolder);
-
-            _view.SetPathTooltip(AssetDatabase.GetAssetPath(Model.SceneData));
-
-            SetTagsContainer();
-
-            _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
-            SolveOpenAdditiveButton();
-            SolveOpenButton();
-            SetLoadButtonState();
-        }
-
         private void SetFoldoutValueFromSavedState()
         {
             var id = Model.SceneData.GetInstanceID().ToString();
             var oldState = SessionState.GetBool(id, false);
-            _foldout.IsOpen = oldState;
+            SetOpenState(oldState);
         }
 
         private void SetTagsContainer()
