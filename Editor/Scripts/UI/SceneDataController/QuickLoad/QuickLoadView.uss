@@ -59,7 +59,7 @@
 
 #DropdownSearchField {
     align-self: center;
-    width: 40%;
+    width: 100%;
 }
 
 #scenes__list > ScrollView > VisualElement > VisualElement > Label {
