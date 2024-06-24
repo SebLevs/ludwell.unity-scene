@@ -8,7 +8,7 @@
             <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
         </ui:VisualElement>
         <ui:VisualElement name="listview-container" class="listview-container">
-            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" name="tag-elements-container" class="listview-container__ListView" />
+            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" name="tag-elements-container" selection-type="Multiple" class="listview-container__ListView" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

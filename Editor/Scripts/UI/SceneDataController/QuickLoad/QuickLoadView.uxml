@@ -12,7 +12,7 @@
                 </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" />
+        <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" selection-type="Multiple" />
         <ui:VisualElement name="buttons">
             <ui:Button text="+" display-tooltip-when-elided="true" name="add" />
             <ui:Button text="-" display-tooltip-when-elided="true" name="remove" />

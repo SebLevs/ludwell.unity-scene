@@ -128,7 +128,7 @@ namespace Ludwell.Scene.Editor
                 var removedIndexes = indexEnumerable.ToList();
                 foreach (var index in removedIndexes)
                 {
-                    var tag = itemsSource[index] as TagWithSubscribers;
+                    var tag = (TagWithSubscribers)itemsSource[index];
                     RemoveTagFromAllSubscribers(tag);
                 }
 
@@ -142,31 +142,51 @@ namespace Ludwell.Scene.Editor
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
         {
-            if (_listViewHandler.ListView.selectedItem == null) return;
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
+            if (!arrayOfElements.Any()) return;
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
-            var data = _listViewHandler.GetSelectedElementData();
-            RemoveTagFromShelf(data);
-            data.RemoveFromAllSubscribers();
-            _listViewHandler.RemoveSelectedElement();
+            // var data = _listViewHandler.GetFirstSelectedElementData();
+            // RemoveTagFromShelf(data);
+            // data.RemoveFromAllSubscribers();
+            // _listViewHandler.RemoveSelectedElement();
+
+            for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+            {
+                RemoveTagFromShelf(arrayOfElements[i]);
+                arrayOfElements[i].RemoveFromAllSubscribers();
+                _listViewHandler.RemoveSelectedElement();
+            }
         }
 
         private void OnKeyUpAddSelected(KeyUpEvent keyUpEvent)
         {
-            if (_listViewHandler.ListView.selectedItem == null) return;
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
+            if (!arrayOfElements.Any()) return;
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
 
-            var data = _listViewHandler.GetSelectedElementData();
-            AddTagToShelf(data);
+            // var data = _listViewHandler.GetFirstSelectedElementData();
+            // AddTagToShelf(data);
+
+            foreach (var tagWithSubscribers in arrayOfElements)
+            {
+                AddTagToShelf(tagWithSubscribers);
+            }
         }
 
         private void OnKeyUpRemoveSelected(KeyUpEvent keyUpEvent)
         {
-            if (_listViewHandler.ListView.selectedItem == null) return;
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
+            if (!arrayOfElements.Any()) return;
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
 
-            var data = _listViewHandler.GetSelectedElementData();
-            RemoveTagFromShelf(data);
+            // var data = _listViewHandler.GetFirstSelectedElementData();
+            // RemoveTagFromShelf(data);
+
+            for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+            {
+                RemoveTagFromShelf(arrayOfElements[i]);
+            }
         }
 
         private void OnItemMadeRegisterEvents(TagsManagerElementController controller)

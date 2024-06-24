@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -44,9 +45,14 @@ namespace Ludwell.Scene
             ListView.Rebuild();
         }
 
-        public TData GetSelectedElementData()
+        public TData GetFirstSelectedData()
         {
             return (TData)ListView.selectedItem;
+        }
+
+        public IEnumerable<TData> GetSelectedData()
+        {
+            return ListView.selectedItems.Cast<TData>();
         }
 
         public TData GetLastData()

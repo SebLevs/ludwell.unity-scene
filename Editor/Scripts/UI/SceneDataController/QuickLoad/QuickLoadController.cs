@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -115,20 +116,37 @@ namespace Ludwell.Scene.Editor
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
-            var selectedElementData = _listViewHandler.GetSelectedElementData() != null
-                ? _listViewHandler.GetSelectedElementData()
-                : _listViewHandler.GetLastData();
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
 
-            var sceneDataPath = AssetDatabase.GetAssetPath(selectedElementData.SceneData);
-
-            AssetDatabase.DeleteAsset(sceneDataPath);
-
-            if (selectedElementData.IsOutsideAssetsFolder)
+            if (!arrayOfElements.Any())
             {
-                Debug.LogWarning($"Suspicious delete action | Path was outside the Assets folder | {sceneDataPath}");
+                var lastData = _listViewHandler.GetLastData();
+
+                var sceneDataPath = AssetDatabase.GetAssetPath(lastData.SceneData);
+                if (lastData.IsOutsideAssetsFolder)
+                {
+                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {sceneDataPath}");
+                }
+
+                AssetDatabase.DeleteAsset(sceneDataPath);
+
+                _listView.ClearSelection();
+                return;
             }
 
-            Signals.Dispatch<UISignals.RefreshView>();
+            for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+            {
+                var sceneDataPath = AssetDatabase.GetAssetPath(arrayOfElements[i].SceneData);
+
+                if (arrayOfElements[i].IsOutsideAssetsFolder)
+                {
+                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {sceneDataPath}");
+                }
+
+                AssetDatabase.DeleteAsset(sceneDataPath);
+            }
+
+            _listView.ClearSelection();
         }
 
         // todo: delete when either service or DI is implemented
