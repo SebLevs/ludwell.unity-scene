@@ -33,35 +33,8 @@ namespace Ludwell.Scene.Editor
             _view.OnAdd += ExecuteOnAdd;
             _view.OnRemove += ExecuteOnRemove;
 
-            var textField = this.Q<TextField>();
-            textField.RegisterCallback<BlurEvent>(SolveBlured);
-            textField.RegisterCallback<KeyDownEvent>(evt =>
-            {
-                switch (evt.keyCode)
-                {
-                    case KeyCode.Return:
-                        UpdateAssetName(textField.value);
-                        break;
-                    case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
-                    case KeyCode.Escape:
-                        _view.SetValue(_model.Name);
-                        evt.StopPropagation();
-                        break;
-                }
-            });
-        }
-
-        ~TagsManagerElementController()
-        {
-            _view.OnAdd -= ExecuteOnAdd;
-            _view.OnRemove -= ExecuteOnRemove;
-
-            var textField = this.Q<TextField>();
-            textField.UnregisterCallback<BlurEvent>(SolveBlured); // todo: return to previous name
-            textField.UnregisterCallback<KeyDownEvent>(evt =>
-            {
-                if (evt.keyCode == KeyCode.Return) UpdateAssetName(textField.value);
-            });
+            _view.TextField.RegisterCallback<BlurEvent>(UpdateAssetName);
+            _view.TextField.RegisterCallback<KeyDownEvent>(HandleKeyPress);
         }
 
         public void CacheData(TagWithSubscribers data)
@@ -79,17 +52,30 @@ namespace Ludwell.Scene.Editor
             if (string.IsNullOrEmpty(_view.Value)) _view.FocusTextFieldWithoutNotify();
         }
 
-        private void SolveBlured(BlurEvent evt)
+        private void UpdateAssetName(BlurEvent evt)
         {
-            if (_view.TextField.value != _model.Name) _view.TextField.value = _model.Name;
-            if (string.IsNullOrEmpty(_view.TextField.value)) ResourcesLocator.GetTagContainer().RemoveTag(_model);
-        }
+            var isNullOrEmptyOrWhiteSpace = string.IsNullOrEmpty(_model.Name) || string.IsNullOrWhiteSpace(_model.Name);
 
-        public void UpdateAssetName(string value)
-        {
-            if (_model.Name == value) return;
-            _model.Name = value;
-            if (!ResourcesLocator.GetTagContainer().HandleTagValidity(_model)) return; // todo: remove???
+            if (!isNullOrEmptyOrWhiteSpace && _model.Name == _view.TextField.value) return;
+
+            var previousName = _model.Name;
+            _model.Name = _view.TextField.value;
+
+            if (isNullOrEmptyOrWhiteSpace)
+            {
+                ResourcesLocator.GetTagContainer().RemoveTag(_model);
+                Signals.Dispatch<UISignals.RefreshView>();
+                return;
+            }
+
+            if (ResourcesLocator.GetTagContainer().IsTagDuplicate(_model))
+            {
+                _view.TextField.value = previousName;
+                _model.Name = previousName;
+                Signals.Dispatch<UISignals.RefreshView>();
+                return;
+            }
+
             ResourcesLocator.GetTagContainer().Tags.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
 
@@ -97,6 +83,7 @@ namespace Ludwell.Scene.Editor
             var index = ResourcesLocator.GetTagContainer().Tags.FindIndex(x => x == _model);
             tagsManagerController.ScrollToItemIndex(index);
             ResourcesLocator.SaveTagContainer();
+            Focus();
         }
 
         private void ExecuteOnAdd()
@@ -107,6 +94,22 @@ namespace Ludwell.Scene.Editor
         private void ExecuteOnRemove()
         {
             OnRemove?.Invoke(_model);
+        }
+
+        private void HandleKeyPress(KeyDownEvent evt)
+        {
+            switch (evt.keyCode)
+            {
+                case KeyCode.Return:
+                    Focus();
+                    break;
+                case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
+                case KeyCode.Escape:
+                    _view.SetValue(_model.Name);
+                    if (_model.Name != _view.TextField.value) evt.PreventDefault();
+                    Focus();
+                    break;
+            }
         }
     }
 }
