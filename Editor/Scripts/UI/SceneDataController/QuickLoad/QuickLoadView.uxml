@@ -6,13 +6,13 @@
                 <ui:Label tabindex="-1" text="Quick Load" display-tooltip-when-elided="true" />
             </ui:VisualElement>
             <ui:VisualElement name="header__actions">
-                <ui:Button name="button__close-all" display-tooltip-when-elided="true" tooltip="Close all" class="button__close-all" style="left: 0;">
-                    <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
-                </ui:Button>
                 <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
+                <ui:Button name="button__close-all" display-tooltip-when-elided="true" tooltip="Close all" class="button__close-all" style="left: 0;">
+                    <ui:VisualElement name="icon" style="width: 100%; height: 100%;" />
+                </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" />
+        <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" selection-type="Multiple" />
         <ui:VisualElement name="buttons">
             <ui:Button text="+" display-tooltip-when-elided="true" name="add" />
             <ui:Button text="-" display-tooltip-when-elided="true" name="remove" />

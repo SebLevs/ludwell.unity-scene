@@ -7,23 +7,20 @@ namespace Ludwell.Scene.Editor
 {
     public class TagsManagerElementController : VisualElement, IListViewVisualElement<TagWithSubscribers>
     {
-        public new class UxmlFactory : UxmlFactory<TagsManagerElementController, UxmlTraits>
-        {
-        }
-
-        public Action<TagWithSubscribers> OnAdd;
-        public Action<TagWithSubscribers> OnRemove;
-        public Action<string> OnValueChanged;
-
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsManagerElementView), "Uxml_" + nameof(TagsManagerElementView));
 
         private static readonly string UssPath =
             Path.Combine("UI", nameof(TagsManagerElementView), "Uss_" + nameof(TagsManagerElementView));
 
+        public Action<TagWithSubscribers> OnAdd;
+        public Action<TagWithSubscribers> OnRemove;
+
         private readonly TagsManagerElementView _view;
 
-        private TagWithSubscribers _data;
+        private TagWithSubscribers _model;
+
+        public void FocusTextField() => _view.FocusTextField();
 
         public TagsManagerElementController()
         {
@@ -31,64 +28,83 @@ namespace Ludwell.Scene.Editor
             this.AddStyleFromUss(UssPath);
 
             _view = new TagsManagerElementView(this);
-            _view.OnAdd += AddAction;
-            _view.OnRemove += RemoveAction;
-            _view.OnValueChanged += OnValueChanged;
+            _view.OnAdd += ExecuteOnAdd;
+            _view.OnRemove += ExecuteOnRemove;
 
             var textField = this.Q<TextField>();
-            textField.RegisterCallback<BlurEvent>(_ => ResourcesLocator.GetTagContainer().HandleUpdatedTag(_data));
-            textField.RegisterCallback<KeyDownEvent>(OnReturnKeyDownEndTextEdit);
+            textField.RegisterCallback<BlurEvent>(SolveBlured);
+            textField.RegisterCallback<KeyDownEvent>(evt =>
+            {
+                switch (evt.keyCode)
+                {
+                    case KeyCode.Return:
+                        UpdateAssetName(textField.value);
+                        break;
+                    case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
+                    case KeyCode.Escape:
+                        _view.SetValue(_model.Name);
+                        evt.StopPropagation();
+                        break;
+                }
+            });
         }
 
         ~TagsManagerElementController()
         {
-            _view.OnAdd -= AddAction;
-            _view.OnRemove -= RemoveAction;
-            _view.OnValueChanged -= OnValueChanged;
-            
+            _view.OnAdd -= ExecuteOnAdd;
+            _view.OnRemove -= ExecuteOnRemove;
+
             var textField = this.Q<TextField>();
-            textField.UnregisterCallback<BlurEvent>(_ => ResourcesLocator.GetTagContainer().HandleUpdatedTag(_data));
-            textField.UnregisterCallback<KeyDownEvent>(OnReturnKeyDownEndTextEdit);
+            textField.UnregisterCallback<BlurEvent>(SolveBlured); // todo: return to previous name
+            textField.UnregisterCallback<KeyDownEvent>(evt =>
+            {
+                if (evt.keyCode == KeyCode.Return) UpdateAssetName(textField.value);
+            });
         }
 
         public void CacheData(TagWithSubscribers data)
         {
-            _data = data;
+            _model = data;
         }
 
         public void BindElementToCachedData()
         {
-            _view.OnValueChanged += UpdateDataValue;
         }
 
         public void SetElementFromCachedData()
         {
-            _view.SetValue(_data.Name);
-            
-            if (!string.IsNullOrEmpty(_view.Value)) return;
-            _view.FocusTextField();
+            _view.SetValue(_model.Name);
+            if (string.IsNullOrEmpty(_view.Value)) _view.FocusTextFieldWithoutNotify();
         }
 
-        private void OnReturnKeyDownEndTextEdit(KeyDownEvent evt)
+        private void SolveBlured(BlurEvent evt)
         {
-            if (evt.keyCode != KeyCode.Return) return;
-            UpdateDataValue(_view.Value);
+            if (_view.TextField.value != _model.Name) _view.TextField.value = _model.Name;
+            if (string.IsNullOrEmpty(_view.TextField.value)) ResourcesLocator.GetTagContainer().RemoveTag(_model);
         }
 
-        private void UpdateDataValue(string value)
+        public void UpdateAssetName(string value)
         {
-            _data.Name = value;
-            ResourcesLocator.SaveTagContainerDelayed();
+            if (_model.Name == value) return;
+            _model.Name = value;
+            if (!ResourcesLocator.GetTagContainer().HandleTagValidity(_model)) return; // todo: remove???
+            ResourcesLocator.GetTagContainer().Tags.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
+
+            var tagsManagerController = ResourcesLocator.TagsManagerController;
+            var index = ResourcesLocator.GetTagContainer().Tags.FindIndex(x => x == _model);
+            tagsManagerController.ScrollToItemIndex(index);
+            ResourcesLocator.SaveTagContainer();
         }
-        
-        private void AddAction()
+
+        private void ExecuteOnAdd()
         {
-            OnAdd?.Invoke(_data);
+            OnAdd?.Invoke(_model);
         }
-        
-        private void RemoveAction()
+
+        private void ExecuteOnRemove()
         {
-            OnRemove?.Invoke(_data);
+            OnRemove?.Invoke(_model);
         }
     }
 }

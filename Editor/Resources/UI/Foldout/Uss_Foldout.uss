@@ -1,0 +1,256 @@
+#root {
+    background-color: rgba(0, 0, 0, 0);
+    height: auto;
+    flex-grow: 1;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-color: rgb(20, 20, 20);
+    border-bottom-color: rgb(20, 20, 20);
+    margin-top: 22.5px;
+    margin-bottom: 22.5px;
+}
+
+#root > #header {
+    flex-direction: row;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+#root > #header > #header__container {
+    background-color: rgb(56, 56, 56);
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    width: 100%;
+}
+
+#root > #header > #header__container > #content__left {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+}
+
+#root > #header > #header__container > #content__center {
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: column;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+#root > #header > #header__container > #content__center > #content__center-top {
+    flex-direction: row;
+    padding-bottom: 2px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#root > #header > #header__container > #content__right {
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    padding-right: 2px;
+}
+
+#root > #header > #toggle {
+    background-color: rgba(0, 0, 0, 0);
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    position: absolute;
+    align-self: center;
+    margin-left: 8px;
+}
+
+#root > #header > #toggle > #toggle-icon {
+    background-image: url('project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=4154780841294389669&guid=f82ce54408d9b7e48a58d91741b52ce7&type=3#arrow-down');
+    width: 16px;
+    height: 16px;
+    -unity-background-image-tint-color: rgb(196, 196, 196);
+}
+
+.icon-rotation__closed {
+    transition-duration: 0.1s;
+}
+
+.icon-rotation__opened {
+    rotate: -90deg;
+    transition-duration: 0.05s;
+}
+
+.ButtonWithIcon {
+    width: 20px;
+    height: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.scene-data__unselected {
+    border-left-color: rgb(13, 13, 13);
+    border-right-color: rgb(13, 13, 13);
+    border-top-color: rgb(13, 13, 13);
+    border-bottom-color: rgb(13, 13, 13);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 0;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.scene-data__selected {
+    border-left-color: rgb(100, 100, 100);
+    border-right-color: rgb(100, 100, 100);
+    border-top-color: rgb(100, 100, 100);
+    border-bottom-color: rgb(100, 100, 100);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 0;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+#button__open-additive > #icon {
+    background-image: resource('Sprites/icon_open-additive');
+}
+
+#button__open > #icon {
+    background-image: resource('Sprites/icon_open');
+}
+
+#button__load > #icon {
+    background-image: resource('Sprites/icon_load');
+}
+
+#button__ping > #icon {
+    background-image: resource('Sprites/icon_ping');
+}
+
+#button__directory-path > #icon {
+    background-image: resource('Sprites/icon_move-file');
+}
+
+#title {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 100%;
+}
+
+#title:hover {
+    border-left-color: rgb(100, 100, 100);
+    border-right-color: rgb(100, 100, 100);
+    border-top-color: rgb(100, 100, 100);
+    border-bottom-color: rgb(100, 100, 100);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 0;
+}
+
+#title > Label {
+    display: none;
+}
+
+#title > #unity-text-input {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom-width: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    justify-content: center;
+    align-items: center;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    -unity-text-align: upper-center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#title > #unity-text-input > TextElement {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#icon__package-scene {
+    width: 16px;
+    height: 16px;
+    align-self: flex-start;
+    background-image: resource('Sprites/icon_asset-outside-assets');
+    -unity-background-image-tint-color: rgb(226, 183, 78);
+}
+
+.header-section__row {
+    height: 50%;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 100%;
+    flex-grow: 0;
+}
+
+.header-section__row__left {
+    align-items: flex-end;
+}
+
+.header-section__row__right {
+    align-items: flex-end;
+}
+
+#root > #content {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(63, 63, 63);
+}
+
+#root > #content > #TagsShelfView {
+    flex-grow: 1;
+    align-self: stretch;
+}
+
+#root > #footer {
+    flex-direction: row;
+    height: 22.5px;
+    border-top-width: 1px;
+    border-top-color: rgb(0, 0, 0);
+    background-color: rgb(56, 56, 56);
+}

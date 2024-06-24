@@ -16,9 +16,9 @@ namespace Ludwell.Scene.Editor
         public Action OnRemove;
         public Action<string> OnValueChanged;
 
-        private readonly TextField _textField;
+        public TextField TextField { get; }
 
-        public string Value => _textField.value;
+        public string Value => TextField.value;
 
         public TagsManagerElementView(VisualElement root)
         {
@@ -30,8 +30,8 @@ namespace Ludwell.Scene.Editor
             var removeButton = _root.Q<Button>(RemoveButtonName);
             removeButton.clicked += RemoveButtonAction;
 
-            _textField = _root.Q<TextField>(TagTextFieldName);
-            _textField.RegisterValueChangedCallback(ValueChangedAction);
+            TextField = _root.Q<TextField>(TagTextFieldName);
+            TextField.RegisterValueChangedCallback(ValueChangedAction);
         }
 
         ~TagsManagerElementView()
@@ -42,17 +42,25 @@ namespace Ludwell.Scene.Editor
             var removeButton = _root.Q<Button>(RemoveButtonName);
             removeButton.clicked -= RemoveButtonAction;
 
-            _textField.UnregisterValueChangedCallback(ValueChangedAction);
+            TextField.UnregisterValueChangedCallback(ValueChangedAction);
         }
 
         public void SetValue(string value)
         {
-            _textField.value = value;
+            TextField.value = value;
+        }
+
+        public void FocusTextFieldWithoutNotify()
+        {
+            TextField.Focus();
         }
 
         public void FocusTextField()
         {
-            _textField.Focus();
+            TextField.Blur();
+            TextField.Focus();
+            var textLength = TextField.text.Length;
+            TextField.SelectRange(textLength, textLength);
         }
 
         private void AddButtonAction()
@@ -64,7 +72,7 @@ namespace Ludwell.Scene.Editor
         {
             OnRemove?.Invoke();
         }
-        
+
         private void ValueChangedAction(ChangeEvent<string> evt)
         {
             OnValueChanged?.Invoke(evt.newValue);

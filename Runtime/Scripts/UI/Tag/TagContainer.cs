@@ -14,11 +14,12 @@ namespace Ludwell.Scene
         public Action<TagWithSubscribers> OnAdd;
         public Action<TagWithSubscribers> OnRemove;
 
-        public void HandleUpdatedTag(TagWithSubscribers tag)
+        /// <returns>Whether the tag had a valid name or not</returns>
+        public bool HandleTagValidity(TagWithSubscribers tag)
         {
-            if (!Tags.Contains(tag)) return;
-            if (IsTagValid(tag)) return;
+            if (IsTagValid(tag)) return true;
             RemoveTag(tag);
+            return false;
         }
 
         public bool IsTagValid(Tag tag)
@@ -35,8 +36,7 @@ namespace Ludwell.Scene
 
         public void RemoveTag(TagWithSubscribers tag)
         {
-            if (!Tags.Contains(tag)) return;
-            Tags.Remove(tag);
+            if (!Tags.Remove(tag)) return;
             tag.RemoveFromAllSubscribers();
             OnRemove?.Invoke(tag);
         }
@@ -46,7 +46,9 @@ namespace Ludwell.Scene
             foreach (var tag in Tags)
             {
                 if (tag == evaluatedTag) continue;
-                if (string.Equals(tag.Name, evaluatedTag.Name, StringComparison.CurrentCultureIgnoreCase)) return true;
+                if (!string.Equals(tag.Name, evaluatedTag.Name, StringComparison.CurrentCultureIgnoreCase)) continue;
+                Debug.LogWarning($"Tag name already exists | {tag.Name}");
+                return true;
             }
 
             return false;

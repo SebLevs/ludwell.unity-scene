@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene
@@ -19,7 +20,10 @@ namespace Ludwell.Scene
         private readonly Dictionary<int, TVisualElement> _visibleElements = new();
 
         public ListView ListView { get; }
-        public IEnumerable<TVisualElement> GetVisualElements() => _visibleElements.Values;
+
+        public IEnumerable<TVisualElement> VisualElements => _visibleElements.Values;
+
+        public IEnumerable<TData> Data => (List<TData>)ListView.itemsSource;
 
         public ListViewHandler(ListView listView, List<TData> data)
         {
@@ -41,10 +45,14 @@ namespace Ludwell.Scene
             ListView.Rebuild();
         }
 
-
-        public TData GetSelectedElementData()
+        public TData GetFirstSelectedData()
         {
             return (TData)ListView.selectedItem;
+        }
+
+        public IEnumerable<TData> GetSelectedData()
+        {
+            return ListView.selectedItems.Cast<TData>();
         }
 
         public TData GetLastData()

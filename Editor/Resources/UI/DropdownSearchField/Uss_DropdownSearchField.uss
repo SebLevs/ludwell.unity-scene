@@ -1,13 +1,11 @@
 #icon__behaviour-cycling {
-    background-color: rgba(0, 0, 0, 0);
     background-image: resource('Sprites/icon_cycling');
-    width: 8px;
-    height: 8px;
-    align-self: center;
+    width: 10px;
+    height: 10px;
     margin-left: 2px;
-    margin-right: 2px;
     position: absolute;
-    left: -12px;
+    left: -16px;
+    -unity-background-image-tint-color: rgb(196, 196, 196);
 }
 
 #search-field {
@@ -23,6 +21,15 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
+    height: 16px;
+    width: 50%;
+}
+
+#toolbar-search-field {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 #unity-search {

@@ -7,7 +7,6 @@ namespace Ludwell.Scene
     public class QuickLoadElementData : TagSubscriberWithTags, IComparable
     {
         [HideInInspector] public SceneData SceneData;
-        [HideInInspector] public bool IsOpen = true;
         [HideInInspector] public bool IsOutsideAssetsFolder;
 
         public int CompareTo(object obj)

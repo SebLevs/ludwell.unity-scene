@@ -17,6 +17,7 @@ namespace Ludwell.Scene.Editor
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
 
         public static QuickLoadController QuickLoadController; // todo: change for DI or service
+        public static TagsManagerController TagsManagerController; // todo: change for DI or service
 
         public static SceneDataManagerSettings GetSceneDataManagerSettings()
         {
@@ -54,7 +55,7 @@ namespace Ludwell.Scene.Editor
 
         public static void SaveTagContainerDelayed()
         {
-            _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveCoreScenes);
+            _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveTagContainer);
             _delayedSaveTagContainer.StartOrRefresh();
         }
 
@@ -105,7 +106,6 @@ namespace Ludwell.Scene.Editor
             if (_quickLoadElements) return;
             _quickLoadElements =
                 (QuickLoadElements)ResourcesSolver.EnsureAssetExistence(typeof(QuickLoadElements), out var existed);
-            // EditorPrefs.SetBool(SceneDataManagerSettings.GenerateSceneDataKey, true);
             if (!existed)
             {
                 SceneDataGenerator.PopulateQuickLoadElements();

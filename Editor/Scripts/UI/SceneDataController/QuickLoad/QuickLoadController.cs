@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Ludwell.Scene.Editor
         private const string TagIconName = "icon_tag";
 
         private readonly QuickLoadElements _quickLoadElements;
-        private ListViewHandler<QuickLoadElementView, QuickLoadElementData> _listViewHandler;
+        private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
 
         private readonly QuickLoadView _view;
         private ListView _listView;
@@ -41,7 +42,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
         }
 
-        public void Dispose()
+        internal void Dispose()
         {
             EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
@@ -53,13 +54,13 @@ namespace Ludwell.Scene.Editor
             if (EditorApplication.isPlaying) return;
             if (mode == OpenSceneMode.Single) return;
 
-            foreach (var quickLoadElementView in _listViewHandler.GetVisualElements())
+            foreach (var quickLoadElementView in _listViewHandler.VisualElements)
             {
                 if (quickLoadElementView.Model.SceneData.name != scene.name) continue;
                 var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetPath(quickLoadElementView.Model.SceneData),
                     ".unity");
                 if (scenePath != scene.path) continue;
-                quickLoadElementView.Controller.SwitchStateOpenAdditive(true);
+                quickLoadElementView.SwitchOpenAdditiveButtonState(true);
                 return;
             }
         }
@@ -67,7 +68,7 @@ namespace Ludwell.Scene.Editor
         private void HandleAdditiveSceneClosed(UnityEngine.SceneManagement.Scene scene)
         {
             if (EditorApplication.isPlaying) return;
-            foreach (var quickLoadElementView in _listViewHandler.GetVisualElements())
+            foreach (var quickLoadElementView in _listViewHandler.VisualElements)
             {
                 if (quickLoadElementView.Model.SceneData.name != scene.name) continue;
                 var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetPath(quickLoadElementView.Model.SceneData),
@@ -75,7 +76,7 @@ namespace Ludwell.Scene.Editor
                 if (scenePath != scene.path) continue;
                 quickLoadElementView.SetOpenButtonEnable(true);
                 quickLoadElementView.SetOpenAdditiveButtonEnable(true);
-                quickLoadElementView.Controller.SwitchStateOpenAdditive(false);
+                quickLoadElementView.SwitchOpenAdditiveButtonState(false);
                 return;
             }
         }
@@ -86,7 +87,7 @@ namespace Ludwell.Scene.Editor
             if (EditorApplication.isPlaying) return;
             var breakAtCount = EditorSceneManager.sceneCount;
             var count = 0;
-            foreach (var quickLoadElementView in _listViewHandler.GetVisualElements())
+            foreach (var quickLoadElementView in _listViewHandler.VisualElements)
             {
                 var sceneDataName = quickLoadElementView.Model.SceneData.name;
                 if (sceneDataName != arg0.name && sceneDataName != arg1.name) continue;
@@ -97,7 +98,7 @@ namespace Ludwell.Scene.Editor
                 if (scenePath == arg0.path) // previous active scene
                 {
                     quickLoadElementView.SetOpenButtonEnable(true);
-                    quickLoadElementView.Controller.SolveOpenAdditiveButton();
+                    quickLoadElementView.SolveOpenAdditiveButton();
                     if (++count == breakAtCount) return;
                     continue;
                 }
@@ -105,7 +106,7 @@ namespace Ludwell.Scene.Editor
                 if (scenePath != arg1.path) continue; // new active scene
                 quickLoadElementView.SetOpenButtonEnable(false);
                 quickLoadElementView.SetOpenAdditiveButtonEnable(false);
-                quickLoadElementView.Controller.SwitchStateOpenAdditive(false);
+                quickLoadElementView.SwitchOpenAdditiveButtonState(false);
                 if (++count == breakAtCount) return;
             }
         }
@@ -115,20 +116,37 @@ namespace Ludwell.Scene.Editor
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
-            var selectedElementData = _listViewHandler.GetSelectedElementData() != null
-                ? _listViewHandler.GetSelectedElementData()
-                : _listViewHandler.GetLastData();
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
 
-            var sceneDataPath = AssetDatabase.GetAssetPath(selectedElementData.SceneData);
-
-            AssetDatabase.DeleteAsset(sceneDataPath);
-
-            if (selectedElementData.IsOutsideAssetsFolder)
+            if (!arrayOfElements.Any())
             {
-                Debug.LogWarning($"Suspicious delete action | Path was outside the Assets folder | {sceneDataPath}");
+                var lastData = _listViewHandler.GetLastData();
+
+                var sceneDataPath = AssetDatabase.GetAssetPath(lastData.SceneData);
+                if (lastData.IsOutsideAssetsFolder)
+                {
+                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {sceneDataPath}");
+                }
+
+                AssetDatabase.DeleteAsset(sceneDataPath);
+
+                _listView.ClearSelection();
+                return;
             }
 
-            Signals.Dispatch<UISignals.RefreshView>();
+            for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+            {
+                var sceneDataPath = AssetDatabase.GetAssetPath(arrayOfElements[i].SceneData);
+
+                if (arrayOfElements[i].IsOutsideAssetsFolder)
+                {
+                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {sceneDataPath}");
+                }
+
+                AssetDatabase.DeleteAsset(sceneDataPath);
+            }
+
+            _listView.ClearSelection();
         }
 
         // todo: delete when either service or DI is implemented
@@ -142,18 +160,16 @@ namespace Ludwell.Scene.Editor
         private void CloseAll()
         {
             if (_quickLoadElements == null || _quickLoadElements.Elements == null) return;
-
-            foreach (var element in _quickLoadElements.Elements)
+            foreach (var item in _listViewHandler.Data)
             {
-                element.IsOpen = false;
+                var id = item.SceneData.GetInstanceID().ToString();
+                SessionState.SetBool(id, false);
             }
 
-            foreach (var item in _listViewHandler.ListView.Query<QuickLoadElementView>().ToList())
+            foreach (var item in _listViewHandler.VisualElements)
             {
-                item.SetIsOpen(false);
+                item.SetOpenState(false);
             }
-
-            ResourcesLocator.SaveQuickLoadElementsDelayed();
         }
 
         private void InitializeListViewHandler(ListView listView)

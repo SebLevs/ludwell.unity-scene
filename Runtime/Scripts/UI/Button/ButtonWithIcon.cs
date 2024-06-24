@@ -16,6 +16,7 @@ namespace Ludwell.Scene
         public ButtonWithIcon()
         {
             InitializeIcon();
+            RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
         }
         
         public void SetIcon(Sprite icon)
