@@ -160,7 +160,6 @@ namespace Ludwell.Scene.Editor
         private void CloseAll()
         {
             if (_quickLoadElements == null || _quickLoadElements.Elements == null) return;
-
             foreach (var item in _listViewHandler.Data)
             {
                 var id = item.SceneData.GetInstanceID().ToString();

@@ -5,6 +5,7 @@ namespace Ludwell.Scene.Editor
 {
     public class QuickLoadView
     {
+        private const string ButtonCloseAllName = "button__close-all";
         private const string ButtonAddName = "add";
         private const string ButtonRemoveName = "remove";
 
@@ -33,7 +34,7 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeButtonCloseAll()
         {
-            var closeAllButton = _root.Q<Button>();
+            var closeAllButton = _root.Q<Button>(ButtonCloseAllName);
             closeAllButton.clicked += _onCloseAll.Invoke;
         }
 
