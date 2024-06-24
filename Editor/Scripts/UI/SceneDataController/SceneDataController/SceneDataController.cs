@@ -58,6 +58,8 @@ namespace Ludwell.Scene.Editor
         private void HandlePlayModeStateChange(PlayModeStateChange playModeStateChange)
         {
             Signals.Dispatch<UISignals.RefreshView>();
+
+            _openSceneButton.SetEnabled(playModeStateChange != PlayModeStateChange.EnteredPlayMode);
         }
 
         private void UpdateStartingScene(ChangeEvent<Object> evt)

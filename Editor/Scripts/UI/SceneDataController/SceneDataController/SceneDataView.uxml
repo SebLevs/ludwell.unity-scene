@@ -6,9 +6,9 @@
         <ui:Foldout text="Starting Scene" name="foldout__starting-scene" class="foldout">
             <ui:VisualElement name="launcher__starting-scene" style="flex-grow: 1; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 8px; margin-bottom: 8px; align-self: stretch; align-items: center;">
                 <ui:VisualElement name="starting-scene__buttons">
-                    <Ludwell.Scene.DualStateButton focusable="true" name="button__load" class="ButtonWithIcon" />
+                    <Ludwell.Scene.DualStateButton focusable="true" name="button__load" tooltip="Play" class="ButtonWithIcon" />
                     <ui:VisualElement name="SpaceBetween" style="background-color: rgba(0, 0, 0, 0); width: 4px;" />
-                    <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open" class="ButtonWithIcon" />
+                    <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open" tooltip="Open" class="ButtonWithIcon" />
                 </ui:VisualElement>
                 <uie:ObjectField name="scene-selection" type="Ludwell.Scene.SceneData, ludwell.scene" style="-unity-text-align: middle-center; align-self: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
             </ui:VisualElement>
