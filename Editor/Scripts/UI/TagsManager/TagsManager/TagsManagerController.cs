@@ -182,6 +182,7 @@ namespace Ludwell.Scene.Editor
         {
             controller.OnAdd += AddTagToShelf;
             controller.OnRemove += RemoveTagFromShelf;
+            _listViewHandler.RegisterScrollWheelLockOnFocusIn(controller.TextField);
         }
 
         private void InitializeDropdownSearchField()

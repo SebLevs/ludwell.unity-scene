@@ -20,6 +20,8 @@ namespace Ludwell.Scene.Editor
 
         private TagWithSubscribers _model;
 
+        public TextField TextField => _view.TextField;
+
         public void FocusTextField() => _view.FocusTextField();
 
         public TagsManagerElementController()

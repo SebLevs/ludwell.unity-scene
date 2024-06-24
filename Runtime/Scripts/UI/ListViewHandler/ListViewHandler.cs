@@ -19,6 +19,8 @@ namespace Ludwell.Scene
 
         private readonly Dictionary<int, TVisualElement> _visibleElements = new();
 
+        private Scroller _scroller;
+        
         public ListView ListView { get; }
 
         public IEnumerable<TVisualElement> VisualElements => _visibleElements.Values;
@@ -27,6 +29,8 @@ namespace Ludwell.Scene
 
         public ListViewHandler(ListView listView, List<TData> data)
         {
+            _scroller = listView.Q<Scroller>();
+            
             ListView = listView;
             ListView.itemsSource = data;
             ListView.makeItem = CreateElement;
@@ -78,6 +82,35 @@ namespace Ludwell.Scene
         {
             ListView.itemsSource.Remove(element);
             ForceRebuild();
+        }
+
+        public void RegisterScrollWheelLockOnFocusIn(VisualElement element)
+        {
+            element.RegisterCallback<FocusInEvent>(DisableScrollWheel);
+            element.RegisterCallback<FocusOutEvent>(EnableScrollWheel);
+        }
+        
+        public void UnregisterScrollWheelLockOnFocusIn(VisualElement element)
+        {
+            element.UnregisterCallback<FocusInEvent>(DisableScrollWheel);
+            element.UnregisterCallback<FocusOutEvent>(EnableScrollWheel);
+        }
+        
+        private void DisableScrollWheel(FocusInEvent evt)  
+        {  
+            ListView.RegisterCallback<WheelEvent>(StopScrollWheel);
+        }
+
+        private void EnableScrollWheel(FocusOutEvent evt)
+        {
+            ListView.UnregisterCallback<WheelEvent>(StopScrollWheel);
+            ListView.Root().Focus(); // hack to remove the automated refocus of TextField
+        }
+
+        private void StopScrollWheel(WheelEvent evt)
+        {
+            if (_scroller.style.display == DisplayStyle.None) return; 
+            evt.StopPropagation(); 
         }
 
         private TVisualElement CreateElement()
