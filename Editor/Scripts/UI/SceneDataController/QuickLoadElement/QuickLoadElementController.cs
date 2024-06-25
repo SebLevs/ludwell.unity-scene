@@ -64,21 +64,6 @@ namespace Ludwell.Scene.Editor
 
         public void BindElementToCachedData()
         {
-            BuildSettingsObserver.Subscribe(Model.SceneData, SolveBuildSettingsButton);
-        }
-
-        private void UpdateAndSaveAssetName(string value)
-        {
-            if (value == Model.SceneData.name) return;
-
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
-            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
-
-            var quickLoadController = ResourcesLocator.QuickLoadController;
-            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
-            quickLoadController.ScrollToItemIndex(index);
-            _foldout.FocusTextField();
         }
 
         public void SetElementFromCachedData()
@@ -131,11 +116,11 @@ namespace Ludwell.Scene.Editor
             var path = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData);
             if (SceneDataManagerEditorApplication.IsSceneInBuildSettings(path))
             {
-                _view.BuildSettingsButton.SwitchState(_view.BuildSettingsButton.StateTwo);
+                _view.SwitchBuildSettingsButtonState(true);
                 return;
             }
 
-            _view.BuildSettingsButton.SwitchState(_view.BuildSettingsButton.StateOne);
+            _view.SwitchBuildSettingsButtonState(false);
         }
 
         private void SetFoldoutValueFromSavedState()
@@ -153,7 +138,7 @@ namespace Ludwell.Scene.Editor
 
         private void SetLoadButtonState()
         {
-            // if (!EditorApplication.isPlaying) return;
+            if (!EditorApplication.isPlaying) return;
             if (SessionState.GetInt(CurrentActiveScene, -1) != Model.SceneData.GetInstanceID())
             {
                 _view.SwitchLoadButtonState(false);
@@ -321,6 +306,20 @@ namespace Ludwell.Scene.Editor
         {
             var id = Model.SceneData.GetInstanceID().ToString();
             SessionState.SetBool(id, _foldout.IsOpen);
+        }
+
+        private void UpdateAndSaveAssetName(string value)
+        {
+            if (value == Model.SceneData.name) return;
+
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
+            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
+
+            var quickLoadController = ResourcesLocator.QuickLoadController;
+            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
+            quickLoadController.ScrollToItemIndex(index);
+            _foldout.FocusTextField();
         }
     }
 }

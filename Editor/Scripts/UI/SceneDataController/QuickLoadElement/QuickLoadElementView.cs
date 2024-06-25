@@ -33,7 +33,7 @@ namespace Ludwell.Scene.Editor
         public readonly ButtonWithIcon PingButton;
         public readonly ButtonWithIcon DirectoryChangeButton;
 
-        private QuickLoadElementController _root;
+        private readonly QuickLoadElementController _root;
 
         public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
 
@@ -62,6 +62,12 @@ namespace Ludwell.Scene.Editor
             DirectoryChangeButton = _root.Q<ButtonWithIcon>(DirectoryChangeButtonName);
 
             _iconAssetOutsideAssets = _root.Q<VisualElement>(IconAssetOutsideAssetsName);
+        }
+
+        public void SwitchBuildSettingsButtonState(bool state)
+        {
+            BuildSettingsButton.SwitchState(state ? BuildSettingsButton.StateTwo : BuildSettingsButton.StateOne);
+            BuildSettingsButton.tooltip = state ? RemoveBuildSettingsTooltip : AddBuildSettingsTooltip;
         }
 
         public void SwitchOpenAdditiveButtonState(bool state)
