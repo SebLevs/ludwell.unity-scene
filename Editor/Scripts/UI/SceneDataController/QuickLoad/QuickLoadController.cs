@@ -87,26 +87,26 @@ namespace Ludwell.Scene.Editor
             if (EditorApplication.isPlaying) return;
             var breakAtCount = EditorSceneManager.sceneCount;
             var count = 0;
-            foreach (var quickLoadElementView in _listViewHandler.VisualElements)
+            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
             {
-                var sceneDataName = quickLoadElementView.Model.SceneData.name;
+                var sceneDataName = quickLoadElementController.Model.SceneData.name;
                 if (sceneDataName != arg0.name && sceneDataName != arg1.name) continue;
-                var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetPath(quickLoadElementView.Model.SceneData),
-                    ".unity");
+                var scenePath = Path.ChangeExtension(
+                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData), ".unity");
                 if (scenePath != arg0.path && scenePath != arg1.path) continue;
 
                 if (scenePath == arg0.path) // previous active scene
                 {
-                    quickLoadElementView.SetOpenButtonEnable(true);
-                    quickLoadElementView.SolveOpenAdditiveButton();
+                    quickLoadElementController.SetOpenButtonEnable(true);
+                    quickLoadElementController.SolveOpenAdditiveButton();
                     if (++count == breakAtCount) return;
                     continue;
                 }
 
                 if (scenePath != arg1.path) continue; // new active scene
-                quickLoadElementView.SetOpenButtonEnable(false);
-                quickLoadElementView.SetOpenAdditiveButtonEnable(false);
-                quickLoadElementView.SwitchOpenAdditiveButtonState(false);
+                quickLoadElementController.SetOpenButtonEnable(false);
+                quickLoadElementController.SetOpenAdditiveButtonEnable(false);
+                quickLoadElementController.SwitchOpenAdditiveButtonState(false);
                 if (++count == breakAtCount) return;
             }
         }

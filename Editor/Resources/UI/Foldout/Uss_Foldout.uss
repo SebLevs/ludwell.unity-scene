@@ -32,8 +32,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-grow: 1;
     height: 100%;
+    width: 25%;
+}
+
+#root > #header > #header__container > #content__left > #top {
+    padding-bottom: 2px;
 }
 
 #root > #header > #header__container > #content__center {
@@ -59,9 +63,13 @@
 #root > #header > #header__container > #content__right {
     background-color: rgba(0, 0, 0, 0);
     flex-direction: column;
-    flex-grow: 1;
     height: 100%;
     padding-right: 2px;
+    width: 25%;
+}
+
+#root > #header > #header__container > #content__right > #top {
+    padding-bottom: 2px;
 }
 
 #root > #header > #toggle {
@@ -127,6 +135,10 @@
     border-bottom-width: 0;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
+}
+
+#button__build-settings > #icon {
+    background-image: resource('Sprites/icon_warning');
 }
 
 #button__open-additive > #icon {
@@ -232,7 +244,7 @@
 }
 
 .header-section__row__right {
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 #root > #content {

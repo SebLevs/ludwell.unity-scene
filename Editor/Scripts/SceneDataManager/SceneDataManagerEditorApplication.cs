@@ -47,5 +47,43 @@ namespace Ludwell.Scene.Editor
             var fullPath = AssetDatabase.GetAssetPath(sceneData);
             return Path.ChangeExtension(fullPath, ".unity");
         }
+
+        public static void AddSceneToBuildSettings(SceneData sceneData)
+        {
+            var path = GetSceneAssetPath(sceneData);
+            if (IsSceneInBuildSettings(path)) return;
+
+            var buildSettingsScenes = EditorBuildSettings.scenes;
+            ArrayUtility.Add(ref buildSettingsScenes, new EditorBuildSettingsScene(path, true));
+            EditorBuildSettings.scenes = buildSettingsScenes;
+        }
+
+        public static void RemoveSceneFromBuildSettings(SceneData sceneData)
+        {
+            var path = GetSceneAssetPath(sceneData);
+            var buildSettingsScenes = EditorBuildSettings.scenes;
+
+            for (var i = buildSettingsScenes.Length - 1; i >= 0; i--)
+            {
+                if (!string.Equals(buildSettingsScenes[i].path, path)) continue;
+
+                ArrayUtility.RemoveAt(ref buildSettingsScenes, i);
+                EditorBuildSettings.scenes = buildSettingsScenes;
+                break;
+            }
+        }
+
+        public static bool IsSceneInBuildSettings(string sceneAssetPath)
+        {
+            var buildScenes = EditorBuildSettings.scenes;
+
+            foreach (var buildScene in buildScenes)
+            {
+                if (!string.Equals(buildScene.path, sceneAssetPath)) continue;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

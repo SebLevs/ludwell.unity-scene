@@ -11,36 +11,42 @@ namespace Ludwell.Scene.Editor
         private static readonly string UssPath =
             Path.Combine("UI", "Foldout", "Uss_" + "Foldout");
 
+        private const string AddBuildSettingsTooltip = "Add to build settings";
+        private const string RemoveBuildSettingsTooltip = "Remove from build settings";
         private const string OpenAdditiveTooltip = "Open additive";
         private const string RemoveAdditiveTooltip = "Remove additive";
 
-        private const string OpenSceneButtonName = "button__open";
+        private const string BuildSettingsButtonName = "button__build-settings";
         private const string OpenSceneAdditiveButtonName = "button__open-additive";
+        private const string OpenSceneButtonName = "button__open";
         private const string LoadButtonName = "button__load";
         private const string PingButtonName = "button__ping";
         private const string DirectoryChangeButtonName = "button__directory-path";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
-        private VisualElement _iconAssetOutsideAssets;
+        private readonly VisualElement _iconAssetOutsideAssets;
 
-        public readonly ButtonWithIcon OpenButton;
+        public readonly DualStateButton BuildSettingsButton;
         public readonly DualStateButton OpenAdditiveButton;
+        public readonly ButtonWithIcon OpenButton;
         public readonly DualStateButton LoadButton;
         public readonly ButtonWithIcon PingButton;
         public readonly ButtonWithIcon DirectoryChangeButton;
 
-        private QuickLoadElementController _root;
+        private readonly QuickLoadElementController _root;
 
-        public void SetIconAssetOutsideAssets(bool state) =>
-            _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
+        public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
 
-        public void SetPathTooltip(string path) => DirectoryChangeButton.tooltip = path;
-
-        public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
+        public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
 
         public void SetOpenButtonEnable(bool state) => OpenButton.SetEnabled(state);
 
-        public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
+        public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
+
+        public void SetPathTooltip(string path) => DirectoryChangeButton.tooltip = path;
+
+        public void SetIconAssetOutsideAssets(bool state) =>
+            _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
 
         public QuickLoadElementView(QuickLoadElementController root)
         {
@@ -48,14 +54,20 @@ namespace Ludwell.Scene.Editor
             _root.AddHierarchyFromUxml(UxmlPath);
             _root.AddStyleFromUss(UssPath);
 
-            _iconAssetOutsideAssets = _root.Q<VisualElement>(IconAssetOutsideAssetsName);
-
+            BuildSettingsButton = _root.Q<DualStateButton>(BuildSettingsButtonName);
             OpenAdditiveButton = _root.Q<DualStateButton>(OpenSceneAdditiveButtonName);
             OpenButton = _root.Q<ButtonWithIcon>(OpenSceneButtonName);
             LoadButton = _root.Q<DualStateButton>(LoadButtonName);
             PingButton = _root.Q<ButtonWithIcon>(PingButtonName);
-
             DirectoryChangeButton = _root.Q<ButtonWithIcon>(DirectoryChangeButtonName);
+
+            _iconAssetOutsideAssets = _root.Q<VisualElement>(IconAssetOutsideAssetsName);
+        }
+
+        public void SwitchBuildSettingsButtonState(bool state)
+        {
+            BuildSettingsButton.SwitchState(state ? BuildSettingsButton.StateTwo : BuildSettingsButton.StateOne);
+            BuildSettingsButton.tooltip = state ? RemoveBuildSettingsTooltip : AddBuildSettingsTooltip;
         }
 
         public void SwitchOpenAdditiveButtonState(bool state)

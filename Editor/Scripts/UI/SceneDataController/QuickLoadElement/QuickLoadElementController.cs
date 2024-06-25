@@ -33,6 +33,7 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController()
         {
             _view = new QuickLoadElementView(this);
+            InitializeBuildSettingsButton();
             InitializeOpenAdditiveButton();
             _view.OpenButton.clicked += OpenScene;
             InitializeLoadButton();
@@ -65,20 +66,6 @@ namespace Ludwell.Scene.Editor
         {
         }
 
-        public void UpdateAndSaveAssetName(string value)
-        {
-            if (value == Model.SceneData.name) return;
-
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
-            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
-
-            var quickLoadController = ResourcesLocator.QuickLoadController;
-            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
-            quickLoadController.ScrollToItemIndex(index);
-            _foldout.FocusTextField();
-        }
-
         public void SetElementFromCachedData()
         {
             SetFoldoutValueFromSavedState();
@@ -89,10 +76,11 @@ namespace Ludwell.Scene.Editor
 
             SetTagsContainer();
 
-            _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
+            SolveBuildSettingsButton();
             SolveOpenAdditiveButton();
             SolveOpenButton();
             SetLoadButtonState();
+            _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
         }
 
         public void SolveOpenAdditiveButton()
@@ -122,6 +110,19 @@ namespace Ludwell.Scene.Editor
             _view.SwitchOpenAdditiveButtonState(false);
         }
 
+        private void SolveBuildSettingsButton()
+        {
+            _view.SetBuildSettingsButtonButtonEnable(!EditorApplication.isPlaying);
+            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData);
+            if (SceneDataManagerEditorApplication.IsSceneInBuildSettings(path))
+            {
+                _view.SwitchBuildSettingsButtonState(true);
+                return;
+            }
+
+            _view.SwitchBuildSettingsButtonState(false);
+        }
+
         private void SetFoldoutValueFromSavedState()
         {
             var id = Model.SceneData.GetInstanceID().ToString();
@@ -145,6 +146,21 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.SwitchLoadButtonState(true);
+        }
+
+        private void InitializeBuildSettingsButton()
+        {
+            var stateOne = new DualStateButtonState(
+                _view.BuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.AddBuildSettings),
+                AddToBuildSettings);
+
+            var stateTwo = new DualStateButtonState(
+                _view.BuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.RemoveBuildSettings),
+                RemoveFromBuildSettings);
+
+            _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
         private void InitializeOpenAdditiveButton()
@@ -261,6 +277,16 @@ namespace Ludwell.Scene.Editor
             Signals.Dispatch<UISignals.RefreshView>();
         }
 
+        private void AddToBuildSettings()
+        {
+            SceneDataManagerEditorApplication.AddSceneToBuildSettings(Model.SceneData);
+        }
+
+        private void RemoveFromBuildSettings()
+        {
+            SceneDataManagerEditorApplication.RemoveSceneFromBuildSettings(Model.SceneData);
+        }
+
         private void OpenSceneAdditive()
         {
             SceneDataManagerEditorApplication.OpenSceneAdditive(Model.SceneData);
@@ -280,6 +306,20 @@ namespace Ludwell.Scene.Editor
         {
             var id = Model.SceneData.GetInstanceID().ToString();
             SessionState.SetBool(id, _foldout.IsOpen);
+        }
+
+        private void UpdateAndSaveAssetName(string value)
+        {
+            if (value == Model.SceneData.name) return;
+
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
+            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
+
+            var quickLoadController = ResourcesLocator.QuickLoadController;
+            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
+            quickLoadController.ScrollToItemIndex(index);
+            _foldout.FocusTextField();
         }
     }
 }
