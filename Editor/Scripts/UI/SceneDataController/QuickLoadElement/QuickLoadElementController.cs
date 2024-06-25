@@ -33,6 +33,7 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController()
         {
             _view = new QuickLoadElementView(this);
+            InitializeBuildSettingsButton();
             InitializeOpenAdditiveButton();
             _view.OpenButton.clicked += OpenScene;
             InitializeLoadButton();
@@ -65,7 +66,7 @@ namespace Ludwell.Scene.Editor
         {
         }
 
-        public void UpdateAndSaveAssetName(string value)
+        private void UpdateAndSaveAssetName(string value)
         {
             if (value == Model.SceneData.name) return;
 
@@ -145,6 +146,21 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.SwitchLoadButtonState(true);
+        }
+        
+        private void InitializeBuildSettingsButton()
+        {
+            var stateOne = new DualStateButtonState(
+                _view.BuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.AddBuildSettings),
+                AddToBuildSettings);
+
+            var stateTwo = new DualStateButtonState(
+                _view.BuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.RemoveBuildSettings),
+                RemoveFromBuildSettings);
+
+            _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
         private void InitializeOpenAdditiveButton()
@@ -259,6 +275,16 @@ namespace Ludwell.Scene.Editor
 
             SceneDataManagerEditorApplication.OpenScene(Model.SceneData);
             Signals.Dispatch<UISignals.RefreshView>();
+        }
+        
+        private void AddToBuildSettings()
+        {
+            SceneDataManagerEditorApplication.AddSceneToBuildSettings(Model.SceneData);
+        }
+
+        private void RemoveFromBuildSettings()
+        {
+            SceneDataManagerEditorApplication.RemoveSceneFromBuildSettings(Model.SceneData);
         }
 
         private void OpenSceneAdditive()
