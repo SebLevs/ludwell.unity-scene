@@ -1,7 +1,6 @@
 using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
@@ -52,17 +51,16 @@ namespace Ludwell.Scene.Editor
         public static void AddSceneToBuildSettings(SceneData sceneData)
         {
             var path = GetSceneAssetPath(sceneData);
-            if (SceneIsInBuildSettings(path)) return;
-            
+            if (IsSceneInBuildSettings(path)) return;
+
             var buildSettingsScenes = EditorBuildSettings.scenes;
             ArrayUtility.Add(ref buildSettingsScenes, new EditorBuildSettingsScene(path, true));
             EditorBuildSettings.scenes = buildSettingsScenes;
         }
-        
+
         public static void RemoveSceneFromBuildSettings(SceneData sceneData)
         {
             var path = GetSceneAssetPath(sceneData);
-            Debug.LogError(path);
             var buildSettingsScenes = EditorBuildSettings.scenes;
 
             for (var i = buildSettingsScenes.Length - 1; i >= 0; i--)
@@ -74,14 +72,14 @@ namespace Ludwell.Scene.Editor
                 break;
             }
         }
-        
-        private static bool SceneIsInBuildSettings(string sceneAssetPath)
+
+        public static bool IsSceneInBuildSettings(string sceneAssetPath)
         {
             var buildScenes = EditorBuildSettings.scenes;
 
             foreach (var buildScene in buildScenes)
             {
-                if (!string.Equals(buildScene.path, sceneAssetPath)) continue; 
+                if (!string.Equals(buildScene.path, sceneAssetPath)) continue;
                 return true;
             }
 

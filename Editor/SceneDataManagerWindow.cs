@@ -32,6 +32,7 @@ namespace Ludwell.Scene.Editor
             rootVisualElement.Q<ViewManager>().Reset();
             ResourcesLocator.QuickLoadController.Dispose();
             Signals.Clear<UISignals.RefreshView>();
+            BuildSettingsObserver.Clear();
         }
     }
 }

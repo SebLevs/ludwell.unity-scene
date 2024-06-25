@@ -24,7 +24,7 @@ namespace Ludwell.Scene.Editor
         private const string DirectoryChangeButtonName = "button__directory-path";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
-        private VisualElement _iconAssetOutsideAssets;
+        private readonly VisualElement _iconAssetOutsideAssets;
 
         public readonly DualStateButton BuildSettingsButton;
         public readonly DualStateButton OpenAdditiveButton;
@@ -35,16 +35,18 @@ namespace Ludwell.Scene.Editor
 
         private QuickLoadElementController _root;
 
-        public void SetIconAssetOutsideAssets(bool state) =>
-            _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
+        public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
 
-        public void SetPathTooltip(string path) => DirectoryChangeButton.tooltip = path;
-
-        public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
+        public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
 
         public void SetOpenButtonEnable(bool state) => OpenButton.SetEnabled(state);
 
-        public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
+        public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
+
+        public void SetPathTooltip(string path) => DirectoryChangeButton.tooltip = path;
+
+        public void SetIconAssetOutsideAssets(bool state) =>
+            _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
 
         public QuickLoadElementView(QuickLoadElementController root)
         {

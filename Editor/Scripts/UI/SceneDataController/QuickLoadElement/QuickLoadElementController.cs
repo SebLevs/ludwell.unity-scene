@@ -64,6 +64,7 @@ namespace Ludwell.Scene.Editor
 
         public void BindElementToCachedData()
         {
+            BuildSettingsObserver.Subscribe(Model.SceneData, SolveBuildSettingsButton);
         }
 
         private void UpdateAndSaveAssetName(string value)
@@ -90,10 +91,11 @@ namespace Ludwell.Scene.Editor
 
             SetTagsContainer();
 
-            _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
+            SolveBuildSettingsButton();
             SolveOpenAdditiveButton();
             SolveOpenButton();
             SetLoadButtonState();
+            _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
         }
 
         public void SolveOpenAdditiveButton()
@@ -123,6 +125,19 @@ namespace Ludwell.Scene.Editor
             _view.SwitchOpenAdditiveButtonState(false);
         }
 
+        private void SolveBuildSettingsButton()
+        {
+            _view.SetBuildSettingsButtonButtonEnable(!EditorApplication.isPlaying);
+            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData);
+            if (SceneDataManagerEditorApplication.IsSceneInBuildSettings(path))
+            {
+                _view.BuildSettingsButton.SwitchState(_view.BuildSettingsButton.StateTwo);
+                return;
+            }
+
+            _view.BuildSettingsButton.SwitchState(_view.BuildSettingsButton.StateOne);
+        }
+
         private void SetFoldoutValueFromSavedState()
         {
             var id = Model.SceneData.GetInstanceID().ToString();
@@ -138,7 +153,7 @@ namespace Ludwell.Scene.Editor
 
         private void SetLoadButtonState()
         {
-            if (!EditorApplication.isPlaying) return;
+            // if (!EditorApplication.isPlaying) return;
             if (SessionState.GetInt(CurrentActiveScene, -1) != Model.SceneData.GetInstanceID())
             {
                 _view.SwitchLoadButtonState(false);
@@ -147,7 +162,7 @@ namespace Ludwell.Scene.Editor
 
             _view.SwitchLoadButtonState(true);
         }
-        
+
         private void InitializeBuildSettingsButton()
         {
             var stateOne = new DualStateButtonState(
@@ -276,7 +291,7 @@ namespace Ludwell.Scene.Editor
             SceneDataManagerEditorApplication.OpenScene(Model.SceneData);
             Signals.Dispatch<UISignals.RefreshView>();
         }
-        
+
         private void AddToBuildSettings()
         {
             SceneDataManagerEditorApplication.AddSceneToBuildSettings(Model.SceneData);
