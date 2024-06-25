@@ -23,9 +23,13 @@
                     <ui:TextField picking-mode="Ignore" name="title" class="scene-data__unselected" />
                 </ui:VisualElement>
                 <ui:VisualElement name="content__right">
-                    <ui:VisualElement name="top" class="header-section__row header-section__row__right" />
+                    <ui:VisualElement name="top" class="header-section__row header-section__row__right">
+                        <Ludwell.Scene.DualStateButton name="button__build-settings" tooltip="Open additive" class="ButtonWithIcon" />
+                    </ui:VisualElement>
                     <ui:VisualElement name="bottom" class="header-section__row header-section__row__right">
-                        <ui:VisualElement tooltip="This asset is located outside the Assets folder." name="icon__package-scene" />
+                        <ui:VisualElement name="warning-icon" class="ButtonWithIcon">
+                            <ui:VisualElement tooltip="This asset is located outside the Assets folder." name="icon__package-scene" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
