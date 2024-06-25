@@ -23,10 +23,6 @@ namespace Ludwell.Scene.Editor
             {
                 ResourcesLocator.GetTagContainer().Tags.Clear();
                 ResourcesLocator.GetQuickLoadElements().Elements.Clear();
-                var coreScenes = ResourcesLocator.GetCoreScenes();
-                coreScenes.LoadingScene = null;
-                coreScenes.StartingScene = null;
-                coreScenes.PersistentScene = null;
 
                 ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
                 AssetDatabase.Refresh();

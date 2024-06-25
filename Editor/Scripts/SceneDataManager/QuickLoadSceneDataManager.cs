@@ -37,33 +37,7 @@ namespace Ludwell.Scene.Editor
                 SceneDataManagerEditorApplication.OpenScene(_sceneData);
             }
 
-            var persistentScene = ResourcesLocator.GetCoreScenes().PersistentScene;
-            if (persistentScene)
-            {
-                SceneDataManagerEditorApplication.OpenSceneAdditive(persistentScene);
-            }
-
             EditorApplication.EnterPlaymode();
-
-            EditorApplication.playModeStateChanged += OnEnteredEditModeRemovePersistent;
-        }
-
-        private static void OnEnteredEditModeRemovePersistent(PlayModeStateChange obj)
-        {
-            if (obj != PlayModeStateChange.EnteredEditMode) return;
-            RemovePersistentScene();
-        }
-
-        private static void RemovePersistentScene()
-        {
-            EditorApplication.playModeStateChanged -= OnEnteredEditModeRemovePersistent;
-
-            if (EditorSceneManager.sceneCount == 1) return;
-
-            var persistentScene = ResourcesLocator.GetCoreScenes().PersistentScene;
-            if (persistentScene && EditorSceneManager.GetActiveScene().name == persistentScene.Name) return;
-
-            SceneDataManagerEditorApplication.CloseScene(persistentScene, true);
         }
     }
 }

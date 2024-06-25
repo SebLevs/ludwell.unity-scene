@@ -6,8 +6,6 @@ namespace Ludwell.Scene.Editor
     {
         private static SceneDataManagerSettings _settings;
 
-        private static CoreScenes _coreScenes;
-
         private static QuickLoadElements _quickLoadElements;
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElements;
 
@@ -27,12 +25,6 @@ namespace Ludwell.Scene.Editor
             return _settings;
         }
 
-        public static CoreScenes GetCoreScenes()
-        {
-            CacheCoreScenes();
-            return _coreScenes;
-        }
-
         public static QuickLoadElements GetQuickLoadElements()
         {
             CacheQuickLoadData();
@@ -43,14 +35,6 @@ namespace Ludwell.Scene.Editor
         {
             CacheTagContainer();
             return _tagContainer;
-        }
-
-        public static void SaveCoreScenes()
-        {
-            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
-            CacheCoreScenes();
-            EditorUtility.SetDirty(_coreScenes);
-            AssetDatabase.SaveAssetIfDirty(_coreScenes);
         }
 
         public static void SaveTagContainerDelayed()
@@ -93,12 +77,6 @@ namespace Ludwell.Scene.Editor
         {
             SaveQuickLoadElements();
             SaveTagContainer();
-        }
-
-        private static void CacheCoreScenes()
-        {
-            if (_coreScenes) return;
-            _coreScenes = (CoreScenes)ResourcesSolver.EnsureAssetExistence(typeof(CoreScenes), out _);
         }
 
         private static void CacheQuickLoadData()

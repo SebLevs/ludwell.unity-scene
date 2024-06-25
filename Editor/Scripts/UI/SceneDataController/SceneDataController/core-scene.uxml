@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/SceneDataController/core-scene.uss?fileID=7433441132597879392&amp;guid=5b3d394756a7fd147b118f53cd682e3a&amp;type=3#core-scene" />
-    <ui:VisualElement name="core-scene__container">
-        <uie:ObjectField type="Ludwell.Scene.SceneData, ludwell.scene" name="scene-selection" label="Persistent scene" />
-    </ui:VisualElement>
-</ui:UXML>
