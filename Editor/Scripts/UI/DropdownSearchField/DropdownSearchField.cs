@@ -141,19 +141,17 @@ namespace Ludwell.Scene.Editor
             this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
             {
                 HideDropdown();
-                var wasStringBasedListing = GetCurrentListingStrategy().IsStringBasedListing;
                 var newListingStrategy = NextListingStrategy();
 
-                _searchField.Q<TextField>().SetEnabled(newListingStrategy.IsStringBasedListing);
-
-                if (!string.IsNullOrEmpty(_searchField.value) || !newListingStrategy.IsStringBasedListing)
+                if (!string.IsNullOrEmpty(_searchField.value) || newListingStrategy.IsSearchEmptyString)
                 {
-                    _listView.itemsSource =
-                        GetCurrentListingStrategy().Execute(_searchField.value, _baseItemsSource);
+                    _listView.itemsSource = newListingStrategy.Execute(_searchField.value, _baseItemsSource);
+                }
+                else if (!Equals(_listView.itemsSource, _baseItemsSource))
+                {
+                    _listView.itemsSource = _baseItemsSource;
                 }
 
-                // if cycling away from a non-stringbased strategy, force a rebuild with the base list
-                if (!wasStringBasedListing) _listView.itemsSource = _baseItemsSource;
                 _listView.Rebuild();
             });
 
@@ -175,7 +173,7 @@ namespace Ludwell.Scene.Editor
 
         public void RebuildActiveListing()
         {
-            if (GetCurrentListingStrategy().IsStringBasedListing && !IsListing) return;
+            if (GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return;
             ExecuteCurrentListingStrategy(_searchField.value);
         }
 
@@ -220,7 +218,7 @@ namespace Ludwell.Scene.Editor
         {
             _searchField.RegisterValueChangedCallback(evt =>
             {
-                if (string.IsNullOrEmpty(evt.newValue))
+                if (string.IsNullOrEmpty(evt.newValue) && !GetCurrentListingStrategy().IsSearchEmptyString)
                 {
                     _listView.itemsSource = _baseItemsSource;
                     _listView.Rebuild();

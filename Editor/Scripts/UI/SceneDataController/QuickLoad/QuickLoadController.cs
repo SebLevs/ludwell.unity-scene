@@ -329,7 +329,7 @@ namespace Ludwell.Scene.Editor
 
             var hierarchyListingIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", HierarchyIconName));
             _hierarchyListingStrategy =
-                new ListingStrategy("loaded scenes", hierarchyListingIcon, ListHierarchy, false);
+                new ListingStrategy("loaded scenes", hierarchyListingIcon, ListHierarchy, true);
 
             dropdownSearchField
                 .WithResizableParent(root)
@@ -379,13 +379,21 @@ namespace Ludwell.Scene.Editor
 
             var itemSourceAsData = boundItemSource.Cast<QuickLoadElementData>();
 
+            Debug.LogError("Contains is fucked for the active scene? First scene? Gives a weird path");
             foreach (var sceneInHierarchy in scenesInHierarchy)
             {
                 foreach (var quickLoadElementData in itemSourceAsData)
                 {
                     var sceneAssetPath =
                         SceneDataManagerEditorApplication.GetSceneAssetPath(quickLoadElementData.SceneData);
-                    if (sceneInHierarchy.path != sceneAssetPath) continue;
+                    if (!sceneInHierarchy.path.Contains(sceneAssetPath)) continue; // 
+                    if (string.IsNullOrEmpty(searchFieldValue) || string.IsNullOrWhiteSpace(searchFieldValue))
+                    {
+                        filteredList.Add(quickLoadElementData);
+                        break;
+                    }
+
+                    if (!quickLoadElementData.SceneData.Name.Contains(searchFieldValue)) continue;
                     filteredList.Add(quickLoadElementData);
                     break;
                 }
