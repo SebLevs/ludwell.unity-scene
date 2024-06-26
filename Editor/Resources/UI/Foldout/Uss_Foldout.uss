@@ -251,17 +251,19 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    background-color: rgb(63, 63, 63);
 }
 
 #root > #content > #TagsShelfView {
     flex-grow: 1;
     align-self: stretch;
+    background-color: rgb(63, 63, 63);
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 #root > #footer {
     flex-direction: row;
-    height: 22.5px;
+    height: 16px;
     border-top-width: 1px;
     border-top-color: rgb(0, 0, 0);
     background-color: rgb(56, 56, 56);
