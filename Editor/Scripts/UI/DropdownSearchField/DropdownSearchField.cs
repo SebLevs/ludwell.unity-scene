@@ -173,7 +173,7 @@ namespace Ludwell.Scene.Editor
 
         public void RebuildActiveListing()
         {
-            if (GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return;
+            if (!GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return;
             ExecuteCurrentListingStrategy(_searchField.value);
         }
 

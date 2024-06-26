@@ -5,14 +5,12 @@ namespace Ludwell.Scene.Editor
     public class QuickLoadView
     {
         private const string CloseAllButtonName = "button__close-all";
-        private const string ListHierarchyButtonName = "button__list-hierarchy";
         private const string AddButtonName = "add";
         private const string RemoveButtonName = "remove";
 
         private readonly VisualElement _root;
 
         public Button CloseAllButton { get; }
-        public Button ListHierarchyButton { get; }
         public Button AddButton { get; }
         public Button RemoveButton { get; }
 
@@ -21,7 +19,6 @@ namespace Ludwell.Scene.Editor
             _root = root;
 
             CloseAllButton = _root.Q<Button>(CloseAllButtonName);
-            ListHierarchyButton = _root.Q<Button>(ListHierarchyButtonName);
             AddButton = _root.Q<Button>(AddButtonName);
             RemoveButton = _root.Q<Button>(RemoveButtonName);
         }
