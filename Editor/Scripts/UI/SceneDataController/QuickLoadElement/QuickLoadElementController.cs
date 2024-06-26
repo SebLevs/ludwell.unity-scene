@@ -33,6 +33,7 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController()
         {
             _view = new QuickLoadElementView(this);
+            _view.SetActiveButton.clicked += SetAsActiveScene;
             InitializeOpenAdditiveButton();
             _view.OpenButton.clicked += OpenScene;
             InitializeLoadButton();
@@ -172,6 +173,11 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.SwitchLoadButtonState(true);
+        }
+        
+        private void SetAsActiveScene()
+        {
+            throw new System.NotImplementedException();
         }
 
         private void InitializeOpenAdditiveButton()
