@@ -29,7 +29,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly QuickLoadElementController _root;
 
-        public ButtonWithIcon SetActiveButton { get; private set; }
+        public ButtonWithIcon SetActiveButton { get; }
         public DualStateButton BuildSettingsButton { get; }
         public DualStateButton OpenAdditiveButton { get; }
         public ButtonWithIcon OpenButton { get; }

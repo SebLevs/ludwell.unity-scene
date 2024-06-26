@@ -26,7 +26,11 @@ namespace Ludwell.Scene.Editor
         public QuickLoadController(VisualElement parent)
         {
             var root = parent.Q(nameof(QuickLoadView));
-            _view = new QuickLoadView(root, CloseAll, SceneDataGenerator.CreateSceneAssetAtPath, DeleteSelection);
+            _view = new QuickLoadView(root);
+            _view.CloseAllButton.clicked += CloseAll;
+            _view.ListHierarchyButton.clicked += ListSceneHierarchy;
+            _view.AddButton.clicked += SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.RemoveButton.clicked += DeleteSelection;
 
             _listView = root.Q<ListView>();
             _dropdownSearchField = root.Q<DropdownSearchField>();
@@ -35,7 +39,7 @@ namespace Ludwell.Scene.Editor
 
             InitializeListViewHandler(root.Q<ListView>());
             InitializeSearchField(root, root.Q<DropdownSearchField>());
-            InitializeListViewKeyUpEvents();
+            _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
             ResourcesLocator.QuickLoadController = this; // todo: change for DI or service
 
@@ -45,6 +49,11 @@ namespace Ludwell.Scene.Editor
             SceneManager.activeSceneChanged += HandleActiveSceneChangeRuntime;
 
             InitializeContextMenuManipulator();
+        }
+
+        private void ListSceneHierarchy()
+        {
+            Debug.LogError("ListSceneHierarchy");
         }
 
         internal void Dispose()
@@ -290,7 +299,7 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeListViewHandler(ListView listView)
         {
-            _listViewHandler = new(listView, _quickLoadElements.Elements);
+            _listViewHandler = new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView, _quickLoadElements.Elements);
 
             _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
             {
@@ -306,6 +315,7 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeSearchField(VisualElement root, DropdownSearchField dropdownSearchField)
         {
+            Debug.LogError("initialize search field");
             dropdownSearchField.BindToListView(_listViewHandler.ListView);
 
             var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
@@ -319,11 +329,6 @@ namespace Ludwell.Scene.Editor
                     _listViewHandler.ListView.ScrollToItem(index);
                 })
                 .WithCyclingListingStrategy(searchListingStrategy);
-        }
-
-        private void InitializeListViewKeyUpEvents()
-        {
-            _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
