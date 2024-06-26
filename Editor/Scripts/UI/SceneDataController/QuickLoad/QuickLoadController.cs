@@ -130,13 +130,15 @@ namespace Ludwell.Scene.Editor
             if (EditorApplication.isPlaying) return;
             if (mode == OpenSceneMode.Single) return;
 
-            foreach (var quickLoadElementView in _listViewHandler.VisualElements)
+            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
             {
-                if (quickLoadElementView.Model.SceneData.name != scene.name) continue;
-                var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetPath(quickLoadElementView.Model.SceneData),
+                if (quickLoadElementController.Model.SceneData.name != scene.name) continue;
+                var scenePath = Path.ChangeExtension(
+                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData),
                     ".unity");
                 if (scenePath != scene.path) continue;
-                quickLoadElementView.SwitchOpenAdditiveButtonState(true);
+                quickLoadElementController.SwitchOpenAdditiveButtonState(true);
+                quickLoadElementController.SolveSetActiveButton();
                 return;
             }
         }
@@ -144,15 +146,17 @@ namespace Ludwell.Scene.Editor
         private void HandleAdditiveSceneClosed(UnityEngine.SceneManagement.Scene scene)
         {
             if (EditorApplication.isPlaying) return;
-            foreach (var quickLoadElementView in _listViewHandler.VisualElements)
+            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
             {
-                if (quickLoadElementView.Model.SceneData.name != scene.name) continue;
-                var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetPath(quickLoadElementView.Model.SceneData),
+                if (quickLoadElementController.Model.SceneData.name != scene.name) continue;
+                var scenePath = Path.ChangeExtension(
+                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData),
                     ".unity");
                 if (scenePath != scene.path) continue;
-                quickLoadElementView.SetOpenButtonEnable(true);
-                quickLoadElementView.SetOpenAdditiveButtonEnable(true);
-                quickLoadElementView.SwitchOpenAdditiveButtonState(false);
+                quickLoadElementController.SetOpenButtonEnable(true);
+                quickLoadElementController.SetOpenAdditiveButtonEnable(true);
+                quickLoadElementController.SwitchOpenAdditiveButtonState(false);
+                quickLoadElementController.SolveSetActiveButton();
                 return;
             }
         }
@@ -175,6 +179,7 @@ namespace Ludwell.Scene.Editor
                 {
                     quickLoadElementController.SetOpenButtonEnable(true);
                     quickLoadElementController.SolveOpenAdditiveButton();
+                    quickLoadElementController.SolveSetActiveButton();
                     if (++count == breakAtCount) return;
                     continue;
                 }
@@ -183,6 +188,7 @@ namespace Ludwell.Scene.Editor
                 quickLoadElementController.SetOpenButtonEnable(false);
                 quickLoadElementController.SetOpenAdditiveButtonEnable(false);
                 quickLoadElementController.SwitchOpenAdditiveButtonState(false);
+                quickLoadElementController.SolveSetActiveButton();
                 if (++count == breakAtCount) return;
             }
         }

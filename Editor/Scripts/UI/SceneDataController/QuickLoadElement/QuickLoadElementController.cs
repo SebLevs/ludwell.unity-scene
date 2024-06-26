@@ -44,6 +44,7 @@ namespace Ludwell.Scene.Editor
             InitializeBuildSettingsButton();
 
             _foldout = new FoldoutController(this, false);
+            _foldout.SetOnPreventHeaderClick(target => target is Button);
             _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(evt =>
             {
                 if (evt.keyCode == KeyCode.Return) UpdateAndSaveAssetName(_foldout.Title);
@@ -105,6 +106,12 @@ namespace Ludwell.Scene.Editor
         public void RemoveSceneAdditive()
         {
             SceneDataManagerEditorApplication.RemoveSceneAdditive(Model.SceneData);
+        }
+
+        public void SolveSetActiveButton()
+        {
+            var isSceneLoaded = SceneDataManagerEditorApplication.IsSceneLoaded(Model.SceneData);
+            _view.SetSetActiveButtonEnable(isSceneLoaded && !IsActiveScene());
         }
 
         public void SolveOpenAdditiveButton()
@@ -174,7 +181,6 @@ namespace Ludwell.Scene.Editor
 
         private void SetAsActiveScene()
         {
-            Debug.LogError("SetAsActiveScene");
             SceneDataManagerEditorApplication.SetActiveScene(Model.SceneData);
         }
 
@@ -206,13 +212,6 @@ namespace Ludwell.Scene.Editor
                 EditorApplication.ExitPlaymode);
 
             _view.LoadButton.Initialize(stateOne, stateTwo);
-        }
-
-        private void SolveSetActiveButton()
-        {
-            Debug.LogError("Solve set as active button state");
-            var isSceneLoaded = SceneDataManagerEditorApplication.IsSceneLoaded(Model.SceneData);
-            _view.SetSetActiveButtonEnable(isSceneLoaded && !IsActiveScene());
         }
 
         private void SolveOpenButton()

@@ -12,6 +12,7 @@ namespace Ludwell.Scene.Editor
         public static readonly string ContentName = "content";
         public static string FooterName = "footer";
 
+        public Func<IEventHandler, bool> OnPreventHeaderClick;
         public Action<string> OnTitleValueChanged;
         public Action OnHeaderClicked;
 
@@ -32,7 +33,12 @@ namespace Ludwell.Scene.Editor
         private void ExecuteTitleValueChangedCallback(ChangeEvent<string> evt) =>
             OnTitleValueChanged?.Invoke(evt.newValue);
 
-        private void ExecuteHeaderClickedCallback(ClickEvent evt) => OnHeaderClicked?.Invoke();
+        private void ExecuteHeaderClickedCallback(ClickEvent evt)
+        {
+            // if (evt.target is Button) return;
+            if (OnPreventHeaderClick?.Invoke(evt.target) == true) return;
+            OnHeaderClicked?.Invoke();
+        }
 
         public FoldoutView(VisualElement root)
         {
