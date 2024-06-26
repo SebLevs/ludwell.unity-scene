@@ -28,10 +28,10 @@ namespace Ludwell.Scene.Editor
         private static readonly string UssPath =
             Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownSearchField));
 
-        private const string SearchFieldName = "toolbar-search-field";
-        private const string DefaultSearchIcon = "icon_search";
-
         private const string CyclingIconName = "icon__behaviour-cycling";
+        private const string SearchFieldName = "toolbar-search-field";
+
+        private const string DefaultSearchIcon = "icon_search";
 
         private const float BorderRadius = 3;
 
@@ -141,13 +141,19 @@ namespace Ludwell.Scene.Editor
             this.Q(UiToolkitNames.UnitySearch).RegisterCallback<ClickEvent>(_ =>
             {
                 HideDropdown();
-                NextListingStrategy();
-                if (!string.IsNullOrEmpty(_searchField.value))
+                var wasStringBasedListing = GetCurrentListingStrategy().IsStringBasedListing;
+                var newListingStrategy = NextListingStrategy();
+
+                _searchField.Q<TextField>().SetEnabled(newListingStrategy.IsStringBasedListing);
+
+                if (!string.IsNullOrEmpty(_searchField.value) || !newListingStrategy.IsStringBasedListing)
                 {
                     _listView.itemsSource =
                         GetCurrentListingStrategy().Execute(_searchField.value, _baseItemsSource);
                 }
 
+                // if cycling away from a non-stringbased strategy, force a rebuild with the base list
+                if (!wasStringBasedListing) _listView.itemsSource = _baseItemsSource;
                 _listView.Rebuild();
             });
 
@@ -169,7 +175,7 @@ namespace Ludwell.Scene.Editor
 
         public void RebuildActiveListing()
         {
-            if (!IsListing) return;
+            if (GetCurrentListingStrategy().IsStringBasedListing && !IsListing) return;
             ExecuteCurrentListingStrategy(_searchField.value);
         }
 
@@ -261,7 +267,7 @@ namespace Ludwell.Scene.Editor
             return _listingStrategies[_listingStrategyIndex];
         }
 
-        private void NextListingStrategy()
+        private ListingStrategy NextListingStrategy()
         {
             _listingStrategyIndex++;
 
@@ -273,6 +279,7 @@ namespace Ludwell.Scene.Editor
             var currentStrategy = GetCurrentListingStrategy();
             _searchIcon.style.backgroundImage = new StyleBackground(currentStrategy.Icon);
             _searchIcon.tooltip = "Search by " + currentStrategy.Name;
+            return currentStrategy;
         }
 
         private void InitializeFocusAndBlur()

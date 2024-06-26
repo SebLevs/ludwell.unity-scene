@@ -15,6 +15,7 @@ namespace Ludwell.Scene.Editor
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
+        private const string HierarchyIconName = "icon_hierarchy";
 
         private readonly QuickLoadElements _quickLoadElements;
         private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
@@ -22,6 +23,8 @@ namespace Ludwell.Scene.Editor
         private readonly QuickLoadView _view;
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
+
+        private ListingStrategy _hierarchyListingStrategy;
 
         public QuickLoadController(VisualElement parent)
         {
@@ -47,6 +50,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChangeEditor;
             SceneManager.activeSceneChanged += HandleActiveSceneChangeRuntime;
+
 
             InitializeContextMenuManipulator();
         }
@@ -299,7 +303,9 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeListViewHandler(ListView listView)
         {
-            _listViewHandler = new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView, _quickLoadElements.Elements);
+            _listViewHandler =
+                new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView,
+                    _quickLoadElements.Elements);
 
             _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
             {
@@ -318,8 +324,12 @@ namespace Ludwell.Scene.Editor
             Debug.LogError("initialize search field");
             dropdownSearchField.BindToListView(_listViewHandler.ListView);
 
-            var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
-            var searchListingStrategy = new ListingStrategy(TagListingStrategyName, icon, ListTag);
+            var tagSearchIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
+            var searchListingStrategy = new ListingStrategy(TagListingStrategyName, tagSearchIcon, ListTag);
+
+            var hierarchyListingIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", HierarchyIconName));
+            _hierarchyListingStrategy =
+                new ListingStrategy("loaded scenes", hierarchyListingIcon, ListHierarchy, false);
 
             dropdownSearchField
                 .WithResizableParent(root)
@@ -328,7 +338,8 @@ namespace Ludwell.Scene.Editor
                     dropdownSearchField.HideDropdown();
                     _listViewHandler.ListView.ScrollToItem(index);
                 })
-                .WithCyclingListingStrategy(searchListingStrategy);
+                .WithCyclingListingStrategy(searchListingStrategy)
+                .WithCyclingListingStrategy(_hierarchyListingStrategy);
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
@@ -343,12 +354,39 @@ namespace Ludwell.Scene.Editor
         {
             List<IListable> filteredList = new();
 
-            foreach (var listViewElement in boundItemSource)
+            foreach (var data in boundItemSource)
             {
-                foreach (var tag in (listViewElement as QuickLoadElementData).Tags)
+                foreach (var tag in (data as QuickLoadElementData).Tags)
                 {
                     if (tag.Name != searchFieldValue) continue;
-                    filteredList.Add(listViewElement as IListable);
+                    filteredList.Add(data as IListable);
+                    break;
+                }
+            }
+
+            return filteredList;
+        }
+
+        private List<IListable> ListHierarchy(string searchFieldValue, IList boundItemSource)
+        {
+            List<IListable> filteredList = new();
+
+            List<UnityEngine.SceneManagement.Scene> scenesInHierarchy = new();
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                scenesInHierarchy.Add(SceneManager.GetSceneAt(i));
+            }
+
+            var itemSourceAsData = boundItemSource.Cast<QuickLoadElementData>();
+
+            foreach (var sceneInHierarchy in scenesInHierarchy)
+            {
+                foreach (var quickLoadElementData in itemSourceAsData)
+                {
+                    var sceneAssetPath =
+                        SceneDataManagerEditorApplication.GetSceneAssetPath(quickLoadElementData.SceneData);
+                    if (sceneInHierarchy.path != sceneAssetPath) continue;
+                    filteredList.Add(quickLoadElementData);
                     break;
                 }
             }
