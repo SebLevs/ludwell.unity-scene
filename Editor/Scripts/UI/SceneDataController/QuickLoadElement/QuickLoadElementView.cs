@@ -32,18 +32,20 @@ namespace Ludwell.Scene.Editor
         public ButtonWithIcon SetActiveButton { get; private set; }
         public DualStateButton BuildSettingsButton { get; }
         public DualStateButton OpenAdditiveButton { get; }
-        public ButtonWithIcon OpenButton{ get; }
+        public ButtonWithIcon OpenButton { get; }
         public DualStateButton LoadButton { get; }
         public ButtonWithIcon PingButton { get; private set; }
         public ButtonWithIcon DirectoryChangeButton { get; }
 
-        public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
+        public void SetSetActiveButtonEnable(bool state) => SetActiveButton.SetEnabled(state);
 
         public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
 
         public void SetOpenButtonEnable(bool state) => OpenButton.SetEnabled(state);
 
         public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
+
+        public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
 
         public void SetPathTooltip(string path) => DirectoryChangeButton.tooltip = path;
 

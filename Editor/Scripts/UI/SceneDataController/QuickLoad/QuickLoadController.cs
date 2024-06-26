@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -41,18 +42,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
 
-            _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator((context) =>
-            {
-                context.menu.AppendAction("Open selection additively", OpenSelectionAdditive,
-                    DropdownMenuAction.AlwaysEnabled);
-                context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive,
-                    DropdownMenuAction.AlwaysEnabled);
-                context.menu.AppendSeparator(null);
-                context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings,
-                    DropdownMenuAction.AlwaysEnabled);
-                context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
-                    DropdownMenuAction.AlwaysEnabled);
-            }));
+            InitializeContextMenuManipulator();
         }
 
         internal void Dispose()
@@ -195,6 +185,20 @@ namespace Ludwell.Scene.Editor
                 quickLoadElementController.SwitchOpenAdditiveButtonState(false);
                 if (++count == breakAtCount) return;
             }
+        }
+
+        private void InitializeContextMenuManipulator()
+        {
+            _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
+            {
+                Func<DropdownMenuAction, DropdownMenuAction.Status> status = DropdownMenuAction.AlwaysEnabled;
+                context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, status);
+                context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive, status);
+                context.menu.AppendSeparator();
+                context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings, status);
+                context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
+                    status);
+            }));
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>

@@ -30,6 +30,8 @@ namespace Ludwell.Scene.Editor
 
         public void SwitchOpenAdditiveButtonState(bool state) => _view.SwitchOpenAdditiveButtonState(state);
 
+        public bool IsActiveScene() => SceneDataManagerEditorApplication.IsActiveScene(Model.SceneData);
+
         public QuickLoadElementController()
         {
             _view = new QuickLoadElementView(this);
@@ -77,17 +79,12 @@ namespace Ludwell.Scene.Editor
 
             SetTagsContainer();
 
+            SolveSetActiveButton();
             SolveOpenAdditiveButton();
             SolveOpenButton();
             SetLoadButtonState();
             _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
             SolveBuildSettingsButton();
-        }
-
-        public bool IsActiveScene()
-        {
-            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData); // todo: optimize
-            return SceneManager.GetActiveScene() == SceneManager.GetSceneByPath(path);
         }
 
         public void AddToBuildSettings()
@@ -174,10 +171,11 @@ namespace Ludwell.Scene.Editor
 
             _view.SwitchLoadButtonState(true);
         }
-        
+
         private void SetAsActiveScene()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("SetAsActiveScene");
+            SceneDataManagerEditorApplication.SetActiveScene(Model.SceneData);
         }
 
         private void InitializeOpenAdditiveButton()
@@ -210,6 +208,13 @@ namespace Ludwell.Scene.Editor
             _view.LoadButton.Initialize(stateOne, stateTwo);
         }
 
+        private void SolveSetActiveButton()
+        {
+            Debug.LogError("Solve set as active button state");
+            var isSceneLoaded = SceneDataManagerEditorApplication.IsSceneLoaded(Model.SceneData);
+            _view.SetSetActiveButtonEnable(isSceneLoaded && !IsActiveScene());
+        }
+
         private void SolveOpenButton()
         {
             if (EditorApplication.isPlaying)
@@ -219,8 +224,7 @@ namespace Ludwell.Scene.Editor
             }
 
             // todo: optimize
-            var scenePath = Path.ChangeExtension(AssetDatabase.GetAssetOrScenePath(Model.SceneData), ".unity");
-            var isSceneActiveScene = SceneManager.GetActiveScene() == SceneManager.GetSceneByPath(scenePath);
+            var isSceneActiveScene = SceneDataManagerEditorApplication.IsActiveScene(Model.SceneData);
             if (isSceneActiveScene) _currentQuickLoadElement = this;
             _view.SetOpenButtonEnable(!isSceneActiveScene);
         }
