@@ -21,6 +21,9 @@ namespace Ludwell.Scene.Editor
         private ListView _listView;
         private DropdownSearchField _dropdownSearchField;
 
+        public IEnumerable<QuickLoadElementController> GetVisualElementSelection() =>
+            _listViewHandler.GetSelectedVisualElements();
+
         public QuickLoadController(VisualElement parent)
         {
             var root = parent.Q(nameof(QuickLoadView));
@@ -40,6 +43,19 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
+
+            _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator((context) =>
+            {
+                context.menu.AppendAction("Open selection additively", OpenSelectionAdditive,
+                    DropdownMenuAction.AlwaysEnabled);
+                context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive,
+                    DropdownMenuAction.AlwaysEnabled);
+                context.menu.AppendSeparator(null);
+                context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings,
+                    DropdownMenuAction.AlwaysEnabled);
+                context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
+                    DropdownMenuAction.AlwaysEnabled);
+            }));
         }
 
         internal void Dispose()
@@ -47,6 +63,79 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
+        }
+
+        // todo: delete when either service or DI is implemented
+        public void ScrollToItemIndex(int index)
+        {
+            _listViewHandler.ListView.ScrollToItem(index);
+            _listViewHandler.ListView.SetSelection(index);
+            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
+        }
+
+        public void ForceRebuildListView()
+        {
+            _listViewHandler.ForceRebuild();
+            _dropdownSearchField.RebuildActiveListing();
+        }
+
+        private List<QuickLoadElementController> GetVisualElementsWithoutActiveScene()
+        {
+            var enumerableSelection = ResourcesLocator.QuickLoadController.GetVisualElementSelection();
+            var quickLoadElementControllers =
+                enumerableSelection as List<QuickLoadElementController> ?? enumerableSelection.ToList();
+
+            if (!quickLoadElementControllers.Any()) return quickLoadElementControllers;
+
+            var activeScene = quickLoadElementControllers.First(x => x.IsActiveScene());
+            quickLoadElementControllers.Remove(activeScene);
+            return quickLoadElementControllers;
+        }
+
+        private void OpenSelectionAdditive(DropdownMenuAction _)
+        {
+            var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
+            foreach (var quickLoadElementController in quickLoadElementControllers)
+            {
+                quickLoadElementController.OpenSceneAdditive();
+            }
+        }
+
+        private void RemoveSelectionAdditive(DropdownMenuAction _)
+        {
+            var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
+            foreach (var quickLoadElementController in quickLoadElementControllers)
+            {
+                quickLoadElementController.RemoveSceneAdditive();
+            }
+        }
+
+        private void AddSelectionToBuildSettings(DropdownMenuAction _)
+        {
+            var enumerableSelection = ResourcesLocator.QuickLoadController.GetVisualElementSelection();
+            var quickLoadElementControllers =
+                enumerableSelection as QuickLoadElementController[] ?? enumerableSelection.ToArray();
+            if (!quickLoadElementControllers.Any()) return;
+            foreach (var quickLoadElementController in quickLoadElementControllers)
+            {
+                quickLoadElementController.AddToBuildSettings();
+            }
+
+            Signals.Dispatch<UISignals.RefreshView>();
+        }
+
+        private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
+        {
+            var enumerableSelection = ResourcesLocator.QuickLoadController.GetVisualElementSelection();
+            var quickLoadElementControllers =
+                enumerableSelection as QuickLoadElementController[] ?? enumerableSelection.ToArray();
+            if (!quickLoadElementControllers.Any()) return;
+            foreach (var quickLoadElementController in quickLoadElementControllers)
+            {
+                quickLoadElementController.RemoveFromBuildSettings();
+            }
+
+            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void HandleAdditiveSceneOpened(UnityEngine.SceneManagement.Scene scene, OpenSceneMode mode)
@@ -112,7 +201,7 @@ namespace Ludwell.Scene.Editor
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>
-        public void DeleteSelection()
+        private void DeleteSelection()
         {
             if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
@@ -147,14 +236,6 @@ namespace Ludwell.Scene.Editor
             }
 
             _listView.ClearSelection();
-        }
-
-        // todo: delete when either service or DI is implemented
-        public void ScrollToItemIndex(int index)
-        {
-            _listViewHandler.ListView.ScrollToItem(index);
-            _listViewHandler.ListView.SetSelection(index);
-            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
         }
 
         private void CloseAll()
@@ -216,12 +297,6 @@ namespace Ludwell.Scene.Editor
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
             DeleteSelection();
-        }
-
-        public void ForceRebuildListView()
-        {
-            _listViewHandler.ForceRebuild();
-            _dropdownSearchField.RebuildActiveListing();
         }
 
         private List<IListable> ListTag(string searchFieldValue, IList boundItemSource)
