@@ -18,11 +18,8 @@ namespace Ludwell.Scene.Editor
         private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
 
         private readonly QuickLoadView _view;
-        private ListView _listView;
-        private DropdownSearchField _dropdownSearchField;
-
-        public IEnumerable<QuickLoadElementController> GetVisualElementSelection() =>
-            _listViewHandler.GetSelectedVisualElements();
+        private readonly ListView _listView;
+        private readonly DropdownSearchField _dropdownSearchField;
 
         public QuickLoadController(VisualElement parent)
         {
@@ -81,14 +78,14 @@ namespace Ludwell.Scene.Editor
 
         private List<QuickLoadElementController> GetVisualElementsWithoutActiveScene()
         {
-            var enumerableSelection = ResourcesLocator.QuickLoadController.GetVisualElementSelection();
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             var quickLoadElementControllers =
                 enumerableSelection as List<QuickLoadElementController> ?? enumerableSelection.ToList();
 
             if (!quickLoadElementControllers.Any()) return quickLoadElementControllers;
 
-            var activeScene = quickLoadElementControllers.First(x => x.IsActiveScene());
-            quickLoadElementControllers.Remove(activeScene);
+            var activeScene = quickLoadElementControllers.FirstOrDefault(x => x.IsActiveScene());
+            if (activeScene != null) quickLoadElementControllers.Remove(activeScene);
             return quickLoadElementControllers;
         }
 
@@ -112,7 +109,7 @@ namespace Ludwell.Scene.Editor
 
         private void AddSelectionToBuildSettings(DropdownMenuAction _)
         {
-            var enumerableSelection = ResourcesLocator.QuickLoadController.GetVisualElementSelection();
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             var quickLoadElementControllers =
                 enumerableSelection as QuickLoadElementController[] ?? enumerableSelection.ToArray();
             if (!quickLoadElementControllers.Any()) return;
@@ -126,7 +123,7 @@ namespace Ludwell.Scene.Editor
 
         private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
         {
-            var enumerableSelection = ResourcesLocator.QuickLoadController.GetVisualElementSelection();
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             var quickLoadElementControllers =
                 enumerableSelection as QuickLoadElementController[] ?? enumerableSelection.ToArray();
             if (!quickLoadElementControllers.Any()) return;
