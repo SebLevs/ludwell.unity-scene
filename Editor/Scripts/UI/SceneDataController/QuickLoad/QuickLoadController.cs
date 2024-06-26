@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -40,16 +41,18 @@ namespace Ludwell.Scene.Editor
 
             EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
             EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
-            EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
+            EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChangeEditor;
+            SceneManager.activeSceneChanged += HandleActiveSceneChangeRuntime;
 
             InitializeContextMenuManipulator();
         }
 
         internal void Dispose()
         {
-            EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
-            EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
-            EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChange;
+            EditorSceneManager.sceneOpened -= HandleAdditiveSceneOpened;
+            EditorSceneManager.sceneClosed -= HandleAdditiveSceneClosed;
+            EditorSceneManager.activeSceneChangedInEditMode -= HandleActiveSceneChangeEditor;
+            SceneManager.activeSceneChanged -= HandleActiveSceneChangeRuntime;
         }
 
         // todo: delete when either service or DI is implemented
@@ -161,11 +164,36 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private void HandleActiveSceneChange(UnityEngine.SceneManagement.Scene arg0,
+        private void HandleActiveSceneChangeRuntime(UnityEngine.SceneManagement.Scene arg0,
             UnityEngine.SceneManagement.Scene arg1)
         {
-            if (EditorApplication.isPlaying) return;
-            var breakAtCount = EditorSceneManager.sceneCount;
+            var breakAtCount = SceneManager.sceneCount;
+            var count = 0;
+            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
+            {
+                var sceneDataName = quickLoadElementController.Model.SceneData.name;
+                if (sceneDataName != arg0.name && sceneDataName != arg1.name) continue;
+                var scenePath = Path.ChangeExtension(
+                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData), ".unity");
+                if (scenePath != arg0.path && scenePath != arg1.path) continue;
+
+                if (scenePath == arg0.path) // previous active scene
+                {
+                    quickLoadElementController.SolveSetActiveButton();
+                    if (++count == breakAtCount) return;
+                    continue;
+                }
+
+                if (scenePath != arg1.path) continue; // new active scene
+                quickLoadElementController.SolveSetActiveButton();
+                if (++count == breakAtCount) return;
+            }
+        }
+
+        private void HandleActiveSceneChangeEditor(UnityEngine.SceneManagement.Scene arg0,
+            UnityEngine.SceneManagement.Scene arg1)
+        {
+            var breakAtCount = SceneManager.sceneCount;
             var count = 0;
             foreach (var quickLoadElementController in _listViewHandler.VisualElements)
             {

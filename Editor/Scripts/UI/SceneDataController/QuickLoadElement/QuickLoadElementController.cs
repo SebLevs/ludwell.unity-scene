@@ -110,6 +110,7 @@ namespace Ludwell.Scene.Editor
 
         public void SolveSetActiveButton()
         {
+            Debug.LogError("solve set active button");
             var isSceneLoaded = SceneDataManagerEditorApplication.IsSceneLoaded(Model.SceneData);
             _view.SetSetActiveButtonEnable(isSceneLoaded && !IsActiveScene());
         }

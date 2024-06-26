@@ -5,13 +5,13 @@
         <ui:VisualElement name="header">
             <ui:VisualElement name="header__container" picking-mode="Ignore">
                 <ui:VisualElement name="content__left">
-                    <ui:VisualElement name="top" class="header-section__row header-section__row__left" />
+                    <ui:VisualElement name="top" class="header-section__row header-section__row__left">
+                        <Ludwell.Scene.DualStateButton name="button__set-active" tooltip="Set as active scene" class="ButtonWithIcon" />
+                    </ui:VisualElement>
                     <ui:VisualElement name="bottom" class="header-section__row header-section__row__left" />
                 </ui:VisualElement>
                 <ui:VisualElement name="content__center">
                     <ui:VisualElement name="content__center-top">
-                        <Ludwell.Scene.DualStateButton name="button__set-active" tooltip="Set as active scene" class="ButtonWithIcon" />
-                        <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.Scene.DualStateButton name="button__open-additive" tooltip="Open additive" class="ButtonWithIcon" />
                         <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.Scene.ButtonWithIcon focusable="true" name="button__open" tooltip="Open" class="ButtonWithIcon" />
@@ -21,8 +21,6 @@
                         <Ludwell.Scene.DualStateButton focusable="true" name="button__ping" tooltip="Ping in project" class="ButtonWithIcon" />
                         <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.Scene.DualStateButton focusable="true" name="button__directory-path" class="ButtonWithIcon" />
-                        <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
-                        <Ludwell.Scene.DualStateButton focusable="true" name="button__empty" class="ButtonWithIcon" style="visibility: hidden;" />
                     </ui:VisualElement>
                     <ui:TextField picking-mode="Ignore" name="title" class="scene-data__unselected" />
                 </ui:VisualElement>
