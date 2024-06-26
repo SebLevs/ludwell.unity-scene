@@ -61,6 +61,18 @@ namespace Ludwell.Scene
             return (TData)ListView.itemsSource[lastIndex];
         }
 
+        public IEnumerable<TVisualElement> GetSelectedVisualElements()
+        {
+            List<TVisualElement> elements = new();
+            foreach (var selectedIndices in ListView.selectedIndices)
+            {
+                if (!_visibleElements.TryGetValue(selectedIndices, out var value)) continue;
+                elements.Add(value);
+            }
+
+            return elements;
+        }
+
         /// <returns>Note that the provided VisualElement might not be in view.</returns>
         public TVisualElement GetVisualElementAt(int index)
         {

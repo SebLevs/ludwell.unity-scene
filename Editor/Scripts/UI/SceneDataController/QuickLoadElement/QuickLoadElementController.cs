@@ -33,12 +33,12 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementController()
         {
             _view = new QuickLoadElementView(this);
-            InitializeBuildSettingsButton();
             InitializeOpenAdditiveButton();
             _view.OpenButton.clicked += OpenScene;
             InitializeLoadButton();
             _view.PingButton.clicked += SelectSceneDataInProject;
             _view.DirectoryChangeButton.clicked += ChangeFolder;
+            InitializeBuildSettingsButton();
 
             _foldout = new FoldoutController(this, false);
             _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(evt =>
@@ -76,11 +76,37 @@ namespace Ludwell.Scene.Editor
 
             SetTagsContainer();
 
-            SolveBuildSettingsButton();
             SolveOpenAdditiveButton();
             SolveOpenButton();
             SetLoadButtonState();
             _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
+            SolveBuildSettingsButton();
+        }
+
+        public bool IsActiveScene()
+        {
+            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData); // todo: optimize
+            return SceneManager.GetActiveScene() == SceneManager.GetSceneByPath(path);
+        }
+
+        public void AddToBuildSettings()
+        {
+            SceneDataManagerEditorApplication.AddSceneToBuildSettings(Model.SceneData);
+        }
+
+        public void RemoveFromBuildSettings()
+        {
+            SceneDataManagerEditorApplication.RemoveSceneFromBuildSettings(Model.SceneData);
+        }
+
+        public void OpenSceneAdditive()
+        {
+            SceneDataManagerEditorApplication.OpenSceneAdditive(Model.SceneData);
+        }
+
+        public void RemoveSceneAdditive()
+        {
+            SceneDataManagerEditorApplication.RemoveSceneAdditive(Model.SceneData);
         }
 
         public void SolveOpenAdditiveButton()
@@ -146,21 +172,6 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.SwitchLoadButtonState(true);
-        }
-
-        private void InitializeBuildSettingsButton()
-        {
-            var stateOne = new DualStateButtonState(
-                _view.BuildSettingsButton,
-                Resources.Load<Sprite>(SpritesPath.AddBuildSettings),
-                AddToBuildSettings);
-
-            var stateTwo = new DualStateButtonState(
-                _view.BuildSettingsButton,
-                Resources.Load<Sprite>(SpritesPath.RemoveBuildSettings),
-                RemoveFromBuildSettings);
-
-            _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
         private void InitializeOpenAdditiveButton()
@@ -240,6 +251,21 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.MoveAsset(sceneAssetPath, newAssetPath);
         }
 
+        private void InitializeBuildSettingsButton()
+        {
+            var stateOne = new DualStateButtonState(
+                _view.BuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.AddBuildSettings),
+                AddToBuildSettings);
+
+            var stateTwo = new DualStateButtonState(
+                _view.BuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.RemoveBuildSettings),
+                RemoveFromBuildSettings);
+
+            _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
+        }
+
         private void LoadScene()
         {
             SessionState.SetInt(CurrentActiveScene, Model.SceneData.GetInstanceID());
@@ -275,26 +301,6 @@ namespace Ludwell.Scene.Editor
 
             SceneDataManagerEditorApplication.OpenScene(Model.SceneData);
             Signals.Dispatch<UISignals.RefreshView>();
-        }
-
-        private void AddToBuildSettings()
-        {
-            SceneDataManagerEditorApplication.AddSceneToBuildSettings(Model.SceneData);
-        }
-
-        private void RemoveFromBuildSettings()
-        {
-            SceneDataManagerEditorApplication.RemoveSceneFromBuildSettings(Model.SceneData);
-        }
-
-        private void OpenSceneAdditive()
-        {
-            SceneDataManagerEditorApplication.OpenSceneAdditive(Model.SceneData);
-        }
-
-        private void RemoveSceneAdditive()
-        {
-            SceneDataManagerEditorApplication.RemoveSceneAdditive(Model.SceneData);
         }
 
         private void TransitionViewToTagsManager(ClickEvent _)
