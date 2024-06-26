@@ -137,8 +137,8 @@
     border-top-right-radius: 2px;
 }
 
-#button__build-settings > #icon {
-    background-image: resource('Sprites/icon_warning');
+#button__set-active > #icon {
+    background-image: resource('Sprites/icon_select');
 }
 
 #button__open-additive > #icon {
@@ -159,6 +159,10 @@
 
 #button__directory-path > #icon {
     background-image: resource('Sprites/icon_move-file');
+}
+
+#button__build-settings > #icon {
+    background-image: resource('Sprites/icon_warning');
 }
 
 #title {
