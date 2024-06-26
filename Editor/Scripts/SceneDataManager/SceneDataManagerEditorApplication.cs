@@ -7,19 +7,31 @@ namespace Ludwell.Scene.Editor
 {
     public static class SceneDataManagerEditorApplication
     {
+        public static void OpenScene(string path)
+        {
+            EditorSceneManager.OpenScene(path);
+        }
+        
         public static void OpenScene(SceneData sceneData)
         {
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData));
         }
 
-        public static void OpenScene(string path)
-        {
-            EditorSceneManager.OpenScene(path);
-        }
-
         public static void OpenSceneAdditive(SceneData sceneData)
         {
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData), OpenSceneMode.Additive);
+        }
+        
+        /// <summary>
+        /// Close a scene from the hierarchy.
+        /// </summary>
+        /// <param name="sceneData">The scene to close.</param>
+        /// <param name="isRemove">Should the scene be removed from the hierarchy.</param>
+        public static void CloseScene(SceneData sceneData, bool isRemove)
+        {
+            if (!EditorSceneManager.GetSceneByName(sceneData.Name).isLoaded) return;
+            var scene = SceneManager.GetSceneByName(sceneData.Name);
+            EditorSceneManager.CloseScene(scene, isRemove);
         }
 
         public static void RemoveSceneAdditive(SceneData sceneData)
@@ -29,23 +41,23 @@ namespace Ludwell.Scene.Editor
             EditorSceneManager.CloseScene(scene, true);
         }
 
-        /// <summary>
-        /// Close a scene from the hierarchy.
-        /// </summary>
-        /// <param name="sceneData">The scene to close.</param>
-        /// <param name="isRemove">Should the scene be removed from the hierarchy.</param>
-        public static void CloseScene(SceneData sceneData, bool isRemove)
-        {
-            if (!sceneData) return;
-            if (!EditorSceneManager.GetSceneByName(sceneData.Name).isLoaded) return;
-            var scene = SceneManager.GetSceneByName(sceneData.Name);
-            EditorSceneManager.CloseScene(scene, isRemove);
-        }
-
         public static string GetSceneAssetPath(SceneData sceneData)
         {
             var fullPath = AssetDatabase.GetAssetPath(sceneData);
             return Path.ChangeExtension(fullPath, ".unity");
+        }
+        
+        public static bool IsSceneInBuildSettings(string sceneAssetPath)
+        {
+            var buildScenes = EditorBuildSettings.scenes;
+
+            foreach (var buildScene in buildScenes)
+            {
+                if (!string.Equals(buildScene.path, sceneAssetPath)) continue;
+                return true;
+            }
+
+            return false;
         }
 
         public static void AddSceneToBuildSettings(SceneData sceneData)
@@ -73,17 +85,25 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public static bool IsSceneInBuildSettings(string sceneAssetPath)
+        // todo: optimise
+        public static bool IsActiveScene(SceneData sceneData)
         {
-            var buildScenes = EditorBuildSettings.scenes;
+            var path = GetSceneAssetPath(sceneData);
+            return EditorSceneManager.GetActiveScene().path == path;
+        }
 
-            foreach (var buildScene in buildScenes)
-            {
-                if (!string.Equals(buildScene.path, sceneAssetPath)) continue;
-                return true;
-            }
+        // todo: optimise
+        public static bool IsSceneLoaded(SceneData sceneData)
+        {
+            var path = GetSceneAssetPath(sceneData);
+            return EditorSceneManager.GetSceneByPath(path).isLoaded;
+        }
 
-            return false;
+        // todo: optimise
+        public static void SetActiveScene(SceneData sceneData)
+        {
+            var path = GetSceneAssetPath(sceneData);
+            EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath(path));
         }
     }
 }

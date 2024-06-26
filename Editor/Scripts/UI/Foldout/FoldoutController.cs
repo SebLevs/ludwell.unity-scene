@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -11,7 +10,7 @@ namespace Ludwell.Scene.Editor
         private FoldoutView _view;
 
         private bool _isOpen;
-        
+
         public Action<string> OnTitleValueChanged => _view.OnTitleValueChanged;
 
         public bool IsOpen
@@ -33,10 +32,13 @@ namespace Ludwell.Scene.Editor
                 _view.Title.value = value;
             }
         }
-        
+
         public void FocusTextField() => _view.FocusTextField();
 
         public TextField TitleTextField => _view.Title;
+
+        public void SetOnPreventHeaderClick(Func<IEventHandler, bool> condition) =>
+            _view.OnPreventHeaderClick = condition;
 
         public FoldoutController(VisualElement root, bool startOpen)
         {

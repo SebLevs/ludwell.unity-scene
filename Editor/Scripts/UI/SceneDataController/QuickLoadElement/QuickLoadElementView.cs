@@ -16,6 +16,7 @@ namespace Ludwell.Scene.Editor
         private const string OpenAdditiveTooltip = "Open additive";
         private const string RemoveAdditiveTooltip = "Remove additive";
 
+        private const string SetActiveButtonName = "button__set-active";
         private const string BuildSettingsButtonName = "button__build-settings";
         private const string OpenSceneAdditiveButtonName = "button__open-additive";
         private const string OpenSceneButtonName = "button__open";
@@ -26,22 +27,25 @@ namespace Ludwell.Scene.Editor
 
         private readonly VisualElement _iconAssetOutsideAssets;
 
-        public readonly DualStateButton BuildSettingsButton;
-        public readonly DualStateButton OpenAdditiveButton;
-        public readonly ButtonWithIcon OpenButton;
-        public readonly DualStateButton LoadButton;
-        public readonly ButtonWithIcon PingButton;
-        public readonly ButtonWithIcon DirectoryChangeButton;
-
         private readonly QuickLoadElementController _root;
 
-        public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
+        public ButtonWithIcon SetActiveButton { get; private set; }
+        public DualStateButton BuildSettingsButton { get; }
+        public DualStateButton OpenAdditiveButton { get; }
+        public ButtonWithIcon OpenButton { get; }
+        public DualStateButton LoadButton { get; }
+        public ButtonWithIcon PingButton { get; private set; }
+        public ButtonWithIcon DirectoryChangeButton { get; }
+
+        public void SetSetActiveButtonEnable(bool state) => SetActiveButton.SetEnabled(state);
 
         public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
 
         public void SetOpenButtonEnable(bool state) => OpenButton.SetEnabled(state);
 
         public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
+
+        public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
 
         public void SetPathTooltip(string path) => DirectoryChangeButton.tooltip = path;
 
@@ -54,12 +58,13 @@ namespace Ludwell.Scene.Editor
             _root.AddHierarchyFromUxml(UxmlPath);
             _root.AddStyleFromUss(UssPath);
 
-            BuildSettingsButton = _root.Q<DualStateButton>(BuildSettingsButtonName);
+            SetActiveButton = _root.Q<ButtonWithIcon>(SetActiveButtonName);
             OpenAdditiveButton = _root.Q<DualStateButton>(OpenSceneAdditiveButtonName);
             OpenButton = _root.Q<ButtonWithIcon>(OpenSceneButtonName);
             LoadButton = _root.Q<DualStateButton>(LoadButtonName);
             PingButton = _root.Q<ButtonWithIcon>(PingButtonName);
             DirectoryChangeButton = _root.Q<ButtonWithIcon>(DirectoryChangeButtonName);
+            BuildSettingsButton = _root.Q<DualStateButton>(BuildSettingsButtonName);
 
             _iconAssetOutsideAssets = _root.Q<VisualElement>(IconAssetOutsideAssetsName);
         }
