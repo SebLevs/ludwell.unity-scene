@@ -8,6 +8,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.Scene.Editor
 {
@@ -15,6 +16,7 @@ namespace Ludwell.Scene.Editor
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
+        private const string HierarchyIconName = "icon_hierarchy";
 
         private readonly QuickLoadElements _quickLoadElements;
         private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
@@ -23,10 +25,29 @@ namespace Ludwell.Scene.Editor
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
 
+        private ListingStrategy _hierarchyListingStrategy;
+
+        private readonly DelayedEditorUpdateAction _delayedRebuild;
+        
+        private void HandleSceneUnloaded(SceneRuntime arg0) => _delayedRebuild.StartOrRefresh();
+
+        private void HandleSceneLoaded(SceneRuntime arg0, LoadSceneMode arg1) => _delayedRebuild.StartOrRefresh();
+
+        private void HandleSceneOpened(SceneRuntime scene, OpenSceneMode mode) => _delayedRebuild.StartOrRefresh();
+
+        private void HandleSceneClosed(SceneRuntime scene) => _delayedRebuild.StartOrRefresh();
+
+        private void HandleActiveSceneChangeRuntime(SceneRuntime arg0, SceneRuntime arg1) => _delayedRebuild.StartOrRefresh();
+
+        private void HandleActiveSceneChangeEditor(SceneRuntime arg0, SceneRuntime arg1) => _delayedRebuild.StartOrRefresh();
+
         public QuickLoadController(VisualElement parent)
         {
             var root = parent.Q(nameof(QuickLoadView));
-            _view = new QuickLoadView(root, CloseAll, SceneDataGenerator.CreateSceneAssetAtPath, DeleteSelection);
+            _view = new QuickLoadView(root);
+            _view.CloseAllButton.clicked += CloseAll;
+            _view.AddButton.clicked += SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.RemoveButton.clicked += DeleteSelection;
 
             _listView = root.Q<ListView>();
             _dropdownSearchField = root.Q<DropdownSearchField>();
@@ -35,12 +56,18 @@ namespace Ludwell.Scene.Editor
 
             InitializeListViewHandler(root.Q<ListView>());
             InitializeSearchField(root, root.Q<DropdownSearchField>());
-            InitializeListViewKeyUpEvents();
+            _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
-            ResourcesLocator.QuickLoadController = this; // todo: change for DI or service
+            // todo: change for DI or service
+            ResourcesLocator.QuickLoadController = this;
 
-            EditorSceneManager.sceneOpened += HandleAdditiveSceneOpened;
-            EditorSceneManager.sceneClosed += HandleAdditiveSceneClosed;
+            // todo: find less static way to handle refresh
+            _delayedRebuild = new(0.2f, ForceRebuildListView);
+
+            SceneManager.sceneLoaded += HandleSceneLoaded;
+            SceneManager.sceneUnloaded += HandleSceneUnloaded;
+            EditorSceneManager.sceneOpened += HandleSceneOpened;
+            EditorSceneManager.sceneClosed += HandleSceneClosed;
             EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChangeEditor;
             SceneManager.activeSceneChanged += HandleActiveSceneChangeRuntime;
 
@@ -49,8 +76,10 @@ namespace Ludwell.Scene.Editor
 
         internal void Dispose()
         {
-            EditorSceneManager.sceneOpened -= HandleAdditiveSceneOpened;
-            EditorSceneManager.sceneClosed -= HandleAdditiveSceneClosed;
+            SceneManager.sceneLoaded -= HandleSceneLoaded;
+            SceneManager.sceneUnloaded -= HandleSceneUnloaded;
+            EditorSceneManager.sceneOpened -= HandleSceneOpened;
+            EditorSceneManager.sceneClosed -= HandleSceneClosed;
             EditorSceneManager.activeSceneChangedInEditMode -= HandleActiveSceneChangeEditor;
             SceneManager.activeSceneChanged -= HandleActiveSceneChangeRuntime;
         }
@@ -71,18 +100,11 @@ namespace Ludwell.Scene.Editor
 
         private List<QuickLoadElementController> GetVisualElementsWithoutActiveScene()
         {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var quickLoadElementControllers =
-                enumerableSelection as List<QuickLoadElementController> ?? enumerableSelection.ToList();
-
-            if (!quickLoadElementControllers.Any()) return quickLoadElementControllers;
-
-            var activeScene = quickLoadElementControllers.FirstOrDefault(x => x.IsActiveScene());
-            if (activeScene != null) quickLoadElementControllers.Remove(activeScene);
-            return quickLoadElementControllers;
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements(); 
+            return enumerableSelection as List<QuickLoadElementController> ?? enumerableSelection.ToList();
         }
 
-        private void OpenSelectionAdditive(DropdownMenuAction _)
+        private void OpenSelectionAdditive(DropdownMenuAction _) 
         {
             var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
             foreach (var quickLoadElementController in quickLoadElementControllers)
@@ -94,8 +116,10 @@ namespace Ludwell.Scene.Editor
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
             var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
+            if (quickLoadElementControllers.Count == 1) return;
             foreach (var quickLoadElementController in quickLoadElementControllers)
             {
+                if (SceneManager.sceneCount == 1) return;
                 quickLoadElementController.RemoveSceneAdditive();
             }
         }
@@ -126,99 +150,6 @@ namespace Ludwell.Scene.Editor
             }
 
             Signals.Dispatch<UISignals.RefreshView>();
-        }
-
-        private void HandleAdditiveSceneOpened(UnityEngine.SceneManagement.Scene scene, OpenSceneMode mode)
-        {
-            if (EditorApplication.isPlaying) return;
-            if (mode == OpenSceneMode.Single) return;
-
-            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
-            {
-                if (quickLoadElementController.Model.SceneData.name != scene.name) continue;
-                var scenePath = Path.ChangeExtension(
-                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData),
-                    ".unity");
-                if (scenePath != scene.path) continue;
-                quickLoadElementController.SwitchOpenAdditiveButtonState(true);
-                quickLoadElementController.SolveSetActiveButton();
-                return;
-            }
-        }
-
-        private void HandleAdditiveSceneClosed(UnityEngine.SceneManagement.Scene scene)
-        {
-            if (EditorApplication.isPlaying) return;
-            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
-            {
-                if (quickLoadElementController.Model.SceneData.name != scene.name) continue;
-                var scenePath = Path.ChangeExtension(
-                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData),
-                    ".unity");
-                if (scenePath != scene.path) continue;
-                quickLoadElementController.SetOpenButtonEnable(true);
-                quickLoadElementController.SetOpenAdditiveButtonEnable(true);
-                quickLoadElementController.SwitchOpenAdditiveButtonState(false);
-                quickLoadElementController.SolveSetActiveButton();
-                return;
-            }
-        }
-
-        private void HandleActiveSceneChangeRuntime(UnityEngine.SceneManagement.Scene arg0,
-            UnityEngine.SceneManagement.Scene arg1)
-        {
-            var breakAtCount = SceneManager.sceneCount;
-            var count = 0;
-            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
-            {
-                var sceneDataName = quickLoadElementController.Model.SceneData.name;
-                if (sceneDataName != arg0.name && sceneDataName != arg1.name) continue;
-                var scenePath = Path.ChangeExtension(
-                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData), ".unity");
-                if (scenePath != arg0.path && scenePath != arg1.path) continue;
-
-                if (scenePath == arg0.path) // previous active scene
-                {
-                    quickLoadElementController.SolveSetActiveButton();
-                    if (++count == breakAtCount) return;
-                    continue;
-                }
-
-                if (scenePath != arg1.path) continue; // new active scene
-                quickLoadElementController.SolveSetActiveButton();
-                if (++count == breakAtCount) return;
-            }
-        }
-
-        private void HandleActiveSceneChangeEditor(UnityEngine.SceneManagement.Scene arg0,
-            UnityEngine.SceneManagement.Scene arg1)
-        {
-            var breakAtCount = SceneManager.sceneCount;
-            var count = 0;
-            foreach (var quickLoadElementController in _listViewHandler.VisualElements)
-            {
-                var sceneDataName = quickLoadElementController.Model.SceneData.name;
-                if (sceneDataName != arg0.name && sceneDataName != arg1.name) continue;
-                var scenePath = Path.ChangeExtension(
-                    AssetDatabase.GetAssetPath(quickLoadElementController.Model.SceneData), ".unity");
-                if (scenePath != arg0.path && scenePath != arg1.path) continue;
-
-                if (scenePath == arg0.path) // previous active scene
-                {
-                    quickLoadElementController.SetOpenButtonEnable(true);
-                    quickLoadElementController.SolveOpenAdditiveButton();
-                    quickLoadElementController.SolveSetActiveButton();
-                    if (++count == breakAtCount) return;
-                    continue;
-                }
-
-                if (scenePath != arg1.path) continue; // new active scene
-                quickLoadElementController.SetOpenButtonEnable(false);
-                quickLoadElementController.SetOpenAdditiveButtonEnable(false);
-                quickLoadElementController.SwitchOpenAdditiveButtonState(false);
-                quickLoadElementController.SolveSetActiveButton();
-                if (++count == breakAtCount) return;
-            }
         }
 
         private void InitializeContextMenuManipulator()
@@ -290,7 +221,9 @@ namespace Ludwell.Scene.Editor
 
         private void InitializeListViewHandler(ListView listView)
         {
-            _listViewHandler = new(listView, _quickLoadElements.Elements);
+            _listViewHandler =
+                new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView,
+                    _quickLoadElements.Elements);
 
             _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
             {
@@ -308,8 +241,12 @@ namespace Ludwell.Scene.Editor
         {
             dropdownSearchField.BindToListView(_listViewHandler.ListView);
 
-            var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
-            var searchListingStrategy = new ListingStrategy(TagListingStrategyName, icon, ListTag);
+            var tagSearchIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
+            var searchListingStrategy = new ListingStrategy(TagListingStrategyName, tagSearchIcon, ListTag);
+
+            var hierarchyListingIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", HierarchyIconName));
+            _hierarchyListingStrategy =
+                new ListingStrategy("loaded scenes", hierarchyListingIcon, ListHierarchy, true);
 
             dropdownSearchField
                 .WithResizableParent(root)
@@ -318,12 +255,8 @@ namespace Ludwell.Scene.Editor
                     dropdownSearchField.HideDropdown();
                     _listViewHandler.ListView.ScrollToItem(index);
                 })
-                .WithCyclingListingStrategy(searchListingStrategy);
-        }
-
-        private void InitializeListViewKeyUpEvents()
-        {
-            _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+                .WithCyclingListingStrategy(searchListingStrategy)
+                .WithCyclingListingStrategy(_hierarchyListingStrategy);
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
@@ -338,12 +271,46 @@ namespace Ludwell.Scene.Editor
         {
             List<IListable> filteredList = new();
 
-            foreach (var listViewElement in boundItemSource)
+            foreach (var data in boundItemSource)
             {
-                foreach (var tag in (listViewElement as QuickLoadElementData).Tags)
+                foreach (var tag in (data as QuickLoadElementData).Tags)
                 {
                     if (tag.Name != searchFieldValue) continue;
-                    filteredList.Add(listViewElement as IListable);
+                    filteredList.Add(data as IListable);
+                    break;
+                }
+            }
+
+            return filteredList;
+        }
+
+        private List<IListable> ListHierarchy(string searchFieldValue, IList boundItemSource)
+        {
+            List<IListable> filteredList = new();
+
+            List<SceneRuntime> scenesInHierarchy = new();
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                scenesInHierarchy.Add(SceneManager.GetSceneAt(i));
+            }
+
+            var itemSourceAsData = boundItemSource.Cast<QuickLoadElementData>();
+
+            foreach (var sceneInHierarchy in scenesInHierarchy)
+            {
+                foreach (var quickLoadElementData in itemSourceAsData)
+                {
+                    var sceneAssetPath =
+                        SceneDataManagerEditorApplication.GetSceneAssetPath(quickLoadElementData.SceneData);
+                    if (!sceneInHierarchy.path.Contains(sceneAssetPath)) continue;
+                    if (string.IsNullOrEmpty(searchFieldValue) || string.IsNullOrWhiteSpace(searchFieldValue))
+                    {
+                        filteredList.Add(quickLoadElementData);
+                        break;
+                    }
+
+                    if (!quickLoadElementData.SceneData.Name.Contains(searchFieldValue)) continue;
+                    filteredList.Add(quickLoadElementData);
                     break;
                 }
             }

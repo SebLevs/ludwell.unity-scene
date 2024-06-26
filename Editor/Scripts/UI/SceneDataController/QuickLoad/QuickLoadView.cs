@@ -1,53 +1,26 @@
-using System;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
     public class QuickLoadView
     {
-        private const string ButtonCloseAllName = "button__close-all";
-        private const string ButtonAddName = "add";
-        private const string ButtonRemoveName = "remove";
+        private const string CloseAllButtonName = "button__close-all";
+        private const string AddButtonName = "add";
+        private const string RemoveButtonName = "remove";
 
         private readonly VisualElement _root;
 
-        private readonly Action _onCloseAll;
-        private readonly Action _onAdd;
-        private readonly Action _onRemove;
+        public Button CloseAllButton { get; }
+        public Button AddButton { get; }
+        public Button RemoveButton { get; }
 
-        public QuickLoadView(VisualElement root, Action onCloseAll, Action onAdd, Action onRemove)
+        public QuickLoadView(VisualElement root)
         {
             _root = root;
 
-            _onCloseAll = onCloseAll;
-            _onAdd = onAdd;
-            _onRemove = onRemove;
-
-            InitializeButtonCloseAll();
-            InitializeAddRemoveButtons();
-        }
-
-        ~QuickLoadView()
-        {
-            ClearAddRemoveButtons();
-        }
-
-        private void InitializeButtonCloseAll()
-        {
-            var closeAllButton = _root.Q<Button>(ButtonCloseAllName);
-            closeAllButton.clicked += _onCloseAll.Invoke;
-        }
-
-        private void InitializeAddRemoveButtons()
-        {
-            _root.Q<Button>(ButtonAddName).clicked += _onAdd.Invoke;
-            _root.Q<Button>(ButtonRemoveName).clicked += _onRemove.Invoke;
-        }
-
-        private void ClearAddRemoveButtons()
-        {
-            _root.Q<Button>(ButtonAddName).clicked -= _onAdd.Invoke;
-            _root.Q<Button>(ButtonRemoveName).clicked -= _onRemove.Invoke;
+            CloseAllButton = _root.Q<Button>(CloseAllButtonName);
+            AddButton = _root.Q<Button>(AddButtonName);
+            RemoveButton = _root.Q<Button>(RemoveButtonName);
         }
     }
 }

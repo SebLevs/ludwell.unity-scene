@@ -59,6 +59,11 @@
 
 #DropdownSearchField {
     align-self: center;
+    width: 50%;
+    flex-direction: row;
+}
+
+#DropdownSearchField > #search-field {
     width: 100%;
 }
 

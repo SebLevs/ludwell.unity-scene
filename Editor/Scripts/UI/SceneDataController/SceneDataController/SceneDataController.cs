@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene.Editor
 {

@@ -1,6 +1,5 @@
 using System.IO;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -24,11 +23,6 @@ namespace Ludwell.Scene.Editor
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
 
         public void FocusTextField() => _foldout.FocusTextField();
-
-        public void SetOpenButtonEnable(bool state) => _view.SetOpenButtonEnable(state);
-        public void SetOpenAdditiveButtonEnable(bool state) => _view.SetOpenAdditiveButtonEnable(state);
-
-        public void SwitchOpenAdditiveButtonState(bool state) => _view.SwitchOpenAdditiveButtonState(state);
 
         public bool IsActiveScene() => SceneDataManagerEditorApplication.IsActiveScene(Model.SceneData);
 
@@ -118,27 +112,16 @@ namespace Ludwell.Scene.Editor
         {
             _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying);
 
-            var sceneCount = SceneManager.sceneCount;
             // todo: optimize
-            var asset = Path.ChangeExtension(AssetDatabase.GetAssetOrScenePath(Model.SceneData), ".unity");
-            for (var i = 0; i < sceneCount; i++)
+            var asset = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData);
+            var assetAtPath = SceneManager.GetSceneByPath(asset);
+
+            _view.SwitchOpenAdditiveButtonState(assetAtPath.isLoaded);
+            if (!assetAtPath.isLoaded) return;
+            if (asset == SceneManager.GetActiveScene().path && SceneManager.sceneCount == 1)
             {
-                var scene = EditorSceneManager.GetSceneAt(i);
-
-                if (scene.path != asset) continue;
-
-                if (scene == SceneManager.GetActiveScene())
-                {
-                    _view.SetOpenAdditiveButtonEnable(false);
-                    _view.SwitchOpenAdditiveButtonState(false);
-                    return;
-                }
-
-                _view.SwitchOpenAdditiveButtonState(true);
-                return;
+                _view.SetOpenAdditiveButtonEnable(false);
             }
-
-            _view.SwitchOpenAdditiveButtonState(false);
         }
 
         private void SolveBuildSettingsButton()
@@ -222,7 +205,6 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            // todo: optimize
             var isSceneActiveScene = SceneDataManagerEditorApplication.IsActiveScene(Model.SceneData);
             if (isSceneActiveScene) _currentQuickLoadElement = this;
             _view.SetOpenButtonEnable(!isSceneActiveScene);
@@ -299,7 +281,7 @@ namespace Ludwell.Scene.Editor
             {
                 _currentQuickLoadElement._view.SetOpenButtonEnable(true);
                 _currentQuickLoadElement._view.SetOpenAdditiveButtonEnable(true);
-                _currentQuickLoadElement.SwitchOpenAdditiveButtonState(false);
+                _currentQuickLoadElement._view.SwitchOpenAdditiveButtonState(false);
             }
 
             _currentQuickLoadElement = this;
@@ -309,7 +291,6 @@ namespace Ludwell.Scene.Editor
             _view.SwitchOpenAdditiveButtonState(false);
 
             SceneDataManagerEditorApplication.OpenScene(Model.SceneData);
-            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void TransitionViewToTagsManager(ClickEvent _)
