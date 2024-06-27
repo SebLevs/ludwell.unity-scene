@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -321,8 +320,6 @@ namespace Ludwell.Scene.Editor
             if (value == _model.SceneData.name) return;
 
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _foldout.Title);
-            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
 
             var quickLoadController = ResourcesLocator.QuickLoadController;
             var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == _model);

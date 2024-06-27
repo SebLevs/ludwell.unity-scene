@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ludwell.Scene
 {
-    public class Signals
+    public static class Signals
     {
         private static Dictionary<string, List<Action>> _signals = new();
 

@@ -25,7 +25,7 @@ namespace Ludwell.Scene
         public QuickLoadElementData Add(SceneData sceneData)
         {
             var element = AddWithoutNotify(sceneData);
-            Signals.Dispatch<UISignals.RefreshView>();
+            // Signals.Dispatch<UISignals.RefreshView>();
             return element;
         }
 
@@ -52,7 +52,7 @@ namespace Ludwell.Scene
                 Elements.Remove(element);
             }
 
-            Signals.Dispatch<UISignals.RefreshView>();
+            // Signals.Dispatch<UISignals.RefreshView>();
         }
 
         public void UpdateElement(string oldName, string newName)
@@ -64,7 +64,7 @@ namespace Ludwell.Scene
                 element.Name = newName;
             }
 
-            Signals.Dispatch<UISignals.RefreshView>();
+            // Signals.Dispatch<UISignals.RefreshView>();
         }
     }
 }

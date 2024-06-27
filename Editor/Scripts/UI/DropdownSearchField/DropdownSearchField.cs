@@ -173,10 +173,14 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public void RebuildActiveListing()
+        /// <returns>Was the current listing strategy executed</returns>
+        public bool RebuildActiveListing()
         {
-            if (!GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return;
+            if (!GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return false;
+            
             ExecuteCurrentListingStrategy(_searchField.value);
+            _listView.Rebuild();
+            return true;
         }
 
         public void ShowDropdown()

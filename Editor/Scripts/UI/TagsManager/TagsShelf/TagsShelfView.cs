@@ -24,13 +24,13 @@ namespace Ludwell.Scene.Editor
         public TagsShelfView(VisualElement parent)
         {
             _root = parent.Q(nameof(TagsShelfView));
-            
+
             _optionsButton = _root.Q<Button>(AddButtonName);
             _optionsButton.clicked += ExecuteOptionClicked;
-            
+
             _container = _root.Q<ScrollView>(TagsContainerName);
             _notTaggedLabel = _root.Q<Label>(NotTaggedName);
-            
+
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
@@ -90,11 +90,11 @@ namespace Ludwell.Scene.Editor
             _notTaggedLabel.style.display = ElementsCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
             _container.style.display = ElementsCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
         }
-        
+
         private void Dispose(DetachFromPanelEvent _)
         {
             _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            
+
             _optionsButton.clicked -= ExecuteOptionClicked;
         }
     }

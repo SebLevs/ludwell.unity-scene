@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -28,22 +27,6 @@ namespace Ludwell.Scene.Editor
 
         private ListingStrategy _hierarchyListingStrategy;
 
-        private readonly DelayedEditorUpdateAction _delayedRebuild;
-
-        private void HandleSceneUnloaded(SceneRuntime arg0) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleSceneLoaded(SceneRuntime arg0, LoadSceneMode arg1) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleSceneOpened(SceneRuntime scene, OpenSceneMode mode) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleSceneClosed(SceneRuntime scene) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleActiveSceneChangeRuntime(SceneRuntime arg0, SceneRuntime arg1) =>
-            _delayedRebuild.StartOrRefresh();
-
-        private void HandleActiveSceneChangeEditor(SceneRuntime arg0, SceneRuntime arg1) =>
-            _delayedRebuild.StartOrRefresh();
-
         public QuickLoadController(VisualElement parent)
         {
             _root = parent.Q(nameof(QuickLoadView));
@@ -64,16 +47,6 @@ namespace Ludwell.Scene.Editor
             // todo: change for DI or service
             ResourcesLocator.QuickLoadController = this;
 
-            // todo: find less static way to handle refresh
-            _delayedRebuild = new DelayedEditorUpdateAction(0.0f, ForceRebuildListView);
-
-            SceneManager.sceneLoaded += HandleSceneLoaded;
-            SceneManager.sceneUnloaded += HandleSceneUnloaded;
-            EditorSceneManager.sceneOpened += HandleSceneOpened;
-            EditorSceneManager.sceneClosed += HandleSceneClosed;
-            EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChangeEditor;
-            SceneManager.activeSceneChanged += HandleActiveSceneChangeRuntime;
-
             InitializeContextMenuManipulator();
 
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
@@ -87,10 +60,10 @@ namespace Ludwell.Scene.Editor
             _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
         }
 
-        public void ForceRebuildListView()
+        public void RebuildActiveListing()
         {
+            if (_dropdownSearchField.RebuildActiveListing()) return;
             _listViewHandler.ForceRebuild();
-            _dropdownSearchField.RebuildActiveListing();
         }
 
         private List<QuickLoadElementController> GetVisualElementsWithoutActiveScene()
@@ -129,8 +102,6 @@ namespace Ludwell.Scene.Editor
             {
                 quickLoadElementController.AddToBuildSettings();
             }
-
-            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
@@ -143,8 +114,6 @@ namespace Ludwell.Scene.Editor
             {
                 quickLoadElementController.RemoveFromBuildSettings();
             }
-
-            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void InitializeContextMenuManipulator()
@@ -317,7 +286,7 @@ namespace Ludwell.Scene.Editor
 
             return filteredList;
         }
-        
+
         private void Dispose(DetachFromPanelEvent _)
         {
             _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
@@ -326,13 +295,6 @@ namespace Ludwell.Scene.Editor
             _view.RemoveButton.clicked -= DeleteSelection;
 
             _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-
-            SceneManager.sceneLoaded -= HandleSceneLoaded;
-            SceneManager.sceneUnloaded -= HandleSceneUnloaded;
-            EditorSceneManager.sceneOpened -= HandleSceneOpened;
-            EditorSceneManager.sceneClosed -= HandleSceneClosed;
-            EditorSceneManager.activeSceneChangedInEditMode -= HandleActiveSceneChangeEditor;
-            SceneManager.activeSceneChanged -= HandleActiveSceneChangeRuntime;
 
             _listViewHandler.ListView.itemsRemoved -= HandleListViewItemsRemoved();
         }

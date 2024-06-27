@@ -34,6 +34,8 @@ namespace Ludwell.Scene.Editor
         {
             if (!TryHandleMove(movedAssets, movedFromAssetPaths) && !TryHandleImport(importedAssets)) return;
 
+            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
+            Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveQuickLoadElementsDelayed();
         }
 
@@ -146,7 +148,7 @@ namespace Ludwell.Scene.Editor
             var path = AssetDatabase.GetAssetPath(element.SceneData);
             element.IsOutsideAssetsFolder = !path.Contains("Assets/");
 
-            Signals.Dispatch<UISignals.RefreshView>();
+            // Signals.Dispatch<UISignals.RefreshView>();
         }
     }
 }
