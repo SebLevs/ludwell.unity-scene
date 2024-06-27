@@ -37,16 +37,8 @@ namespace Ludwell.Scene.Editor
             _view.SetButtonsStyle(DisplayStyle.None);
 
             RegisterCallback<AttachToPanelEvent>(InitializeDropdown);
-        }
 
-        ~TagsShelfElementController()
-        {
-            _view.OnRemoveButtonClicked -= RemoveFromController;
-            _view.OnMainButtonClicked -= SelectSelf;
-            _view.OnSearchButtonClicked -= SearchWithData;
-            _view.OnSearchButtonClicked -= _view.ToggleVisual;
-
-            UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         public void SetTagShelfController(TagsShelfController tagsShelfController)
@@ -96,6 +88,20 @@ namespace Ludwell.Scene.Editor
         private void SearchWithData()
         {
             _dropdownSearchField.ListWithStrategy(_listingStrategyName, _data.Name);
+        }
+        
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            UnregisterCallback<DetachFromPanelEvent>(Dispose);
+
+            _currentSelection = null;
+
+            _view.OnRemoveButtonClicked -= RemoveFromController;
+            _view.OnMainButtonClicked -= SelectSelf;
+            _view.OnSearchButtonClicked -= SearchWithData;
+            _view.OnSearchButtonClicked -= _view.ToggleVisual;
+
+            UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
     }
 }

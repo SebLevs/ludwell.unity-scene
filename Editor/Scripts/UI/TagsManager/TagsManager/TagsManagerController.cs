@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -33,7 +34,7 @@ namespace Ludwell.Scene.Editor
             _root = parent.Q(nameof(TagsManagerView));
             _view = new TagsManagerView(_root);
 
-            _tagsShelfController = new TagsShelfController(_root, _ => ReturnToPreviousView());
+            _tagsShelfController = new TagsShelfController(_root, ReturnToPreviousView);
 
             _tagContainer = ResourcesLocator.GetTagContainer();
 
@@ -42,6 +43,8 @@ namespace Ludwell.Scene.Editor
             _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
             InitializeListViewHandler();
             InitializeDropdownSearchField();
+
+            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         // todo: delete when either service or DI is implemented
@@ -122,22 +125,24 @@ namespace Ludwell.Scene.Editor
 
             var listView = _listViewHandler.ListView;
 
-            listView.itemsRemoved += indexEnumerable =>
-            {
-                var itemsSource = listView.itemsSource;
-                var removedIndexes = indexEnumerable.ToList();
-                foreach (var index in removedIndexes)
-                {
-                    var tag = (TagWithSubscribers)itemsSource[index];
-                    RemoveTagFromAllSubscribers(tag);
-                }
-
-                ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
-            };
+            listView.itemsRemoved += HandleItemsRemoved;
 
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
+        }
+
+        private void HandleItemsRemoved(IEnumerable<int> enumerable)
+        {
+            var itemsSource = _listViewHandler.ListView.itemsSource;
+            var removedIndexes = enumerable.ToList();
+            foreach (var index in removedIndexes)
+            {
+                var tag = (TagWithSubscribers)itemsSource[index];
+                RemoveTagFromAllSubscribers(tag);
+            }
+
+            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
@@ -192,6 +197,22 @@ namespace Ludwell.Scene.Editor
             {
                 _listViewHandler.ListView.ScrollToItem(itemIndex);
             });
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
+
+            _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
+
+            var listView = _listViewHandler.ListView;
+
+            listView.itemsRemoved += HandleItemsRemoved;
+
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
     }
 }

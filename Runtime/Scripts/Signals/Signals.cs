@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ludwell.Scene
 {
-    public class Signals
+    public static class Signals
     {
         private static Dictionary<string, List<Action>> _signals = new();
 
@@ -46,7 +46,7 @@ namespace Ludwell.Scene
         public static void Dispatch<T>() where T : ISignal
         {
             const string type = nameof(T);
-            if (!_signals.TryGetValue(type, out List<Action> actions)) return;
+            if (!_signals.TryGetValue(type, out var actions)) return;
             foreach (var action in actions)
             {
                 action?.Invoke();

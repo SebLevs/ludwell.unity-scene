@@ -11,6 +11,7 @@ namespace Ludwell.Scene.Editor
         private readonly float _delay;
         private readonly CallbackFunction _callbackFunction;
 
+        /// <param name="delay">When set to 0 the callback will trigger on the next editor update</param>
         public DelayedEditorUpdateAction(float delay, CallbackFunction callbackFunction, bool start = false)
         {
             _delay = delay;

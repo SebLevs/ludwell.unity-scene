@@ -13,18 +13,17 @@ namespace Ludwell.Scene.Editor
         private const string CurrentActiveScene = "currentActiveScene";
 
         private QuickLoadElementView _view;
+        private QuickLoadElementData _model;
 
         private FoldoutController _foldout;
         private readonly TagsShelfController _tagsShelfController;
         private ViewManager _viewManager;
 
-        public QuickLoadElementData Model { get; private set; }
-
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
 
         public void FocusTextField() => _foldout.FocusTextField();
 
-        public bool IsActiveScene() => SceneDataManagerEditorApplication.IsActiveScene(Model.SceneData);
+        public bool IsActiveScene() => SceneDataManagerEditorApplication.IsActiveScene(_model.SceneData);
 
         public QuickLoadElementController()
         {
@@ -39,25 +38,21 @@ namespace Ludwell.Scene.Editor
 
             _foldout = new FoldoutController(this, false);
             _foldout.SetOnPreventHeaderClick(target => target is Button);
-            _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(evt =>
-            {
-                if (evt.keyCode == KeyCode.Return) UpdateAndSaveAssetName(_foldout.Title);
-            });
-            _foldout.TitleTextField.RegisterCallback<BlurEvent>(_ =>
-            {
-                if (_foldout.Title == Model.SceneData.name) return;
-                _foldout.Title = Model.SceneData.name;
-            });
+            _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(HandleReturnPressed);
+            _foldout.TitleTextField.RegisterCallback<BlurEvent>(HandleBlur);
 
             _tagsShelfController = new TagsShelfController(this, TransitionViewToTagsManager);
-            RegisterCallback<AttachToPanelEvent>(_ => { _viewManager = this.Root().Q<ViewManager>(); });
+
+            RegisterCallback<AttachToPanelEvent>(BindViewManager);
 
             RegisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
+
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         public void CacheData(QuickLoadElementData data)
         {
-            Model = data;
+            _model = data;
         }
 
         public void BindElementToCachedData()
@@ -67,10 +62,10 @@ namespace Ludwell.Scene.Editor
         public void SetElementFromCachedData()
         {
             SetFoldoutValueFromSavedState();
-            _foldout.Title = Model.SceneData.Name;
-            _view.SetIconAssetOutsideAssets(Model.IsOutsideAssetsFolder);
+            _foldout.Title = _model.SceneData.Name;
+            _view.SetIconAssetOutsideAssets(_model.IsOutsideAssetsFolder);
 
-            _view.SetPathTooltip(AssetDatabase.GetAssetPath(Model.SceneData));
+            _view.SetPathTooltip(AssetDatabase.GetAssetPath(_model.SceneData));
 
             SetTagsContainer();
 
@@ -84,36 +79,36 @@ namespace Ludwell.Scene.Editor
 
         public void AddToBuildSettings()
         {
-            SceneDataManagerEditorApplication.AddSceneToBuildSettings(Model.SceneData);
+            SceneDataManagerEditorApplication.AddSceneToBuildSettings(_model.SceneData);
         }
 
         public void RemoveFromBuildSettings()
         {
-            SceneDataManagerEditorApplication.RemoveSceneFromBuildSettings(Model.SceneData);
+            SceneDataManagerEditorApplication.RemoveSceneFromBuildSettings(_model.SceneData);
         }
 
         public void OpenSceneAdditive()
         {
-            SceneDataManagerEditorApplication.OpenSceneAdditive(Model.SceneData);
+            SceneDataManagerEditorApplication.OpenSceneAdditive(_model.SceneData);
         }
 
         public void RemoveSceneAdditive()
         {
-            SceneDataManagerEditorApplication.RemoveSceneAdditive(Model.SceneData);
+            SceneDataManagerEditorApplication.RemoveSceneAdditive(_model.SceneData);
         }
 
-        public void SolveSetActiveButton()
+        private void SolveSetActiveButton()
         {
-            var isSceneLoaded = SceneDataManagerEditorApplication.IsSceneLoaded(Model.SceneData);
+            var isSceneLoaded = SceneDataManagerEditorApplication.IsSceneLoaded(_model.SceneData);
             _view.SetSetActiveButtonEnable(isSceneLoaded && !IsActiveScene());
         }
 
-        public void SolveOpenAdditiveButton()
+        private void SolveOpenAdditiveButton()
         {
             _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying);
 
             // todo: optimize
-            var asset = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData);
+            var asset = SceneDataManagerEditorApplication.GetSceneAssetPath(_model.SceneData);
             var assetAtPath = SceneManager.GetSceneByPath(asset);
 
             _view.SwitchOpenAdditiveButtonState(assetAtPath.isLoaded);
@@ -127,7 +122,7 @@ namespace Ludwell.Scene.Editor
         private void SolveBuildSettingsButton()
         {
             _view.SetBuildSettingsButtonButtonEnable(!EditorApplication.isPlaying);
-            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(Model.SceneData);
+            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(_model.SceneData);
             if (SceneDataManagerEditorApplication.IsSceneInBuildSettings(path))
             {
                 _view.SwitchBuildSettingsButtonState(true);
@@ -139,21 +134,21 @@ namespace Ludwell.Scene.Editor
 
         private void SetFoldoutValueFromSavedState()
         {
-            var id = Model.SceneData.GetInstanceID().ToString();
+            var id = _model.SceneData.GetInstanceID().ToString();
             var oldState = SessionState.GetBool(id, false);
             SetOpenState(oldState);
         }
 
         private void SetTagsContainer()
         {
-            _tagsShelfController.UpdateData(Model);
+            _tagsShelfController.UpdateData(_model);
             _tagsShelfController.Populate();
         }
 
         private void SetLoadButtonState()
         {
             if (!EditorApplication.isPlaying) return;
-            if (SessionState.GetInt(CurrentActiveScene, -1) != Model.SceneData.GetInstanceID())
+            if (SessionState.GetInt(CurrentActiveScene, -1) != _model.SceneData.GetInstanceID())
             {
                 _view.SwitchLoadButtonState(false);
                 return;
@@ -164,7 +159,7 @@ namespace Ludwell.Scene.Editor
 
         private void SetAsActiveScene()
         {
-            SceneDataManagerEditorApplication.SetActiveScene(Model.SceneData);
+            SceneDataManagerEditorApplication.SetActiveScene(_model.SceneData);
         }
 
         private void InitializeOpenAdditiveButton()
@@ -205,20 +200,20 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var isSceneActiveScene = SceneDataManagerEditorApplication.IsActiveScene(Model.SceneData);
+            var isSceneActiveScene = SceneDataManagerEditorApplication.IsActiveScene(_model.SceneData);
             if (isSceneActiveScene) _currentQuickLoadElement = this;
             _view.SetOpenButtonEnable(!isSceneActiveScene);
         }
 
         private void SelectSceneDataInProject()
         {
-            Selection.activeObject = Model.SceneData;
+            Selection.activeObject = _model.SceneData;
             EditorGUIUtility.PingObject(Selection.activeObject);
         }
 
         private void ChangeFolder()
         {
-            var sceneAssetPath = AssetDatabase.GetAssetPath(Model.SceneData);
+            var sceneAssetPath = AssetDatabase.GetAssetPath(_model.SceneData);
             var absolutePath = EditorUtility.OpenFolderPanel("Select folder", "Assets", "");
 
             if (string.IsNullOrEmpty(absolutePath)) return;
@@ -257,10 +252,26 @@ namespace Ludwell.Scene.Editor
             _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
+        private void HandleBlur(BlurEvent evt)
+        {
+            if (_foldout.Title == _model.SceneData.name) return;
+            _foldout.Title = _model.SceneData.name;
+        }
+
+        private void HandleReturnPressed(KeyDownEvent evt)
+        {
+            if (evt.keyCode == KeyCode.Return) UpdateAndSaveAssetName(_foldout.Title);
+        }
+
+        private void BindViewManager(AttachToPanelEvent evt)
+        {
+            _viewManager = this.Root().Q<ViewManager>();
+        }
+
         private void LoadScene()
         {
-            SessionState.SetInt(CurrentActiveScene, Model.SceneData.GetInstanceID());
-            QuickLoadSceneDataManager.LoadScene(Model.SceneData);
+            SessionState.SetInt(CurrentActiveScene, _model.SceneData.GetInstanceID());
+            QuickLoadSceneDataManager.LoadScene(_model.SceneData);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
         }
 
@@ -270,7 +281,7 @@ namespace Ludwell.Scene.Editor
             EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
 
             var prefActiveSceneID = SessionState.GetInt(CurrentActiveScene, -1);
-            var modelSceneID = Model.SceneData.GetInstanceID();
+            var modelSceneID = _model.SceneData.GetInstanceID();
             if (prefActiveSceneID == modelSceneID) SessionState.EraseInt(CurrentActiveScene);
             _view.SwitchLoadButtonState(false);
         }
@@ -290,32 +301,47 @@ namespace Ludwell.Scene.Editor
             _view.SetOpenAdditiveButtonEnable(false);
             _view.SwitchOpenAdditiveButtonState(false);
 
-            SceneDataManagerEditorApplication.OpenScene(Model.SceneData);
+            SceneDataManagerEditorApplication.OpenScene(_model.SceneData);
         }
 
-        private void TransitionViewToTagsManager(ClickEvent _)
+        private void TransitionViewToTagsManager()
         {
-            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(Model));
+            _viewManager.TransitionToFirstViewOfType<TagsManagerController>(new TagsManagerViewArgs(_model));
         }
 
         private void SessionStateCacheFoldoutValue(ClickEvent _)
         {
-            var id = Model.SceneData.GetInstanceID().ToString();
+            var id = _model.SceneData.GetInstanceID().ToString();
             SessionState.SetBool(id, _foldout.IsOpen);
         }
 
         private void UpdateAndSaveAssetName(string value)
         {
-            if (value == Model.SceneData.name) return;
+            if (value == _model.SceneData.name) return;
 
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(Model.SceneData), _foldout.Title);
-            ResourcesLocator.GetQuickLoadElements().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _foldout.Title);
 
             var quickLoadController = ResourcesLocator.QuickLoadController;
-            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == Model);
+            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
             quickLoadController.ScrollToItemIndex(index);
             _foldout.FocusTextField();
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            _currentQuickLoadElement = null;
+
+            _view.SetActiveButton.clicked -= SetAsActiveScene;
+            _view.OpenButton.clicked -= OpenScene;
+            _view.PingButton.clicked -= SelectSceneDataInProject;
+            _view.DirectoryChangeButton.clicked -= ChangeFolder;
+
+            _foldout.TitleTextField.UnregisterCallback<KeyDownEvent>(HandleReturnPressed);
+            _foldout.TitleTextField.UnregisterCallback<BlurEvent>(HandleBlur);
+
+            UnregisterCallback<AttachToPanelEvent>(BindViewManager);
+            UnregisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
         }
     }
 }

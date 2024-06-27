@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -21,67 +20,36 @@ namespace Ludwell.Scene.Editor
         private readonly QuickLoadElements _quickLoadElements;
         private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
 
+        private readonly VisualElement _root;
         private readonly QuickLoadView _view;
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
 
         private ListingStrategy _hierarchyListingStrategy;
 
-        private readonly DelayedEditorUpdateAction _delayedRebuild;
-        
-        private void HandleSceneUnloaded(SceneRuntime arg0) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleSceneLoaded(SceneRuntime arg0, LoadSceneMode arg1) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleSceneOpened(SceneRuntime scene, OpenSceneMode mode) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleSceneClosed(SceneRuntime scene) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleActiveSceneChangeRuntime(SceneRuntime arg0, SceneRuntime arg1) => _delayedRebuild.StartOrRefresh();
-
-        private void HandleActiveSceneChangeEditor(SceneRuntime arg0, SceneRuntime arg1) => _delayedRebuild.StartOrRefresh();
-
         public QuickLoadController(VisualElement parent)
         {
-            var root = parent.Q(nameof(QuickLoadView));
-            _view = new QuickLoadView(root);
+            _root = parent.Q(nameof(QuickLoadView));
+            _view = new QuickLoadView(_root);
             _view.CloseAllButton.clicked += CloseAll;
             _view.AddButton.clicked += SceneDataGenerator.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked += DeleteSelection;
 
-            _listView = root.Q<ListView>();
-            _dropdownSearchField = root.Q<DropdownSearchField>();
+            _listView = _root.Q<ListView>();
+            _dropdownSearchField = _root.Q<DropdownSearchField>();
 
             _quickLoadElements = ResourcesLocator.GetQuickLoadElements();
 
-            InitializeListViewHandler(root.Q<ListView>());
-            InitializeSearchField(root, root.Q<DropdownSearchField>());
+            InitializeListViewHandler(_root.Q<ListView>());
+            InitializeSearchField(_root, _root.Q<DropdownSearchField>());
             _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
             // todo: change for DI or service
             ResourcesLocator.QuickLoadController = this;
 
-            // todo: find less static way to handle refresh
-            _delayedRebuild = new(0.2f, ForceRebuildListView);
-
-            SceneManager.sceneLoaded += HandleSceneLoaded;
-            SceneManager.sceneUnloaded += HandleSceneUnloaded;
-            EditorSceneManager.sceneOpened += HandleSceneOpened;
-            EditorSceneManager.sceneClosed += HandleSceneClosed;
-            EditorSceneManager.activeSceneChangedInEditMode += HandleActiveSceneChangeEditor;
-            SceneManager.activeSceneChanged += HandleActiveSceneChangeRuntime;
-
             InitializeContextMenuManipulator();
-        }
 
-        internal void Dispose()
-        {
-            SceneManager.sceneLoaded -= HandleSceneLoaded;
-            SceneManager.sceneUnloaded -= HandleSceneUnloaded;
-            EditorSceneManager.sceneOpened -= HandleSceneOpened;
-            EditorSceneManager.sceneClosed -= HandleSceneClosed;
-            EditorSceneManager.activeSceneChangedInEditMode -= HandleActiveSceneChangeEditor;
-            SceneManager.activeSceneChanged -= HandleActiveSceneChangeRuntime;
+            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         // todo: delete when either service or DI is implemented
@@ -92,19 +60,19 @@ namespace Ludwell.Scene.Editor
             _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
         }
 
-        public void ForceRebuildListView()
+        public void RebuildActiveListing()
         {
+            if (_dropdownSearchField.RebuildActiveListing()) return;
             _listViewHandler.ForceRebuild();
-            _dropdownSearchField.RebuildActiveListing();
         }
 
         private List<QuickLoadElementController> GetVisualElementsWithoutActiveScene()
         {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements(); 
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             return enumerableSelection as List<QuickLoadElementController> ?? enumerableSelection.ToList();
         }
 
-        private void OpenSelectionAdditive(DropdownMenuAction _) 
+        private void OpenSelectionAdditive(DropdownMenuAction _)
         {
             var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
             foreach (var quickLoadElementController in quickLoadElementControllers)
@@ -134,8 +102,6 @@ namespace Ludwell.Scene.Editor
             {
                 quickLoadElementController.AddToBuildSettings();
             }
-
-            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
@@ -148,8 +114,6 @@ namespace Ludwell.Scene.Editor
             {
                 quickLoadElementController.RemoveFromBuildSettings();
             }
-
-            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void InitializeContextMenuManipulator()
@@ -225,7 +189,12 @@ namespace Ludwell.Scene.Editor
                 new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView,
                     _quickLoadElements.Elements);
 
-            _listViewHandler.ListView.itemsRemoved += indexEnumerable =>
+            _listViewHandler.ListView.itemsRemoved += HandleListViewItemsRemoved();
+        }
+
+        private Action<IEnumerable<int>> HandleListViewItemsRemoved()
+        {
+            return indexEnumerable =>
             {
                 foreach (var index in indexEnumerable)
                 {
@@ -316,6 +285,18 @@ namespace Ludwell.Scene.Editor
             }
 
             return filteredList;
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            _view.CloseAllButton.clicked -= CloseAll;
+            _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.RemoveButton.clicked -= DeleteSelection;
+
+            _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+
+            _listViewHandler.ListView.itemsRemoved -= HandleListViewItemsRemoved();
         }
     }
 }

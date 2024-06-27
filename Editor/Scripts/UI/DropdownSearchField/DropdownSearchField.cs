@@ -63,6 +63,8 @@ namespace Ludwell.Scene.Editor
             InitializeFocusAndBlur();
 
             KeepDropdownUnderSelf(this);
+            
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         public bool HasSearchStrategy(string strategy)
@@ -93,7 +95,7 @@ namespace Ludwell.Scene.Editor
 
         public DropdownSearchField WithResizableParent(VisualElement resizableParent)
         {
-            UnregisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+            UnregisterCallback<GeometryChangedEvent>(PlaceUnder);
             KeepDropdownUnderSelf(resizableParent);
             return this;
         }
@@ -171,10 +173,14 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        public void RebuildActiveListing()
+        /// <returns>Was the current listing strategy executed</returns>
+        public bool RebuildActiveListing()
         {
-            if (!GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return;
+            if (!GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return false;
+            
             ExecuteCurrentListingStrategy(_searchField.value);
+            _listView.Rebuild();
+            return true;
         }
 
         public void ShowDropdown()
@@ -300,7 +306,7 @@ namespace Ludwell.Scene.Editor
 
         private void KeepDropdownUnderSelf(VisualElement resizableElement)
         {
-            resizableElement.RegisterCallback<GeometryChangedEvent>(_ => PlaceUnder());
+            resizableElement.RegisterCallback<GeometryChangedEvent>(PlaceUnder);
         }
 
         private void AddToBaseItemsSource(IEnumerable<int> integers)
@@ -322,7 +328,7 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private void PlaceUnder()
+        private void PlaceUnder(GeometryChangedEvent evt)
         {
             _dropdownListView.PlaceUnder(this);
         }
@@ -331,6 +337,16 @@ namespace Ludwell.Scene.Editor
         {
             _searchField.style.borderBottomLeftRadius = radius;
             _searchField.style.borderBottomRightRadius = radius;
+        }
+        
+        private void Dispose(DetachFromPanelEvent evt)
+        {
+            UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            
+            _listView.itemsAdded -= AddToBaseItemsSource;
+            _listView.itemsRemoved -= RemoveFromBaseItemsSource;
+            
+            UnregisterCallback<GeometryChangedEvent>(PlaceUnder);
         }
     }
 }

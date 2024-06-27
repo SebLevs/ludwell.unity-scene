@@ -11,19 +11,32 @@ namespace Ludwell.Scene.Editor
         private const string NotTaggedName = "not-tagged";
         private const string IconButtonName = "tags__button-add";
 
+        public Action OnOptionClicked;
+
         private Button _optionsButton;
         private ScrollView _container;
         private Label _notTaggedLabel;
 
-        private VisualElement _root;
+        private readonly VisualElement _root;
 
         private int ElementsCount => _container.childCount;
 
-        public TagsShelfView(VisualElement parent, EventCallback<ClickEvent> onOptionClicked)
+        public TagsShelfView(VisualElement parent)
         {
             _root = parent.Q(nameof(TagsShelfView));
-            SetReferences();
-            _optionsButton.RegisterCallback(onOptionClicked);
+
+            _optionsButton = _root.Q<Button>(AddButtonName);
+            _optionsButton.clicked += ExecuteOptionClicked;
+
+            _container = _root.Q<ScrollView>(TagsContainerName);
+            _notTaggedLabel = _root.Q<Label>(NotTaggedName);
+
+            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+        }
+
+        private void ExecuteOptionClicked()
+        {
+            OnOptionClicked?.Invoke();
         }
 
         public void OverrideIconTooltip(string value)
@@ -72,17 +85,17 @@ namespace Ludwell.Scene.Editor
             });
         }
 
-        private void SetReferences()
-        {
-            _optionsButton = _root.Q<Button>(AddButtonName);
-            _container = _root.Q<ScrollView>(TagsContainerName);
-            _notTaggedLabel = _root.Q<Label>(NotTaggedName);
-        }
-
         private void HandleUntaggedState()
         {
             _notTaggedLabel.style.display = ElementsCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
             _container.style.display = ElementsCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
+
+            _optionsButton.clicked -= ExecuteOptionClicked;
         }
     }
 }

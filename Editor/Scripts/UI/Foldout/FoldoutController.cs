@@ -7,7 +7,8 @@ namespace Ludwell.Scene.Editor
     {
         public Action<bool> OnHeaderClickedCallback;
 
-        private FoldoutView _view;
+        private readonly VisualElement _root;
+        private readonly FoldoutView _view;
 
         private bool _isOpen;
 
@@ -42,6 +43,7 @@ namespace Ludwell.Scene.Editor
 
         public FoldoutController(VisualElement root, bool startOpen)
         {
+            _root = root;
             _view = new FoldoutView(root);
 
             OnHeaderClickedCallback += _view.ToggleFoldoutStyle;
@@ -49,6 +51,8 @@ namespace Ludwell.Scene.Editor
 
             IsOpen = startOpen;
             _view.ToggleFoldoutStyle(startOpen);
+            
+            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         private void ToggleContentVisibility()
@@ -60,6 +64,14 @@ namespace Ludwell.Scene.Editor
         private void ExecuteHeaderClickedCallback()
         {
             OnHeaderClickedCallback?.Invoke(IsOpen);
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            
+            OnHeaderClickedCallback -= _view.ToggleFoldoutStyle;
+            _view.OnHeaderClicked -= ToggleContentVisibility;
         }
     }
 }
