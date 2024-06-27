@@ -65,7 +65,7 @@ namespace Ludwell.Scene.Editor
             ResourcesLocator.QuickLoadController = this;
 
             // todo: find less static way to handle refresh
-            _delayedRebuild = new(0.2f, ForceRebuildListView);
+            _delayedRebuild = new DelayedEditorUpdateAction(0.0f, ForceRebuildListView);
 
             SceneManager.sceneLoaded += HandleSceneLoaded;
             SceneManager.sceneUnloaded += HandleSceneUnloaded;
