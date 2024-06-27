@@ -34,9 +34,6 @@ namespace Ludwell.Scene
             ListView.unbindItem = OnElementScrollOutOfView;
             ListView.itemsAdded += _ => ForceRebuild();
             ListView.itemsRemoved += _ => ForceRebuild();
-
-            // todo: replace workaround for the ListView visual issue concerning dynamically sized element rendering.
-            listView.RegisterCallback<GeometryChangedEvent>(_ => { ListView.Rebuild(); });
         }
 
         /// <summary> Workaround for a ListView visual issue concerning dynamically sized element rendering. </summary>

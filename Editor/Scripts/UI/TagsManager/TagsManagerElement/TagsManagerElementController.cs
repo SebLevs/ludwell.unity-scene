@@ -31,35 +31,10 @@ namespace Ludwell.Scene.Editor
             _view.OnAdd += ExecuteOnAdd;
             _view.OnRemove += ExecuteOnRemove;
 
-            var textField = this.Q<TextField>();
-            textField.RegisterCallback<BlurEvent>(SolveBlured);
-            textField.RegisterCallback<KeyDownEvent>(evt =>
-            {
-                switch (evt.keyCode)
-                {
-                    case KeyCode.Return:
-                        UpdateAssetName(textField.value);
-                        break;
-                    case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
-                    case KeyCode.Escape:
-                        _view.SetValue(_model.Name);
-                        evt.StopPropagation();
-                        break;
-                }
-            });
-        }
+            _view.TextField.RegisterCallback<BlurEvent>(SolveBlurred);
+            _view.TextField.RegisterCallback<KeyDownEvent>(OnReturnKeyHandleAssetName);
 
-        ~TagsManagerElementController()
-        {
-            _view.OnAdd -= ExecuteOnAdd;
-            _view.OnRemove -= ExecuteOnRemove;
-
-            var textField = this.Q<TextField>();
-            textField.UnregisterCallback<BlurEvent>(SolveBlured); // todo: return to previous name
-            textField.UnregisterCallback<KeyDownEvent>(evt =>
-            {
-                if (evt.keyCode == KeyCode.Return) UpdateAssetName(textField.value);
-            });
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         public void CacheData(TagWithSubscribers data)
@@ -77,10 +52,25 @@ namespace Ludwell.Scene.Editor
             if (string.IsNullOrEmpty(_view.Value)) _view.FocusTextFieldWithoutNotify();
         }
 
-        private void SolveBlured(BlurEvent evt)
+        private void SolveBlurred(BlurEvent evt)
         {
             if (_view.TextField.value != _model.Name) _view.TextField.value = _model.Name;
             if (string.IsNullOrEmpty(_view.TextField.value)) ResourcesLocator.GetTagContainer().RemoveTag(_model);
+        }
+
+        private void OnReturnKeyHandleAssetName(KeyDownEvent evt)
+        {
+            switch (evt.keyCode)
+            {
+                case KeyCode.Return:
+                    UpdateAssetName(_view.TextField.value);
+                    break;
+                case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
+                case KeyCode.Escape:
+                    _view.SetValue(_model.Name);
+                    evt.StopPropagation();
+                    break;
+            }
         }
 
         public void UpdateAssetName(string value)
@@ -105,6 +95,16 @@ namespace Ludwell.Scene.Editor
         private void ExecuteOnRemove()
         {
             OnRemove?.Invoke(_model);
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            _view.OnAdd -= ExecuteOnAdd;
+            _view.OnRemove -= ExecuteOnRemove;
+
+            _view.TextField.UnregisterCallback<BlurEvent>(SolveBlurred);
+            _view.TextField.UnregisterCallback<KeyDownEvent>(OnReturnKeyHandleAssetName);
         }
     }
 }

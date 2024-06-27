@@ -22,6 +22,15 @@ namespace Ludwell.Scene
             StateTwo.OnClick += SwitchToStateOne;
 
             SwitchState(StateOne);
+
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
+        }
+
+        public void Dispose(DetachFromPanelEvent evt)
+        {
+            UnregisterCallback<DetachFromPanelEvent>(Dispose);
+            StateOne.OnClick -= SwitchToStateTwo;
+            StateTwo.OnClick -= SwitchToStateOne;
         }
 
         public void SwitchState(DualStateButtonState state)
@@ -32,7 +41,7 @@ namespace Ludwell.Scene
                 _currentState.Enter();
                 return;
             }
-            
+
             if (_currentState == state) return;
 
             _currentState.Exit();

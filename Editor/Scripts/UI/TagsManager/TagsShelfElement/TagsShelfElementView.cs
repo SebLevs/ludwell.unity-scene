@@ -19,23 +19,22 @@ namespace Ludwell.Scene.Editor
 
         public string Value => _mainButton.text;
 
+        private VisualElement _view;
+
         public TagsShelfElementView(VisualElement view)
         {
-            _removeButton = view.Q<Button>(RemoveButtonName);
+            _view = view;
+
+            _removeButton = _view.Q<Button>(RemoveButtonName);
             _removeButton.clicked += RemoveButtonAction;
 
-            _mainButton = view.Q<Button>(MainButtonName);
+            _mainButton = _view.Q<Button>(MainButtonName);
             _mainButton.clicked += MainButtonAction;
 
-            _searchButton = view.Q<Button>(SearchButtonName);
+            _searchButton = _view.Q<Button>(SearchButtonName);
             _searchButton.clicked += SearchButtonAction;
-        }
 
-        ~TagsShelfElementView()
-        {
-            _removeButton.clicked -= RemoveButtonAction;
-            _mainButton.clicked -= MainButtonAction;
-            _searchButton.clicked -= SearchButtonAction;
+            _view.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         public void SetValue(string text)
@@ -75,6 +74,15 @@ namespace Ludwell.Scene.Editor
         private void SearchButtonAction()
         {
             OnSearchButtonClicked?.Invoke();
+        }
+
+        private void Dispose(DetachFromPanelEvent _)
+        {
+            _view.UnregisterCallback<DetachFromPanelEvent>(Dispose);
+
+            _removeButton.clicked -= RemoveButtonAction;
+            _mainButton.clicked -= MainButtonAction;
+            _searchButton.clicked -= SearchButtonAction;
         }
     }
 }
