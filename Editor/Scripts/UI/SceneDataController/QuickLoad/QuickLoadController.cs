@@ -44,15 +44,13 @@ namespace Ludwell.Scene.Editor
             InitializeSearchField(_root, _root.Q<DropdownSearchField>());
             _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
-            // todo: change for DI or service
-            ResourcesLocator.QuickLoadController = this;
+            ServiceLocator.Register<QuickLoadController>(this);
 
             InitializeContextMenuManipulator();
 
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
-        // todo: delete when either service or DI is implemented
         public void ScrollToItemIndex(int index)
         {
             _listViewHandler.ListView.ScrollToItem(index);

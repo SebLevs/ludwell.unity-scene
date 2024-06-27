@@ -29,7 +29,7 @@ namespace Ludwell.Scene.Editor
 
         public TagsManagerController(VisualElement parent) : base(parent)
         {
-            ResourcesLocator.TagsManagerController = this;
+            ServiceLocator.Register<TagsManagerController>(this);
 
             _root = parent.Q(nameof(TagsManagerView));
             _view = new TagsManagerView(_root);
@@ -47,7 +47,6 @@ namespace Ludwell.Scene.Editor
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
-        // todo: delete when either service or DI is implemented
         public void ScrollToItemIndex(int index)
         {
             _listViewHandler.ListView.ScrollToItem(index);

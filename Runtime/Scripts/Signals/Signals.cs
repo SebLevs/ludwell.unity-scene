@@ -5,7 +5,7 @@ namespace Ludwell.Scene
 {
     public static class Signals
     {
-        private static Dictionary<string, List<Action>> _signals = new();
+        private static readonly Dictionary<string, List<Action>> _signals = new();
 
         public static void Clear<T>()
         {

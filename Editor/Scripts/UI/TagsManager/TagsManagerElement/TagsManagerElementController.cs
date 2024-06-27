@@ -77,12 +77,12 @@ namespace Ludwell.Scene.Editor
         {
             if (_model.Name == value) return;
             _model.Name = value;
-            if (!ResourcesLocator.GetTagContainer().HandleTagValidity(_model)) return; // todo: remove???
+            if (!ResourcesLocator.GetTagContainer().HandleTagValidity(_model)) return;
             ResourcesLocator.GetTagContainer().Tags.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
 
-            var tagsManagerController = ResourcesLocator.TagsManagerController;
             var index = ResourcesLocator.GetTagContainer().Tags.FindIndex(x => x == _model);
+            var tagsManagerController = ServiceLocator.Get<TagsManagerController>();
             tagsManagerController.ScrollToItemIndex(index);
             ResourcesLocator.SaveTagContainer();
         }
