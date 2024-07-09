@@ -12,10 +12,10 @@ namespace Ludwell.Scene.Editor
 
         private const string CurrentActiveScene = "currentActiveScene";
 
-        private QuickLoadElementView _view;
+        private readonly QuickLoadElementView _view;
         private QuickLoadElementData _model;
 
-        private FoldoutController _foldout;
+        private readonly FoldoutController _foldout;
         private readonly TagsShelfController _tagsShelfController;
         private ViewManager _viewManager;
 
@@ -38,7 +38,6 @@ namespace Ludwell.Scene.Editor
 
             _foldout = new FoldoutController(this, false);
             _foldout.SetOnPreventHeaderClick(target => target is Button);
-            // _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(HandleReturnPressed);
             _foldout.TitleTextField.RegisterCallback<BlurEvent>(RenameAsset);
 
             _tagsShelfController = new TagsShelfController(this, TransitionViewToTagsManager);
@@ -263,7 +262,7 @@ namespace Ludwell.Scene.Editor
             }
 
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _foldout.Title);
-            
+
             var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
             var quickLoadController = ServiceLocator.Get<QuickLoadController>();
             quickLoadController.ScrollToItemIndex(index);
@@ -275,12 +274,11 @@ namespace Ludwell.Scene.Editor
             var assetPath = SceneDataManagerEditorApplication.GetSceneAssetPath(_model.SceneData);
             assetPath = Path.Combine(Path.GetDirectoryName(assetPath) ?? string.Empty, _foldout.Title + ".unity");
             var asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
-            
+
             if (!asset) return true;
-            
+
             Debug.LogWarning($"SceneAsset with name already exists | {assetPath}");
             return false;
-
         }
 
         private void BindViewManager(AttachToPanelEvent evt)
