@@ -255,7 +255,7 @@ namespace Ludwell.Scene.Editor
         {
             if (_foldout.Title == _model.SceneData.name) return;
 
-            if (!CanRenameAsset())
+            if (!CanRenameAsset() || string.IsNullOrEmpty(_foldout.Title) || string.IsNullOrWhiteSpace(_foldout.Title))
             {
                 _foldout.Title = _model.SceneData.name;
                 return;
