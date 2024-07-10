@@ -152,6 +152,7 @@ namespace Ludwell.Scene.Editor
                 AssetDatabase.DeleteAsset(sceneDataPath);
 
                 _listView.ClearSelection();
+                Signals.Dispatch<UISignals.RefreshView>();
                 return;
             }
 
@@ -168,6 +169,7 @@ namespace Ludwell.Scene.Editor
             }
 
             _listView.ClearSelection();
+            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void CloseAll()
