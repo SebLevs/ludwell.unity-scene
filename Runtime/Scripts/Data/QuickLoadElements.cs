@@ -52,7 +52,7 @@ namespace Ludwell.Scene
                 Elements.Remove(element);
             }
 
-            // Signals.Dispatch<UISignals.RefreshView>();
+            Signals.Dispatch<UISignals.RefreshView>();
         }
 
         public void UpdateElement(string oldName, string newName)
