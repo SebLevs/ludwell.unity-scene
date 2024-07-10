@@ -49,6 +49,10 @@ namespace Ludwell.Scene.Editor
 
         public void ScrollToItemIndex(int index)
         {
+            var focusController = _root.focusController;
+            var focusedElement = focusController.focusedElement;
+            focusedElement?.Blur();
+
             _listViewHandler.ListView.ScrollToItem(index);
             _listViewHandler.ListView.SetSelection(index);
             _listViewHandler.GetVisualElementAt(index)?.FocusTextField();

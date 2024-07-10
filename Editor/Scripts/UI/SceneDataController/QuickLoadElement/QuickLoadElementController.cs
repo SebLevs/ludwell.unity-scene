@@ -266,7 +266,6 @@ namespace Ludwell.Scene.Editor
             var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
             var quickLoadController = ServiceLocator.Get<QuickLoadController>();
             quickLoadController.ScrollToItemIndex(index);
-            _foldout.FocusTextField();
         }
 
         private bool CanRenameAsset()

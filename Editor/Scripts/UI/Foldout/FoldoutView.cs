@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
 
         private void ExecuteTitleValueChangedCallback(ChangeEvent<string> evt) =>
             OnTitleValueChanged?.Invoke(evt.newValue);
-        
+
         private void OnClickStopPropagation(ClickEvent evt) => evt.StopPropagation();
 
         public FoldoutView(VisualElement root)
@@ -53,16 +53,14 @@ namespace Ludwell.Scene.Editor
             Title.RegisterCallback<BlurEvent>(SetStyleUnselectedTextField);
 
             _content = _root.Q<VisualElement>(ContentName);
-            
+
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
         public void FocusTextField()
         {
-            Title.Blur();
-            Title.Focus();
-            var textLength = Title.text.Length;
-            Title.SelectRange(textLength, textLength);
+            // todo: find a solution to this hack
+            Title.FocusOnNextEditorFrame();
         }
 
         public void SetContentVisibility(bool state)
@@ -87,14 +85,14 @@ namespace Ludwell.Scene.Editor
             var borderTopWidth = value ? 1 : 0;
             _root.Q(FooterName).style.borderTopWidth = borderTopWidth;
         }
-        
+
         private void ExecuteHeaderClickedCallback(ClickEvent evt)
         {
             // if (evt.target is Button) return;
             if (OnPreventHeaderClick?.Invoke(evt.target) == true) return;
             OnHeaderClicked?.Invoke();
         }
-        
+
         private void OnKeyDownSimulateHeaderClick(KeyDownEvent evt)
         {
             if (evt.keyCode != KeyCode.Space) return;
@@ -106,17 +104,17 @@ namespace Ludwell.Scene.Editor
             Title.RemoveFromClassList(TextFieldUnselectedClass);
             Title.AddToClassList(TextFieldSelectedClass);
         }
-        
+
         private void SetStyleUnselectedTextField(BlurEvent _)
         {
             Title.RemoveFromClassList(TextFieldSelectedClass);
             Title.AddToClassList(TextFieldUnselectedClass);
         }
-        
+
         private void Dispose(DetachFromPanelEvent _)
         {
             _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            
+
             _header.UnregisterCallback<ClickEvent>(ExecuteHeaderClickedCallback);
 
             _root.UnregisterCallback<KeyDownEvent>(OnKeyDownSimulateHeaderClick);
