@@ -1,4 +1,3 @@
-using PlasticGui.Help;
 using UnityEditor;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
@@ -28,7 +27,7 @@ namespace Ludwell.Scene.Editor
 
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneDataController>();
         }
-        
+
         [Shortcut("SceneManagerToolkit", KeyCode.S,
             ShortcutModifiers.Control | ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
         private static void ShortcutToggleWindow()
