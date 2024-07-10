@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
             _view.OnRemove += ExecuteOnRemove;
 
             _view.TextField.RegisterCallback<BlurEvent>(SolveBlurred);
-            _view.TextField.RegisterCallback<KeyDownEvent>(OnReturnKeyHandleAssetName);
+            _view.TextField.RegisterCallback<KeyDownEvent>(OnKeyRevertName);
 
             RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
@@ -54,30 +54,33 @@ namespace Ludwell.Scene.Editor
 
         private void SolveBlurred(BlurEvent evt)
         {
-            if (_view.TextField.value != _model.Name) _view.TextField.value = _model.Name;
-            if (string.IsNullOrEmpty(_view.TextField.value)) ResourcesLocator.GetTagContainer().RemoveTag(_model);
-        }
+            var isTextFieldValid = !string.IsNullOrEmpty(_view.TextField.value) &&
+                                    !string.IsNullOrWhiteSpace(_view.TextField.value);
+            var isModelNameValid = !string.IsNullOrEmpty(_model.Name) &&
+                                    !string.IsNullOrWhiteSpace(_model.Name);
+            if (!isTextFieldValid && !isModelNameValid) ResourcesLocator.GetTagContainer().RemoveTag(_model);
 
-        private void OnReturnKeyHandleAssetName(KeyDownEvent evt)
-        {
-            switch (evt.keyCode)
+            if (_model.Name == _view.TextField.value) return;
+
+            if (ResourcesLocator.GetTagContainer().ContainsTagWithName(_view.TextField.value))
             {
-                case KeyCode.Return:
-                    UpdateAssetName(_view.TextField.value);
-                    break;
-                case KeyCode.Z when (evt.modifiers & EventModifiers.Control) != 0:
-                case KeyCode.Escape:
-                    _view.SetValue(_model.Name);
-                    evt.StopPropagation();
-                    break;
+                _view.TextField.value = _model.Name;
+                return;
             }
+            
+            UpdateAssetName();
         }
 
-        public void UpdateAssetName(string value)
+        private void OnKeyRevertName(KeyDownEvent evt)
         {
-            if (_model.Name == value) return;
-            _model.Name = value;
-            if (!ResourcesLocator.GetTagContainer().HandleTagValidity(_model)) return;
+            if (evt.keyCode != KeyCode.Z || (evt.modifiers & EventModifiers.Control) == 0) return;
+            _view.SetValue(_model.Name);
+            evt.StopPropagation();
+        }
+
+        private void UpdateAssetName()
+        {
+            _model.Name = _view.TextField.value;
             ResourcesLocator.GetTagContainer().Tags.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
 
@@ -104,7 +107,7 @@ namespace Ludwell.Scene.Editor
             _view.OnRemove -= ExecuteOnRemove;
 
             _view.TextField.UnregisterCallback<BlurEvent>(SolveBlurred);
-            _view.TextField.UnregisterCallback<KeyDownEvent>(OnReturnKeyHandleAssetName);
+            _view.TextField.UnregisterCallback<KeyDownEvent>(OnKeyRevertName);
         }
     }
 }
