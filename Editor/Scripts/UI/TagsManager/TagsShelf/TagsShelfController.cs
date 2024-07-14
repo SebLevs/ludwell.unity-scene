@@ -23,7 +23,7 @@ namespace Ludwell.Scene.Editor
         {
             if (Contains(tag)) return;
             _data.Tags.Add(tag);
-            tag.AddSubscriber(_data);
+            tag.Add(_data);
             _view.Add(ConstructTagElement(tag));
             Sort();
 
@@ -36,7 +36,7 @@ namespace Ludwell.Scene.Editor
 
             _view.RemoveAt(IndexOf(tagWithSubscribers));
             _data.Tags.Remove(tagWithSubscribers);
-            tagWithSubscribers.RemoveSubscriber(_data);
+            tagWithSubscribers.Remove(_data);
 
             ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
         }

@@ -12,10 +12,10 @@ namespace Ludwell.Scene.Editor
 
         private const string CurrentActiveScene = "currentActiveScene";
 
-        private QuickLoadElementView _view;
+        private readonly QuickLoadElementView _view;
         private QuickLoadElementData _model;
 
-        private FoldoutController _foldout;
+        private readonly FoldoutController _foldout;
         private readonly TagsShelfController _tagsShelfController;
         private ViewManager _viewManager;
 
@@ -38,8 +38,7 @@ namespace Ludwell.Scene.Editor
 
             _foldout = new FoldoutController(this, false);
             _foldout.SetOnPreventHeaderClick(target => target is Button);
-            _foldout.TitleTextField.RegisterCallback<KeyDownEvent>(HandleReturnPressed);
-            _foldout.TitleTextField.RegisterCallback<BlurEvent>(HandleBlur);
+            _foldout.TitleTextField.RegisterCallback<BlurEvent>(RenameAsset);
 
             _tagsShelfController = new TagsShelfController(this, TransitionViewToTagsManager);
 
@@ -252,15 +251,33 @@ namespace Ludwell.Scene.Editor
             _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
-        private void HandleBlur(BlurEvent evt)
+        private void RenameAsset(BlurEvent evt)
         {
             if (_foldout.Title == _model.SceneData.name) return;
-            _foldout.Title = _model.SceneData.name;
+
+            if (!CanRenameAsset() || string.IsNullOrEmpty(_foldout.Title) || string.IsNullOrWhiteSpace(_foldout.Title))
+            {
+                _foldout.Title = _model.SceneData.name;
+                return;
+            }
+
+            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _foldout.Title);
+
+            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
+            var quickLoadController = ServiceLocator.Get<QuickLoadController>();
+            quickLoadController.ScrollToItemIndex(index);
         }
 
-        private void HandleReturnPressed(KeyDownEvent evt)
+        private bool CanRenameAsset()
         {
-            if (evt.keyCode == KeyCode.Return) UpdateAndSaveAssetName(_foldout.Title);
+            var assetPath = SceneDataManagerEditorApplication.GetSceneAssetPath(_model.SceneData);
+            assetPath = Path.Combine(Path.GetDirectoryName(assetPath) ?? string.Empty, _foldout.Title + ".unity");
+            var asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
+
+            if (!asset) return true;
+
+            Debug.LogWarning($"SceneAsset with name already exists | {assetPath}");
+            return false;
         }
 
         private void BindViewManager(AttachToPanelEvent evt)
@@ -315,18 +332,6 @@ namespace Ludwell.Scene.Editor
             SessionState.SetBool(id, _foldout.IsOpen);
         }
 
-        private void UpdateAndSaveAssetName(string value)
-        {
-            if (value == _model.SceneData.name) return;
-
-            AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_model.SceneData), _foldout.Title);
-
-            var index = ResourcesLocator.GetQuickLoadElements().Elements.FindIndex(x => x == _model);
-            var quickLoadController = ServiceLocator.Get<QuickLoadController>();
-            quickLoadController.ScrollToItemIndex(index);
-            _foldout.FocusTextField();
-        }
-
         private void Dispose(DetachFromPanelEvent _)
         {
             UnregisterCallback<DetachFromPanelEvent>(Dispose);
@@ -337,8 +342,7 @@ namespace Ludwell.Scene.Editor
             _view.PingButton.clicked -= SelectSceneDataInProject;
             _view.DirectoryChangeButton.clicked -= ChangeFolder;
 
-            _foldout.TitleTextField.UnregisterCallback<KeyDownEvent>(HandleReturnPressed);
-            _foldout.TitleTextField.UnregisterCallback<BlurEvent>(HandleBlur);
+            _foldout.TitleTextField.UnregisterCallback<BlurEvent>(RenameAsset);
 
             UnregisterCallback<AttachToPanelEvent>(BindViewManager);
             UnregisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);

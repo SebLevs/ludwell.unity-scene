@@ -49,6 +49,10 @@ namespace Ludwell.Scene.Editor
 
         public void ScrollToItemIndex(int index)
         {
+            var focusController = _root.focusController;
+            var focusedElement = focusController?.focusedElement;
+            focusedElement?.Blur();
+
             _listViewHandler.ListView.ScrollToItem(index);
             _listViewHandler.ListView.SetSelection(index);
             _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
@@ -152,8 +156,8 @@ namespace Ludwell.Scene.Editor
 
             for (var i = arrayOfElements.Length - 1; i >= 0; i--)
             {
-                RemoveTagFromShelf(arrayOfElements[i]);
                 arrayOfElements[i].RemoveFromAllSubscribers();
+                RemoveTagFromShelf(arrayOfElements[i]);
                 _listViewHandler.RemoveSelectedElement();
             }
         }

@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,6 +26,20 @@ namespace Ludwell.Scene.Editor
             _sceneDataController = new SceneDataController(rootVisualElement);
 
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneDataController>();
+        }
+
+        [Shortcut("SceneManagerToolkit", KeyCode.S,
+            ShortcutModifiers.Control | ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
+        private static void ShortcutToggleWindow()
+        {
+            if (HasOpenInstances<SceneDataManagerWindow>())
+            {
+                GetWindow<SceneDataManagerWindow>().Close();
+            }
+            else
+            {
+                OpenWindow();
+            }
         }
 
         private void OnDestroy()

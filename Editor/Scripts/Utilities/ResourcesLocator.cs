@@ -11,8 +11,10 @@ namespace Ludwell.Scene.Editor
 
         private static TagContainer _tagContainer;
         private static DelayedEditorUpdateAction _delayedSaveTagContainer;
-
+        
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
+        
+        private static JoinTable _joinTable;
 
         public static SceneDataManagerSettings GetSceneDataManagerSettings()
         {
@@ -33,11 +35,11 @@ namespace Ludwell.Scene.Editor
             CacheTagContainer();
             return _tagContainer;
         }
-
-        public static void SaveTagContainerDelayed()
+        
+        public static JoinTable GetJoinTable()
         {
-            _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveTagContainer);
-            _delayedSaveTagContainer.StartOrRefresh();
+            CacheJoinTable();
+            return _joinTable;
         }
 
         public static void SaveQuickLoadElements()
@@ -62,18 +64,32 @@ namespace Ludwell.Scene.Editor
             EditorUtility.SetDirty(_tagContainer);
             AssetDatabase.SaveAssetIfDirty(_tagContainer);
         }
-
-        public static void SaveQuickLoadElementsAndTagContainerDelayed()
+        
+        public static void SaveTagContainerDelayed()
         {
-            _delayedSaveQuickLoadElementsAndTagContainer ??=
-                new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElementsAndTagContainer);
-            _delayedSaveQuickLoadElementsAndTagContainer.StartOrRefresh();
+            _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveTagContainer);
+            _delayedSaveTagContainer.StartOrRefresh();
+        }
+        
+        public static void SaveJoinTable()
+        {
+            CacheJoinTable();
+            EditorUtility.SetDirty(_joinTable);
+            AssetDatabase.SaveAssetIfDirty(_joinTable);
         }
 
         private static void SaveQuickLoadElementsAndTagContainer()
         {
             SaveQuickLoadElements();
             SaveTagContainer();
+        }
+        
+        
+        public static void SaveQuickLoadElementsAndTagContainerDelayed()
+        {
+            _delayedSaveQuickLoadElementsAndTagContainer ??=
+                new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElementsAndTagContainer);
+            _delayedSaveQuickLoadElementsAndTagContainer.StartOrRefresh();
         }
 
         private static void CacheQuickLoadData()
@@ -91,6 +107,12 @@ namespace Ludwell.Scene.Editor
         {
             if (_tagContainer) return;
             _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer), out _);
+        }
+        
+        private static void CacheJoinTable()
+        {
+            if (_joinTable) return;
+            _joinTable = (JoinTable)ResourcesSolver.EnsureAssetExistence(typeof(JoinTable), out _);
         }
     }
 }

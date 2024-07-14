@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
 
             TextField = _root.Q<TextField>(TagTextFieldName);
             TextField.RegisterValueChangedCallback(ValueChangedAction);
-            
+
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
@@ -48,10 +48,8 @@ namespace Ludwell.Scene.Editor
 
         public void FocusTextField()
         {
-            TextField.Blur();
-            TextField.Focus();
-            var textLength = TextField.text.Length;
-            TextField.SelectRange(textLength, textLength);
+            // todo: find a solution to this hack
+            TextField.FocusOnNextEditorFrame();
         }
 
         private void AddButtonAction()
@@ -68,11 +66,11 @@ namespace Ludwell.Scene.Editor
         {
             OnValueChanged?.Invoke(evt.newValue);
         }
-        
+
         private void Dispose(DetachFromPanelEvent _)
         {
             _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            
+
             var addButton = _root.Q<Button>(AddButtonName);
             addButton.clicked -= AddButtonAction;
 
