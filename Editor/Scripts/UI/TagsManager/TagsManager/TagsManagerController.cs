@@ -156,8 +156,8 @@ namespace Ludwell.Scene.Editor
 
             for (var i = arrayOfElements.Length - 1; i >= 0; i--)
             {
-                RemoveTagFromShelf(arrayOfElements[i]);
                 arrayOfElements[i].RemoveFromAllSubscribers();
+                RemoveTagFromShelf(arrayOfElements[i]);
                 _listViewHandler.RemoveSelectedElement();
             }
         }

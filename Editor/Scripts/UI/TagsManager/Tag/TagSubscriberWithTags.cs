@@ -14,11 +14,31 @@ namespace Ludwell.Scene.Editor
             Tags.Clear();
         }
 
+        public void Add(TagWithSubscribers tag)
+        {
+            if (Tags.Contains(tag)) return;
+
+            Tags.Add(tag);
+
+            if (tag.Subscribers.Contains(this)) return;
+            tag.Add(this);
+        }
+
+        public void Remove(TagWithSubscribers tag)
+        {
+            if (!Tags.Contains(tag)) return;
+
+            Tags.Remove(tag);
+            
+            if (!tag.Subscribers.Contains(this)) return;
+            tag.Remove(this);
+        }
+
         public void RemoveFromAllTags()
         {
             foreach (var tag in Tags)
             {
-                (tag as TagWithSubscribers)?.RemoveSubscriber(this);
+                (tag as TagWithSubscribers)?.Remove(this);
             }
 
             Tags.Clear();

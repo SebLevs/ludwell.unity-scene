@@ -55,19 +55,28 @@ namespace Ludwell.Scene.Editor
         private void SolveBlurred(BlurEvent evt)
         {
             var isTextFieldValid = !string.IsNullOrEmpty(_view.TextField.value) &&
-                                    !string.IsNullOrWhiteSpace(_view.TextField.value);
+                                   !string.IsNullOrWhiteSpace(_view.TextField.value);
             var isModelNameValid = !string.IsNullOrEmpty(_model.Name) &&
-                                    !string.IsNullOrWhiteSpace(_model.Name);
+                                   !string.IsNullOrWhiteSpace(_model.Name);
             if (!isTextFieldValid && !isModelNameValid) ResourcesLocator.GetTagContainer().RemoveTag(_model);
+
+            if (isModelNameValid && !isTextFieldValid)
+            {
+                _view.TextField.value = _model.Name;
+                return;
+            }
 
             if (_model.Name == _view.TextField.value) return;
 
             if (ResourcesLocator.GetTagContainer().ContainsTagWithName(_view.TextField.value))
             {
                 _view.TextField.value = _model.Name;
+
+                if (!isModelNameValid) ResourcesLocator.GetTagContainer().RemoveTag(_model);
+
                 return;
             }
-            
+
             UpdateAssetName();
         }
 
