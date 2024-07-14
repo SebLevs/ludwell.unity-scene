@@ -56,6 +56,7 @@ namespace Ludwell.Scene.Editor
             this.AddStyleFromUss(UssPath);
 
             SetReferences();
+            
             InitializeDropDown();
             InitializeSearchField();
             SetDefaultSearchBehaviour();
