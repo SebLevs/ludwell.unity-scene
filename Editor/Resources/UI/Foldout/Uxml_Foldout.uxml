@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="True">
     <ui:Template name="TagsShelfView" src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/TagsManager/TagsShelf/Uxml_TagsShelfView.uxml?fileID=9197481963319205126&amp;guid=b11f09c9737ee2b448c3a12d9e566bcf&amp;type=3#Uxml_TagsShelfView" />
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Resources/UI/Foldout/Uss_Foldout.uss?fileID=7433441132597879392&amp;guid=7c9ef5d5908b4cb47932327cac1c745c&amp;type=3#Uss_Foldout" />
     <ui:VisualElement name="root">

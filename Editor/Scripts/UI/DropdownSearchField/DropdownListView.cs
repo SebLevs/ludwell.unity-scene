@@ -21,6 +21,12 @@ namespace Ludwell.Scene.Editor
         private float _heightDifference = -1;
 
         private const float _maxHeight = 200;
+        
+        private DropdownSearchField _owner;
+        
+        public int Count => itemsSource.Count;
+
+        public bool IsHidden => style.display == DisplayStyle.None;
 
         public DropdownListView()
         {
@@ -28,14 +34,8 @@ namespace Ludwell.Scene.Editor
             AddToClassList("dropdown-list-view");
             SetStyle();
 
-            _listViewHandler = new(this, _data);
+            _listViewHandler = new ListViewHandler<DropdownVisualElement, DropdownData>(this, _data);
         }
-
-        public int Count => itemsSource.Count;
-
-        public bool IsHidden => style.display == DisplayStyle.None;
-
-        private DropdownSearchField _owner;
 
         public void SetOwner(DropdownSearchField dropdownSearchField)
         {
@@ -84,7 +84,6 @@ namespace Ludwell.Scene.Editor
 
         private void TryCacheHeightDifference(VisualElement target)
         {
-            // if (_heightDifference <= -1)
             if (_heightDifference > -1) return;
             var rootHeight = target.Root().resolvedStyle.height;
             var rootVisualElement = target.Root().FindFirstChildWhereNameContains(UiToolkitNames.RootVisualContainer);
