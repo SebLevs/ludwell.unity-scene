@@ -80,13 +80,14 @@
     position: absolute;
     align-self: center;
     margin-left: 8px;
+    width: 8px;
+    height: 8px;
 }
 
 #root > #header > #toggle > #toggle-icon {
-    background-image: url('project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=4154780841294389669&guid=f82ce54408d9b7e48a58d91741b52ce7&type=3#arrow-down');
-    width: 16px;
-    height: 16px;
-    -unity-background-image-tint-color: rgb(196, 196, 196);
+    background-image: resource('Sprites/icon_load');
+    width: 8px;
+    height: 8px;
 }
 
 .icon-rotation__closed {
@@ -94,7 +95,7 @@
 }
 
 .icon-rotation__opened {
-    rotate: -90deg;
+    rotate: 90deg;
     transition-duration: 0.05s;
 }
 
