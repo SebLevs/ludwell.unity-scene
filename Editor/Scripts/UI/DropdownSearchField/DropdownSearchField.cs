@@ -330,6 +330,7 @@ namespace Ludwell.Scene.Editor
 
         private void PlaceUnder(GeometryChangedEvent evt)
         {
+            if (_dropdownListView.IsHidden) return;
             _dropdownListView.PlaceUnder(this);
         }
 
@@ -343,10 +344,11 @@ namespace Ludwell.Scene.Editor
         {
             UnregisterCallback<DetachFromPanelEvent>(Dispose);
             
+            UnregisterCallback<GeometryChangedEvent>(PlaceUnder);
+
+            if (_listView == null) return;
             _listView.itemsAdded -= AddToBaseItemsSource;
             _listView.itemsRemoved -= RemoveFromBaseItemsSource;
-            
-            UnregisterCallback<GeometryChangedEvent>(PlaceUnder);
         }
     }
 }

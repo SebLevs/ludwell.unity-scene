@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/ludwell.unity-scene/Editor/Scripts/UI/SceneDataController/QuickLoad/QuickLoadView.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#QuickLoadView" />
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement name="header-content">
