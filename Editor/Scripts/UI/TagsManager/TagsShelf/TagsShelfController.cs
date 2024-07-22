@@ -11,7 +11,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly TagsShelfView _view;
 
-        public int IndexOf(TagWithSubscribers tagWithSubscribers) => _data.Tags.IndexOf(tagWithSubscribers);
+        public int IndexOf(Tag tag) => _data.Tags.IndexOf(tag);
 
         public TagsShelfController(VisualElement parent, Action onOptionClicked)
         {
@@ -19,24 +19,22 @@ namespace Ludwell.Scene.Editor
             _view.OnOptionClicked += onOptionClicked;
         }
 
-        public void Add(TagWithSubscribers tag)
+        public void Add(Tag tag)
         {
             if (Contains(tag)) return;
             _data.Tags.Add(tag);
-            tag.Add(_data);
             _view.Add(ConstructTagElement(tag));
             Sort();
 
             ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
         }
 
-        public void Remove(TagWithSubscribers tagWithSubscribers)
+        public void Remove(Tag tag)
         {
-            if (!Contains(tagWithSubscribers)) return;
+            if (!Contains(tag)) return;
 
-            _view.RemoveAt(IndexOf(tagWithSubscribers));
-            _data.Tags.Remove(tagWithSubscribers);
-            tagWithSubscribers.Remove(_data);
+            _view.RemoveAt(IndexOf(tag));
+            _data.Tags.Remove(tag);
 
             ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
         }
@@ -68,17 +66,17 @@ namespace Ludwell.Scene.Editor
             return _data.Tags.Contains(tag);
         }
 
+        private IEnumerable<TagsShelfElementController> ConstructTagElements(List<Tag> tags)
+        {
+            return tags.Select(ConstructTagElement);
+        }
+
         private TagsShelfElementController ConstructTagElement(Tag tag)
         {
             TagsShelfElementController tagsShelfElementController = new();
             tagsShelfElementController.UpdateCache(tag);
             tagsShelfElementController.SetTagShelfController(this);
             return tagsShelfElementController;
-        }
-
-        private IEnumerable<TagsShelfElementController> ConstructTagElements(List<Tag> tags)
-        {
-            return tags.Select(ConstructTagElement);
         }
     }
 }

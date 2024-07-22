@@ -72,12 +72,12 @@ namespace Ludwell.Scene.Editor
             if (!state)
             {
                 _icon.RemoveFromClassList(IconRotationOpenedClassName);
-                _icon.AddToClassList(IconRotationOpenedClassName);
+                _icon.AddToClassList(IconRotationClosedClassName);
                 return;
             }
 
-            _icon.RemoveFromClassList(IconRotationOpenedClassName);
-            _icon.AddToClassList(IconRotationClosedClassName);
+            _icon.RemoveFromClassList(IconRotationClosedClassName);
+            _icon.AddToClassList(IconRotationOpenedClassName);
         }
 
         public void ToggleFoldoutStyle(bool value)

@@ -9,34 +9,28 @@ namespace Ludwell.Scene.Editor
     {
         [field: HideInInspector]
         [field: SerializeField]
-        public List<TagWithSubscribers> Tags { get; set; } = new();
-
-        public Action<TagWithSubscribers> OnAdd;
-        public Action<TagWithSubscribers> OnRemove;
+        public List<Tag> Tags { get; set; } = new();
 
         public bool ContainsTagWithName(string value)
         {
             foreach (var tag in Tags)
             {
-                if (!string.Equals(tag.Name, value, StringComparison.CurrentCultureIgnoreCase)) continue;
-                Debug.LogWarning($"Tag name already exists | {tag.Name}");
+                if (!string.Equals(tag.ID, value, StringComparison.CurrentCultureIgnoreCase)) continue;
+                Debug.LogWarning($"Tag name already exists | {tag}");
                 return true;
             }
 
             return false;
         }
 
-        public void AddTag(TagWithSubscribers tag)
+        public void Add(Tag tag)
         {
             Tags.Add(tag);
-            OnAdd?.Invoke(tag);
         }
 
-        public void RemoveTag(TagWithSubscribers tag)
+        public void Remove(Tag tag)
         {
-            if (!Tags.Remove(tag)) return;
-            tag.RemoveFromAllSubscribers();
-            OnRemove?.Invoke(tag);
+            Tags.Remove(tag);
         }
     }
 }

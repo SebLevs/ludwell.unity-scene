@@ -115,7 +115,7 @@ namespace Ludwell.Scene.Editor
                 for (var i = 0; i < _baseItemsSource.Count; i++)
                 {
                     if (_baseItemsSource[i] == null) break;
-                    var dataName = (_baseItemsSource[i] as IListable).Name;
+                    var dataName = (_baseItemsSource[i] as IListable).ID;
                     if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
                     var index = i;
                     _dropdownListView.Add(
@@ -256,7 +256,7 @@ namespace Ludwell.Scene.Editor
             List<IListable> cache = new();
             foreach (var element in defaultList)
             {
-                var dataName = (element as IListable).Name;
+                var dataName = (element as IListable).ID;
                 if (!dataName.ToLower().Contains(searchFieldValue.ToLower())) continue;
                 cache.Add(element as IListable);
             }

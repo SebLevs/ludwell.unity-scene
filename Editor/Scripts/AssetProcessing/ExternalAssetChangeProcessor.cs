@@ -19,7 +19,7 @@ namespace Ludwell.Scene.Editor
                 IsImportCauseInternal = false;
                 return;
             }
-            
+
             if (importedAssets.Length <= 0) return;
 
             foreach (var asset in importedAssets)
@@ -27,71 +27,34 @@ namespace Ludwell.Scene.Editor
                 if (!asset.EndsWith(".asset")) continue;
 
                 var importedAsset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(asset);
-                if (importedAsset is QuickLoadElements)
-                {
-                    SolveQuickLoadElements();
-                }
-                else if (importedAsset is TagContainer)
-                {
-                    SolveTags();
-                }
+                if (importedAsset is not TagContainer) continue;
+                SolveQuickLoadElements();
+                break;
             }
         }
 
         public static void SolveQuickLoadElements()
         {
             var quickLoadElements = ResourcesLocator.GetQuickLoadElements().Elements;
-            var tags = ResourcesLocator.GetTagContainer().Tags;
+            var tagContainer = ResourcesLocator.GetTagContainer();
 
-            if (quickLoadElements.Count == 0)
-            {
-                foreach (var tag in tags)
-                {
-                    tag.Clear();
-                }
-            }
+            bool shouldSave = false;
 
             foreach (var element in quickLoadElements)
             {
                 for (var index = element.Tags.Count - 1; index >= 0; index--)
                 {
                     var tag = element.Tags[index];
-                    var tagWithSubscribers = (TagWithSubscribers)tag;
-                    if (tags.Contains(tagWithSubscribers)) continue;
-                    tagWithSubscribers.RemoveFromAllSubscribers();
+                    if (tagContainer.Tags.Contains(tag)) continue;
+                    element.Tags.Remove(tag);
+                    shouldSave = true;
                 }
             }
 
             Signals.Dispatch<UISignals.RefreshView>();
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
-        }
 
-        public static void SolveTags()
-        {
-            var quickLoadElements = ResourcesLocator.GetQuickLoadElements().Elements;
-            var tags = ResourcesLocator.GetTagContainer().Tags;
-
-            if (tags.Count == 0)
-            {
-                foreach (var element in quickLoadElements)
-                {
-                    element.Clear();
-                }
-            }
-
-            foreach (var tag in tags)
-            {
-                for (var index = tag.Subscribers.Count - 1; index >= 0; index--)
-                {
-                    var tagSubscriber = tag.Subscribers[index];
-                    var quickLoadElementData = (QuickLoadElementData)tagSubscriber;
-                    if (quickLoadElements.Contains(quickLoadElementData)) continue;
-                    quickLoadElementData.RemoveFromAllTags();
-                }
-            }
-
-            Signals.Dispatch<UISignals.RefreshView>();
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+            if (!shouldSave) return;
+            ResourcesLocator.SaveQuickLoadElements();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Ludwell.Scene.Editor
             if (obj == null) return 1;
 
             var otherAsType = (QuickLoadElementData)obj;
-            return string.Compare(Name, otherAsType.Name, StringComparison.InvariantCultureIgnoreCase);
+            return string.Compare(ID, otherAsType.ID, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

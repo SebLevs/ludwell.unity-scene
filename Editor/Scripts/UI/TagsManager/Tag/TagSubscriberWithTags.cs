@@ -5,43 +5,39 @@ using UnityEngine;
 namespace Ludwell.Scene.Editor
 {
     [Serializable]
-    public class TagSubscriberWithTags : TagSubscriber
+    public class TagSubscriberWithTags : IListable
     {
         [field: SerializeField] public List<Tag> Tags { get; set; } = new();
+        
+        [SerializeField] private string _name;
+
+        public string ID
+        {
+            get => _name;
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+            }
+        }
 
         public void Clear()
         {
             Tags.Clear();
         }
 
-        public void Add(TagWithSubscribers tag)
+        public void Add(Tag tag)
         {
             if (Tags.Contains(tag)) return;
 
             Tags.Add(tag);
-
-            if (tag.Subscribers.Contains(this)) return;
-            tag.Add(this);
         }
 
-        public void Remove(TagWithSubscribers tag)
+        public void Remove(Tag tag)
         {
             if (!Tags.Contains(tag)) return;
 
             Tags.Remove(tag);
-            
-            if (!tag.Subscribers.Contains(this)) return;
-            tag.Remove(this);
-        }
-
-        public void RemoveFromAllTags()
-        {
-            foreach (var tag in Tags)
-            {
-                (tag as TagWithSubscribers)?.Remove(this);
-            }
-
-            Tags.Clear();
         }
     }
 }
