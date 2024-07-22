@@ -1,5 +1,4 @@
 using System.IO;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -16,7 +15,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly TagsShelfElementView _view;
 
-        private Tag _data;
+        private Tag _model;
 
         private string _listingStrategyName = "tag";
         private DropdownSearchField _dropdownSearchField;
@@ -49,20 +48,13 @@ namespace Ludwell.Scene.Editor
 
         public void UpdateCache(Tag tag)
         {
-            if (_data != null)
-            {
-                _data.OnValueChanged -= _view.SetValue;
-            }
-
-            _data = tag;
-
-            _view.SetValue(_data.Name);
-            _data.OnValueChanged += _view.SetValue;
+            _model = tag;
+            _view.SetValue(_model.ID);
         }
 
         private void RemoveFromController()
         {
-            _tagShelfController.Remove(_data as TagWithSubscribers);
+            _tagShelfController.Remove(_model);
         }
 
         private void SelectSelf()
@@ -88,7 +80,7 @@ namespace Ludwell.Scene.Editor
 
         private void SearchWithData()
         {
-            _dropdownSearchField.ListWithStrategy(_listingStrategyName, _data.Name);
+            _dropdownSearchField.ListWithStrategy(_listingStrategyName, _model.ID);
         }
         
         private void Dispose(DetachFromPanelEvent _)

@@ -190,23 +190,8 @@ namespace Ludwell.Scene.Editor
             _listViewHandler =
                 new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView,
                     _quickLoadElements.Elements);
-
-            _listViewHandler.ListView.itemsRemoved += HandleListViewItemsRemoved();
         }
-
-        private Action<IEnumerable<int>> HandleListViewItemsRemoved()
-        {
-            return indexEnumerable =>
-            {
-                foreach (var index in indexEnumerable)
-                {
-                    var element = _quickLoadElements.Elements[index] as TagSubscriberWithTags;
-                    element.RemoveFromAllTags();
-                }
-
-                ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
-            };
-        }
+        
 
         private void InitializeSearchField(VisualElement root, DropdownSearchField dropdownSearchField)
         {
@@ -246,7 +231,7 @@ namespace Ludwell.Scene.Editor
             {
                 foreach (var tag in (data as QuickLoadElementData).Tags)
                 {
-                    if (tag.Name != searchFieldValue) continue;
+                    if (!string.Equals(tag.ID, searchFieldValue, StringComparison.InvariantCultureIgnoreCase)) continue;
                     filteredList.Add(data as IListable);
                     break;
                 }
@@ -297,8 +282,6 @@ namespace Ludwell.Scene.Editor
             _view.RemoveButton.clicked -= DeleteSelection;
 
             _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-
-            _listViewHandler.ListView.itemsRemoved -= HandleListViewItemsRemoved();
         }
     }
 }

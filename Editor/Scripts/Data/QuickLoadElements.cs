@@ -33,7 +33,7 @@ namespace Ludwell.Scene.Editor
         {
             var element = new QuickLoadElementData
             {
-                Name = sceneData.Name,
+                ID = sceneData.Name,
                 SceneData = sceneData
             };
 
@@ -48,7 +48,6 @@ namespace Ludwell.Scene.Editor
             {
                 var element = Elements[index];
                 if (element.SceneData != sceneData) continue;
-                element.RemoveFromAllTags();
                 Elements.Remove(element);
             }
 
@@ -59,9 +58,9 @@ namespace Ludwell.Scene.Editor
         {
             foreach (var element in Elements)
             {
-                if (element.Name != oldName) continue;
+                if (element.ID != oldName) continue;
                 if (element.SceneData.name != newName) continue;
-                element.Name = newName;
+                element.ID = newName;
             }
 
             // Signals.Dispatch<UISignals.RefreshView>();

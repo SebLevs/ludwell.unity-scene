@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,7 +26,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly TagContainer _tagContainer;
 
-        private ListViewHandler<TagsManagerElementController, TagWithSubscribers> _listViewHandler;
+        private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
 
         public TagsManagerController(VisualElement parent) : base(parent)
         {
@@ -60,18 +61,16 @@ namespace Ludwell.Scene.Editor
 
         protected override void Show(ViewArgs args)
         {
-            _tagContainer.OnRemove += RemoveInvalidTagElement;
             Signals.Add<UISignals.RefreshView>(_tagsShelfController.Populate);
             Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             var tagsManagerViewArgs = (TagsManagerViewArgs)args;
             _view.Show();
-            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.Name);
+            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.ID);
             BuildTagsController(tagsManagerViewArgs.TagSubscriberWithTags);
         }
 
         protected override void Hide()
         {
-            _tagContainer.OnRemove -= RemoveInvalidTagElement;
             Signals.Remove<UISignals.RefreshView>(_tagsShelfController.Populate);
             Signals.Remove<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             _view.Hide();
@@ -83,27 +82,14 @@ namespace Ludwell.Scene.Editor
             _tagsShelfController.Populate();
         }
 
-        private void AddTagToShelf(TagWithSubscribers tag)
+        private void AddTagToShelf(Tag tag)
         {
             _tagsShelfController.Add(tag);
         }
 
-        private void RemoveTagFromShelf(TagWithSubscribers tag)
+        private void RemoveTagFromShelf(Tag tag)
         {
             _tagsShelfController.Remove(tag);
-        }
-
-        private void RemoveTagFromAllSubscribers(TagWithSubscribers tag)
-        {
-            _tagsShelfController.Remove(tag);
-            tag.RemoveFromAllSubscribers();
-        }
-
-        private void RemoveInvalidTagElement(TagWithSubscribers tag)
-        {
-            RemoveTagFromShelf(tag);
-            ResourcesLocator.SaveTagContainer();
-            _listViewHandler.ForceRebuild();
         }
 
         private void SetViewReturnIconTooltip()
@@ -120,53 +106,63 @@ namespace Ludwell.Scene.Editor
         private void InitializeListViewHandler()
         {
             _listViewHandler =
-                new ListViewHandler<TagsManagerElementController, TagWithSubscribers>(
+                new ListViewHandler<TagsManagerElementController, Tag>(
                     _root.Q<ListView>(TagElementsContainerName),
                     ResourcesLocator.GetTagContainer().Tags);
 
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
+            _listViewHandler.ListView.itemsRemoved += HandleItemsRemoved;
 
             var listView = _listViewHandler.ListView;
-
-            listView.itemsRemoved += HandleItemsRemoved;
 
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
-
+        
         private void HandleItemsRemoved(IEnumerable<int> enumerable)
         {
+            var quickLoadElementData = ResourcesLocator.GetQuickLoadElements().Elements;
+            
             var itemsSource = _listViewHandler.ListView.itemsSource;
             var removedIndexes = enumerable.ToList();
+            
             foreach (var index in removedIndexes)
             {
-                var tag = (TagWithSubscribers)itemsSource[index];
-                RemoveTagFromAllSubscribers(tag);
+                var tag = (Tag)itemsSource[index];
+                _tagsShelfController.Remove(tag);
+                foreach (var element in quickLoadElementData)
+                {
+                    if (!element.Tags.Contains(tag)) continue;
+                    element.Tags.Remove(tag);
+                    ResourcesLocator.SaveQuickLoadElementsDelayed();
+                }
             }
 
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesLocator.SaveTagContainer();
+            // Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
         {
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
+            
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
-            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
             for (var i = arrayOfElements.Length - 1; i >= 0; i--)
             {
-                arrayOfElements[i].RemoveFromAllSubscribers();
                 RemoveTagFromShelf(arrayOfElements[i]);
-                _listViewHandler.RemoveSelectedElement();
+                _listViewHandler.RemoveSelectedElement(); 
             }
         }
 
         private void OnKeyUpAddSelected(KeyUpEvent keyUpEvent)
         {
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
+            
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
-            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
 
             foreach (var tagWithSubscribers in arrayOfElements)
             {
@@ -188,8 +184,8 @@ namespace Ludwell.Scene.Editor
 
         private void OnItemMadeRegisterEvents(TagsManagerElementController controller)
         {
-            controller.OnAdd += AddTagToShelf;
-            controller.OnRemove += RemoveTagFromShelf;
+            controller.OnAddToShelf += AddTagToShelf;
+            controller.OnRemoveFromShelf += RemoveTagFromShelf;
         }
 
         private void InitializeDropdownSearchField()
@@ -207,11 +203,10 @@ namespace Ludwell.Scene.Editor
             _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
             _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
 
-            _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
+            _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
+            _listViewHandler.ListView.itemsRemoved -= HandleItemsRemoved;
 
             var listView = _listViewHandler.ListView;
-
-            listView.itemsRemoved += HandleItemsRemoved;
 
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);

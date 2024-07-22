@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerElementController : VisualElement, IListViewVisualElement<TagWithSubscribers>
+    public class TagsManagerElementController : VisualElement, IListViewVisualElement<Tag>
     {
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsManagerElementView), "Uxml_" + nameof(TagsManagerElementView));
@@ -13,12 +13,12 @@ namespace Ludwell.Scene.Editor
         private static readonly string UssPath =
             Path.Combine("UI", nameof(TagsManagerElementView), "Uss_" + nameof(TagsManagerElementView));
 
-        public Action<TagWithSubscribers> OnAdd;
-        public Action<TagWithSubscribers> OnRemove;
+        public Action<Tag> OnAddToShelf;
+        public Action<Tag> OnRemoveFromShelf;
 
         private readonly TagsManagerElementView _view;
 
-        private TagWithSubscribers _model;
+        private Tag _model;
 
         public void FocusTextField() => _view.FocusTextField();
 
@@ -37,7 +37,7 @@ namespace Ludwell.Scene.Editor
             RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
-        public void CacheData(TagWithSubscribers data)
+        public void CacheData(Tag data)
         {
             _model = data;
         }
@@ -48,7 +48,7 @@ namespace Ludwell.Scene.Editor
 
         public void SetElementFromCachedData()
         {
-            _view.SetValue(_model.Name);
+            _view.SetValue(_model.ID);
             if (string.IsNullOrEmpty(_view.Value)) _view.FocusTextFieldWithoutNotify();
         }
 
@@ -56,24 +56,30 @@ namespace Ludwell.Scene.Editor
         {
             var isTextFieldValid = !string.IsNullOrEmpty(_view.TextField.value) &&
                                    !string.IsNullOrWhiteSpace(_view.TextField.value);
-            var isModelNameValid = !string.IsNullOrEmpty(_model.Name) &&
-                                   !string.IsNullOrWhiteSpace(_model.Name);
-            if (!isTextFieldValid && !isModelNameValid) ResourcesLocator.GetTagContainer().RemoveTag(_model);
-
-            if (isModelNameValid && !isTextFieldValid)
+            var isModelNameValid = !string.IsNullOrEmpty(_model.ID) &&
+                                   !string.IsNullOrWhiteSpace(_model.ID);
+            
+            if (!isTextFieldValid && !isModelNameValid)
             {
-                _view.TextField.value = _model.Name;
+                ResourcesLocator.GetTagContainer().Remove(_model);
+                Signals.Dispatch<UISignals.RefreshView>();
                 return;
             }
 
-            if (_model.Name == _view.TextField.value) return;
+            if (isModelNameValid && !isTextFieldValid)
+            {
+                _view.TextField.value = _model.ID;
+                return;
+            }
+
+            if (_model.ID == _view.TextField.value) return;
 
             if (ResourcesLocator.GetTagContainer().ContainsTagWithName(_view.TextField.value))
             {
-                _view.TextField.value = _model.Name;
+                _view.TextField.value = _model.ID;
 
-                if (!isModelNameValid) ResourcesLocator.GetTagContainer().RemoveTag(_model);
-
+                if (!isModelNameValid) ResourcesLocator.GetTagContainer().Remove(_model);
+                Signals.Dispatch<UISignals.RefreshView>();
                 return;
             }
 
@@ -83,13 +89,13 @@ namespace Ludwell.Scene.Editor
         private void OnKeyRevertName(KeyDownEvent evt)
         {
             if (evt.keyCode != KeyCode.Z || (evt.modifiers & EventModifiers.Control) == 0) return;
-            _view.SetValue(_model.Name);
+            _view.SetValue(_model.ID);
             evt.StopPropagation();
         }
 
         private void UpdateAssetName()
         {
-            _model.Name = _view.TextField.value;
+            _model.ID = _view.TextField.value;
             ResourcesLocator.GetTagContainer().Tags.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
 
@@ -101,12 +107,12 @@ namespace Ludwell.Scene.Editor
 
         private void ExecuteOnAdd()
         {
-            OnAdd?.Invoke(_model);
+            OnAddToShelf?.Invoke(_model);
         }
 
         private void ExecuteOnRemove()
         {
-            OnRemove?.Invoke(_model);
+            OnRemoveFromShelf?.Invoke(_model);
         }
 
         private void Dispose(DetachFromPanelEvent _)
