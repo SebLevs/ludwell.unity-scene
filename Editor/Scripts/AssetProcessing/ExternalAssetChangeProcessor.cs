@@ -19,7 +19,7 @@ namespace Ludwell.Scene.Editor
                 IsImportCauseInternal = false;
                 return;
             }
-            
+
             if (importedAssets.Length <= 0) return;
 
             foreach (var asset in importedAssets)

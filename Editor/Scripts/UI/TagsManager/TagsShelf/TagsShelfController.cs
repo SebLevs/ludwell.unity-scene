@@ -70,7 +70,7 @@ namespace Ludwell.Scene.Editor
         {
             return tags.Select(ConstructTagElement);
         }
-        
+
         private TagsShelfElementController ConstructTagElement(Tag tag)
         {
             TagsShelfElementController tagsShelfElementController = new();

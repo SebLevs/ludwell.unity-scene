@@ -58,7 +58,7 @@ namespace Ludwell.Scene.Editor
                                    !string.IsNullOrWhiteSpace(_view.TextField.value);
             var isModelNameValid = !string.IsNullOrEmpty(_model.ID) &&
                                    !string.IsNullOrWhiteSpace(_model.ID);
-            
+
             if (!isTextFieldValid && !isModelNameValid)
             {
                 ResourcesLocator.GetTagContainer().Remove(_model);

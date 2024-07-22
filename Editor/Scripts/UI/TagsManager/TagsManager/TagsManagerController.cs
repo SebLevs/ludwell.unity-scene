@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -119,14 +118,14 @@ namespace Ludwell.Scene.Editor
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
             listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
-        
+
         private void HandleItemsRemoved(IEnumerable<int> enumerable)
         {
             var quickLoadElementData = ResourcesLocator.GetQuickLoadElements().Elements;
-            
+
             var itemsSource = _listViewHandler.ListView.itemsSource;
             var removedIndexes = enumerable.ToList();
-            
+
             foreach (var index in removedIndexes)
             {
                 var tag = (Tag)itemsSource[index];
@@ -146,21 +145,21 @@ namespace Ludwell.Scene.Editor
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
         {
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
-            
+
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
 
             for (var i = arrayOfElements.Length - 1; i >= 0; i--)
             {
                 RemoveTagFromShelf(arrayOfElements[i]);
-                _listViewHandler.RemoveSelectedElement(); 
+                _listViewHandler.RemoveSelectedElement();
             }
         }
 
         private void OnKeyUpAddSelected(KeyUpEvent keyUpEvent)
         {
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
-            
+
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
 
