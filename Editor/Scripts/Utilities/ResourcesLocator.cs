@@ -13,10 +13,8 @@ namespace Ludwell.Scene.Editor
         private static DelayedEditorUpdateAction _delayedSaveTagContainer;
         
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
-        
-        private static JoinTable _joinTable;
 
-        public static SceneDataManagerSettings GetSceneDataManagerSettings()
+        public static SceneDataManagerSettings GetSceneDataManagerSettings() 
         {
             if (_settings) return _settings;
             _settings = (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings),
@@ -34,12 +32,6 @@ namespace Ludwell.Scene.Editor
         {
             CacheTagContainer();
             return _tagContainer;
-        }
-        
-        public static JoinTable GetJoinTable()
-        {
-            CacheJoinTable();
-            return _joinTable;
         }
 
         public static void SaveQuickLoadElements()
@@ -69,13 +61,6 @@ namespace Ludwell.Scene.Editor
         {
             _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveTagContainer);
             _delayedSaveTagContainer.StartOrRefresh();
-        }
-        
-        public static void SaveJoinTable()
-        {
-            CacheJoinTable();
-            EditorUtility.SetDirty(_joinTable);
-            AssetDatabase.SaveAssetIfDirty(_joinTable);
         }
 
         private static void SaveQuickLoadElementsAndTagContainer()
@@ -107,12 +92,6 @@ namespace Ludwell.Scene.Editor
         {
             if (_tagContainer) return;
             _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer), out _);
-        }
-        
-        private static void CacheJoinTable()
-        {
-            if (_joinTable) return;
-            _joinTable = (JoinTable)ResourcesSolver.EnsureAssetExistence(typeof(JoinTable), out _);
         }
     }
 }
