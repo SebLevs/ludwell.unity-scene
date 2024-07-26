@@ -1,5 +1,4 @@
 #root {
-    background-color: rgba(0, 0, 0, 0);
     height: auto;
     flex-grow: 1;
     border-top-width: 1px;
@@ -17,7 +16,6 @@
 }
 
 #root > #header > #header__container {
-    background-color: rgb(56, 56, 56);
     height: 100%;
     flex-direction: row;
     align-items: center;
@@ -54,10 +52,11 @@
 
 #root > #header > #header__container > #content__center > #content__center-top {
     flex-direction: row;
-    padding-bottom: 2px;
+    padding-bottom: 4px;
     width: 100%;
     justify-content: center;
     align-items: center;
+    padding-top: 2px;
 }
 
 #root > #header > #header__container > #content__right {
@@ -261,9 +260,8 @@
 #root > #content > #TagsShelfView {
     flex-grow: 1;
     align-self: stretch;
-    background-color: rgb(63, 63, 63);
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-right: 4px;
+    padding-left: 4px;
 }
 
 #root > #footer {
@@ -271,5 +269,4 @@
     height: 16px;
     border-top-width: 1px;
     border-top-color: rgb(0, 0, 0);
-    background-color: rgb(56, 56, 56);
 }

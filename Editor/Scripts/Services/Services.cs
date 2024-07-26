@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ludwell.Scene.Editor
 {
-    public class ServiceLocator
+    public class Services
     {
         private static readonly Dictionary<Type, object> _services = new();
 
@@ -12,13 +12,13 @@ namespace Ludwell.Scene.Editor
             _services.Clear();
         }
         
-        public static void Register<T>(object service)
+        public static void Add<T>(object service)
         {
             var type = typeof(T);
             _services.TryAdd(type, service);
         }
         
-        public static void Deregister<T>()
+        public static void Remove<T>()
         { 
             var type = typeof(T);
             if (!_services.ContainsKey(type)) return;

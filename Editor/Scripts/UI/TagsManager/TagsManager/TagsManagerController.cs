@@ -29,7 +29,7 @@ namespace Ludwell.Scene.Editor
 
         public TagsManagerController(VisualElement parent) : base(parent)
         {
-            ServiceLocator.Register<TagsManagerController>(this);
+            Services.Add<TagsManagerController>(this);
 
             _root = parent.Q(nameof(TagsManagerView));
             _view = new TagsManagerView(_root);

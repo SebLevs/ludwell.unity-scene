@@ -44,7 +44,7 @@ namespace Ludwell.Scene.Editor
             InitializeSearchField(_root, _root.Q<DropdownSearchField>());
             _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
-            ServiceLocator.Register<QuickLoadController>(this);
+            Services.Add<QuickLoadController>(this);
 
             InitializeContextMenuManipulator();
 

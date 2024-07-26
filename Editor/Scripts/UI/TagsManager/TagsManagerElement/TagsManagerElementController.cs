@@ -100,7 +100,7 @@ namespace Ludwell.Scene.Editor
             Signals.Dispatch<UISignals.RefreshView>();
 
             var index = ResourcesLocator.GetTagContainer().Tags.FindIndex(x => x == _model);
-            var tagsManagerController = ServiceLocator.Get<TagsManagerController>();
+            var tagsManagerController = Services.Get<TagsManagerController>();
             tagsManagerController.ScrollToItemIndex(index);
             ResourcesLocator.SaveTagContainer();
         }
