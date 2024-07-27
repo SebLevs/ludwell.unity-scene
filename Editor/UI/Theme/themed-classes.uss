@@ -1,0 +1,52 @@
+:root {
+    --header-theme-background-color: rgb(41, 41, 41);
+    --toolbar-theme-background-color: rgb(60, 60, 60);
+    --primary-theme-background-color: rgb(49, 49, 49);
+    --secondary-theme-background-color: rgb(56, 56, 56);
+    --list-view-theme-background-color: rgb(70, 70, 70);
+    --border-theme-color: rgb(35, 35, 35);
+    --text-theme-font-color: rgb(210, 210, 210);
+    --image-tint-colorr: rgb(255, 255, 255);
+}
+
+.header-theme {
+    background-color: var(--header-theme-background-color);
+}
+
+.toolbar-theme {
+    background-color: var(--toolbar-theme-background-color);
+}
+
+.primary-theme {
+    background-color: var(--primary-theme-background-color);
+}
+
+.secondary-theme {
+    background-color: var(--secondary-theme-background-color);
+}
+
+.list-view-theme {
+    background-color: var(--list-view-theme-background-color);
+}
+
+.border-theme-top {
+    border-top-width: 1px;
+    border-top-color: var(--border-theme-color);
+}
+
+.border-theme-bottom {
+    border-bottom-width: 1px;
+    border-bottom-color: var(--border-theme-color);
+}
+
+.text-theme {
+    color: var(--text-theme-font-color);
+}
+
+#icon{
+    -unity-background-image-tint-color: var(--image-tint-colorr);
+}
+
+#unity-search{
+    -unity-background-image-tint-color: var(--image-tint-colorr);
+}

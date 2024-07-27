@@ -1,11 +1,10 @@
-#icon__behaviour-cycling {
+#icon {
     background-image: resource('Sprites/icon_cycling');
     width: 10px;
     height: 10px;
     margin-left: 2px;
     position: absolute;
     left: -16px;
-    -unity-background-image-tint-color: rgb(196, 196, 196);
 }
 
 #search-field {

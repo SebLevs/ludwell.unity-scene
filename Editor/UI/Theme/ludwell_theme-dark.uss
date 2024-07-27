@@ -1,0 +1,10 @@
+:root{
+    --header-theme-background-color: #292929;
+    --toolbar-theme-background-color: #3C3C3C;
+    --primary-theme-background-color: #313131;
+    --secondary-theme-background-color: #383838;
+    --list-view-theme-background-color: #464646;
+    --border-theme-color: #232323;
+    --text-theme-font-color: #D2D2D2;
+    --image-tint-colorr: #FFFFFF;
+}

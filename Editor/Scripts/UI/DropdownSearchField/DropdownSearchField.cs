@@ -28,7 +28,7 @@ namespace Ludwell.Scene.Editor
         private static readonly string UssPath =
             Path.Combine("UI", nameof(DropdownSearchField), "Uss_" + nameof(DropdownSearchField));
 
-        private const string CyclingIconName = "icon__behaviour-cycling";
+        private const string CyclingIconName = "icon";
         private const string SearchFieldName = "toolbar-search-field";
 
         private const string DefaultSearchIcon = "icon_search";
