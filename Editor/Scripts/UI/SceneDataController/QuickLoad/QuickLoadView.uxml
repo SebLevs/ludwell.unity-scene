@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="MoreInformationView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/MoreInformation/MoreInformationView.uxml?fileID=9197481963319205126&amp;guid=7ce4c3166204f6c449e81c3f7b045e68&amp;type=3#MoreInformationView" />
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/SceneDataController/QuickLoad/QuickLoadView.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#QuickLoadView" />
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1;">
         <ui:VisualElement name="header-content">
@@ -17,5 +18,6 @@
             <ui:Button text="+" display-tooltip-when-elided="true" name="add" />
             <ui:Button text="-" display-tooltip-when-elided="true" name="remove" />
         </ui:VisualElement>
+        <ui:Instance template="MoreInformationView" name="MoreInformationView" />
     </ui:VisualElement>
 </ui:UXML>

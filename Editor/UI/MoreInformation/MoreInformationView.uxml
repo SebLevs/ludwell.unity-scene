@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/MoreInformation/MoreInformationView.uss?fileID=7433441132597879392&amp;guid=9d96c491d5c568a44ac74a9ebca84449&amp;type=3#MoreInformationView" />
+    <ui:VisualElement name="MoreInformationView">
+        <ui:VisualElement name="modal-overlay" class="modal-overlay">
+            <ui:VisualElement name="more-info-panel" class="more-info-panel">
+                <ui:VisualElement name="vertical-slide" class="vertical-slide">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                    <ui:VisualElement name="call-to-action" class="call-to-action">
+                        <ui:Label text="Documentation" display-tooltip-when-elided="false" name="text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="vertical-slide" class="vertical-slide">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                    <ui:VisualElement name="call-to-action" class="call-to-action">
+                        <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="vertical-slide" class="vertical-slide">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                    <ui:VisualElement name="call-to-action" class="call-to-action">
+                        <ui:Label text="Join our Discord server" name="text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="vertical-slide" class="vertical-slide">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                    <ui:VisualElement name="call-to-action" class="call-to-action">
+                        <ui:Label text="Browse our products" name="text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="vertical-slide" class="vertical-slide">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                    <ui:VisualElement name="call-to-action" class="call-to-action">
+                        <ui:Label text="Is this tool useful? Give us feedback!" name="text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
