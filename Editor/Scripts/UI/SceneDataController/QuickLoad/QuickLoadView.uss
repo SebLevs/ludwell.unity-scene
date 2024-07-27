@@ -1,16 +1,8 @@
-#header__load {
-    flex-grow: 0;
-    flex-shrink: 1;
-    height: 20px;
-    -unity-text-align: middle-center;
-    font-size: 14px;
-}
-
 #header__actions {
     flex-grow: 0;
     flex-direction: row;
     justify-content: center;
-    height: 20px;
+    height: 21px;
     flex-shrink: 0;
 }
 

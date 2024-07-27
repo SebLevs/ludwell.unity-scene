@@ -1,11 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/SceneDataController/QuickLoad/QuickLoadView.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#QuickLoadView" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1;">
         <ui:VisualElement name="header-content">
-            <ui:VisualElement name="header__load" class="header-theme">
-                <ui:Label tabindex="-1" text="Scene Assets" display-tooltip-when-elided="true" class="text-theme" />
-            </ui:VisualElement>
             <ui:VisualElement name="header__actions" class="toolbar-theme border-theme-bottom">
                 <Ludwell.Scene.Editor.DropdownSearchField name="DropdownSearchField" />
                 <ui:Button name="button__close-all" display-tooltip-when-elided="true" tooltip="Close all" class="button__close-all" style="left: 0;">
