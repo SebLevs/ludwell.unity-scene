@@ -38,7 +38,6 @@
 }
 
 #button__close-all > #icon {
-    -unity-background-image-tint-color: rgb(196, 196, 196);
     background-image: resource('Sprites/icon_close-all');
 }
 

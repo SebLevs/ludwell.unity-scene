@@ -6,6 +6,7 @@
     --list-view-theme-background-color: rgb(70, 70, 70);
     --border-theme-color: rgb(35, 35, 35);
     --text-theme-font-color: rgb(210, 210, 210);
+    --image-tint-colorr: rgb(255, 255, 255);
 }
 
 .header-theme {
@@ -40,4 +41,12 @@
 
 .text-theme {
     color: var(--text-theme-font-color);
+}
+
+#icon{
+    -unity-background-image-tint-color: var(--image-tint-colorr);
+}
+
+#unity-search{
+    -unity-background-image-tint-color: var(--image-tint-colorr);
 }

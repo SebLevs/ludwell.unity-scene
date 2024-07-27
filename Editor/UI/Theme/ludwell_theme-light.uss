@@ -6,4 +6,5 @@
     --list-view-theme-background-color: #C1C1C1;
     --border-theme-color: #B0B0B0;
     --text-theme-font-color: #090909;
+    --image-tint-colorr: #555555;
 }
