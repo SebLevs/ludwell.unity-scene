@@ -12,7 +12,7 @@
     justify-content: center;
 }
 
-.more-info-panel {
+.panel__more-information {
     width: 75%;
     height: 80%;
     background-color: rgb(49, 49, 49);
@@ -32,8 +32,24 @@
     padding-right: 2px;
     padding-bottom: 2px;
     padding-left: 2px;
-    justify-content: space-around;
     align-items: center;
+}
+
+.header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
+
+.header-icon {
+    position: absolute;
+    left: -40px;
+}
+
+.header > Label {
+    -unity-text-align: middle-center;
+    text-overflow: ellipsis;
 }
 
 .vertical-slide {
@@ -60,10 +76,26 @@
     border-left-color: rgb(66, 66, 66);
 }
 
-.icon__no-tint {
+.icon-container {
+    width: 36px;
+    height: 36px;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon__no-tint:hover {
     width: 32px;
     height: 32px;
-    margin-right: 8px;
+    transition-duration: 0.02s;
+}
+
+.icon__no-tint {
+    width: 16px;
+    height: 16px;
     background-image: resource('Sprites/icon_more-information');
 }
 
@@ -72,10 +104,10 @@
 }
 
 Label {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -89,4 +121,15 @@ Label {
 .scale-animation:hover {
     transition-duration: 0.02s;
     scale: 1.1 1.1;
+}
+
+.line-separator {
+    width: 80%;
+    height: 1px;
+    background-color: rgb(133, 133, 133);
+}
+
+.vertical-separator {
+    height: 20px;
+    width: 100%;
 }
