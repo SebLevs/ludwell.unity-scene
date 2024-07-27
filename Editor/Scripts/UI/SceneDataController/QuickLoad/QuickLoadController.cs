@@ -25,6 +25,8 @@ namespace Ludwell.Scene.Editor
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
 
+        private readonly MoreInformationController _moreInformationController;
+        
         private ListingStrategy _hierarchyListingStrategy;
 
         public QuickLoadController(VisualElement parent)
@@ -37,6 +39,8 @@ namespace Ludwell.Scene.Editor
 
             _listView = _root.Q<ListView>();
             _dropdownSearchField = _root.Q<DropdownSearchField>();
+            
+            _moreInformationController = new MoreInformationController(_root);
 
             _quickLoadElements = ResourcesLocator.GetQuickLoadElements();
 
