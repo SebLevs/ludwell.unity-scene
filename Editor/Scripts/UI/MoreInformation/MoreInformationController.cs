@@ -32,27 +32,27 @@ namespace Ludwell.Scene.Editor
 
         public void OpenDocumentation()
         {
-            Application.OpenURL(_model.DocumentationURL);
+            Application.OpenURL(MoreInformationModel.DocumentationURL);
         }
         
         public void OpenCompanyWebsite()
         {
-            UnityEngine.Application.OpenURL(_model.CompanyWebsiteURL);
+            Application.OpenURL(MoreInformationModel.DocumentationURL);
         }
         
         public void OpenDiscordJoinLink()
         {
-            UnityEngine.Application.OpenURL(_model.DocumentationURL);
+            Application.OpenURL(MoreInformationModel.DocumentationURL);
         }
         
         public void OpenCompanyAssetStorePage()
         {
-            UnityEngine.Application.OpenURL(_model.LudwellAssetStorePageURL);  
+            Application.OpenURL(MoreInformationModel.DocumentationURL);  
         }
         
         public void OpenProductAssetStorePage()
         {
-            UnityEngine.Application.OpenURL(_model.ProductAssetStorePageURL);
+            Application.OpenURL(MoreInformationModel.DocumentationURL);
         }
     }
 }

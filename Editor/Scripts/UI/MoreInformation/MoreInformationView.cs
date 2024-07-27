@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -14,6 +15,8 @@ namespace Ludwell.Scene.Editor
         private readonly VisualElement _moreInformationPanel;
 
         private readonly VisualElement[] _stars = new VisualElement[5];
+
+        private float _baseStarScale = -1;
 
         private void Hide(ClickEvent _) => Hide();
 
@@ -58,31 +61,35 @@ namespace Ludwell.Scene.Editor
             _root.style.display = DisplayStyle.None;
         }
 
-        private void PreventPanelBubbleUp(ClickEvent _)
+        private void PreventPanelBubbleUp(ClickEvent evt)
         {
-            _.PreventDefault();
-            _.StopPropagation();
+            evt.PreventDefault();
+            evt.StopPropagation();
         }
 
         private void ScaleStarsUpTo(MouseEnterEvent evt)
         {
-            ScaleDownAllStars();
+            if (_baseStarScale <= -1) _baseStarScale = _stars[0].Children().First().resolvedStyle.width;
 
-            var target = evt.target as Button;
+            var target = evt.target as VisualElement;
+
             foreach (var star in _stars)
             {
-                star.style.width = new StyleLength(52);
-                star.style.height = new StyleLength(52);
+                var icon = star.Children().First();
+                icon.style.width = _baseStarScale * 2;
+                icon.style.height = _baseStarScale * 2;
                 if (star == target) break;
             }
         }
 
-        private void ScaleDownAllStars(MouseLeaveEvent evt = null)
+        private void ScaleDownAllStars(MouseLeaveEvent evt)
         {
             foreach (var star in _stars)
             {
-                star.style.width = new StyleLength(40);
-                star.style.height = new StyleLength(40);
+                var icon = star.Children().First();
+                icon.style.width = _baseStarScale;
+                icon.style.height = _baseStarScale;
+                if (star == evt.target) break;
             }
         }
     }

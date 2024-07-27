@@ -55,12 +55,22 @@
                         <ui:Label text="Is this tool useful?" name="text" />
                         <ui:Label text="Give us your feedback!" name="text" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="stars" style="flex-grow: 1; flex-direction: row;">
-                        <ui:VisualElement name="1" picking-mode="Ignore" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="2" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="3" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="4" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="5" class="icon__no-tint scale-animation" />
+                    <ui:VisualElement name="stars" style="flex-direction: row;">
+                        <ui:VisualElement name="1" class="icon-container">
+                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_star&apos;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="2" class="icon-container">
+                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="3" class="icon-container">
+                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="4" class="icon-container">
+                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="5" class="icon-container">
+                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />

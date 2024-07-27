@@ -87,16 +87,16 @@
     justify-content: center;
 }
 
-.icon__no-tint:hover {
-    width: 32px;
-    height: 32px;
-    transition-duration: 0.02s;
-}
-
 .icon__no-tint {
     width: 16px;
     height: 16px;
     background-image: resource('Sprites/icon_more-information');
+}
+
+.icon__no-tint:hover {
+    width: 32px;
+    height: 32px;
+    transition-duration: 0.02s;
 }
 
 .call-to-action {

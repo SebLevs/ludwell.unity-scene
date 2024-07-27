@@ -42,6 +42,7 @@ namespace Ludwell.Scene.Editor
             
             _moreInformationController = new MoreInformationController(_root);
             _view.MoreInformationButton.clicked += _moreInformationController.Show;
+            _moreInformationController.Hide();
 
             _quickLoadElements = ResourcesLocator.GetQuickLoadElements();
 
