@@ -1,8 +1,10 @@
+using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class MoreInformationController
+    public class MoreInformationController : IDisposable
     {
         private readonly MoreInformationView _view;
         private readonly MoreInformationModel _model;
@@ -11,6 +13,11 @@ namespace Ludwell.Scene.Editor
         {
             _view = new MoreInformationView(root);
             _model = new MoreInformationModel();
+        }
+        
+        public void Dispose()
+        {
+            _view.Dispose();
         }
 
         public void Show()
@@ -25,7 +32,7 @@ namespace Ludwell.Scene.Editor
 
         public void OpenDocumentation()
         {
-            UnityEngine.Application.OpenURL(_model.DocumentationURL);
+            Application.OpenURL(_model.DocumentationURL);
         }
         
         public void OpenCompanyWebsite()

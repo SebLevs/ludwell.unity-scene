@@ -7,12 +7,14 @@ namespace Ludwell.Scene.Editor
         private const string CloseAllButtonName = "button__close-all";
         private const string AddButtonName = "add";
         private const string RemoveButtonName = "remove";
+        private const string MoreInformationButtonName = "button__more-information";
 
         private readonly VisualElement _root;
 
         public Button CloseAllButton { get; }
         public Button AddButton { get; }
         public Button RemoveButton { get; }
+        public Button MoreInformationButton { get; }
 
         public QuickLoadView(VisualElement root)
         {
@@ -21,6 +23,7 @@ namespace Ludwell.Scene.Editor
             CloseAllButton = _root.Q<Button>(CloseAllButtonName);
             AddButton = _root.Q<Button>(AddButtonName);
             RemoveButton = _root.Q<Button>(RemoveButtonName);
+            MoreInformationButton = _root.Q<Button>(MoreInformationButtonName);
         }
     }
 }

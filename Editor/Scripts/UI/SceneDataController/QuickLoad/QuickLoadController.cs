@@ -41,6 +41,7 @@ namespace Ludwell.Scene.Editor
             _dropdownSearchField = _root.Q<DropdownSearchField>();
             
             _moreInformationController = new MoreInformationController(_root);
+            _view.MoreInformationButton.clicked += _moreInformationController.Show;
 
             _quickLoadElements = ResourcesLocator.GetQuickLoadElements();
 
@@ -284,8 +285,11 @@ namespace Ludwell.Scene.Editor
             _view.CloseAllButton.clicked -= CloseAll;
             _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked -= DeleteSelection;
+            _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 
             _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            
+            _moreInformationController.Dispose();
         }
     }
 }
