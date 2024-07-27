@@ -82,3 +82,11 @@ Label {
     margin-left: 0;
     white-space: normal;
 }
+
+.scale-animation {
+}
+
+.scale-animation:hover {
+    transition-duration: 0.02s;
+    scale: 1.1 1.1;
+}

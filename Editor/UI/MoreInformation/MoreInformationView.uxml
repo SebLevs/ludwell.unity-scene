@@ -3,34 +3,41 @@
     <ui:VisualElement name="MoreInformationView">
         <ui:VisualElement name="modal-overlay" class="modal-overlay">
             <ui:VisualElement name="more-info-panel" class="more-info-panel">
-                <ui:VisualElement name="vertical-slide" class="vertical-slide">
-                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
                     <ui:VisualElement name="call-to-action" class="call-to-action">
                         <ui:Label text="Documentation" display-tooltip-when-elided="false" name="text" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="vertical-slide" class="vertical-slide">
-                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell&apos;);" />
                     <ui:VisualElement name="call-to-action" class="call-to-action">
                         <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="vertical-slide" class="vertical-slide">
-                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" style="background-image: resource(&apos;Sprites/MoreInformation/discord_32_purple&apos;);" />
                     <ui:VisualElement name="call-to-action" class="call-to-action">
                         <ui:Label text="Join our Discord server" name="text" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="vertical-slide" class="vertical-slide">
-                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
+                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
                     <ui:VisualElement name="call-to-action" class="call-to-action">
                         <ui:Label text="Browse our products" name="text" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="vertical-slide" class="vertical-slide">
-                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" />
-                    <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Is this tool useful? Give us feedback!" name="text" />
+                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation" style="flex-direction: column; height: 100px;">
+                    <ui:VisualElement name="call-to-action" class="call-to-action" style="-unity-text-align: middle-center; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px;">
+                        <ui:Label text="Is this tool useful?" name="text" />
+                        <ui:Label text="Give us your feedback!" name="text" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="stars" style="flex-grow: 1; flex-direction: row;">
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
