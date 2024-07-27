@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/MoreInformation/MoreInformationView.uss?fileID=7433441132597879392&amp;guid=9d96c491d5c568a44ac74a9ebca84449&amp;type=3#MoreInformationView" />
     <ui:VisualElement name="MoreInformationView">
         <ui:VisualElement name="modal-overlay" class="modal-overlay">
@@ -22,7 +22,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
-                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
+                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" style="background-image: resource(&apos;Sprites/icon_more-information&apos;);" />
                     <ui:VisualElement name="call-to-action" class="call-to-action">
                         <ui:Label text="Browse our products" name="text" />
                     </ui:VisualElement>
@@ -33,11 +33,11 @@
                         <ui:Label text="Give us your feedback!" name="text" />
                     </ui:VisualElement>
                     <ui:VisualElement name="stars" style="flex-grow: 1; flex-direction: row;">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="1" picking-mode="Ignore" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="2" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="3" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="4" class="icon__no-tint scale-animation" />
+                        <ui:VisualElement name="5" class="icon__no-tint scale-animation" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

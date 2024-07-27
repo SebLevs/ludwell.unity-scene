@@ -13,29 +13,39 @@ namespace Ludwell.Scene.Editor
             _model = new MoreInformationModel();
         }
 
-        public void OpenInformationPanel()
+        public void Show()
         {
-            
+            _view.Show();
+        }
+
+        public void Hide()
+        {
+            _view.Hide();
+        }
+
+        public void OpenDocumentation()
+        {
+            UnityEngine.Application.OpenURL(_model.DocumentationURL);
         }
         
         public void OpenCompanyWebsite()
         {
-            
+            UnityEngine.Application.OpenURL(_model.CompanyWebsiteURL);
         }
         
         public void OpenDiscordJoinLink()
         {
-            
+            UnityEngine.Application.OpenURL(_model.DocumentationURL);
         }
         
         public void OpenCompanyAssetStorePage()
         {
-            
+            UnityEngine.Application.OpenURL(_model.LudwellAssetStorePageURL);  
         }
         
         public void OpenProductAssetStorePage()
         {
-            
+            UnityEngine.Application.OpenURL(_model.ProductAssetStorePageURL);
         }
     }
 }
