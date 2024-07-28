@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ludwell.MoreInformation.Editor;
+using Ludwell.UIToolkitElements.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -204,10 +205,10 @@ namespace Ludwell.Scene.Editor
         {
             dropdownSearchField.BindToListView(_listViewHandler.ListView);
 
-            var tagSearchIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", TagIconName));
+            var tagSearchIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), TagIconName));
             var searchListingStrategy = new ListingStrategy(TagListingStrategyName, tagSearchIcon, ListTag);
 
-            var hierarchyListingIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", HierarchyIconName));
+            var hierarchyListingIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), HierarchyIconName));
             _hierarchyListingStrategy =
                 new ListingStrategy("loaded scenes", hierarchyListingIcon, ListHierarchy, true);
 

@@ -1,5 +1,5 @@
 #icon {
-    background-image: resource('Sprites/icon_cycling');
+    background-image: url("project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitElements/Editor/Resources/Sprites/DropdownSearchField/icon_cycling.png?fileID=2800000&guid=5e8f898653eb8b546a98429bb4d425f1&type=3#icon_cycling");
     width: 10px;
     height: 10px;
     margin-left: 2px;
@@ -32,7 +32,7 @@
 }
 
 #unity-search {
-    background-image: resource('Sprites/icon_search');
+    background-image: resource('Sprites/DropdownSearchField/icon_search');
 }
 
 .hover-behaviour:hover {

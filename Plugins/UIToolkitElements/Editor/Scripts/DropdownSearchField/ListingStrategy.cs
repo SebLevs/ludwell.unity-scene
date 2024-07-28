@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitElements.Editor
 {
     public class ListingStrategy
     {

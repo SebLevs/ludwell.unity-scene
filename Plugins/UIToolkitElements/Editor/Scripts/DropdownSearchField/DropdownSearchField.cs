@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Ludwell.UIToolkitUtilities;
+using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitElements.Editor
 {
     /// <summary>
     /// Default behaviour on value changed is to list the element by name<br/>
@@ -33,6 +34,8 @@ namespace Ludwell.Scene.Editor
         private const string SearchFieldName = "toolbar-search-field";
 
         private const string DefaultSearchIcon = "icon_search";
+
+        private const string HoverBehaviourClassName = "hover-behaviour";
 
         private const float BorderRadius = 3;
 
@@ -136,7 +139,7 @@ namespace Ludwell.Scene.Editor
         {
             if (_listingStrategies.Count == 1)
             {
-                _searchIcon.AddToClassList("hover-behaviour");
+                _searchIcon.AddToClassList(HoverBehaviourClassName);
                 this.Q<VisualElement>(CyclingIconName).style.display = DisplayStyle.Flex;
             }
 
@@ -245,7 +248,7 @@ namespace Ludwell.Scene.Editor
 
         private void SetDefaultSearchBehaviour()
         {
-            var icon = Resources.Load<Texture2D>("Sprites/" + DefaultSearchIcon);
+            var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), DefaultSearchIcon));
             var searchFieldListing = new ListingStrategy(DefaultSearchName, icon, DefaultSearchBehaviour);
             _listingStrategies.Add(searchFieldListing);
             this.Q<VisualElement>(CyclingIconName).style.display = DisplayStyle.None;
