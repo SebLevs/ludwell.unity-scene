@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitElements.Editor
 {
     public class ButtonWithIcon : Button
     {
