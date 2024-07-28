@@ -19,6 +19,8 @@ namespace Ludwell.Scene.Editor
 
         private ThemeManagerEditor _themeManagerEditor;
 
+        private Disposer _disposer;
+
         [MenuItem("Tools/Ludwell Studio/Scene Manager Toolkit")]
         public static void OpenWindow()
         {
@@ -32,10 +34,13 @@ namespace Ludwell.Scene.Editor
             _themeManagerEditor = new ThemeManagerEditor(rootVisualElement, _darkTheme, _lightTheme);
 
             _tagsManagerController = new TagsManagerController(rootVisualElement);
-            
+
             _sceneElementsController = new SceneElementsController(rootVisualElement);
 
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneElementsController>();
+
+            _disposer = new();
+            Services.Add<Disposer>(_disposer);
         }
 
         [Shortcut("SceneManagerToolkit", KeyCode.S,
@@ -54,13 +59,25 @@ namespace Ludwell.Scene.Editor
 
         private void OnDestroy()
         {
-            _themeManagerEditor.Dispose();
+            rootVisualElement.Q<ViewManager>().Reset();
+
+            Dispose();
+
+            _disposer.Clear();
+            _disposer = null;
             _themeManagerEditor = null;
             _tagsManagerController = null;
             _sceneElementsController = null;
-            
-            rootVisualElement.Q<ViewManager>().Reset();
+
             Signals.Clear<UISignals.RefreshView>();
+        }
+
+        private void Dispose()
+        {
+            _themeManagerEditor?.Dispose();
+            _tagsManagerController?.Dispose();
+            _sceneElementsController?.Dispose();
+            _disposer.Dispose();
         }
     }
 }

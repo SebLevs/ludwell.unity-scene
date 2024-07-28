@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitElements.Editor
 {
-    public class FoldoutView
+    public class FoldoutView : IDisposable
     {
         public static readonly string UxmlPath = Path.Combine("UI", "Foldout", "Uxml_" + nameof(FoldoutView));
         public static readonly string UssPath = Path.Combine("UI", "Foldout", "Uss_" + nameof(FoldoutView));
@@ -58,8 +58,18 @@ namespace Ludwell.UIToolkitElements.Editor
             Title.RegisterCallback<BlurEvent>(SetStyleUnselectedTextField);
 
             _content = _root.Q<VisualElement>(ContentName);
+        }
+        
+        public void Dispose()
+        {
+            _header.UnregisterCallback<ClickEvent>(ExecuteHeaderClickedCallback);
 
-            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+            _root.UnregisterCallback<KeyDownEvent>(OnKeyDownSimulateHeaderClick);
+
+            Title.UnregisterValueChangedCallback(ExecuteTitleValueChangedCallback);
+            Title.UnregisterCallback<ClickEvent>(SetStyleSelectedTextField);
+            Title.UnregisterCallback<ClickEvent>(OnClickStopPropagation);
+            Title.UnregisterCallback<BlurEvent>(SetStyleUnselectedTextField);
         }
 
         public void FocusTextField()
@@ -114,20 +124,6 @@ namespace Ludwell.UIToolkitElements.Editor
         {
             Title.RemoveFromClassList(TextFieldSelectedClass);
             Title.AddToClassList(TextFieldUnselectedClass);
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-
-            _header.UnregisterCallback<ClickEvent>(ExecuteHeaderClickedCallback);
-
-            _root.UnregisterCallback<KeyDownEvent>(OnKeyDownSimulateHeaderClick);
-
-            Title.UnregisterValueChangedCallback(ExecuteTitleValueChangedCallback);
-            Title.UnregisterCallback<ClickEvent>(SetStyleSelectedTextField);
-            Title.UnregisterCallback<ClickEvent>(OnClickStopPropagation);
-            Title.UnregisterCallback<BlurEvent>(SetStyleUnselectedTextField);
         }
     }
 }

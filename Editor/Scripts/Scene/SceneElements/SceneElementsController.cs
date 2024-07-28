@@ -62,10 +62,20 @@ namespace Ludwell.Scene.Editor
 
             InitializeContextMenuManipulator();
 
-            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
-            
             OnShow = AddRefreshViewSignal;
             OnHide = RemoveRefreshViewSignal;
+        }
+        
+        public void Dispose()
+        {
+            _view.CloseAllButton.clicked -= CloseAll;
+            _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.RemoveButton.clicked -= DeleteSelection;
+            _view.MoreInformationButton.clicked -= _moreInformationController.Show;
+
+            _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            
+            _moreInformationController.Dispose();
         }
 
         public void ScrollToItemIndex(int index)
@@ -89,7 +99,6 @@ namespace Ludwell.Scene.Editor
         {
             _view.Show();
             _sceneElementsListViewRefresh.StartOrRefreshDelayedRebuild();
-            
         }
 
         protected override void Hide()
@@ -311,19 +320,6 @@ namespace Ludwell.Scene.Editor
             }
 
             return filteredList;
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            _view.CloseAllButton.clicked -= CloseAll;
-            _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
-            _view.RemoveButton.clicked -= DeleteSelection;
-            _view.MoreInformationButton.clicked -= _moreInformationController.Show;
-
-            _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            
-            _moreInformationController.Dispose();
         }
     }
 }

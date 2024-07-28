@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementController : VisualElement, IListViewVisualElement<SceneManagerElementData>
+    public class SceneElementController : VisualElement, IListViewVisualElement<SceneManagerElementData>, IDisposable
     {
         private static SceneElementController _currentSceneElement;
 
@@ -49,7 +50,25 @@ namespace Ludwell.Scene.Editor
 
             RegisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
 
-            RegisterCallback<DetachFromPanelEvent>(Dispose);
+            Services.Get<Disposer>().Add(this);
+        }
+
+        public void Dispose()
+        {
+            _currentSceneElement = null;
+
+            _view.SetActiveButton.clicked -= SetAsActiveScene;
+            _view.OpenButton.clicked -= OpenScene;
+            _view.PingButton.clicked -= SelectSceneDataInProject;
+            _view.DirectoryChangeButton.clicked -= ChangeFolder;
+
+            _foldout.TitleTextField.UnregisterCallback<BlurEvent>(RenameAsset);
+
+            UnregisterCallback<AttachToPanelEvent>(BindViewManager);
+            UnregisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
+
+            _view.Dispose();
+            _foldout.Dispose();
         }
 
         public void CacheData(SceneManagerElementData data)
@@ -333,22 +352,6 @@ namespace Ludwell.Scene.Editor
         {
             var id = _model.SceneData.GetInstanceID().ToString();
             SessionState.SetBool(id, _foldout.IsOpen);
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            _currentSceneElement = null;
-
-            _view.SetActiveButton.clicked -= SetAsActiveScene;
-            _view.OpenButton.clicked -= OpenScene;
-            _view.PingButton.clicked -= SelectSceneDataInProject;
-            _view.DirectoryChangeButton.clicked -= ChangeFolder;
-
-            _foldout.TitleTextField.UnregisterCallback<BlurEvent>(RenameAsset);
-
-            UnregisterCallback<AttachToPanelEvent>(BindViewManager);
-            UnregisterCallback<ClickEvent>(SessionStateCacheFoldoutValue);
         }
     }
 }

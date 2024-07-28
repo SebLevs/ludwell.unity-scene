@@ -47,8 +47,22 @@ namespace Ludwell.Scene.Editor
             _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
             InitializeListViewHandler();
             InitializeDropdownSearchField();
+        }
+        
+        public void Dispose()
+        {
+            _tagsShelfController.Dispose();
+            
+            _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
 
-            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+            _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
+            _listViewHandler.ListView.itemsRemoved -= HandleItemsRemoved;
+
+            var listView = _listViewHandler.ListView;
+
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
 
         public void ScrollToItemIndex(int index)
@@ -199,21 +213,6 @@ namespace Ludwell.Scene.Editor
             {
                 _listViewHandler.ListView.ScrollToItem(itemIndex);
             });
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
-
-            _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
-            _listViewHandler.ListView.itemsRemoved -= HandleItemsRemoved;
-
-            var listView = _listViewHandler.ListView;
-
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
     }
 }

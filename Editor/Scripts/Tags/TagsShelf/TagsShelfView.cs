@@ -30,8 +30,11 @@ namespace Ludwell.Scene.Editor
 
             _container = _root.Q<ScrollView>(TagsContainerName);
             _notTaggedLabel = _root.Q<Label>(NotTaggedName);
-
-            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+        }
+        
+        public void Dispose()
+        {
+            _optionsButton.clicked -= ExecuteOptionClicked;
         }
 
         private void ExecuteOptionClicked()
@@ -89,13 +92,6 @@ namespace Ludwell.Scene.Editor
         {
             _notTaggedLabel.style.display = ElementsCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
             _container.style.display = ElementsCount == 0 ? DisplayStyle.None : DisplayStyle.Flex;
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-
-            _optionsButton.clicked -= ExecuteOptionClicked;
         }
     }
 }

@@ -1,10 +1,11 @@
+using System;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementView
+    public class SceneElementView : IDisposable
     {
         private readonly string UxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
         private readonly string UssPath = FoldoutView.UssPath + "_SceneManagerToolkit";
@@ -65,6 +66,13 @@ namespace Ludwell.Scene.Editor
             BuildSettingsButton = _root.Q<DualStateButton>(BuildSettingsButtonName);
 
             _iconAssetOutsideAssets = _root.Q<VisualElement>(IconAssetOutsideAssetsName);
+        }
+        
+        public void Dispose()
+        {
+            BuildSettingsButton.Dispose();
+            OpenAdditiveButton.Dispose();
+            LoadButton.Dispose();
         }
 
         public void SwitchBuildSettingsButtonState(bool state)
