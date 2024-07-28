@@ -1,5 +1,4 @@
 using System;
-using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitUtilities.Editor
@@ -15,11 +14,6 @@ namespace Ludwell.UIToolkitUtilities.Editor
         {
             _manager = root.Root().Q<ViewManager>();
             _manager.Add(this);
-        }
-
-        ~AViewable()
-        {
-            _manager.Remove(this);
         }
 
         public void ShowView(ViewArgs args)

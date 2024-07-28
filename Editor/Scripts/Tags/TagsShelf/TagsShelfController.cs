@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsShelfController
+    public class TagsShelfController : IDisposable
     {
         private TagSubscriberWithTags _data = new();
 
@@ -17,6 +17,11 @@ namespace Ludwell.Scene.Editor
         {
             _view = new TagsShelfView(parent);
             _view.OnOptionClicked += onOptionClicked;
+        }
+        
+        public void Dispose()
+        {
+            _view.Dispose();
         }
 
         public void Add(Tag tag)

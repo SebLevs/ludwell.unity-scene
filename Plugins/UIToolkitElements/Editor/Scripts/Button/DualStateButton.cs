@@ -1,8 +1,9 @@
+using System;
 using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitElements.Editor
 {
-    public class DualStateButton : ButtonWithIcon
+    public class DualStateButton : ButtonWithIcon, IDisposable
     {
         public new class UxmlFactory : UxmlFactory<DualStateButton>
         {
@@ -22,13 +23,10 @@ namespace Ludwell.UIToolkitElements.Editor
             StateTwo.OnClick += SwitchToStateOne;
 
             SwitchState(StateOne);
-
-            RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
-        public void Dispose(DetachFromPanelEvent evt)
+        public void Dispose()
         {
-            UnregisterCallback<DetachFromPanelEvent>(Dispose);
             StateOne.OnClick -= SwitchToStateTwo;
             StateTwo.OnClick -= SwitchToStateOne;
         }

@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitElements.Editor
 {
-    public class FoldoutController
+    public class FoldoutController : IDisposable
     {
         public Action<bool> OnHeaderClickedCallback;
 
@@ -51,8 +51,13 @@ namespace Ludwell.UIToolkitElements.Editor
 
             IsOpen = startOpen;
             _view.ToggleFoldoutStyle(startOpen);
-            
-            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+        }
+        
+        public void Dispose()
+        {
+            OnHeaderClickedCallback -= _view.ToggleFoldoutStyle;
+            _view.OnHeaderClicked -= ToggleContentVisibility;
+            _view.Dispose();
         }
 
         private void ToggleContentVisibility()
@@ -64,14 +69,6 @@ namespace Ludwell.UIToolkitElements.Editor
         private void ExecuteHeaderClickedCallback()
         {
             OnHeaderClickedCallback?.Invoke(IsOpen);
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            
-            OnHeaderClickedCallback -= _view.ToggleFoldoutStyle;
-            _view.OnHeaderClicked -= ToggleContentVisibility;
         }
     }
 }
