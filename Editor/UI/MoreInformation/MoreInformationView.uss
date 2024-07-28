@@ -145,12 +145,8 @@ Label {
 }
 
 .scale-animation__down {
-}
-
-.scale-animation__down:hover {
-    transition-duration: 0.02s;
     scale: 1 1;
-    transition-timing-function: ease;
+    transition-duration: 0.01s;
 }
 
 .call-to-action__feedback {

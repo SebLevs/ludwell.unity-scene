@@ -15,6 +15,9 @@ namespace Ludwell.Scene.Editor
         private const string DiscordServerButtonName  = "discord-server";
         private const string BrowseProductsButtonName = "browse-products";
         private const string RateProductButtonName = "rate-product";
+
+        private const string ScaleAnimationClassName = "scale-animation";
+        private const string ScaleAnimationDownClassName = "scale-animation__down";
         
         private readonly VisualElement _root;
 
@@ -60,8 +63,8 @@ namespace Ludwell.Scene.Editor
             BrowseProductsButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
             
             RateProductButton = _root.Q<Button>(RateProductButtonName);
-            BrowseProductsButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
-            BrowseProductsButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
+            RateProductButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
+            RateProductButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
 
             for (var index = 1; index < _stars.Length + 1; index++)
             {
@@ -89,8 +92,8 @@ namespace Ludwell.Scene.Editor
             BrowseProductsButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
             BrowseProductsButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
             
-            BrowseProductsButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
-            BrowseProductsButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
+            RateProductButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
+            RateProductButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
 
             for (var index = 1; index < _stars.Length + 1; index++)
             {
@@ -117,16 +120,17 @@ namespace Ludwell.Scene.Editor
         
         private void MouseDownEvent(MouseDownEvent evt)
         {
-            var targetAsVisualElement = evt.target as VisualElement;
-            targetAsVisualElement.AddToClassList("scale-animation__down");
-            targetAsVisualElement.RemoveFromClassList("scale-animation");
+            var targetAsVisualElement = (evt.target as VisualElement).FirstAncestorWithClass(ScaleAnimationClassName);
+            targetAsVisualElement.AddToClassList(ScaleAnimationDownClassName);
+            targetAsVisualElement.RemoveFromClassList(ScaleAnimationClassName);
         }
         
         private void MouseUpEvent(MouseUpEvent evt)
         {
-            var targetAsVisualElement = evt.target as VisualElement;
-            targetAsVisualElement.RemoveFromClassList("scale-animation__down");
-            targetAsVisualElement.AddToClassList("scale-animation");
+            var targetAsVisualElement = (evt.target as VisualElement).FirstAncestorWithClass(ScaleAnimationDownClassName);
+            if (targetAsVisualElement == null) return;
+            targetAsVisualElement.RemoveFromClassList(ScaleAnimationDownClassName);
+            targetAsVisualElement.AddToClassList(ScaleAnimationClassName);
         }
 
         private void ScaleStarsUpTo(MouseEnterEvent evt)
