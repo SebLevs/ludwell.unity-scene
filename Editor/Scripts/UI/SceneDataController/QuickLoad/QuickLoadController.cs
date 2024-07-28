@@ -25,6 +25,8 @@ namespace Ludwell.Scene.Editor
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
 
+        private readonly MoreInformationController _moreInformationController;
+        
         private ListingStrategy _hierarchyListingStrategy;
 
         public QuickLoadController(VisualElement parent)
@@ -37,6 +39,10 @@ namespace Ludwell.Scene.Editor
 
             _listView = _root.Q<ListView>();
             _dropdownSearchField = _root.Q<DropdownSearchField>();
+            
+            _moreInformationController = new MoreInformationController(_root);
+            _view.MoreInformationButton.clicked += _moreInformationController.Show;
+            _moreInformationController.Hide();
 
             _quickLoadElements = ResourcesLocator.GetQuickLoadElements();
 
@@ -280,8 +286,11 @@ namespace Ludwell.Scene.Editor
             _view.CloseAllButton.clicked -= CloseAll;
             _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked -= DeleteSelection;
+            _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 
             _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            
+            _moreInformationController.Dispose();
         }
     }
 }

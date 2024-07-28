@@ -26,7 +26,7 @@
     margin-top: 0;
     margin-bottom: 0;
     align-self: center;
-    left: -1px;
+    left: 0;
 }
 
 #button__close-all > #icon {
@@ -46,6 +46,35 @@
 
 #DropdownSearchField > #search-field {
     width: 100%;
+}
+
+#button__more-information {
+    margin-top: 0;
+    margin-right: 4px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#button__more-information > #icon {
+    background-image: resource('Sprites/icon_more-information');
+}
+
+#button__more-information > #icon:hover {
+    scale: 1.2 1.2;
+    transition-duration: 0.02s;
 }
 
 #scenes__list > ScrollView > VisualElement > VisualElement > Label {
