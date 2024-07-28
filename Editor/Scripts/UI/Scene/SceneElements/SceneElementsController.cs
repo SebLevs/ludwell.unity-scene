@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ludwell.Architecture;
 using Ludwell.MoreInformation.Editor;
 using Ludwell.UIToolkitElements.Editor;
+using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,7 +15,7 @@ using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementsController
+    public class SceneElementsController : AViewable
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
@@ -31,7 +33,9 @@ namespace Ludwell.Scene.Editor
         
         private ListingStrategy _hierarchyListingStrategy;
 
-        public SceneElementsController(VisualElement parent)
+        private SceneElementsListViewRefresh _sceneElementsListViewRefresh;
+
+        public SceneElementsController(VisualElement parent) : base(parent)
         {
             _root = parent.Q(nameof(SceneElementsView));
             _view = new SceneElementsView(_root);
@@ -52,11 +56,16 @@ namespace Ludwell.Scene.Editor
             InitializeSearchField(_root, _root.Q<DropdownSearchField>());
             _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
+            _sceneElementsListViewRefresh = new SceneElementsListViewRefresh(_root);
+
             Services.Add<SceneElementsController>(this);
 
             InitializeContextMenuManipulator();
 
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+            
+            OnShow = AddRefreshViewSignal;
+            OnHide = RemoveRefreshViewSignal;
         }
 
         public void ScrollToItemIndex(int index)
@@ -74,6 +83,28 @@ namespace Ludwell.Scene.Editor
         {
             if (_dropdownSearchField.RebuildActiveListing()) return;
             _listViewHandler.ForceRebuild();
+        }
+        
+        protected override void Show(ViewArgs args)
+        {
+            _view.Show();
+            _sceneElementsListViewRefresh.StartOrRefreshDelayedRebuild();
+            
+        }
+
+        protected override void Hide()
+        {
+            _view.Hide();
+        }
+
+        private void AddRefreshViewSignal()
+        {
+            Signals.Add<UISignals.RefreshView>(RebuildActiveListing);
+        }
+
+        private void RemoveRefreshViewSignal()
+        {
+            Signals.Remove<UISignals.RefreshView>(RebuildActiveListing);
         }
 
         private List<SceneElementController> GetVisualElementsWithoutActiveScene()

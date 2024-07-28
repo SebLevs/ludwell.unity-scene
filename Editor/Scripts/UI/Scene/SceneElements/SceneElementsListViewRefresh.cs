@@ -1,6 +1,5 @@
 using Ludwell.Architecture;
 using Ludwell.EditorUtilities;
-using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
@@ -9,13 +8,9 @@ using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataController : AViewable
+    public class SceneElementsListViewRefresh
     {
-        private readonly ViewManager _viewManager;
-
         private readonly VisualElement _root;
-        private readonly SceneDataView _view;
-        private readonly SceneElementsController _sceneElementsController;
 
         private readonly DelayedEditorUpdateAction _delayedRebuild;
 
@@ -38,14 +33,9 @@ namespace Ludwell.Scene.Editor
 
         private void DispatchRefreshSignal() => Signals.Dispatch<UISignals.RefreshView>();
 
-        public SceneDataController(VisualElement parent) : base(parent)
+        public SceneElementsListViewRefresh(VisualElement parent)
         {
-            _root = parent.Q(nameof(SceneDataView));
-            _view = new SceneDataView(_root);
-
-            _sceneElementsController = new SceneElementsController(_root);
-            OnShow = AddRefreshViewSignal;
-            OnHide = RemoveRefreshViewSignal;
+            _root = parent;
 
             _delayedRebuild = new DelayedEditorUpdateAction(0.0f, DispatchRefreshSignal);
 
@@ -59,26 +49,10 @@ namespace Ludwell.Scene.Editor
 
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
-
-        protected override void Show(ViewArgs args)
+        
+        public void StartOrRefreshDelayedRebuild()
         {
-            _view.Show();
             _delayedRebuild.StartOrRefresh();
-        }
-
-        protected override void Hide()
-        {
-            _view.Hide();
-        }
-
-        private void AddRefreshViewSignal()
-        {
-            Signals.Add<UISignals.RefreshView>(_sceneElementsController.RebuildActiveListing);
-        }
-
-        private void RemoveRefreshViewSignal()
-        {
-            Signals.Remove<UISignals.RefreshView>(_sceneElementsController.RebuildActiveListing);
         }
 
         private void Dispose(DetachFromPanelEvent evt)

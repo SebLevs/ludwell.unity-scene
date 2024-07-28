@@ -25,5 +25,15 @@ namespace Ludwell.Scene.Editor
             RemoveButton = _root.Q<Button>(RemoveButtonName);
             MoreInformationButton = _root.Q<Button>(MoreInformationButtonName);
         }
+        
+        public void Show()
+        {
+            _root.style.display = DisplayStyle.Flex;
+        }
+
+        public void Hide()
+        {
+            _root.style.display = DisplayStyle.None;
+        }
     }
 }
