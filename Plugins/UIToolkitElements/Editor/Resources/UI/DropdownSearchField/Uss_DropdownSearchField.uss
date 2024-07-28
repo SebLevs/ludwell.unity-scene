@@ -1,0 +1,41 @@
+#icon {
+    background-image: url("project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitElements/Editor/Resources/Sprites/DropdownSearchField/icon_cycling.png?fileID=2800000&guid=5e8f898653eb8b546a98429bb4d425f1&type=3#icon_cycling");
+    width: 10px;
+    height: 10px;
+    margin-left: 2px;
+    position: absolute;
+    left: -16px;
+}
+
+#search-field {
+    background-color: rgba(0, 0, 0, 0);
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 16px;
+    width: 50%;
+}
+
+#toolbar-search-field {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#unity-search {
+    background-image: resource('Sprites/DropdownSearchField/icon_search');
+}
+
+.hover-behaviour:hover {
+    scale: 1.2 1.2;
+    transition-duration: 0.2s;
+}

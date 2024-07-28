@@ -27,7 +27,7 @@
 #icon {
     width: 100%;
     height: 100%;
-    background-image: resource('Sprites/icon_search');
+    background-image: resource('Sprites/DropdownSearchField/icon_search');
     align-items: center;
     justify-content: center;
     align-self: center;

@@ -1,12 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:Template name="SceneDataController" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/SceneDataController/SceneDataController/SceneDataView.uxml?fileID=9197481963319205126&amp;guid=f120eb9dee03458419fb91ddff14e2fc&amp;type=3#SceneDataView" />
-    <ui:Template name="TagsManagerView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/TagsManager/TagsManager/Uxml_TagsManagerView.uxml?fileID=9197481963319205126&amp;guid=7fc55af2aad5c8c43b3a5135fee454cb&amp;type=3#Uxml_TagsManagerView" />
+    <ui:Template name="TagsManagerView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/Tags/TagsManager/Uxml_TagsManagerView.uxml?fileID=9197481963319205126&amp;guid=7fc55af2aad5c8c43b3a5135fee454cb&amp;type=3#Uxml_TagsManagerView" />
+    <ui:Template name="SceneElementsView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Scene/SceneElementsView/SceneElementsView.uxml?fileID=9197481963319205126&amp;guid=14480c97d71de344c9818775c93f888a&amp;type=3#SceneElementsView" />
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/EditorWindow/SceneDataManagerWindow.uss?fileID=7433441132597879392&amp;guid=084f846459e63874ab1c3bd6f0a92815&amp;type=3#SceneDataManagerWindow" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="root" style="flex-grow: 1; flex-direction: column; overflow: visible;">
-        <Ludwell.Scene.Editor.ViewManager name="ViewManager" />
+        <Ludwell.UIToolkitUtilities.Editor.ViewManager name="ViewManager" />
         <ui:VisualElement name="views" style="flex-grow: 1; position: relative; flex-wrap: nowrap; flex-basis: 100%; flex-shrink: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 100%;">
-            <ui:Instance template="SceneDataController" name="SceneDataView" />
+            <ui:Instance template="SceneElementsView" name="SceneElementsView" />
             <ui:Instance template="TagsManagerView" name="TagsManagerView" />
         </ui:VisualElement>
     </ui:VisualElement>

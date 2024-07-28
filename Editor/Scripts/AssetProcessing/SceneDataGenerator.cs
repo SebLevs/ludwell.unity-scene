@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Ludwell.Architecture;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -65,9 +66,9 @@ namespace Ludwell.Scene.Editor
         public static void GenerateSceneData()
         {
             var settings =
-                (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings), out _);
+                (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings), out _);
 
-            if (!EditorPrefs.GetBool(SceneDataManagerSettings.GenerateSceneDataKey)) return;
+            if (!EditorPrefs.GetBool(Settings.GenerateSceneDataKey)) return;
 
             List<string> paths = new();
 
@@ -91,7 +92,7 @@ namespace Ludwell.Scene.Editor
                 ResourcesLocator.GetQuickLoadElements().Add(sceneData);
             }
 
-            EditorPrefs.SetBool(SceneDataManagerSettings.GenerateSceneDataKey, false);
+            EditorPrefs.SetBool(Settings.GenerateSceneDataKey, false);
             EditorUtility.SetDirty(settings);
             AssetDatabase.SaveAssetIfDirty(settings);
 

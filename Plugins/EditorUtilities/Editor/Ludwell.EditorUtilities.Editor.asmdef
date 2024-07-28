@@ -1,0 +1,16 @@
+{
+  "name": "Ludwell.EditorUtilities.Editor",
+  "rootNamespace": "Ludwell.EditorUtilities.Editor",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "autoReferenced": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": []
+}

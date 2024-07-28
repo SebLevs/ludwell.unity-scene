@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitElements/Editor/Resources/UI/Foldout/Uss_FoldoutView.uss?fileID=7433441132597879392&amp;guid=7c9ef5d5908b4cb47932327cac1c745c&amp;type=3#Uss_FoldoutView" />
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
+    <ui:VisualElement name="root">
+        <ui:VisualElement name="header">
+            <ui:VisualElement name="header__container" picking-mode="Ignore" class="primary-theme">
+                <ui:VisualElement name="content__left">
+                    <ui:VisualElement name="top" class="header-section__row header-section__row__left" />
+                    <ui:VisualElement name="bottom" class="header-section__row header-section__row__left" />
+                </ui:VisualElement>
+                <ui:VisualElement name="content__center">
+                    <ui:VisualElement name="content__center-top" />
+                </ui:VisualElement>
+                <ui:VisualElement name="content__right">
+                    <ui:VisualElement name="top" class="header-section__row header-section__row__right" />
+                    <ui:VisualElement name="bottom" class="header-section__row header-section__row__right">
+                        <ui:VisualElement name="warning-icon" class="ButtonWithIcon" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="toggle">
+                <ui:VisualElement name="toggle-icon" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="content" class="secondary-theme" />
+        <ui:VisualElement name="footer" class="primary-theme" />
+    </ui:VisualElement>
+</ui:UXML>
