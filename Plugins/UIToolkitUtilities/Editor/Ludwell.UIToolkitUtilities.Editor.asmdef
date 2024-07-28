@@ -1,0 +1,16 @@
+{
+  "name": "Ludwell.UIToolkitUtilities.Editor",
+  "rootNamespace": "Ludwell.UIToolkitUtilities.Editor",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "autoReferenced": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": []
+}

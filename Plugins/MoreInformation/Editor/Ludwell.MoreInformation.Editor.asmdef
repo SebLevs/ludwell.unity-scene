@@ -1,0 +1,18 @@
+{
+    "name": "Ludwell.MoreInformation.Editor",
+    "rootNamespace": "Ludwell.MoreInformation.Editor",
+    "references": [
+        "GUID:e5c5263d642932149a4d3efaecc00d0a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
