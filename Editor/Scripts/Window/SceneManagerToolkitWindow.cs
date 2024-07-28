@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataManagerWindow : EditorWindow
+    public class SceneManagerToolkitWindow : EditorWindow
     {
         [SerializeField] private VisualTreeAsset _visualTreeAsset;
 
@@ -19,10 +19,10 @@ namespace Ludwell.Scene.Editor
 
         private ThemeManagerEditor _themeManagerEditor;
 
-        [MenuItem("Tools/Scene Data Manager")]
+        [MenuItem("Tools/Ludwell Studio/Scene Manager Toolkit")]
         public static void OpenWindow()
         {
-            GetWindow<SceneDataManagerWindow>(title: "Scene Data Manager");
+            GetWindow<SceneManagerToolkitWindow>(title: "Scene Manager Toolkit");
         }
 
         public void CreateGUI()
@@ -41,9 +41,9 @@ namespace Ludwell.Scene.Editor
             ShortcutModifiers.Control | ShortcutModifiers.Shift | ShortcutModifiers.Alt)]
         private static void ShortcutToggleWindow()
         {
-            if (HasOpenInstances<SceneDataManagerWindow>())
+            if (HasOpenInstances<SceneManagerToolkitWindow>())
             {
-                GetWindow<SceneDataManagerWindow>().Close();
+                GetWindow<SceneManagerToolkitWindow>().Close();
             }
             else
             {
