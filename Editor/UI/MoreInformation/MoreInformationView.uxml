@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/MoreInformation/MoreInformationView.uss?fileID=7433441132597879392&amp;guid=9d96c491d5c568a44ac74a9ebca84449&amp;type=3#MoreInformationView" />
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="MoreInformationView">
         <ui:VisualElement name="modal-overlay" class="modal-overlay">
-            <ui:VisualElement name="panel__more-information" class="panel__more-information">
+            <ui:VisualElement name="panel__more-information" class="panel__more-information primary-theme">
                 <ui:VisualElement name="header" class="header">
                     <ui:VisualElement name="icon-container" class="icon-container header-icon">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell_64&apos;);" />
@@ -14,7 +15,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="line-separator" class="line-separator" />
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="about-company" class="vertical-slide scale-animation">
+                <ui:VisualElement name="about-company" class="vertical-slide scale-animation secondary-theme">
                     <ui:VisualElement name="icon-container" class="icon-container">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell_64&apos;);" />
                     </ui:VisualElement>
@@ -23,7 +24,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="documentation" class="vertical-slide scale-animation">
+                <ui:VisualElement name="documentation" class="vertical-slide scale-animation secondary-theme">
                     <ui:VisualElement name="icon-container" class="icon-container">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_documentation&apos;);" />
                     </ui:VisualElement>
@@ -32,7 +33,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:Button name="discord-server" class="vertical-slide scale-animation">
+                <ui:Button name="discord-server" class="vertical-slide scale-animation secondary-theme">
                     <ui:VisualElement name="icon-container" class="icon-container">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/discord_32_purple&apos;);" />
                     </ui:VisualElement>
@@ -41,7 +42,7 @@
                     </ui:VisualElement>
                 </ui:Button>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="browse-products" class="vertical-slide scale-animation">
+                <ui:VisualElement name="browse-products" class="vertical-slide scale-animation secondary-theme">
                     <ui:VisualElement name="icon-container" class="icon-container">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_shop&apos;);" />
                     </ui:VisualElement>
@@ -50,7 +51,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="rate-product" class="vertical-slide scale-animation rate-product">
+                <ui:VisualElement name="rate-product" class="vertical-slide scale-animation rate-product secondary-theme">
                     <ui:VisualElement name="call-to-action" class="call-to-action call-to-action__feedback">
                         <ui:Label text="Is this tool useful?" name="text" class="scale-animation" />
                         <ui:Label text="Give us your feedback!" name="text" class="scale-animation" />
