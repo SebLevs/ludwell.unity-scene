@@ -1,4 +1,4 @@
-using System.IO;
+using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
@@ -6,12 +6,6 @@ namespace Ludwell.Scene.Editor
 {
     public class QuickLoadElementView
     {
-        private static readonly string UxmlPath =
-            Path.Combine("UI", "Foldout", "Uxml_" + "Foldout");
-
-        private static readonly string UssPath =
-            Path.Combine("UI", "Foldout", "Uss_" + "Foldout");
-
         private const string AddBuildSettingsTooltip = "Add to build settings";
         private const string RemoveBuildSettingsTooltip = "Remove from build settings";
         private const string OpenAdditiveTooltip = "Open additive";
@@ -56,8 +50,8 @@ namespace Ludwell.Scene.Editor
         public QuickLoadElementView(QuickLoadElementController root)
         {
             _root = root;
-            _root.AddHierarchyFromUxml(UxmlPath);
-            _root.AddStyleFromUss(UssPath);
+            _root.AddHierarchyFromUxml(FoldoutView.UxmlPath);
+            _root.AddStyleFromUss(FoldoutView.UssPath);
 
             SetActiveButton = _root.Q<ButtonWithIcon>(SetActiveButtonName);
             OpenAdditiveButton = _root.Q<DualStateButton>(OpenSceneAdditiveButtonName);

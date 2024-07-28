@@ -1,12 +1,16 @@
 using System;
+using System.IO;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitElements.Editor
 {
     public class FoldoutView
     {
+        public static readonly string UxmlPath = Path.Combine("UI", "Foldout", "Uxml_" + nameof(FoldoutView));
+        public static readonly string UssPath = Path.Combine("UI", "Foldout", "Uss_" + nameof(FoldoutView));
+        
         public static readonly string HeaderName = "header";
         public static readonly string ToggleIconName = "toggle-icon";
         public static readonly string TitleName = "title";
