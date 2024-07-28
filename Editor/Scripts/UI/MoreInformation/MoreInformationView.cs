@@ -12,23 +12,23 @@ namespace Ludwell.Scene.Editor
 
         private const string AboutCompanyButtonName = "about-company";
         private const string DocumentationButtonName = "documentation";
-        private const string DiscordServerButtonName  = "discord-server";
+        private const string DiscordServerButtonName = "discord-server";
         private const string BrowseProductsButtonName = "browse-products";
         private const string RateProductButtonName = "rate-product";
 
         private const string ScaleAnimationClassName = "scale-animation";
         private const string ScaleAnimationDownClassName = "scale-animation__down";
-        
+
         private readonly VisualElement _root;
 
         private readonly VisualElement _modalOverlay;
         private readonly VisualElement _moreInformationPanel;
 
-        public VisualElement AboutCompanyButton { get;  }
-        public VisualElement DocumentationButton { get;  }
-        public VisualElement DiscordServerButton { get;  }
-        public VisualElement BrowseProductsButton { get;  }
-        public VisualElement RateProductButton { get;  }
+        public VisualElement AboutCompanyButton { get; }
+        public VisualElement DocumentationButton { get; }
+        public VisualElement DiscordServerButton { get; }
+        public VisualElement BrowseProductsButton { get; }
+        public VisualElement RateProductButton { get; }
 
         private readonly VisualElement[] _stars = new VisualElement[5];
 
@@ -49,19 +49,19 @@ namespace Ludwell.Scene.Editor
             AboutCompanyButton = _root.Q<VisualElement>(AboutCompanyButtonName);
             AboutCompanyButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             AboutCompanyButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             DocumentationButton = _root.Q<Button>(DocumentationButtonName);
             DocumentationButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             DocumentationButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             DiscordServerButton = _root.Q<Button>(DiscordServerButtonName);
             DiscordServerButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             DiscordServerButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             BrowseProductsButton = _root.Q<Button>(BrowseProductsButtonName);
             BrowseProductsButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             BrowseProductsButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             RateProductButton = _root.Q<Button>(RateProductButtonName);
             RateProductButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             RateProductButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
@@ -79,19 +79,19 @@ namespace Ludwell.Scene.Editor
             _modalOverlay.UnregisterCallback<ClickEvent>(Hide);
 
             _moreInformationPanel.UnregisterCallback<ClickEvent>(PreventPanelBubbleUp);
-            
+
             AboutCompanyButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
             AboutCompanyButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             DocumentationButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
             DocumentationButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             DiscordServerButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
             DiscordServerButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             BrowseProductsButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
             BrowseProductsButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
-            
+
             RateProductButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
             RateProductButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
 
@@ -117,17 +117,18 @@ namespace Ludwell.Scene.Editor
             evt.PreventDefault();
             evt.StopPropagation();
         }
-        
+
         private void MouseDownEvent(MouseDownEvent evt)
         {
             var targetAsVisualElement = (evt.target as VisualElement).FirstAncestorWithClass(ScaleAnimationClassName);
             targetAsVisualElement.AddToClassList(ScaleAnimationDownClassName);
             targetAsVisualElement.RemoveFromClassList(ScaleAnimationClassName);
         }
-        
+
         private void MouseUpEvent(MouseUpEvent evt)
         {
-            var targetAsVisualElement = (evt.target as VisualElement).FirstAncestorWithClass(ScaleAnimationDownClassName);
+            var targetAsVisualElement =
+                (evt.target as VisualElement).FirstAncestorWithClass(ScaleAnimationDownClassName);
             if (targetAsVisualElement == null) return;
             targetAsVisualElement.RemoveFromClassList(ScaleAnimationDownClassName);
             targetAsVisualElement.AddToClassList(ScaleAnimationClassName);

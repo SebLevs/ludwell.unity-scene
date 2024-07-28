@@ -20,7 +20,7 @@ namespace Ludwell.Scene.Editor
             _view.BrowseProductsButton.RegisterCallback<ClickEvent>(OpenCompanyAssetStorePage);
             _view.RateProductButton.RegisterCallback<ClickEvent>(OpenProductAssetStorePage);
         }
-        
+
         public void Dispose()
         {
             _view.AboutCompanyButton.UnregisterCallback<ClickEvent>(OpenCompanyWebsite);
@@ -45,7 +45,7 @@ namespace Ludwell.Scene.Editor
         {
             Application.OpenURL(MoreInformationModel.DocumentationURL);
         }
-        
+
         private void OpenCompanyWebsite(ClickEvent _)
         {
             Application.OpenURL(MoreInformationModel.DocumentationURL);
@@ -58,9 +58,9 @@ namespace Ludwell.Scene.Editor
 
         private void OpenCompanyAssetStorePage(ClickEvent _)
         {
-            Application.OpenURL(MoreInformationModel.DocumentationURL);  
+            Application.OpenURL(MoreInformationModel.DocumentationURL);
         }
-        
+
         private void OpenProductAssetStorePage(ClickEvent _)
         {
             Application.OpenURL(MoreInformationModel.DocumentationURL);

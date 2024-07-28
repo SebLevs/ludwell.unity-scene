@@ -79,7 +79,7 @@ namespace Ludwell.Scene.Editor
 
             return element.parent.FindInAncestors<T>(memoization);
         }
-        
+
         public static VisualElement FirstAncestorWithClass(this VisualElement element, string className)
         {
             if (element == null) return null;
