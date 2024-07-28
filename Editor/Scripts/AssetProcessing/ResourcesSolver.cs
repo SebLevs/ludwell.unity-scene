@@ -12,7 +12,7 @@ namespace Ludwell.Scene.Editor
         private static readonly string[] EditorPath =
         {
             "Plugins",
-            "SceneDataManager",
+            "SceneManagerToolkit",
             "Editor",
             "Resources"
         };
@@ -20,7 +20,7 @@ namespace Ludwell.Scene.Editor
         private static readonly string[] RuntimePath =
         {
             "Plugins",
-            "SceneDataManager",
+            "SceneManagerToolkit",
             "Runtime",
             "Resources"
         };
