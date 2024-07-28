@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
-    public static class SceneDataManagerEditorApplication
+    public static class EditorSceneManagerHelper
     {
         public static void OpenScene(string path)
         {

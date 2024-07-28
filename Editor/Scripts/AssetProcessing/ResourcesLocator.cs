@@ -5,9 +5,9 @@ namespace Ludwell.Scene.Editor
 {
     public static class ResourcesLocator
     {
-        private static SceneDataManagerSettings _settings;
+        private static Settings _toolkitSettings;
 
-        private static QuickLoadElements _quickLoadElements;
+        private static SceneManagerElements _sceneManagerElements;
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElements;
 
         private static TagContainer _tagContainer;
@@ -15,18 +15,18 @@ namespace Ludwell.Scene.Editor
         
         private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
 
-        public static SceneDataManagerSettings GetSceneDataManagerSettings() 
+        public static Settings GetSceneDataManagerSettings() 
         {
-            if (_settings) return _settings;
-            _settings = (SceneDataManagerSettings)ResourcesSolver.EnsureAssetExistence(typeof(SceneDataManagerSettings),
+            if (_toolkitSettings) return _toolkitSettings;
+            _toolkitSettings = (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings),
                 out var _);
-            return _settings;
+            return _toolkitSettings;
         }
 
-        public static QuickLoadElements GetQuickLoadElements()
+        public static SceneManagerElements GetQuickLoadElements()
         {
             CacheQuickLoadData();
-            return _quickLoadElements;
+            return _sceneManagerElements;
         }
 
         public static TagContainer GetTagContainer()
@@ -39,8 +39,8 @@ namespace Ludwell.Scene.Editor
         {
             ExternalAssetChangeProcessor.IsImportCauseInternal = true;
             CacheQuickLoadData();
-            EditorUtility.SetDirty(_quickLoadElements);
-            AssetDatabase.SaveAssetIfDirty(_quickLoadElements);
+            EditorUtility.SetDirty(_sceneManagerElements);
+            AssetDatabase.SaveAssetIfDirty(_sceneManagerElements);
             AssetDatabase.Refresh();
         }
 
@@ -80,9 +80,9 @@ namespace Ludwell.Scene.Editor
 
         private static void CacheQuickLoadData()
         {
-            if (_quickLoadElements) return;
-            _quickLoadElements =
-                (QuickLoadElements)ResourcesSolver.EnsureAssetExistence(typeof(QuickLoadElements), out var existed);
+            if (_sceneManagerElements) return;
+            _sceneManagerElements =
+                (SceneManagerElements)ResourcesSolver.EnsureAssetExistence(typeof(SceneManagerElements), out var existed);
             if (!existed)
             {
                 SceneDataGenerator.PopulateQuickLoadElements();

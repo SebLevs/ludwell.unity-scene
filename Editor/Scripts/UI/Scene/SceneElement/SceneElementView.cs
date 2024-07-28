@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class QuickLoadElementView
+    public class SceneElementView
     {
         private readonly string UxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
         private readonly string UssPath = FoldoutView.UssPath + "_SceneManagerToolkit";
@@ -25,7 +25,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly VisualElement _iconAssetOutsideAssets;
 
-        private readonly QuickLoadElementController _root;
+        private readonly SceneElementController _root;
 
         public ButtonWithIcon SetActiveButton { get; }
         public DualStateButton BuildSettingsButton { get; }
@@ -50,7 +50,7 @@ namespace Ludwell.Scene.Editor
         public void SetIconAssetOutsideAssets(bool state) =>
             _iconAssetOutsideAssets.style.display = state ? DisplayStyle.Flex : DisplayStyle.None;
 
-        public QuickLoadElementView(QuickLoadElementController root)
+        public SceneElementView(SceneElementController root)
         {
             _root = root;
             _root.AddHierarchyFromUxml(UxmlPath);

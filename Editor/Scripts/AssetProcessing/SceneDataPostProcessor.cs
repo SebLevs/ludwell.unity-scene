@@ -22,7 +22,7 @@ namespace Ludwell.Scene.Editor
 
             if (!sceneData) return false;
 
-            SceneDataManagerEditorApplication.OpenScene(Path.ChangeExtension(path, ".unity"));
+            EditorSceneManagerHelper.OpenScene(Path.ChangeExtension(path, ".unity"));
 
             return true;
         }
@@ -144,7 +144,7 @@ namespace Ludwell.Scene.Editor
             HandleAssetOutsideAssetsFolder(element);
         }
 
-        private static void HandleAssetOutsideAssetsFolder(QuickLoadElementData element)
+        private static void HandleAssetOutsideAssetsFolder(SceneManagerElementData element)
         {
             var path = AssetDatabase.GetAssetPath(element.SceneData);
             element.IsOutsideAssetsFolder = !path.Contains("Assets/");

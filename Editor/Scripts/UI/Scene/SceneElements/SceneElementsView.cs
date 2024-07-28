@@ -2,7 +2,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class QuickLoadView
+    public class SceneElementsView
     {
         private const string CloseAllButtonName = "button__close-all";
         private const string AddButtonName = "add";
@@ -16,7 +16,7 @@ namespace Ludwell.Scene.Editor
         public Button RemoveButton { get; }
         public Button MoreInformationButton { get; }
 
-        public QuickLoadView(VisualElement root)
+        public SceneElementsView(VisualElement root)
         {
             _root = root;
 

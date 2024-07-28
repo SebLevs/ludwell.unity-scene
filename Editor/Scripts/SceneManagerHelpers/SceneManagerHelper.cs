@@ -1,11 +1,9 @@
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
-    public class QuickLoadSceneDataManager
+    public class SceneManagerHelper
     {
         private static SceneData _sceneData;
 
@@ -31,10 +29,10 @@ namespace Ludwell.Scene.Editor
 
         private static void LoadScene()
         {
-            var path = SceneDataManagerEditorApplication.GetSceneAssetPath(_sceneData);
+            var path = EditorSceneManagerHelper.GetSceneAssetPath(_sceneData);
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByPath(path))
             {
-                SceneDataManagerEditorApplication.OpenScene(_sceneData);
+                EditorSceneManagerHelper.OpenScene(_sceneData);
             }
 
             EditorApplication.EnterPlaymode();

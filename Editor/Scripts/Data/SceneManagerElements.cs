@@ -6,11 +6,11 @@ using UnityEngine;
 namespace Ludwell.Scene.Editor
 {
     [Serializable]
-    public class QuickLoadElements : ScriptableObject
+    public class SceneManagerElements : ScriptableObject
     {
         [field: HideInInspector]
         [field: SerializeField]
-        public List<QuickLoadElementData> Elements { get; set; } = new();
+        public List<SceneManagerElementData> Elements { get; set; } = new();
 
         public bool Contains(SceneData sceneData)
         {
@@ -23,16 +23,16 @@ namespace Ludwell.Scene.Editor
             return false;
         }
         
-        public QuickLoadElementData Add(SceneData sceneData)
+        public SceneManagerElementData Add(SceneData sceneData)
         {
             var element = AddWithoutNotify(sceneData);
             // Signals.Dispatch<UISignals.RefreshView>();
             return element;
         }
 
-        public QuickLoadElementData AddWithoutNotify(SceneData sceneData)
+        public SceneManagerElementData AddWithoutNotify(SceneData sceneData)
         {
-            var element = new QuickLoadElementData
+            var element = new SceneManagerElementData
             {
                 ID = sceneData.Name,
                 SceneData = sceneData

@@ -13,17 +13,17 @@ using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.Scene.Editor
 {
-    public class QuickLoadController
+    public class SceneElementsController
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
         private const string HierarchyIconName = "icon_hierarchy";
 
-        private readonly QuickLoadElements _quickLoadElements;
-        private ListViewHandler<QuickLoadElementController, QuickLoadElementData> _listViewHandler;
+        private readonly SceneManagerElements _sceneManagerElements;
+        private ListViewHandler<SceneElementController, SceneManagerElementData> _listViewHandler;
 
         private readonly VisualElement _root;
-        private readonly QuickLoadView _view;
+        private readonly SceneElementsView _view;
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
 
@@ -31,10 +31,10 @@ namespace Ludwell.Scene.Editor
         
         private ListingStrategy _hierarchyListingStrategy;
 
-        public QuickLoadController(VisualElement parent)
+        public SceneElementsController(VisualElement parent)
         {
-            _root = parent.Q(nameof(QuickLoadView));
-            _view = new QuickLoadView(_root);
+            _root = parent.Q(nameof(SceneElementsView));
+            _view = new SceneElementsView(_root);
             _view.CloseAllButton.clicked += CloseAll;
             _view.AddButton.clicked += SceneDataGenerator.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked += DeleteSelection;
@@ -46,13 +46,13 @@ namespace Ludwell.Scene.Editor
             _view.MoreInformationButton.clicked += _moreInformationController.Show;
             _moreInformationController.Hide();
 
-            _quickLoadElements = ResourcesLocator.GetQuickLoadElements();
+            _sceneManagerElements = ResourcesLocator.GetQuickLoadElements();
 
             InitializeListViewHandler(_root.Q<ListView>());
             InitializeSearchField(_root, _root.Q<DropdownSearchField>());
             _listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
-            Services.Add<QuickLoadController>(this);
+            Services.Add<SceneElementsController>(this);
 
             InitializeContextMenuManipulator();
 
@@ -76,10 +76,10 @@ namespace Ludwell.Scene.Editor
             _listViewHandler.ForceRebuild();
         }
 
-        private List<QuickLoadElementController> GetVisualElementsWithoutActiveScene()
+        private List<SceneElementController> GetVisualElementsWithoutActiveScene()
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            return enumerableSelection as List<QuickLoadElementController> ?? enumerableSelection.ToList();
+            return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
         }
 
         private void OpenSelectionAdditive(DropdownMenuAction _)
@@ -106,7 +106,7 @@ namespace Ludwell.Scene.Editor
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             var quickLoadElementControllers =
-                enumerableSelection as QuickLoadElementController[] ?? enumerableSelection.ToArray();
+                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
             if (!quickLoadElementControllers.Any()) return;
             foreach (var quickLoadElementController in quickLoadElementControllers)
             {
@@ -118,7 +118,7 @@ namespace Ludwell.Scene.Editor
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             var quickLoadElementControllers =
-                enumerableSelection as QuickLoadElementController[] ?? enumerableSelection.ToArray();
+                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
             if (!quickLoadElementControllers.Any()) return;
             foreach (var quickLoadElementController in quickLoadElementControllers)
             {
@@ -180,7 +180,7 @@ namespace Ludwell.Scene.Editor
 
         private void CloseAll()
         {
-            if (_quickLoadElements == null || _quickLoadElements.Elements == null) return;
+            if (_sceneManagerElements == null || _sceneManagerElements.Elements == null) return;
             foreach (var item in _listViewHandler.Data)
             {
                 var id = item.SceneData.GetInstanceID().ToString();
@@ -196,8 +196,8 @@ namespace Ludwell.Scene.Editor
         private void InitializeListViewHandler(ListView listView)
         {
             _listViewHandler =
-                new ListViewHandler<QuickLoadElementController, QuickLoadElementData>(listView,
-                    _quickLoadElements.Elements);
+                new ListViewHandler<SceneElementController, SceneManagerElementData>(listView,
+                    _sceneManagerElements.Elements);
         }
         
 
@@ -237,7 +237,7 @@ namespace Ludwell.Scene.Editor
 
             foreach (var data in boundItemSource)
             {
-                foreach (var tag in (data as QuickLoadElementData).Tags)
+                foreach (var tag in (data as SceneManagerElementData).Tags)
                 {
                     if (!string.Equals(tag.ID, searchFieldValue, StringComparison.InvariantCultureIgnoreCase)) continue;
                     filteredList.Add(data as IListable);
@@ -258,14 +258,14 @@ namespace Ludwell.Scene.Editor
                 scenesInHierarchy.Add(SceneManager.GetSceneAt(i));
             }
 
-            var itemSourceAsData = boundItemSource.Cast<QuickLoadElementData>();
+            var itemSourceAsData = boundItemSource.Cast<SceneManagerElementData>();
 
             foreach (var sceneInHierarchy in scenesInHierarchy)
             {
                 foreach (var quickLoadElementData in itemSourceAsData)
                 {
                     var sceneAssetPath =
-                        SceneDataManagerEditorApplication.GetSceneAssetPath(quickLoadElementData.SceneData);
+                        EditorSceneManagerHelper.GetSceneAssetPath(quickLoadElementData.SceneData);
                     if (!sceneInHierarchy.path.Contains(sceneAssetPath)) continue;
                     if (string.IsNullOrEmpty(searchFieldValue) || string.IsNullOrWhiteSpace(searchFieldValue))
                     {

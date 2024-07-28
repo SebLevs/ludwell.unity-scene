@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Template name="QuickLoadView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Scene/SceneElementsView/SceneElementsView.uxml?fileID=9197481963319205126&amp;guid=14480c97d71de344c9818775c93f888a&amp;type=3#SceneElementsView" />
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/Scene/SceneDataController/SceneDataView.uss?fileID=7433441132597879392&amp;guid=6d52c786db684094a8788aa48687b6b4&amp;type=3#SceneDataView" />
+    <ui:VisualElement name="content" style="flex-grow: 1; flex-direction: column; display: flex;">
+        <ui:Instance template="QuickLoadView" name="SceneElementsView" />
+    </ui:VisualElement>
+</ui:UXML>

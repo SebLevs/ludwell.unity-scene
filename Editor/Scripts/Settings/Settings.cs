@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataManagerSettings : ScriptableObject
+    public class Settings : ScriptableObject
     {
         public static readonly string GenerateSceneDataKey = "GenerateSceneData";
     }
 
-    [CustomEditor(typeof(SceneDataManagerSettings))]
-    public class SceneDataManagerSettingsEditor : UnityEditor.Editor
+    [CustomEditor(typeof(Settings))]
+    public class SettingsEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
@@ -42,7 +42,7 @@ namespace Ludwell.Scene.Editor
 
             if (GUILayout.Button("Generate SceneData assets"))
             {
-                EditorPrefs.SetBool(SceneDataManagerSettings.GenerateSceneDataKey, true);
+                EditorPrefs.SetBool(Settings.GenerateSceneDataKey, true);
                 SceneDataGenerator.GenerateSceneData();
             }
 

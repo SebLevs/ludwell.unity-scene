@@ -15,7 +15,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly VisualElement _root;
         private readonly SceneDataView _view;
-        private readonly QuickLoadController _quickLoadController;
+        private readonly SceneElementsController _sceneElementsController;
 
         private readonly DelayedEditorUpdateAction _delayedRebuild;
 
@@ -43,7 +43,7 @@ namespace Ludwell.Scene.Editor
             _root = parent.Q(nameof(SceneDataView));
             _view = new SceneDataView(_root);
 
-            _quickLoadController = new QuickLoadController(_root);
+            _sceneElementsController = new SceneElementsController(_root);
             OnShow = AddRefreshViewSignal;
             OnHide = RemoveRefreshViewSignal;
 
@@ -73,12 +73,12 @@ namespace Ludwell.Scene.Editor
 
         private void AddRefreshViewSignal()
         {
-            Signals.Add<UISignals.RefreshView>(_quickLoadController.RebuildActiveListing);
+            Signals.Add<UISignals.RefreshView>(_sceneElementsController.RebuildActiveListing);
         }
 
         private void RemoveRefreshViewSignal()
         {
-            Signals.Remove<UISignals.RefreshView>(_quickLoadController.RebuildActiveListing);
+            Signals.Remove<UISignals.RefreshView>(_sceneElementsController.RebuildActiveListing);
         }
 
         private void Dispose(DetachFromPanelEvent evt)

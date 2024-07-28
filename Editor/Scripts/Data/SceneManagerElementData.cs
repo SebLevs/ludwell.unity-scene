@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Ludwell.Scene.Editor
 {
     [Serializable]
-    public class QuickLoadElementData : TagSubscriberWithTags, IComparable
+    public class SceneManagerElementData : TagSubscriberWithTags, IComparable
     {
         [HideInInspector] public SceneData SceneData;
         [HideInInspector] public bool IsOutsideAssetsFolder;
@@ -13,7 +13,7 @@ namespace Ludwell.Scene.Editor
         {
             if (obj == null) return 1;
 
-            var otherAsType = (QuickLoadElementData)obj;
+            var otherAsType = (SceneManagerElementData)obj;
             return string.Compare(ID, otherAsType.ID, StringComparison.InvariantCultureIgnoreCase);
         }
     }
