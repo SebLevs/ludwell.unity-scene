@@ -2,7 +2,7 @@ using System;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitUtilities.Editor
 {
     public abstract class AViewable
     {

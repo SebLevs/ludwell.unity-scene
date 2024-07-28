@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Theme.Editor
+namespace Ludwell.UIToolkitUtilities.Editor
 {
     public class ThemeManagerEditor : IDisposable
     {

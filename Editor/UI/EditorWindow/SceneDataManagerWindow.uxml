@@ -4,7 +4,7 @@
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/EditorWindow/SceneDataManagerWindow.uss?fileID=7433441132597879392&amp;guid=084f846459e63874ab1c3bd6f0a92815&amp;type=3#SceneDataManagerWindow" />
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="root" style="flex-grow: 1; flex-direction: column; overflow: visible;">
-        <Ludwell.Scene.Editor.ViewManager name="ViewManager" />
+        <Ludwell.UIToolkitUtilities.Editor.ViewManager name="ViewManager" />
         <ui:VisualElement name="views" style="flex-grow: 1; position: relative; flex-wrap: nowrap; flex-basis: 100%; flex-shrink: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 100%;">
             <ui:Instance template="SceneDataController" name="SceneDataView" />
             <ui:Instance template="TagsManagerView" name="TagsManagerView" />

@@ -3,11 +3,11 @@
     "rootNamespace": "Ludwell.Scene.Editor",
     "references": [
         "GUID:3ff281a81af69b744bec0f07c01af33f",
-        "GUID:fbd850241e7a2ad448c381c50b5da8aa",
-        "GUID:e5c5263d642932149a4d3efaecc00d0a",
         "GUID:0aac39bf52affa64b9eb75938480a575",
         "GUID:364de0b623b7c8c4eb2d6c52f2db6bd0",
-        "GUID:724c589468d85e94a9775795439d4e82"
+        "GUID:fbd850241e7a2ad448c381c50b5da8aa",
+        "GUID:724c589468d85e94a9775795439d4e82",
+        "GUID:e5c5263d642932149a4d3efaecc00d0a"
     ],
     "includePlatforms": [
         "Editor"
