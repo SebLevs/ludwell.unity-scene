@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,10 +16,19 @@ namespace Ludwell.Scene.Editor
             _model = new MoreInformationModel();
 
             _view.AboutCompanyButton.RegisterCallback<ClickEvent>(OpenCompanyWebsite);
+            _view.AboutCompanyButton.tooltip = MoreInformationModel.CompanyWebsiteURL;
+
             _view.DocumentationButton.RegisterCallback<ClickEvent>(OpenDocumentation);
+            _view.DocumentationButton.tooltip = _model.ReadmeURL;
+
             _view.DiscordServerButton.RegisterCallback<ClickEvent>(OpenDiscordJoinLink);
+            _view.DiscordServerButton.tooltip = MoreInformationModel.DiscordJoinLinkURL;
+
             _view.BrowseProductsButton.RegisterCallback<ClickEvent>(OpenCompanyAssetStorePage);
+            _view.BrowseProductsButton.tooltip = MoreInformationModel.LudwellAssetStorePageURL;
+
             _view.RateProductButton.RegisterCallback<ClickEvent>(OpenProductAssetStorePage);
+            _view.RateProductButton.tooltip = MoreInformationModel.ProductAssetStorePageURL;
         }
 
         public void Dispose()
@@ -43,7 +53,7 @@ namespace Ludwell.Scene.Editor
 
         private void OpenDocumentation(ClickEvent _)
         {
-            Application.OpenURL(MoreInformationModel.DocumentationURL);
+            EditorUtility.RevealInFinder(_model.ReadmeURL);
         }
 
         private void OpenCompanyWebsite(ClickEvent _)

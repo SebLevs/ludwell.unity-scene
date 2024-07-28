@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -50,19 +49,19 @@ namespace Ludwell.Scene.Editor
             AboutCompanyButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             AboutCompanyButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
 
-            DocumentationButton = _root.Q<Button>(DocumentationButtonName);
+            DocumentationButton = _root.Q<VisualElement>(DocumentationButtonName);
             DocumentationButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             DocumentationButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
 
-            DiscordServerButton = _root.Q<Button>(DiscordServerButtonName);
+            DiscordServerButton = _root.Q<VisualElement>(DiscordServerButtonName);
             DiscordServerButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             DiscordServerButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
 
-            BrowseProductsButton = _root.Q<Button>(BrowseProductsButtonName);
+            BrowseProductsButton = _root.Q<VisualElement>(BrowseProductsButtonName);
             BrowseProductsButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             BrowseProductsButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
 
-            RateProductButton = _root.Q<Button>(RateProductButtonName);
+            RateProductButton = _root.Q<VisualElement>(RateProductButtonName);
             RateProductButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
             RateProductButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
 
