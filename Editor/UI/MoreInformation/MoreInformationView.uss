@@ -74,6 +74,10 @@
     border-right-color: rgb(66, 66, 66);
     border-bottom-color: rgb(66, 66, 66);
     border-left-color: rgb(66, 66, 66);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
 }
 
 .icon-container {
@@ -113,6 +117,7 @@ Label {
     margin-bottom: 0;
     margin-left: 0;
     white-space: normal;
+    align-self: center;
 }
 
 .scale-animation {
@@ -132,4 +137,26 @@ Label {
 .vertical-separator {
     height: 20px;
     width: 100%;
+}
+
+.rate-product {
+    flex-direction: column;
+    height: 100px;
+}
+
+.scale-animation__down {
+}
+
+.scale-animation__down:hover {
+    transition-duration: 0.02s;
+    scale: 1 1;
+    transition-timing-function: ease;
+}
+
+.call-to-action__feedback {
+    -unity-text-align: middle-center;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
 }

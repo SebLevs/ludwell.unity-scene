@@ -7,53 +7,61 @@
                     <ui:VisualElement name="icon-container" class="icon-container header-icon">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell&apos;);" />
                     </ui:VisualElement>
-                    <ui:Label text="A Ludwell Studio tool" class="scale-animation" />
+                    <ui:Label text="A Ludwell Studio tool" />
                     <ui:VisualElement name="icon-container" class="icon-container header-icon" style="right: -40px; left: auto;">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell&apos;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="line-separator" class="line-separator" />
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                <ui:VisualElement name="about-company" class="vertical-slide scale-animation">
                     <ui:VisualElement name="icon-container" class="icon-container">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" />
+                        <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" class="scale-animation" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                <ui:Button name="about-company" class="vertical-slide scale-animation" style="display: none;">
                     <ui:VisualElement name="icon-container" class="icon-container">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/icon_more-information&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/Logo_Ludwell&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Documentation" display-tooltip-when-elided="false" name="text" />
+                        <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" class="scale-animation" />
                     </ui:VisualElement>
-                </ui:VisualElement>
+                </ui:Button>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                <ui:Button name="documentation" class="vertical-slide scale-animation">
+                    <ui:VisualElement name="icon-container" class="icon-container">
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_documentation&apos;);" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="call-to-action" class="call-to-action">
+                        <ui:Label text="Documentation" display-tooltip-when-elided="false" name="text" class="scale-animation" />
+                    </ui:VisualElement>
+                </ui:Button>
+                <ui:VisualElement name="space-between" class="vertical-separator" />
+                <ui:Button name="discord-server" class="vertical-slide scale-animation">
                     <ui:VisualElement name="icon-container" class="icon-container">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/discord_32_purple&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Join our Discord server" name="text" />
+                        <ui:Label text="Join our Discord server" name="text" class="scale-animation" />
                     </ui:VisualElement>
-                </ui:VisualElement>
+                </ui:Button>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation">
+                <ui:Button name="browse-products" class="vertical-slide scale-animation">
                     <ui:VisualElement name="icon-container" class="icon-container">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/icon_more-information&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_shop&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Browse our products" name="text" />
+                        <ui:Label text="Browse our products" name="text" class="scale-animation" />
                     </ui:VisualElement>
-                </ui:VisualElement>
+                </ui:Button>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="vertical-slide" class="vertical-slide scale-animation" style="flex-direction: column; height: 100px;">
-                    <ui:VisualElement name="call-to-action" class="call-to-action" style="-unity-text-align: middle-center; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px;">
-                        <ui:Label text="Is this tool useful?" name="text" />
-                        <ui:Label text="Give us your feedback!" name="text" />
+                <ui:Button name="rate-product" class="vertical-slide scale-animation rate-product">
+                    <ui:VisualElement name="call-to-action" class="call-to-action call-to-action__feedback">
+                        <ui:Label text="Is this tool useful?" name="text" class="scale-animation" />
+                        <ui:Label text="Give us your feedback!" name="text" class="scale-animation" />
                     </ui:VisualElement>
                     <ui:VisualElement name="stars" style="flex-direction: row;">
                         <ui:VisualElement name="1" class="icon-container">
@@ -72,7 +80,7 @@
                             <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: resource(&apos;Sprites/MoreInformation/icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                </ui:VisualElement>
+                </ui:Button>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
             </ui:VisualElement>
         </ui:VisualElement>

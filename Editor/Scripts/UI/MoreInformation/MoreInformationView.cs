@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -9,10 +10,22 @@ namespace Ludwell.Scene.Editor
         private const string ModalOverlayName = "modal-overlay";
         private const string MoreInformationPanelName = "panel__more-information";
 
+        private const string AboutCompanyButtonName = "about-company";
+        private const string DocumentationButtonName = "documentation";
+        private const string DiscordServerButtonName  = "discord-server";
+        private const string BrowseProductsButtonName = "browse-products";
+        private const string RateProductButtonName = "rate-product";
+        
         private readonly VisualElement _root;
 
         private readonly VisualElement _modalOverlay;
         private readonly VisualElement _moreInformationPanel;
+
+        public VisualElement AboutCompanyButton { get;  }
+        public VisualElement DocumentationButton { get;  }
+        public VisualElement DiscordServerButton { get;  }
+        public VisualElement BrowseProductsButton { get;  }
+        public VisualElement RateProductButton { get;  }
 
         private readonly VisualElement[] _stars = new VisualElement[5];
 
@@ -30,6 +43,26 @@ namespace Ludwell.Scene.Editor
             _moreInformationPanel = _root.Q<VisualElement>(MoreInformationPanelName);
             _moreInformationPanel.RegisterCallback<ClickEvent>(PreventPanelBubbleUp);
 
+            AboutCompanyButton = _root.Q<VisualElement>(AboutCompanyButtonName);
+            AboutCompanyButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
+            AboutCompanyButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            DocumentationButton = _root.Q<Button>(DocumentationButtonName);
+            DocumentationButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
+            DocumentationButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            DiscordServerButton = _root.Q<Button>(DiscordServerButtonName);
+            DiscordServerButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
+            DiscordServerButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            BrowseProductsButton = _root.Q<Button>(BrowseProductsButtonName);
+            BrowseProductsButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
+            BrowseProductsButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            RateProductButton = _root.Q<Button>(RateProductButtonName);
+            BrowseProductsButton.RegisterCallback<MouseDownEvent>(MouseDownEvent);
+            BrowseProductsButton.RegisterCallback<MouseUpEvent>(MouseUpEvent);
+
             for (var index = 1; index < _stars.Length + 1; index++)
             {
                 _stars[index - 1] = _root.Q<VisualElement>(index.ToString());
@@ -43,6 +76,21 @@ namespace Ludwell.Scene.Editor
             _modalOverlay.UnregisterCallback<ClickEvent>(Hide);
 
             _moreInformationPanel.UnregisterCallback<ClickEvent>(PreventPanelBubbleUp);
+            
+            AboutCompanyButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
+            AboutCompanyButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            DocumentationButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
+            DocumentationButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            DiscordServerButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
+            DiscordServerButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            BrowseProductsButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
+            BrowseProductsButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
+            
+            BrowseProductsButton.UnregisterCallback<MouseDownEvent>(MouseDownEvent);
+            BrowseProductsButton.UnregisterCallback<MouseUpEvent>(MouseUpEvent);
 
             for (var index = 1; index < _stars.Length + 1; index++)
             {
@@ -65,6 +113,20 @@ namespace Ludwell.Scene.Editor
         {
             evt.PreventDefault();
             evt.StopPropagation();
+        }
+        
+        private void MouseDownEvent(MouseDownEvent evt)
+        {
+            var targetAsVisualElement = evt.target as VisualElement;
+            targetAsVisualElement.AddToClassList("scale-animation__down");
+            targetAsVisualElement.RemoveFromClassList("scale-animation");
+        }
+        
+        private void MouseUpEvent(MouseUpEvent evt)
+        {
+            var targetAsVisualElement = evt.target as VisualElement;
+            targetAsVisualElement.RemoveFromClassList("scale-animation__down");
+            targetAsVisualElement.AddToClassList("scale-animation");
         }
 
         private void ScaleStarsUpTo(MouseEnterEvent evt)
