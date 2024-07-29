@@ -18,7 +18,7 @@ namespace Ludwell.Scene.Editor
             _view = new TagsShelfView(parent);
             _view.OnOptionClicked += onOptionClicked;
         }
-        
+
         public void Dispose()
         {
             _view.Dispose();

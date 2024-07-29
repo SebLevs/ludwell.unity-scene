@@ -48,11 +48,11 @@ namespace Ludwell.Scene.Editor
             InitializeListViewHandler();
             InitializeDropdownSearchField();
         }
-        
+
         public void Dispose()
         {
             _tagsShelfController.Dispose();
-            
+
             _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
 
             _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
@@ -157,7 +157,6 @@ namespace Ludwell.Scene.Editor
             }
 
             ResourcesLocator.SaveTagContainer();
-            // Signals.Dispatch<UISignals.RefreshView>();
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)

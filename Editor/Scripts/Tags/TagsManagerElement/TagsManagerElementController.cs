@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsManagerElementController : VisualElement, IListViewVisualElement<Tag>
+    public class TagsManagerElementController : VisualElement, IListViewVisualElement<Tag>, IDisposable
     {
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsManagerElementView), "Uxml_" + nameof(TagsManagerElementView));
@@ -36,7 +36,18 @@ namespace Ludwell.Scene.Editor
             _view.TextField.RegisterCallback<BlurEvent>(SolveBlurred);
             _view.TextField.RegisterCallback<KeyDownEvent>(OnKeyRevertName);
 
-            RegisterCallback<DetachFromPanelEvent>(Dispose);
+            Services.Get<Disposer>().Add(this);
+        }
+
+        public void Dispose()
+        {
+            _view.OnAdd -= ExecuteOnAdd;
+            _view.OnRemove -= ExecuteOnRemove;
+
+            _view.TextField.UnregisterCallback<BlurEvent>(SolveBlurred);
+            _view.TextField.UnregisterCallback<KeyDownEvent>(OnKeyRevertName);
+
+            _view.Dispose();
         }
 
         public void CacheData(Tag data)
@@ -115,16 +126,6 @@ namespace Ludwell.Scene.Editor
         private void ExecuteOnRemove()
         {
             OnRemoveFromShelf?.Invoke(_model);
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            _view.OnAdd -= ExecuteOnAdd;
-            _view.OnRemove -= ExecuteOnRemove;
-
-            _view.TextField.UnregisterCallback<BlurEvent>(SolveBlurred);
-            _view.TextField.UnregisterCallback<KeyDownEvent>(OnKeyRevertName);
         }
     }
 }
