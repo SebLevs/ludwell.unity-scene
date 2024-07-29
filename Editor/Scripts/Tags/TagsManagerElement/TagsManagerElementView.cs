@@ -33,8 +33,17 @@ namespace Ludwell.Scene.Editor
 
             TextField = _root.Q<TextField>(TagTextFieldName);
             TextField.RegisterValueChangedCallback(ValueChangedAction);
+        }
 
-            _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
+        public void Dispose()
+        {
+            var addButton = _root.Q<Button>(AddButtonName);
+            addButton.clicked -= AddButtonAction;
+
+            var removeButton = _root.Q<Button>(RemoveButtonName);
+            removeButton.clicked -= RemoveButtonAction;
+
+            TextField.UnregisterValueChangedCallback(ValueChangedAction);
         }
 
         public void SetValue(string value)
@@ -66,19 +75,6 @@ namespace Ludwell.Scene.Editor
         private void ValueChangedAction(ChangeEvent<string> evt)
         {
             OnValueChanged?.Invoke(evt.newValue);
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _root.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-
-            var addButton = _root.Q<Button>(AddButtonName);
-            addButton.clicked -= AddButtonAction;
-
-            var removeButton = _root.Q<Button>(RemoveButtonName);
-            removeButton.clicked -= RemoveButtonAction;
-
-            TextField.UnregisterValueChangedCallback(ValueChangedAction);
         }
     }
 }

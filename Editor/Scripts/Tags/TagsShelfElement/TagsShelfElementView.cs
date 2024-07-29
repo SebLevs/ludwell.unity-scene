@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsShelfElementView
+    public class TagsShelfElementView : IDisposable
     {
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
@@ -33,8 +33,13 @@ namespace Ludwell.Scene.Editor
 
             _searchButton = _view.Q<Button>(SearchButtonName);
             _searchButton.clicked += SearchButtonAction;
+        }
 
-            _view.RegisterCallback<DetachFromPanelEvent>(Dispose);
+        public void Dispose()
+        {
+            _removeButton.clicked -= RemoveButtonAction;
+            _mainButton.clicked -= MainButtonAction;
+            _searchButton.clicked -= SearchButtonAction;
         }
 
         public void SetValue(string text)
@@ -74,15 +79,6 @@ namespace Ludwell.Scene.Editor
         private void SearchButtonAction()
         {
             OnSearchButtonClicked?.Invoke();
-        }
-
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            _view.UnregisterCallback<DetachFromPanelEvent>(Dispose);
-
-            _removeButton.clicked -= RemoveButtonAction;
-            _mainButton.clicked -= MainButtonAction;
-            _searchButton.clicked -= SearchButtonAction;
         }
     }
 }

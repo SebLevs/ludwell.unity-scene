@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
@@ -5,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsShelfElementController : VisualElement
+    public class TagsShelfElementController : VisualElement, IDisposable
     {
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsShelfElementView), "Uxml_" + nameof(TagsShelfElementView));
@@ -40,7 +41,21 @@ namespace Ludwell.Scene.Editor
 
             RegisterCallback<AttachToPanelEvent>(InitializeDropdown);
 
-            RegisterCallback<DetachFromPanelEvent>(Dispose);
+            Services.Get<Disposer>().Add(this);
+        }
+
+        public void Dispose()
+        {
+            _currentSelection = null;
+
+            _view.OnRemoveButtonClicked -= RemoveFromController;
+            _view.OnMainButtonClicked -= SelectSelf;
+            _view.OnSearchButtonClicked -= SearchWithData;
+            _view.OnSearchButtonClicked -= _view.ToggleVisual;
+
+            _view.Dispose();
+
+            UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
 
         public void SetTagShelfController(TagsShelfController tagsShelfController)
@@ -83,20 +98,6 @@ namespace Ludwell.Scene.Editor
         private void SearchWithData()
         {
             _dropdownSearchField.ListWithStrategy(_listingStrategyName, _model.ID);
-        }
-        
-        private void Dispose(DetachFromPanelEvent _)
-        {
-            UnregisterCallback<DetachFromPanelEvent>(Dispose);
-
-            _currentSelection = null;
-
-            _view.OnRemoveButtonClicked -= RemoveFromController;
-            _view.OnMainButtonClicked -= SelectSelf;
-            _view.OnSearchButtonClicked -= SearchWithData;
-            _view.OnSearchButtonClicked -= _view.ToggleVisual;
-
-            UnregisterCallback<AttachToPanelEvent>(InitializeDropdown);
         }
     }
 }

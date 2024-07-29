@@ -9,7 +9,7 @@ namespace Ludwell.Scene.Editor
     public class TagSubscriberWithTags : IListable
     {
         [field: SerializeField] public List<Tag> Tags { get; set; } = new();
-        
+
         [SerializeField] private string _name;
 
         public string ID
