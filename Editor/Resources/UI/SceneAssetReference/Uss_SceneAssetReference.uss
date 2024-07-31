@@ -1,3 +1,11 @@
+:root {
+    margin-bottom: 1px;
+    margin-right: -2px;
+    margin-left: 3px;
+    margin-top: 1px;
+    overflow: hidden;
+}
+
 ObjectField {
     margin-top: 0;
     margin-right: 0;
@@ -6,9 +14,9 @@ ObjectField {
 }
 
 ObjectField > Label {
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    -unity-text-align: middle-left;
+    min-width: 119.8px;
+    width: 40%;
+}
+
+ObjectField > VisualElement {
 }
