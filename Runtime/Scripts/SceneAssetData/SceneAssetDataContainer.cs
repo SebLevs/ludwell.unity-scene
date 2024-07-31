@@ -7,7 +7,7 @@ namespace Ludwell.Scene
     public class SceneAssetDataContainer : ScriptableObject
     {
         private static SceneAssetDataContainer _instance;
-        
+
         [SerializeField] private List<SceneAssetDataBinder> _dataBinders = new();
 
         public static SceneAssetDataContainer Instance

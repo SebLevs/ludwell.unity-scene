@@ -14,7 +14,7 @@ namespace Ludwell.Scene
             {
                 return string.Compare(Key, objectAs.Key, StringComparison.Ordinal);
             }
-            
+
             throw new ArgumentException($"Parameter is not a {nameof(SceneAssetDataBinder)}");
         }
     }
