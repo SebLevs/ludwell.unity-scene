@@ -15,8 +15,11 @@ ObjectField {
 
 ObjectField > Label {
     min-width: 119.8px;
+    flex-shrink: 0;
     width: 40%;
 }
 
 ObjectField > VisualElement {
+    flex-grow: 1;
+    flex-shrink: 0;
 }
