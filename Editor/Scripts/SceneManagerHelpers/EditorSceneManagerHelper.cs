@@ -69,6 +69,15 @@ namespace Ludwell.Scene.Editor
             ArrayUtility.Add(ref buildSettingsScenes, new EditorBuildSettingsScene(path, true));
             EditorBuildSettings.scenes = buildSettingsScenes;
         }
+        
+        public static void AddSceneToBuildSettings(string path)
+        {
+            if (IsSceneInBuildSettings(path)) return;
+
+            var buildSettingsScenes = EditorBuildSettings.scenes;
+            ArrayUtility.Add(ref buildSettingsScenes, new EditorBuildSettingsScene(path, true));
+            EditorBuildSettings.scenes = buildSettingsScenes;
+        }
 
         public static void RemoveSceneFromBuildSettings(SceneData sceneData)
         {

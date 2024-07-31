@@ -6,6 +6,43 @@
     overflow: hidden;
 }
 
+#help-box {
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    border-left-color: rgb(50, 50, 50);
+    border-right-color: rgb(50, 50, 50);
+    border-top-color: rgb(50, 50, 50);
+    border-bottom-color: rgb(50, 50, 50);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    background-color: rgb(70, 70, 70);
+    margin-bottom: 2px;
+}
+
+#help-box > #visuals {
+    width: 100%;
+    flex-direction: row;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+}
+
+#help-box > #visuals > #icon {
+    margin-right: 8px;
+}
+
+#texts {
+}
+
 ObjectField {
     margin-top: 0;
     margin-right: 0;
