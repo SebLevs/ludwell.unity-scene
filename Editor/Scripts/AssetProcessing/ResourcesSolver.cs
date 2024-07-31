@@ -31,6 +31,7 @@ namespace Ludwell.Scene.Editor
             { nameof(Settings), (typeof(Settings), EditorPath) },
             { nameof(SceneManagerElements), (typeof(SceneManagerElements), EditorPath) },
             { nameof(TagContainer), (typeof(TagContainer), EditorPath) },
+            { nameof(SceneAssetDataContainer), (typeof(SceneAssetDataContainer), RuntimePath)}
         };
 
         static ResourcesSolver()
@@ -38,6 +39,7 @@ namespace Ludwell.Scene.Editor
             ResourcesLocator.GetSceneDataManagerSettings();
             ResourcesLocator.GetQuickLoadElements();
             ResourcesLocator.GetTagContainer();
+            EnsureAssetExistence(typeof(SceneAssetDataContainer), out _);
         }
 
         public static ScriptableObject EnsureAssetExistence(Type type, out bool existed)
