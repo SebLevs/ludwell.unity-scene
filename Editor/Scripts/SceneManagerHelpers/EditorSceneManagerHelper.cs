@@ -11,7 +11,7 @@ namespace Ludwell.Scene.Editor
         {
             EditorSceneManager.OpenScene(path);
         }
-        
+
         public static void OpenScene(SceneData sceneData)
         {
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData));
@@ -21,7 +21,7 @@ namespace Ludwell.Scene.Editor
         {
             EditorSceneManager.OpenScene(GetSceneAssetPath(sceneData), OpenSceneMode.Additive);
         }
-        
+
         /// <summary>
         /// Close a scene from the hierarchy.
         /// </summary>
@@ -46,7 +46,7 @@ namespace Ludwell.Scene.Editor
             var fullPath = AssetDatabase.GetAssetPath(sceneData);
             return Path.ChangeExtension(fullPath, ".unity");
         }
-        
+
         public static bool IsSceneInBuildSettings(string sceneAssetPath)
         {
             var buildScenes = EditorBuildSettings.scenes;
@@ -69,7 +69,7 @@ namespace Ludwell.Scene.Editor
             ArrayUtility.Add(ref buildSettingsScenes, new EditorBuildSettingsScene(path, true));
             EditorBuildSettings.scenes = buildSettingsScenes;
         }
-        
+
         public static void AddSceneToBuildSettings(string path)
         {
             if (IsSceneInBuildSettings(path)) return;

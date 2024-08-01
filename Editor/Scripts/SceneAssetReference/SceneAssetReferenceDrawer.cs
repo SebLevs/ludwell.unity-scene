@@ -39,12 +39,10 @@ namespace Ludwell.Scene.Editor
             root.AddHierarchyFromUxml(UxmlPath);
             root.AddStyleFromUss(UssPath);
 
-            var lightTheme = DefaultThemes.GetLightThemeStyleSheet();
-            var darkTheme = DefaultThemes.GetDarkThemeStyleSheet();
-            _themeManagerEditor = new ThemeManagerEditor(root, darkTheme, lightTheme);
+            root.RegisterCallback<DetachFromPanelEvent>(Dispose);
 
             root.RegisterCallback<AttachToPanelEvent>(AddToDrawers);
-            root.RegisterCallback<DetachFromPanelEvent>(RemoveFromDrawers);
+            root.RegisterCallback<AttachToPanelEvent>(CacheThemeManager);
 
             _helpBox = root.Q<VisualElement>(HelpBoxName);
             HideHelpBox();
@@ -82,6 +80,19 @@ namespace Ludwell.Scene.Editor
             return root;
         }
 
+        private void CacheThemeManager(AttachToPanelEvent evt)
+        {
+            var lightTheme = DefaultThemes.GetLightThemeStyleSheet();
+            var darkTheme = DefaultThemes.GetDarkThemeStyleSheet();
+            _themeManagerEditor = new ThemeManagerEditor(evt.target as VisualElement, darkTheme, lightTheme);
+        }
+
+        private void Dispose(DetachFromPanelEvent evt)
+        {
+            RemoveFromDrawers();
+            _themeManagerEditor.Dispose();
+        }
+
         public static void OnBuildSettingsChangedSolveHelpBoxes()
         {
             foreach (var drawer in _drawers)
@@ -95,7 +106,7 @@ namespace Ludwell.Scene.Editor
             _drawers.Add(this);
         }
 
-        private void RemoveFromDrawers(DetachFromPanelEvent evt)
+        private void RemoveFromDrawers()
         {
             _drawers.Remove(this);
         }
