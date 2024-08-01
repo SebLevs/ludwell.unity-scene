@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ludwell.UIToolkitUtilities;
@@ -13,6 +14,8 @@ namespace Ludwell.Scene.Editor
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
+        private static List<SceneAssetReferenceDrawer> _drawers = new();
+
         private readonly string UxmlPath =
             Path.Combine("UI", nameof(SceneAssetReference), "Uxml_" + nameof(SceneAssetReference));
 
@@ -32,6 +35,9 @@ namespace Ludwell.Scene.Editor
             var root = new VisualElement();
             root.AddHierarchyFromUxml(UxmlPath);
             root.AddStyleFromUss(UssPath);
+
+            root.RegisterCallback<AttachToPanelEvent>(AddToDrawers);
+            root.RegisterCallback<DetachFromPanelEvent>(RemoveFromDrawers);
 
             _helpBox = root.Q<VisualElement>(HelpBoxName);
             HideHelpBox();
@@ -69,23 +75,45 @@ namespace Ludwell.Scene.Editor
             return root;
         }
 
-        private void SolveHelpBox(ChangeEvent<Object> evt)
+        public static void OnBuildSettingsChangedSolveHelpBoxes()
         {
-            var data = _sceneAssetReference?.Value();
+            foreach (var drawer in _drawers)
+            {
+                drawer.SolveHelpBox(null);
+            }
+        }
 
-            if (data == null)
+        private void AddToDrawers(AttachToPanelEvent evt)
+        {
+            _drawers.Add(this);
+        }
+
+        private void RemoveFromDrawers(DetachFromPanelEvent evt)
+        {
+            _drawers.Remove(this);
+        }
+
+        private void SolveHelpBox(ChangeEvent<Object> _)
+        {
+            if (_sceneAssetReference.IsKeyEmpty)
             {
                 HideHelpBox();
                 return;
             }
 
+            var data = _sceneAssetReference.Value();
+
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
             {
-                // todo: if scene asset is addressable, do not show the panel
+                Debug.LogError("todo: if scene asset is addressable, do not show the panel");
+
                 _helpBoxButton.text = $"Add {data.Name} to Build Settings";
                 ShowHelpBox();
+                return;
             }
+
+            HideHelpBox();
         }
 
         private void ShowHelpBox()
@@ -101,7 +129,6 @@ namespace Ludwell.Scene.Editor
         private void AddToBuildSettings()
         {
             EditorSceneManagerHelper.AddSceneToBuildSettings(_sceneAssetReference.Value().Path);
-            HideHelpBox();
         }
 
         private void UpdatePropertyCache(ChangeEvent<Object> evt)

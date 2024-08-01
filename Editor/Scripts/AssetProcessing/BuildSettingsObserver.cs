@@ -20,6 +20,7 @@ namespace Ludwell.Scene.Editor
             _buildSettingsCount = EditorBuildSettings.scenes.Length;
 
             Signals.Dispatch<UISignals.RefreshView>();
+            SceneAssetReferenceDrawer.OnBuildSettingsChangedSolveHelpBoxes();
         }
     }
 }
