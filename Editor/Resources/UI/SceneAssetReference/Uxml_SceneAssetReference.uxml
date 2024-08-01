@@ -4,7 +4,7 @@
         <ui:VisualElement name="help-box" style="flex-grow: 1;">
             <ui:VisualElement name="visuals">
                 <ui:VisualElement name="icon" style="width: 16px; height: 16px; background-image: resource(&apos;Sprites/icon_more-information&apos;);" />
-                <ui:Label text="The following SceneAsset is not in Build Settings" name="title" />
+                <ui:Label text="SceneAsset not in Build Settings" name="title" />
             </ui:VisualElement>
             <ui:Button text="Add to build settings" name="add-to-build-settings" />
         </ui:VisualElement>
