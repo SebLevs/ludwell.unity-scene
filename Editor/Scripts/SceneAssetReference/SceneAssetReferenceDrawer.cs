@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ludwell.UIToolkitUtilities;
+using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
@@ -21,7 +22,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly string UssPath =
             Path.Combine("UI", nameof(SceneAssetReference), "Uss_" + nameof(SceneAssetReference));
-
+        
         private const string HelpBoxName = "help-box";
 
         private SceneAssetReference _sceneAssetReference;
@@ -30,11 +31,18 @@ namespace Ludwell.Scene.Editor
         private Button _helpBoxButton;
         private ObjectField _objectField;
 
+        private ThemeManagerEditor _themeManagerEditor;
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
+            
             var root = new VisualElement();
             root.AddHierarchyFromUxml(UxmlPath);
             root.AddStyleFromUss(UssPath);
+
+            var lightTheme = DefaultThemes.GetLightThemeStyleSheet();
+            var darkTheme = DefaultThemes.GetDarkThemeStyleSheet();
+            _themeManagerEditor = new ThemeManagerEditor(root, darkTheme, lightTheme);
 
             root.RegisterCallback<AttachToPanelEvent>(AddToDrawers);
             root.RegisterCallback<DetachFromPanelEvent>(RemoveFromDrawers);

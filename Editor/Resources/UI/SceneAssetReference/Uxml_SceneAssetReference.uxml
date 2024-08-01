@@ -1,7 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Resources/UI/SceneAssetReference/Uss_SceneAssetReference.uss?fileID=7433441132597879392&amp;guid=b1ab718f2ebbf094f97ad15b770c8819&amp;type=3#Uss_SceneAssetReference" />
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="parent" style="flex-grow: 1;">
-        <ui:VisualElement name="help-box" style="flex-grow: 1;">
+        <ui:VisualElement name="help-box" class="list-view-theme" style="flex-grow: 1;">
             <ui:VisualElement name="visuals">
                 <ui:VisualElement name="icon" style="width: 16px; height: 16px; background-image: resource(&apos;Sprites/icon_more-information&apos;);" />
                 <ui:Label text="SceneAsset not in Build Settings" name="title" />

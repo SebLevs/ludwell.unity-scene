@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitUtilities.Editor
@@ -13,15 +14,18 @@ namespace Ludwell.UIToolkitUtilities.Editor
         public ThemeManagerEditor(VisualElement element, StyleSheet darkTheme, StyleSheet lightTheme)
         {
             _root = element;
+            _root.styleSheets.Add(DefaultThemes.GetThemedClass());
+
             _darkTheme = darkTheme;
             _lightTheme = lightTheme;
-            
-            _root.styleSheets.Remove(_lightTheme);
+
             _root.styleSheets.Remove(_darkTheme);
-            
+            _root.styleSheets.Remove(_lightTheme);
+
+            SolveTheme();
             EditorApplication.delayCall += SolveTheme;
         }
-        
+
         public void Dispose()
         {
             EditorApplication.delayCall -= SolveTheme;
@@ -29,6 +33,7 @@ namespace Ludwell.UIToolkitUtilities.Editor
 
         private void SolveTheme()
         {
+            Debug.LogError("solve");
             if (EditorGUIUtility.isProSkin)
             {
                 _root.styleSheets.Remove(_lightTheme);

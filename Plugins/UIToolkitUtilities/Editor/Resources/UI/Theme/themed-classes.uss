@@ -43,10 +43,10 @@
     color: var(--text-theme-font-color);
 }
 
-#icon{
+#icon {
     -unity-background-image-tint-color: var(--image-tint-colorr);
 }
 
-#unity-search{
+#unity-search {
     -unity-background-image-tint-color: var(--image-tint-colorr);
 }
