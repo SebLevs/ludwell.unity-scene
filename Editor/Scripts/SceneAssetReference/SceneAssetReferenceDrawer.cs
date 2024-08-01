@@ -22,7 +22,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly string UssPath =
             Path.Combine("UI", nameof(SceneAssetReference), "Uss_" + nameof(SceneAssetReference));
-        
+
         private const string HelpBoxName = "help-box";
 
         private SceneAssetReference _sceneAssetReference;
@@ -35,7 +35,6 @@ namespace Ludwell.Scene.Editor
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            
             var root = new VisualElement();
             root.AddHierarchyFromUxml(UxmlPath);
             root.AddStyleFromUss(UssPath);

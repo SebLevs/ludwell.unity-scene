@@ -1,6 +1,5 @@
 using System;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitUtilities.Editor
@@ -33,7 +32,6 @@ namespace Ludwell.UIToolkitUtilities.Editor
 
         private void SolveTheme()
         {
-            Debug.LogError("solve");
             if (EditorGUIUtility.isProSkin)
             {
                 _root.styleSheets.Remove(_lightTheme);
