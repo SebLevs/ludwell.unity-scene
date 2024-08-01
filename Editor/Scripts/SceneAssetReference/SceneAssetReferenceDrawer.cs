@@ -52,6 +52,7 @@ namespace Ludwell.Scene.Editor
             _helpBoxButton.clicked += AddToBuildSettings;
 
             _objectField = root.Q<ObjectField>();
+            _objectField.Q<Label>().text = property.displayName;
 
             _sceneAssetReference ??= fieldInfo.GetValue(property.serializedObject.targetObject) as SceneAssetReference;
 
@@ -143,7 +144,7 @@ namespace Ludwell.Scene.Editor
         {
             _helpBox.style.display = DisplayStyle.None;
         }
-
+        
         private void AddToBuildSettings()
         {
             EditorSceneManagerHelper.AddSceneToBuildSettings(_sceneAssetReference.Value().Path);
