@@ -8,7 +8,7 @@ namespace Ludwell.Scene
     {
         /// <summary>
         /// The SceneAsset path GUID.<br/>
-        /// Used in <see cref="Value"/> to return information about the referenced SceneAsset.
+        /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
         /// </summary>
         [SerializeField] private string Key;
 
@@ -21,7 +21,7 @@ namespace Ludwell.Scene
             Key = key;
         }
 
-        public SceneAssetData Value()
+        public SceneAssetData Data()
         {
             if (string.IsNullOrEmpty(Key)) return null;
 

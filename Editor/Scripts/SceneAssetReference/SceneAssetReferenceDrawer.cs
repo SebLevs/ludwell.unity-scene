@@ -56,7 +56,7 @@ namespace Ludwell.Scene.Editor
 
             _sceneAssetReference ??= fieldInfo.GetValue(property.serializedObject.targetObject) as SceneAssetReference;
 
-            var data = _sceneAssetReference?.Value();
+            var data = _sceneAssetReference?.Data();
             if (data != null)
             {
                 _objectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
@@ -120,7 +120,7 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var data = _sceneAssetReference.Value();
+            var data = _sceneAssetReference.Data();
 
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
@@ -147,7 +147,7 @@ namespace Ludwell.Scene.Editor
         
         private void AddToBuildSettings()
         {
-            EditorSceneManagerHelper.AddSceneToBuildSettings(_sceneAssetReference.Value().Path);
+            EditorSceneManagerHelper.AddSceneToBuildSettings(_sceneAssetReference.Data().Path);
         }
 
         private void UpdatePropertyCache(ChangeEvent<Object> evt)
