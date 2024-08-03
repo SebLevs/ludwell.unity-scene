@@ -1,4 +1,4 @@
-namespace Ludwell.UIToolkitElements.Editor
+namespace Ludwell.UIToolkitElements
 {
     public interface IListable
     {

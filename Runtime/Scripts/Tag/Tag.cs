@@ -1,8 +1,8 @@
 using System;
-using Ludwell.UIToolkitElements.Editor;
+using Ludwell.UIToolkitElements;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.Scene
 {
     [Serializable]
     public sealed class Tag : IComparable, IListable

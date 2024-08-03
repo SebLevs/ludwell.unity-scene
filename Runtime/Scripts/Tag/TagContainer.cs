@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.Scene
 {
     [Serializable]
     public class TagContainer : ScriptableObject

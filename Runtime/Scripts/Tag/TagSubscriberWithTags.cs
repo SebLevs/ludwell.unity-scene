@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Ludwell.UIToolkitElements.Editor;
+using Ludwell.UIToolkitElements;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.Scene
 {
     [Serializable]
     public class TagSubscriberWithTags : IListable

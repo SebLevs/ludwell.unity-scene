@@ -29,8 +29,8 @@ namespace Ludwell.Scene.Editor
         public static readonly Dictionary<string, (Type, string[])> ScriptableAssets = new()
         {
             { nameof(Settings), (typeof(Settings), EditorPath) },
-            { nameof(SceneManagerElements), (typeof(SceneManagerElements), EditorPath) },
-            { nameof(TagContainer), (typeof(TagContainer), EditorPath) },
+            { nameof(SceneManagerElements), (typeof(SceneManagerElements), RuntimePath) },
+            { nameof(TagContainer), (typeof(TagContainer), RuntimePath) },
             { nameof(SceneAssetDataContainer), (typeof(SceneAssetDataContainer), RuntimePath)}
         };
 
