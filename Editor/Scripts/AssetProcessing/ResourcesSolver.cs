@@ -29,15 +29,15 @@ namespace Ludwell.Scene.Editor
         public static readonly Dictionary<string, (Type, string[])> ScriptableAssets = new()
         {
             { nameof(Settings), (typeof(Settings), EditorPath) },
-            { nameof(TagContainer), (typeof(TagContainer), RuntimePath) },
-            { nameof(SceneAssetDataContainer), (typeof(SceneAssetDataContainer), RuntimePath)}
+            { nameof(Tags), (typeof(Tags), RuntimePath) },
+            { nameof(SceneAssetDataBinders), (typeof(SceneAssetDataBinders), RuntimePath)}
         };
 
         static ResourcesSolver()
         {
             ResourcesLocator.GetSceneDataManagerSettings();
-            ResourcesLocator.GetTagContainer();
-            EnsureAssetExistence(typeof(SceneAssetDataContainer), out _);
+            ResourcesLocator.GetTags();
+            ResourcesLocator.GetSceneAssetDataBinders();
         }
 
         public static ScriptableObject EnsureAssetExistence(Type type, out bool existed)

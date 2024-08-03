@@ -22,10 +22,10 @@ namespace Ludwell.Scene.Editor
         {
             if (GUILayout.Button("Clear all"))
             {
-                ResourcesLocator.GetTagContainer().Tags.Clear();
-                ResourcesLocator.GetSceneAssetDataContainer().DataBinders.Clear();
+                ResourcesLocator.GetTags().Elements.Clear();
+                ResourcesLocator.GetSceneAssetDataBinders().Elements.Clear();
 
-                ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
+                ResourcesLocator.SaveSceneAssetDataBindersAndTagsDelayed();
                 AssetDatabase.Refresh();
             }
 
@@ -33,8 +33,8 @@ namespace Ludwell.Scene.Editor
 
             if (GUILayout.Button("Repopulate SceneAsset list"))
             {
-                ResourcesLocator.GetTagContainer().Tags.Clear();
-                ResourcesLocator.GetSceneAssetDataContainer().DataBinders.Clear();
+                ResourcesLocator.GetTags().Elements.Clear();
+                ResourcesLocator.GetSceneAssetDataBinders().Elements.Clear();
                 SceneDataGenerator.PopulateQuickLoadElements();
             }
 

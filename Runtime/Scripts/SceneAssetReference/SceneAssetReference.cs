@@ -12,13 +12,13 @@ namespace Ludwell.Scene
         /// </summary>
         [SerializeField] private string Key;
 
-        public bool IsValid => string.IsNullOrEmpty(Key) && SceneAssetDataContainer.Instance.Contains(Key);
+        public bool IsValid => string.IsNullOrEmpty(Key) && SceneAssetDataBinders.Instance.ContainsWithId(Key);
 
         public SceneAssetData Data()
         {
             if (string.IsNullOrEmpty(Key)) return null;
 
-            if (SceneAssetDataContainer.Instance.TryGetData(Key, out var data)) return data;
+            if (SceneAssetDataBinders.Instance.TryGetDataFromId(Key, out var data)) return data;
 
             Debug.LogError($"No {nameof(SceneAssetData)} could be found from key: {Key}");
             return null;

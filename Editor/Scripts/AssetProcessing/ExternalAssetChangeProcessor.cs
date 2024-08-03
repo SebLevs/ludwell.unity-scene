@@ -28,7 +28,7 @@ namespace Ludwell.Scene.Editor
                 if (!asset.EndsWith(".asset")) continue;
 
                 var importedAsset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(asset);
-                if (importedAsset is not TagContainer) continue;
+                if (importedAsset is not Tags) continue;
                 SolveSceneAssetListing();
                 break;
             }
@@ -36,8 +36,8 @@ namespace Ludwell.Scene.Editor
 
         public static void SolveSceneAssetListing()
         {
-            var dataBinders = SceneAssetDataContainer.Instance.DataBinders;
-            var tagContainer = ResourcesLocator.GetTagContainer();
+            var dataBinders = SceneAssetDataBinders.Instance.Elements;
+            var tagContainer = ResourcesLocator.GetTags();
 
             var shouldSave = false;
 
@@ -46,7 +46,7 @@ namespace Ludwell.Scene.Editor
                 for (var index = dataBinder.Tags.Count - 1; index >= 0; index--)
                 {
                     var tag = dataBinder.Tags[index];
-                    if (tagContainer.Tags.Contains(tag)) continue;
+                    if (tagContainer.Elements.Contains(tag)) continue;
                     dataBinder.Tags.Remove(tag);
                     shouldSave = true;
                 }
@@ -54,7 +54,7 @@ namespace Ludwell.Scene.Editor
 
             if (!shouldSave) return;
             Signals.Dispatch<UISignals.RefreshView>();
-            ResourcesLocator.SaveSceneAssetDataContainer();
+            ResourcesLocator.SaveSceneAssetDataBinders();
         }
     }
 }

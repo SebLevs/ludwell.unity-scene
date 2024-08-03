@@ -27,7 +27,7 @@ namespace Ludwell.Scene.Editor
             RegisterCallback<DetachFromPanelEvent>(Dispose);
             RegisterCallback<AttachToPanelEvent>(AddToDrawers);
 
-            var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
             if (data != null)
             {
                 _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
@@ -75,7 +75,7 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
 
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
@@ -90,7 +90,7 @@ namespace Ludwell.Scene.Editor
 
         private void AddToBuildSettings()
         {
-            var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
 

@@ -13,17 +13,12 @@ namespace Ludwell.Scene
 
         public SceneAssetData Data;
 
-        public override string GetID() => Data.Name;
+        public override string GetTagSubscriberWithTagID() => Data.Name;
 
         public string GetListableId() => Data.Name;
 
         public int CompareTo(object obj)
         {
-            // if (obj == null) return 1;
-            //
-            // var otherAsType = (SceneAssetDataBinder)obj;
-            // return string.Compare(ID, otherAsType.ID, StringComparison.InvariantCultureIgnoreCase);
-
             if (obj is not SceneAssetDataBinder otherAsType) return 1;
             return string.Compare(Data.Name, otherAsType.Data.Name, StringComparison.InvariantCultureIgnoreCase);
         }

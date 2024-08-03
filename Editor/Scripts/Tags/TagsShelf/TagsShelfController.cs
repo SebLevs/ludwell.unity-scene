@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
             _view.Add(ConstructTagElement(tag));
             Sort();
 
-            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
+            ResourcesLocator.SaveSceneAssetDataBindersAndTagsDelayed();
         }
 
         public void Remove(Tag tag)
@@ -42,7 +42,7 @@ namespace Ludwell.Scene.Editor
             _view.RemoveAt(IndexOf(tag));
             _data.Tags.Remove(tag);
 
-            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
+            ResourcesLocator.SaveSceneAssetDataBindersAndTagsDelayed();
         }
 
         private void Sort()

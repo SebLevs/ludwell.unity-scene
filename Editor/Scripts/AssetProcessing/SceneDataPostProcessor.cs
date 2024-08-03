@@ -18,9 +18,9 @@ namespace Ludwell.Scene.Editor
         {
             if (!TryHandleMove(movedAssets, movedFromAssetPaths) && !TryHandleImport(importedAssets)) return;
 
-            ResourcesLocator.GetSceneAssetDataContainer().DataBinders.Sort();
+            ResourcesLocator.GetSceneAssetDataBinders().Elements.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
-            ResourcesLocator.SaveSceneAssetDataContainer();
+            ResourcesLocator.SaveSceneAssetDataBinders();
         }
 
         private static bool TryHandleMove(IReadOnlyList<string> movedAssets, IReadOnlyList<string> movedFromAssetPaths)
@@ -37,7 +37,7 @@ namespace Ludwell.Scene.Editor
 
                 shouldSave = true;
 
-                var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataContainer();
+                var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataBinders();
 
                 var binder = sceneAssetDataContainer.GetBinderFromPath(movedFromAssetPaths[index]);
                 binder.ID = AssetDatabase.AssetPathToGUID(movedAssets[index]);
@@ -62,7 +62,7 @@ namespace Ludwell.Scene.Editor
                 if (!path.EndsWith(".unity")) continue;
                 shouldSave = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
-                if (ResourcesLocator.GetSceneAssetDataContainer().Contains(guid)) continue;
+                if (ResourcesLocator.GetSceneAssetDataBinders().ContainsWithId(guid)) continue;
 
                 SceneDataGenerator.AddFromGuid(guid);
             }

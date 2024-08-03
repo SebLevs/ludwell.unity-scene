@@ -9,7 +9,7 @@ namespace Ludwell.Scene
     {
         [field: SerializeField] public List<Tag> Tags { get; set; } = new();
 
-        public abstract string GetID();
+        public abstract string GetTagSubscriberWithTagID();
 
         public void Clear()
         {

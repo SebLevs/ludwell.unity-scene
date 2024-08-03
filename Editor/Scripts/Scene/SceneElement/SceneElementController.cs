@@ -281,7 +281,7 @@ namespace Ludwell.Scene.Editor
 
             AssetDatabase.RenameAsset(_model.Data.Path, _foldout.Title);
 
-            var index = SceneAssetDataContainer.Instance.IndexOf(_model);
+            var index = SceneAssetDataBinders.Instance.IndexOf(_model);
             var quickLoadController = Services.Get<SceneElementsController>();
             quickLoadController.ScrollToItemIndex(index);
         }

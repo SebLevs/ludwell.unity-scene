@@ -22,7 +22,7 @@ namespace Ludwell.Scene.Editor
         private const string TagIconName = "icon_tag";
         private const string HierarchyIconName = "icon_hierarchy";
 
-        private readonly SceneAssetDataContainer _sceneAssetDataContainer;
+        private readonly SceneAssetDataBinders _sceneAssetDataBinders;
         private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
         private readonly VisualElement _root;
@@ -51,7 +51,7 @@ namespace Ludwell.Scene.Editor
             _view.MoreInformationButton.clicked += _moreInformationController.Show;
             _moreInformationController.Hide();
 
-            _sceneAssetDataContainer = SceneAssetDataContainer.Instance;
+            _sceneAssetDataBinders = SceneAssetDataBinders.Instance;
 
             InitializeListViewHandler(_root.Q<ListView>());
             InitializeSearchField(_root, _root.Q<DropdownSearchField>());
@@ -221,7 +221,7 @@ namespace Ludwell.Scene.Editor
 
         private void CloseAll()
         {
-            if (_sceneAssetDataContainer == null || _sceneAssetDataContainer.DataBinders == null) return;
+            if (_sceneAssetDataBinders == null || _sceneAssetDataBinders.Elements == null) return;
             foreach (var item in _listViewHandler.Data)
             {
                 var id = item.ID;
@@ -238,7 +238,7 @@ namespace Ludwell.Scene.Editor
         {
             _listViewHandler =
                 new ListViewHandler<SceneElementController, SceneAssetDataBinder>(listView,
-                    _sceneAssetDataContainer.DataBinders);
+                    _sceneAssetDataBinders.Elements);
         }
 
 

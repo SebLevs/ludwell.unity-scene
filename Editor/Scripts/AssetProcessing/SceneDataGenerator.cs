@@ -28,10 +28,10 @@ namespace Ludwell.Scene.Editor
             {
                 Debug.LogWarning($"Suspicious action | Path was outside the Assets folder | {absolutePath}");
 
-                var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataContainer();
-                for (var index = sceneAssetDataContainer.DataBinders.Count - 1; index >= 0; index--)
+                var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataBinders();
+                for (var index = sceneAssetDataContainer.Elements.Count - 1; index >= 0; index--)
                 {
-                    var sceneDataAtIndex = sceneAssetDataContainer.DataBinders[index].Data.Path;
+                    var sceneDataAtIndex = sceneAssetDataContainer.Elements[index].Data.Path;
                     var sceneAssetPath = Path.ChangeExtension(sceneDataAtIndex, ".unity");
 
                     var normalizedAbsolutePath = Path.GetFullPath(absolutePath)
@@ -42,16 +42,16 @@ namespace Ludwell.Scene.Editor
                     if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    ResourcesLocator.GetSceneAssetDataContainer()
-                        .Remove(sceneAssetDataContainer.DataBinders[index].ID);
+                    ResourcesLocator.GetSceneAssetDataBinders()
+                        .Remove(sceneAssetDataContainer.Elements[index].ID);
                 }
             }
             else
             {
-                var binder = ResourcesLocator.GetSceneAssetDataContainer().GetBinderFromPath(absolutePath);
+                var binder = ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromPath(absolutePath);
                 if (binder != null)
                 {
-                    ResourcesLocator.GetSceneAssetDataContainer().Remove(binder.ID);
+                    ResourcesLocator.GetSceneAssetDataBinders().Remove(binder.ID);
                 }
             }
 
@@ -74,21 +74,21 @@ namespace Ludwell.Scene.Editor
                 Signals.Dispatch<UISignals.RefreshView>();
             }
 
-            var instance = SceneAssetDataContainer.Instance;
+            var instance = SceneAssetDataBinders.Instance;
             EditorUtility.SetDirty(instance);
             AssetDatabase.SaveAssetIfDirty(instance);
 
-            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
+            ResourcesLocator.SaveSceneAssetDataBindersAndTagsDelayed();
             AssetDatabase.Refresh();
         }
 
         public static void AddFromGuid(string guid)
         {
             Debug.LogError("Setup addressable ID");
-            var instance = SceneAssetDataContainer.Instance;
+            var instance = SceneAssetDataBinders.Instance;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
             var sceneData = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
-            if (instance.Contains(guid)) return;
+            if (instance.ContainsWithId(guid)) return;
             instance.Add(new SceneAssetDataBinder
             {
                 ID = guid,
@@ -101,7 +101,7 @@ namespace Ludwell.Scene.Editor
                 }
             });
 
-            instance.DataBinders.Sort();
+            instance.Elements.Sort();
         }
     }
 }

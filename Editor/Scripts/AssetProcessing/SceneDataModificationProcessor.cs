@@ -14,8 +14,8 @@ namespace Ludwell.Scene.Editor
 
             _isHandling = true;
 
-            ResourcesLocator.GetSceneAssetDataContainer().Remove(AssetDatabase.AssetPathToGUID(assetPath));
-            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
+            ResourcesLocator.GetSceneAssetDataBinders().Remove(AssetDatabase.AssetPathToGUID(assetPath));
+            ResourcesLocator.SaveSceneAssetDataBindersAndTagsDelayed();
             Signals.Dispatch<UISignals.RefreshView>();
 
             AssetDatabase.DeleteAsset(assetPath);
