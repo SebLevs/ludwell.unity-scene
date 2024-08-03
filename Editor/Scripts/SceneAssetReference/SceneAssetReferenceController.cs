@@ -26,6 +26,21 @@ namespace Ludwell.Scene.Editor
             
             RegisterCallback<DetachFromPanelEvent>(Dispose);
             RegisterCallback<AttachToPanelEvent>(AddToDrawers);
+            
+            var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
+            if (data != null)
+            {
+                _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
+                SolveButtonVisibleState(null);
+            }
+            else if (!string.IsNullOrEmpty(_model.stringValue))
+            {
+                Debug.LogError("Suspicious data | Key has a value, but no binding could be found | Key will be reset");
+                _model.stringValue = string.Empty;
+
+                var activeScene = SceneManager.GetActiveScene();
+                EditorSceneManager.MarkSceneDirty(activeScene);
+            }
 
             _view.ObjectField.tooltip = _model.stringValue;
             _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
@@ -50,25 +65,11 @@ namespace Ludwell.Scene.Editor
         
         public void Dispose() => Dispose(null);
 
-        public void Dispose(DetachFromPanelEvent evt)
-        {
-            RemoveFromDrawers();
-            _view.Dispose(null);
-        }
-
         public void SetObjectFieldLabel(string value)
         {
             _view.SetObjectFieldLabel(value);
         }
 
-        public void SetObjectFieldValue(SceneAsset sceneAsset)
-        {
-            _view.ObjectField.value = sceneAsset;
-            SolveButtonVisibleState(null);
-        }
-
-        public void SolveButtonVisibleState() => SolveButtonVisibleState(null);
-        
         private void SolveButtonVisibleState(ChangeEvent<Object> _)
         {
             if (string.IsNullOrEmpty(_model.stringValue))
@@ -156,6 +157,12 @@ namespace Ludwell.Scene.Editor
         private void RemoveFromDrawers()
         {
             _controllers.Remove(this);
+        }
+        
+        private void Dispose(DetachFromPanelEvent evt)
+        {
+            RemoveFromDrawers();
+            _view.Dispose(null);
         }
     }
 }
