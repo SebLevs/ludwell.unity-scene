@@ -60,7 +60,7 @@ namespace Ludwell.UIToolkitElements.Editor
             this.AddStyleFromUss(UssPath);
 
             SetReferences();
-            
+
             InitializeDropDown();
             InitializeSearchField();
             SetDefaultSearchBehaviour();
@@ -68,7 +68,7 @@ namespace Ludwell.UIToolkitElements.Editor
             InitializeFocusAndBlur();
 
             KeepDropdownUnderSelf(this);
-            
+
             RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
 
@@ -119,7 +119,7 @@ namespace Ludwell.UIToolkitElements.Editor
                 for (var i = 0; i < _baseItemsSource.Count; i++)
                 {
                     if (_baseItemsSource[i] == null) break;
-                    var dataName = (_baseItemsSource[i] as IListable).ID;
+                    var dataName = (_baseItemsSource[i] as IListable).GetListableId();
                     if (!dataName.ToLower().Contains(evt.newValue.ToLower())) continue;
                     var index = i;
                     _dropdownListView.Add(
@@ -182,7 +182,7 @@ namespace Ludwell.UIToolkitElements.Editor
         public bool RebuildActiveListing()
         {
             if (!GetCurrentListingStrategy().IsSearchEmptyString && !IsListing) return false;
-            
+
             ExecuteCurrentListingStrategy(_searchField.value);
             _listView.Rebuild();
             return true;
@@ -248,7 +248,8 @@ namespace Ludwell.UIToolkitElements.Editor
 
         private void SetDefaultSearchBehaviour()
         {
-            var icon = Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), DefaultSearchIcon));
+            var icon = Resources.Load<Texture2D>(
+                Path.Combine("Sprites", nameof(DropdownSearchField), DefaultSearchIcon));
             var searchFieldListing = new ListingStrategy(DefaultSearchName, icon, DefaultSearchBehaviour);
             _listingStrategies.Add(searchFieldListing);
             this.Q<VisualElement>(CyclingIconName).style.display = DisplayStyle.None;
@@ -260,7 +261,7 @@ namespace Ludwell.UIToolkitElements.Editor
             List<IListable> cache = new();
             foreach (var element in defaultList)
             {
-                var dataName = (element as IListable).ID;
+                var dataName = (element as IListable).GetListableId();
                 if (!dataName.ToLower().Contains(searchFieldValue.ToLower())) continue;
                 cache.Add(element as IListable);
             }
@@ -344,11 +345,11 @@ namespace Ludwell.UIToolkitElements.Editor
             _searchField.style.borderBottomLeftRadius = radius;
             _searchField.style.borderBottomRightRadius = radius;
         }
-        
+
         private void Dispose(DetachFromPanelEvent evt)
         {
             UnregisterCallback<DetachFromPanelEvent>(Dispose);
-            
+
             UnregisterCallback<GeometryChangedEvent>(PlaceUnder);
 
             if (_listView == null) return;

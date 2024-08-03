@@ -9,6 +9,8 @@ namespace Ludwell.Scene
     {
         [field: SerializeField] public string ID { get; set; }
 
+        public string GetListableId() => ID;
+
         public override int GetHashCode()
         {
             return StringComparer.InvariantCultureIgnoreCase.GetHashCode(ID);

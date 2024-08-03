@@ -1,21 +1,31 @@
 using System;
+using Ludwell.UIToolkitElements;
+using UnityEngine;
 
 namespace Ludwell.Scene
 {
     [Serializable]
-    public class SceneAssetDataBinder : IComparable
+    public class SceneAssetDataBinder : TagSubscriberWithTags, IListable, IComparable
     {
-        public string Key;
+        /// <summary> AssetPathToGUID </summary>
+        [field: SerializeField]
+        public string ID { get; set; }
+
         public SceneAssetData Data;
+
+        public override string GetID() => Data.Name;
+
+        public string GetListableId() => Data.Name;
 
         public int CompareTo(object obj)
         {
-            if (obj is SceneAssetDataBinder objectAs)
-            {
-                return string.Compare(Key, objectAs.Key, StringComparison.Ordinal);
-            }
+            // if (obj == null) return 1;
+            //
+            // var otherAsType = (SceneAssetDataBinder)obj;
+            // return string.Compare(ID, otherAsType.ID, StringComparison.InvariantCultureIgnoreCase);
 
-            throw new ArgumentException($"Parameter is not a {nameof(SceneAssetDataBinder)}");
+            if (obj is not SceneAssetDataBinder otherAsType) return 1;
+            return string.Compare(Data.Name, otherAsType.Data.Name, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

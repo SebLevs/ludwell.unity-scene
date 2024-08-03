@@ -1,26 +1,15 @@
 using System;
 using System.Collections.Generic;
-using Ludwell.UIToolkitElements;
 using UnityEngine;
 
 namespace Ludwell.Scene
 {
     [Serializable]
-    public class TagSubscriberWithTags : IListable
+    public abstract class TagSubscriberWithTags
     {
         [field: SerializeField] public List<Tag> Tags { get; set; } = new();
 
-        [SerializeField] private string _name;
-
-        public string ID
-        {
-            get => _name;
-            set
-            {
-                if (_name == value) return;
-                _name = value;
-            }
-        }
+        public abstract string GetID();
 
         public void Clear()
         {

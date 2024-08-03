@@ -18,7 +18,7 @@ namespace Ludwell.Scene
         {
             if (string.IsNullOrEmpty(Key)) return null;
 
-            if (SceneAssetDataContainer.Instance.TryGetValue(Key, out var data)) return data;
+            if (SceneAssetDataContainer.Instance.TryGetData(Key, out var data)) return data;
 
             Debug.LogError($"No {nameof(SceneAssetData)} could be found from key: {Key}");
             return null;

@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Ludwell.Architecture;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
@@ -13,7 +13,8 @@ namespace Ludwell.Scene.Editor
     {
         static SceneDataGenerator()
         {
-            GenerateSceneData();
+            // GenerateSceneData();
+            PopulateQuickLoadElements();
         }
 
         public static void CreateSceneAssetAtPath()
@@ -27,10 +28,10 @@ namespace Ludwell.Scene.Editor
             {
                 Debug.LogWarning($"Suspicious action | Path was outside the Assets folder | {absolutePath}");
 
-                var quickLoadElements = ResourcesLocator.GetQuickLoadElements();
-                for (var index = quickLoadElements.Elements.Count - 1; index >= 0; index--)
+                var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataContainer();
+                for (var index = sceneAssetDataContainer.DataBinders.Count - 1; index >= 0; index--)
                 {
-                    var sceneDataAtIndex = AssetDatabase.GetAssetPath(quickLoadElements.Elements[index].SceneData);
+                    var sceneDataAtIndex = sceneAssetDataContainer.DataBinders[index].Data.Path;
                     var sceneAssetPath = Path.ChangeExtension(sceneDataAtIndex, ".unity");
 
                     var normalizedAbsolutePath = Path.GetFullPath(absolutePath)
@@ -41,15 +42,16 @@ namespace Ludwell.Scene.Editor
                     if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    ResourcesLocator.GetQuickLoadElements().Remove(quickLoadElements.Elements[index].SceneData);
+                    ResourcesLocator.GetSceneAssetDataContainer()
+                        .Remove(sceneAssetDataContainer.DataBinders[index].ID);
                 }
             }
             else
             {
-                var sceneData = GetSceneDataFromAbsolutePath(absolutePath);
-                if (sceneData)
+                var binder = ResourcesLocator.GetSceneAssetDataContainer().GetBinderFromPath(absolutePath);
+                if (binder != null)
                 {
-                    ResourcesLocator.GetQuickLoadElements().Remove(sceneData);
+                    ResourcesLocator.GetSceneAssetDataContainer().Remove(binder.ID);
                 }
             }
 
@@ -63,71 +65,43 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.Refresh();
         }
 
-        public static void GenerateSceneData()
-        {
-            var settings =
-                (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings), out _);
-
-            if (!EditorPrefs.GetBool(Settings.GenerateSceneDataKey)) return;
-
-            List<string> paths = new();
-
-            var guids = AssetDatabase.FindAssets("t:SceneAsset");
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                paths.Add(Path.ChangeExtension(path, ".asset"));
-            }
-
-            var shouldSave = false;
-            foreach (var path in paths)
-            {
-                var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(path);
-
-                if (sceneData) continue;
-
-                shouldSave = true;
-                sceneData = ScriptableObject.CreateInstance<SceneData>();
-                AssetDatabase.CreateAsset(sceneData, path);
-                ResourcesLocator.GetQuickLoadElements().Add(sceneData);
-            }
-
-            EditorPrefs.SetBool(Settings.GenerateSceneDataKey, false);
-            EditorUtility.SetDirty(settings);
-            AssetDatabase.SaveAssetIfDirty(settings);
-
-            if (!shouldSave) return;
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
         public static void PopulateQuickLoadElements()
         {
-            var assetGuids = AssetDatabase.FindAssets("t:SceneData");
-            var QuickLoadElements = ResourcesLocator.GetQuickLoadElements();
+            var assetGuids = AssetDatabase.FindAssets("t:SceneAsset");
             foreach (var guid in assetGuids)
             {
-                var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(assetPath);
-                if (QuickLoadElements.Contains(sceneData)) continue;
-                var element = QuickLoadElements.Add(sceneData);
-
-                var path = AssetDatabase.GetAssetPath(sceneData);
-                element.IsOutsideAssetsFolder = !path.Contains("Assets/");
+                AddFromGuid(guid);
                 Signals.Dispatch<UISignals.RefreshView>();
             }
 
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+            var instance = SceneAssetDataContainer.Instance;
+            EditorUtility.SetDirty(instance);
+            AssetDatabase.SaveAssetIfDirty(instance);
+
+            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
             AssetDatabase.Refresh();
         }
 
-        private static SceneData GetSceneDataFromAbsolutePath(string absolutePath)
+        public static void AddFromGuid(string guid)
         {
-            var indexOfAssets = absolutePath.IndexOf("Assets/", StringComparison.Ordinal);
-            var relativePath = absolutePath[indexOfAssets..];
-            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.ChangeExtension(relativePath, ".asset"));
-            return sceneData;
+            Debug.LogError("Setup addressable ID");
+            var instance = SceneAssetDataContainer.Instance;
+            var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            var sceneData = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
+            if (instance.Contains(guid)) return;
+            instance.Add(new SceneAssetDataBinder
+            {
+                ID = guid,
+                Data = new SceneAssetData
+                {
+                    BuildIndex = SceneUtility.GetBuildIndexByScenePath(assetPath),
+                    Name = sceneData.name,
+                    Path = assetPath,
+                    AddressableID = "TO BE FILLED"
+                }
+            });
+
+            instance.DataBinders.Sort();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Ludwell.Scene
     {
         private static SceneAssetDataContainer _instance;
 
-        [SerializeField] private List<SceneAssetDataBinder> _dataBinders = new();
+        public List<SceneAssetDataBinder> DataBinders = new();
 
         public static SceneAssetDataContainer Instance
         {
@@ -20,11 +20,22 @@ namespace Ludwell.Scene
             }
         }
 
-        public bool Contains(string key)
+        public int IndexOf(SceneAssetDataBinder sceneAssetDataBinder)
         {
-            foreach (var binder in _dataBinders)
+            for (var index = 0; index < DataBinders.Count; index++)
             {
-                if (string.Equals(key, binder.Key, StringComparison.InvariantCulture)) return true;
+                var binder = DataBinders[index];
+                if (sceneAssetDataBinder.Equals(binder)) return index;
+            }
+
+            return -1;
+        }
+
+        public bool Contains(string id)
+        {
+            foreach (var binder in DataBinders)
+            {
+                if (string.Equals(id, binder.ID, StringComparison.InvariantCulture)) return true;
             }
 
             return false;
@@ -32,48 +43,81 @@ namespace Ludwell.Scene
 
         public void Add(SceneAssetDataBinder newBinder)
         {
-            foreach (var binder in _dataBinders)
+            foreach (var binder in DataBinders)
             {
-                if (!string.Equals(newBinder.Key, binder.Key, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(newBinder.ID, binder.ID, StringComparison.InvariantCulture)) continue;
                 return;
             }
 
-            _dataBinders.Add(newBinder);
-            _dataBinders.Sort();
+            DataBinders.Add(newBinder);
+            DataBinders.Sort();
         }
 
-        public void Remove(string key)
+        public void Remove(string id)
         {
-            foreach (var binder in _dataBinders)
+            foreach (var binder in DataBinders)
             {
-                if (!string.Equals(key, binder.Key, StringComparison.InvariantCulture)) continue;
-                _dataBinders.Remove(binder);
+                if (!string.Equals(id, binder.ID, StringComparison.InvariantCulture)) continue;
+                DataBinders.Remove(binder);
                 return;
             }
         }
 
-        public SceneAssetData GetData(string key)
+        public SceneAssetDataBinder GetBinder(string id)
         {
-            foreach (var sceneAssetDataBinder in _dataBinders)
+            if (string.IsNullOrEmpty(id)) throw new Exception("Suspicious action | Binder id parameter is invalid");
+            
+            foreach (var sceneAssetDataBinder in DataBinders)
             {
-                if (string.Equals(sceneAssetDataBinder.Key, key, StringComparison.InvariantCulture))
-                {
-                    return sceneAssetDataBinder.Data;
-                }
+                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                return sceneAssetDataBinder;
             }
 
             return null;
         }
 
-        public bool TryGetValue(string key, out SceneAssetData data)
+        public SceneAssetDataBinder GetBinderFromPath(string path)
         {
-            foreach (var sceneAssetDataBinder in _dataBinders)
+            foreach (var sceneAssetDataBinder in DataBinders)
             {
-                if (string.Equals(sceneAssetDataBinder.Key, key, StringComparison.InvariantCulture))
-                {
-                    data = sceneAssetDataBinder.Data;
-                    return true;
-                }
+                if (!string.Equals(sceneAssetDataBinder.Data.Path, path, StringComparison.InvariantCulture)) continue;
+                return sceneAssetDataBinder;
+            }
+
+            return null;
+        }
+        
+        public bool TryGetBinder(string id, out SceneAssetDataBinder binder)
+        {
+            foreach (var sceneAssetDataBinder in DataBinders)
+            {
+                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                binder = sceneAssetDataBinder;
+                return true;
+            }
+
+            binder = null;
+            return false;
+        }
+
+        public SceneAssetData GetData(string id)
+        {
+            foreach (var sceneAssetDataBinder in DataBinders)
+            {
+                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                return sceneAssetDataBinder.Data;
+            }
+
+            return null;
+        }
+
+        public bool TryGetData(string key, out SceneAssetData data)
+        {
+            foreach (var sceneAssetDataBinder in DataBinders)
+            {
+                if (!string.Equals(sceneAssetDataBinder.ID, key, StringComparison.InvariantCulture)) continue;
+                data = sceneAssetDataBinder.Data;
+                return true;
             }
 
             data = null;

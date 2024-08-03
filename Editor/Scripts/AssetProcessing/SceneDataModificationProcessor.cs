@@ -1,4 +1,4 @@
-using System.IO;
+using Ludwell.Architecture;
 using UnityEditor;
 
 namespace Ludwell.Scene.Editor
@@ -10,23 +10,14 @@ namespace Ludwell.Scene.Editor
         private static AssetDeleteResult OnWillDeleteAsset(string assetPath, RemoveAssetOptions options)
         {
             if (_isHandling) return AssetDeleteResult.DidNotDelete;
-            if (!assetPath.EndsWith(".unity") && !assetPath.EndsWith(".asset")) return AssetDeleteResult.DidNotDelete;
+            if (!assetPath.EndsWith(".unity")) return AssetDeleteResult.DidNotDelete;
 
             _isHandling = true;
 
-            var directoryName = Path.GetDirectoryName(assetPath);
-            var assetName = Path.GetFileNameWithoutExtension(assetPath);
-            var sceneData = AssetDatabase.LoadAssetAtPath<SceneData>(Path.Combine(directoryName, assetName + ".asset"));
-            if (sceneData == null)
-            {
-                _isHandling = false;
-                return AssetDeleteResult.DidNotDelete;
-            }
-            ResourcesLocator.GetQuickLoadElements().Remove(sceneData);
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesLocator.GetSceneAssetDataContainer().Remove(AssetDatabase.AssetPathToGUID(assetPath));
+            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
+            Signals.Dispatch<UISignals.RefreshView>();
 
-            var otherSpecifier = assetPath.EndsWith(".unity") ? ".asset" : ".unity";
-            AssetDatabase.DeleteAsset(Path.Combine(directoryName, assetName + otherSpecifier));
             AssetDatabase.DeleteAsset(assetPath);
 
             _isHandling = false;

@@ -7,13 +7,13 @@ namespace Ludwell.Scene.Editor
     {
         private static Settings _toolkitSettings;
 
-        private static SceneManagerElements _sceneManagerElements;
-        private static DelayedEditorUpdateAction _delayedSaveQuickLoadElements;
+        private static SceneAssetDataContainer _sceneAssetDataContainer;
+        private static DelayedEditorUpdateAction _delayedSaveSceneAssetDataContainer;
 
         private static TagContainer _tagContainer;
         private static DelayedEditorUpdateAction _delayedSaveTagContainer;
         
-        private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
+        private static DelayedEditorUpdateAction _delayedSaveSceneAssetsContainerAndTagContainer;
 
         public static Settings GetSceneDataManagerSettings() 
         {
@@ -22,11 +22,11 @@ namespace Ludwell.Scene.Editor
                 out var _);
             return _toolkitSettings;
         }
-
-        public static SceneManagerElements GetQuickLoadElements()
+        
+        public static SceneAssetDataContainer GetSceneAssetDataContainer()
         {
-            CacheQuickLoadData();
-            return _sceneManagerElements;
+            CacheSceneAssetDataContainer();
+            return _sceneAssetDataContainer;
         }
 
         public static TagContainer GetTagContainer()
@@ -34,20 +34,20 @@ namespace Ludwell.Scene.Editor
             CacheTagContainer();
             return _tagContainer;
         }
-
-        public static void SaveQuickLoadElements()
+        
+        public static void SaveSceneAssetDataContainer()
         {
             ExternalAssetChangeProcessor.IsImportCauseInternal = true;
-            CacheQuickLoadData();
-            EditorUtility.SetDirty(_sceneManagerElements);
-            AssetDatabase.SaveAssetIfDirty(_sceneManagerElements);
+            CacheSceneAssetDataContainer();
+            EditorUtility.SetDirty(_sceneAssetDataContainer);
+            AssetDatabase.SaveAssetIfDirty(_sceneAssetDataContainer);
             AssetDatabase.Refresh();
         }
 
-        public static void SaveQuickLoadElementsDelayed()
+        public static void SaveSceneAssetDataContainerDelayed()
         {
-            _delayedSaveQuickLoadElements ??= new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElements);
-            _delayedSaveQuickLoadElements.StartOrRefresh();
+            _delayedSaveSceneAssetDataContainer ??= new DelayedEditorUpdateAction(0.5f, SaveSceneAssetDataContainer);
+            _delayedSaveSceneAssetDataContainer.StartOrRefresh();
         }
 
         public static void SaveTagContainer()
@@ -64,25 +64,25 @@ namespace Ludwell.Scene.Editor
             _delayedSaveTagContainer.StartOrRefresh();
         }
 
-        private static void SaveQuickLoadElementsAndTagContainer()
+        private static void SaveSceneAssetContainerAndTagContainer()
         {
-            SaveQuickLoadElements();
+            SaveSceneAssetDataContainer();
             SaveTagContainer();
         }
         
         
-        public static void SaveQuickLoadElementsAndTagContainerDelayed()
+        public static void SaveSceneAssetContainerAndTagContainerDelayed()
         {
-            _delayedSaveQuickLoadElementsAndTagContainer ??=
-                new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElementsAndTagContainer);
-            _delayedSaveQuickLoadElementsAndTagContainer.StartOrRefresh();
+            _delayedSaveSceneAssetsContainerAndTagContainer ??=
+                new DelayedEditorUpdateAction(0.5f, SaveSceneAssetContainerAndTagContainer);
+            _delayedSaveSceneAssetsContainerAndTagContainer.StartOrRefresh();
         }
-
-        private static void CacheQuickLoadData()
+        
+        private static void CacheSceneAssetDataContainer()
         {
-            if (_sceneManagerElements) return;
-            _sceneManagerElements =
-                (SceneManagerElements)ResourcesSolver.EnsureAssetExistence(typeof(SceneManagerElements), out var existed);
+            if (_sceneAssetDataContainer) return;
+            _sceneAssetDataContainer =
+                (SceneAssetDataContainer)ResourcesSolver.EnsureAssetExistence(typeof(SceneAssetDataContainer), out var existed);
             if (!existed)
             {
                 SceneDataGenerator.PopulateQuickLoadElements();

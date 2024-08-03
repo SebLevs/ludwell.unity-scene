@@ -110,34 +110,8 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var instance = SceneAssetDataContainer.Instance;
-
-            if (instance == null) // todo: delete when system transition to SceneElements is completed 
-            {
-                instance = (SceneAssetDataContainer)ResourcesSolver.EnsureAssetExistence(
-                    typeof(SceneAssetDataContainer), out _);
-            }
-
-            Debug.LogError("Fill addressable ID"); // todo: delete when system transition to SceneElements is completed 
             var assetPath = AssetDatabase.GetAssetPath(targetAsSceneAsset);
             var key = AssetDatabase.AssetPathToGUID(assetPath);
-            if (!instance.Contains(key))
-            {
-                instance.Add(new SceneAssetDataBinder
-                {
-                    Key = key,
-                    Data = new SceneAssetData
-                    {
-                        BuildIndex = SceneUtility.GetBuildIndexByScenePath(assetPath),
-                        Name = targetAsSceneAsset.name,
-                        Path = assetPath,
-                        AddressableID = "TO BE FILLED"
-                    }
-                });
-                EditorUtility.SetDirty(instance);
-                AssetDatabase.SaveAssetIfDirty(instance);
-            }
-
             UpdateModel(key);
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         }

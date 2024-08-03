@@ -7,7 +7,8 @@ namespace Ludwell.Scene.Editor
 {
     public class TagsShelfController : IDisposable
     {
-        private TagSubscriberWithTags _data = new();
+        // private TagSubscriberWithTags _data = new();
+        private TagSubscriberWithTags _data;
 
         private readonly TagsShelfView _view;
 
@@ -31,7 +32,7 @@ namespace Ludwell.Scene.Editor
             _view.Add(ConstructTagElement(tag));
             Sort();
 
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
         }
 
         public void Remove(Tag tag)
@@ -41,7 +42,7 @@ namespace Ludwell.Scene.Editor
             _view.RemoveAt(IndexOf(tag));
             _data.Tags.Remove(tag);
 
-            ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+            ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
         }
 
         private void Sort()

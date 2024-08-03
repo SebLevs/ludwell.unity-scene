@@ -82,7 +82,7 @@ namespace Ludwell.Scene.Editor
             Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             var tagsManagerViewArgs = (TagsManagerViewArgs)args;
             _view.Show();
-            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.ID);
+            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.GetID());
             BuildTagsController(tagsManagerViewArgs.TagSubscriberWithTags);
         }
 
@@ -139,7 +139,7 @@ namespace Ludwell.Scene.Editor
 
         private void HandleItemsRemoved(IEnumerable<int> enumerable)
         {
-            var quickLoadElementData = ResourcesLocator.GetQuickLoadElements().Elements;
+            var dataBinders = SceneAssetDataContainer.Instance.DataBinders.ToList();
 
             var itemsSource = _listViewHandler.ListView.itemsSource;
             var removedIndexes = enumerable.ToList();
@@ -148,11 +148,11 @@ namespace Ludwell.Scene.Editor
             {
                 var tag = (Tag)itemsSource[index];
                 _tagsShelfController.Remove(tag);
-                foreach (var element in quickLoadElementData)
+                foreach (var element in dataBinders)
                 {
                     if (!element.Tags.Contains(tag)) continue;
                     element.Tags.Remove(tag);
-                    ResourcesLocator.SaveQuickLoadElementsDelayed();
+                    ResourcesLocator.SaveSceneAssetDataContainerDelayed();
                 }
             }
 

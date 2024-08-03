@@ -6,7 +6,7 @@ namespace Ludwell.Scene.Editor
 {
     public class Settings : ScriptableObject
     {
-        public static readonly string GenerateSceneDataKey = "GenerateSceneData";
+        // public static readonly string GenerateSceneDataKey = "GenerateSceneData";
     }
 
     [CustomEditor(typeof(Settings))]
@@ -23,27 +23,19 @@ namespace Ludwell.Scene.Editor
             if (GUILayout.Button("Clear all"))
             {
                 ResourcesLocator.GetTagContainer().Tags.Clear();
-                ResourcesLocator.GetQuickLoadElements().Elements.Clear();
+                ResourcesLocator.GetSceneAssetDataContainer().DataBinders.Clear();
 
-                ResourcesLocator.SaveQuickLoadElementsAndTagContainerDelayed();
+                ResourcesLocator.SaveSceneAssetContainerAndTagContainerDelayed();
                 AssetDatabase.Refresh();
             }
 
             GUILayout.Space(2);
 
-            if (GUILayout.Button("Repopulate Quick Load list"))
+            if (GUILayout.Button("Repopulate SceneAsset list"))
             {
                 ResourcesLocator.GetTagContainer().Tags.Clear();
-                ResourcesLocator.GetQuickLoadElements().Elements.Clear();
+                ResourcesLocator.GetSceneAssetDataContainer().DataBinders.Clear();
                 SceneDataGenerator.PopulateQuickLoadElements();
-            }
-
-            GUILayout.Space(2);
-
-            if (GUILayout.Button("Generate SceneData assets"))
-            {
-                EditorPrefs.SetBool(Settings.GenerateSceneDataKey, true);
-                SceneDataGenerator.GenerateSceneData();
             }
 
             EditorPainter.DrawSeparatorLine();
