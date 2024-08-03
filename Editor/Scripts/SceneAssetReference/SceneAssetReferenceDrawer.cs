@@ -10,23 +10,17 @@ namespace Ludwell.Scene.Editor
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
-        private static List<SceneAssetReferenceDrawer> _drawers = new();
-
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var serializedProperty = property.FindPropertyRelative("Key");
             var root = new SceneAssetReferenceController(serializedProperty);
             root.SetObjectFieldLabel(property.displayName);
 
-            root.RegisterCallback<DetachFromPanelEvent>(Dispose);
-
-            root.RegisterCallback<AttachToPanelEvent>(AddToDrawers);
-
             var data = SceneAssetDataContainer.Instance.GetValue(serializedProperty.stringValue);
             if (data != null)
             {
                 root.SetObjectFieldValue(AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path));
-                // SolveHelpBox(null); // todo: call directly from here instead of from controller method?
+                root.SolveButtonVisibleState();
             }
             else if (!string.IsNullOrEmpty(serializedProperty.stringValue))
             {
@@ -38,31 +32,6 @@ namespace Ludwell.Scene.Editor
             }
 
             return root;
-        }
-
-        private void Dispose(DetachFromPanelEvent evt)
-        {
-            RemoveFromDrawers();
-            (evt.target as SceneAssetReferenceController)?.Dispose();
-        }
-
-        public static void OnBuildSettingsChangedSolveHelpBoxes()
-        {
-            foreach (var drawer in _drawers)
-            {
-                Debug.LogError("update");
-                // drawer.SolveHelpBox(null);
-            }
-        }
-
-        private void AddToDrawers(AttachToPanelEvent evt)
-        {
-            _drawers.Add(this);
-        }
-
-        private void RemoveFromDrawers()
-        {
-            _drawers.Remove(this);
         }
     }
 }

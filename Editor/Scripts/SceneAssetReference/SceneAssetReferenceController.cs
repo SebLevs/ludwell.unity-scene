@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -11,6 +12,8 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneAssetReferenceController : VisualElement, IDisposable
     {
+        private static List<SceneAssetReferenceController> _controllers = new();
+        
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
 
@@ -20,9 +23,12 @@ namespace Ludwell.Scene.Editor
 
             _view = new SceneAssetReferenceView(this);
             _view.HideButton();
+            
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
+            RegisterCallback<AttachToPanelEvent>(AddToDrawers);
 
             _view.ObjectField.tooltip = _model.stringValue;
-            _view.ObjectField.RegisterValueChangedCallback(SolveHelpBox);
+            _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
 
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
@@ -30,12 +36,24 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.UnregisterValueChangedCallback(UpdatePropertyCache);
             _view.ObjectField.RegisterValueChangedCallback(UpdatePropertyCache);
 
-            _view.ObjectField.UnregisterValueChangedCallback(SolveHelpBox);
-            _view.ObjectField.RegisterValueChangedCallback(SolveHelpBox);
+            _view.ObjectField.UnregisterValueChangedCallback(SolveButtonVisibleState);
+            _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
         }
-
-        public void Dispose()
+        
+        public static void OnBuildSettingsChangedSolveHelpBoxes()
         {
+            foreach (var controller in _controllers)
+            {
+                Debug.LogError("update");
+                controller.SolveButtonVisibleState(null);
+            }
+        }
+        
+        public void Dispose() => Dispose(null);
+
+        public void Dispose(DetachFromPanelEvent evt)
+        {
+            RemoveFromDrawers();
             _view.Dispose(null);
         }
 
@@ -47,10 +65,12 @@ namespace Ludwell.Scene.Editor
         public void SetObjectFieldValue(SceneAsset sceneAsset)
         {
             _view.ObjectField.value = sceneAsset;
-            SolveHelpBox(null);
+            SolveButtonVisibleState(null);
         }
 
-        private void SolveHelpBox(ChangeEvent<Object> _)
+        public void SolveButtonVisibleState() => SolveButtonVisibleState(null);
+        
+        private void SolveButtonVisibleState(ChangeEvent<Object> _)
         {
             if (string.IsNullOrEmpty(_model.stringValue))
             {
@@ -64,8 +84,6 @@ namespace Ludwell.Scene.Editor
             if (!isInBuildSetting)
             {
                 Debug.LogError("todo: if scene asset is addressable, do not show the panel");
-
-                // _helpBoxButton.text = $"Add {data.Name} to Build Settings";
                 _view.ShowButton();
                 return;
             }
@@ -129,6 +147,16 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.tooltip = _model.stringValue;
             _model.serializedObject.ApplyModifiedProperties();
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        }
+        
+        private void AddToDrawers(AttachToPanelEvent evt)
+        {
+            _controllers.Add(this);
+        }
+
+        private void RemoveFromDrawers()
+        {
+            _controllers.Remove(this);
         }
     }
 }
