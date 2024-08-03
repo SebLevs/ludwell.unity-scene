@@ -1,22 +1,6 @@
-:root {
-    margin-bottom: 1px;
-    margin-right: -2px;
-    margin-left: 3px;
-    margin-top: 1px;
-    overflow: hidden;
-}
-
-ObjectField {
-    margin-right: 0;
-    flex-grow: 1;
-}
-
-ObjectField > Label {
-    min-width: 119.8px;
-    width: 40%;
-}
-
-ObjectField > VisualElement {
+#parent {
+    flex-direction: row;
+    width: 100%;
 }
 
 #build-settings {
@@ -30,9 +14,43 @@ ObjectField > VisualElement {
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
-    margin-left: 2px;
+    margin-left: 4px;
 }
 
 #build-settings > #icon {
     background-image: resource('Sprites/icon_add-build-settings');
+}
+
+ObjectField {
+    margin-top: 1px;
+    margin-right: -2px;
+    margin-bottom: 1px;
+    margin-left: 3px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+ObjectField > Label {
+    margin-top: 0;
+    margin-right: 2px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 0;
+    padding-left: 1px;
+    min-width: 119.8px;
+}
+
+ObjectField > VisualElement {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    overflow: hidden;
+    max-width: 50%;
 }
