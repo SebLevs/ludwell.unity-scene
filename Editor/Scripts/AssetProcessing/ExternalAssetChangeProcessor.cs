@@ -52,9 +52,8 @@ namespace Ludwell.Scene.Editor
                 }
             }
 
-            Signals.Dispatch<UISignals.RefreshView>();
-
             if (!shouldSave) return;
+            Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveSceneAssetDataContainer();
         }
     }
