@@ -16,12 +16,12 @@ namespace Ludwell.Scene.Editor
         {
             var serializedProperty = property.FindPropertyRelative("Key");
             var root = new SceneAssetReferenceController(serializedProperty);
-            root.SetObjectFieldLabel(property.name);
-        
+            root.SetObjectFieldLabel(property.displayName);
+
             root.RegisterCallback<DetachFromPanelEvent>(Dispose);
-        
+
             root.RegisterCallback<AttachToPanelEvent>(AddToDrawers);
-        
+
             var data = SceneAssetDataContainer.Instance.GetValue(serializedProperty.stringValue);
             if (data != null)
             {
@@ -32,11 +32,11 @@ namespace Ludwell.Scene.Editor
             {
                 Debug.LogError("Suspicious data | Key has a value, but no binding could be found | Key will be reset");
                 serializedProperty.stringValue = string.Empty;
-            
+
                 var activeScene = SceneManager.GetActiveScene();
                 EditorSceneManager.MarkSceneDirty(activeScene);
             }
-        
+
             return root;
         }
 

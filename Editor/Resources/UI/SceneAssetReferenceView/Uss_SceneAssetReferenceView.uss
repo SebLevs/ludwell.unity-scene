@@ -6,57 +6,33 @@
     overflow: hidden;
 }
 
-#help-box {
-    padding-top: 4px;
-    padding-right: 4px;
-    padding-bottom: 4px;
-    padding-left: 4px;
-    border-left-color: rgb(50, 50, 50);
-    border-right-color: rgb(50, 50, 50);
-    border-top-color: rgb(50, 50, 50);
-    border-bottom-color: rgb(50, 50, 50);
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-    margin-bottom: 2px;
-}
-
-#help-box > #visuals {
-    width: 100%;
-    flex-direction: row;
-    padding-top: 4px;
-    padding-right: 4px;
-    padding-bottom: 4px;
-    padding-left: 4px;
-}
-
-#help-box > #visuals > #icon {
-    margin-right: 8px;
-}
-
-#title {
-    text-overflow: ellipsis;
-}
-
 ObjectField {
-    margin-top: 0;
     margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
+    flex-grow: 1;
 }
 
 ObjectField > Label {
     min-width: 119.8px;
-    flex-shrink: 0;
     width: 40%;
 }
 
 ObjectField > VisualElement {
-    flex-grow: 1;
-    flex-shrink: 0;
+}
+
+#build-settings {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 2px;
+}
+
+#build-settings > #icon {
+    background-image: resource('Sprites/icon_add-build-settings');
 }

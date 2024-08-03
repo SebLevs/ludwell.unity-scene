@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneAssetReferenceView: IDisposable
+    public class SceneAssetReferenceView : IDisposable
     {
         private readonly string UxmlPath =
             Path.Combine("UI", nameof(SceneAssetReferenceView), "Uxml_" + nameof(SceneAssetReferenceView));
@@ -15,14 +15,12 @@ namespace Ludwell.Scene.Editor
         private readonly string UssPath =
             Path.Combine("UI", nameof(SceneAssetReferenceView), "Uss_" + nameof(SceneAssetReferenceView));
 
-        private const string HelpBoxName = "help-box";
-        
         private ThemeManagerEditor _themeManagerEditor;
 
         private readonly Label _objectFieldLabel;
 
-        public VisualElement HelpBox { get; }
-        public Button HelpBoxButton { get; private set; }
+        public Button BuildSettingsButton { get; private set; }
+
         public ObjectField ObjectField { get; }
 
         public SceneAssetReferenceView(VisualElement root)
@@ -32,12 +30,9 @@ namespace Ludwell.Scene.Editor
 
             ObjectField = root.Q<ObjectField>();
             _objectFieldLabel = ObjectField.Q<Label>();
-            
-            HelpBox = root.Q<VisualElement>(HelpBoxName);
-            HideHelpBox();
-            
-            HelpBoxButton = HelpBox.Q<Button>();
-            
+
+            BuildSettingsButton = root.Q<Button>();
+
             root.RegisterCallback<DetachFromPanelEvent>(Dispose);
             root.RegisterCallback<AttachToPanelEvent>(CacheThemeManager);
         }
@@ -48,22 +43,22 @@ namespace Ludwell.Scene.Editor
         {
             _themeManagerEditor.Dispose();
         }
-        
-        public void ShowHelpBox()
+
+        public void ShowButton()
         {
-            HelpBox.style.display = DisplayStyle.Flex;
+            BuildSettingsButton.style.display = DisplayStyle.Flex;
         }
 
-        public void HideHelpBox()
+        public void HideButton()
         {
-            HelpBox.style.display = DisplayStyle.None;
+            BuildSettingsButton.style.display = DisplayStyle.None;
         }
-        
+
         public void SetObjectFieldLabel(string value)
         {
             _objectFieldLabel.text = value;
         }
-        
+
         private void CacheThemeManager(AttachToPanelEvent evt)
         {
             var lightTheme = DefaultThemes.GetLightThemeStyleSheet();

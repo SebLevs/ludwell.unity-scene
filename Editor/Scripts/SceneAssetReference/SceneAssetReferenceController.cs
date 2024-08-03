@@ -13,72 +13,72 @@ namespace Ludwell.Scene.Editor
     {
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
-        
-        
+
         public SceneAssetReferenceController(SerializedProperty model)
         {
             _model = model;
-            
+
             _view = new SceneAssetReferenceView(this);
+            _view.HideButton();
 
             _view.ObjectField.tooltip = _model.stringValue;
             _view.ObjectField.RegisterValueChangedCallback(SolveHelpBox);
-            
-            _view.HelpBoxButton.clicked -= AddToBuildSettings;
-            _view.HelpBoxButton.clicked += AddToBuildSettings;
-            
+
+            _view.BuildSettingsButton.clicked -= AddToBuildSettings;
+            _view.BuildSettingsButton.clicked += AddToBuildSettings;
+
             _view.ObjectField.UnregisterValueChangedCallback(UpdatePropertyCache);
             _view.ObjectField.RegisterValueChangedCallback(UpdatePropertyCache);
-        
+
             _view.ObjectField.UnregisterValueChangedCallback(SolveHelpBox);
             _view.ObjectField.RegisterValueChangedCallback(SolveHelpBox);
         }
-        
+
         public void Dispose()
         {
             _view.Dispose(null);
         }
-        
+
         public void SetObjectFieldLabel(string value)
         {
             _view.SetObjectFieldLabel(value);
         }
-        
+
         public void SetObjectFieldValue(SceneAsset sceneAsset)
         {
             _view.ObjectField.value = sceneAsset;
             SolveHelpBox(null);
         }
-        
+
         private void SolveHelpBox(ChangeEvent<Object> _)
         {
             if (string.IsNullOrEmpty(_model.stringValue))
             {
-                _view.HideHelpBox();
+                _view.HideButton();
                 return;
             }
-            
+
             var data = SceneAssetDataContainer.Instance.GetValue(_model.stringValue);
-            
+
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
             {
                 Debug.LogError("todo: if scene asset is addressable, do not show the panel");
-            
+
                 // _helpBoxButton.text = $"Add {data.Name} to Build Settings";
-                _view.ShowHelpBox();
+                _view.ShowButton();
                 return;
             }
-            
-            _view.HideHelpBox();
+
+            _view.HideButton();
         }
-        
+
         private void AddToBuildSettings()
         {
             var data = SceneAssetDataContainer.Instance.GetValue(_model.stringValue);
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
-        
+
         private void UpdatePropertyCache(ChangeEvent<Object> evt)
         {
             var targetAsSceneAsset = evt.newValue as SceneAsset;
@@ -89,11 +89,11 @@ namespace Ludwell.Scene.Editor
                 {
                     EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                 }
-            
+
                 _model.stringValue = string.Empty;
                 _view.ObjectField.tooltip = _model.stringValue;
                 _model.serializedObject.ApplyModifiedProperties();
-            
+
                 return;
             }
 
