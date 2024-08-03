@@ -13,7 +13,7 @@ namespace Ludwell.Scene.Editor
     public class SceneAssetReferenceController : VisualElement, IDisposable
     {
         private static HashSet<SceneAssetReferenceController> _controllers = new();
-        
+
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
 
@@ -23,10 +23,10 @@ namespace Ludwell.Scene.Editor
 
             _view = new SceneAssetReferenceView(this);
             _view.HideButton();
-            
+
             RegisterCallback<DetachFromPanelEvent>(Dispose);
             RegisterCallback<AttachToPanelEvent>(AddToDrawers);
-            
+
             var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
             if (data != null)
             {
@@ -35,11 +35,8 @@ namespace Ludwell.Scene.Editor
             }
             else if (!string.IsNullOrEmpty(_model.stringValue))
             {
-                Debug.LogError("Suspicious data | Key has a value, but no binding could be found | Key will be reset");
                 _model.stringValue = string.Empty;
-
-                var activeScene = SceneManager.GetActiveScene();
-                EditorSceneManager.MarkSceneDirty(activeScene);
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
             }
 
             _view.ObjectField.tooltip = _model.stringValue;
@@ -48,13 +45,13 @@ namespace Ludwell.Scene.Editor
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
 
-            _view.ObjectField.UnregisterValueChangedCallback(UpdatePropertyCache);
-            _view.ObjectField.RegisterValueChangedCallback(UpdatePropertyCache);
+            _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
+            _view.ObjectField.RegisterValueChangedCallback(OnValueChanged);
 
             _view.ObjectField.UnregisterValueChangedCallback(SolveButtonVisibleState);
             _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
         }
-        
+
         public static void OnBuildSettingsChangedSolveHelpBoxes()
         {
             foreach (var controller in _controllers)
@@ -62,7 +59,7 @@ namespace Ludwell.Scene.Editor
                 controller.SolveButtonVisibleState(null);
             }
         }
-        
+
         public void Dispose() => Dispose(null);
 
         public void SetObjectFieldLabel(string value)
@@ -97,7 +94,7 @@ namespace Ludwell.Scene.Editor
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
 
-        private void UpdatePropertyCache(ChangeEvent<Object> evt)
+        private void OnValueChanged(ChangeEvent<Object> evt)
         {
             var targetAsSceneAsset = evt.newValue as SceneAsset;
 
@@ -108,22 +105,20 @@ namespace Ludwell.Scene.Editor
                     EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                 }
 
-                _model.stringValue = string.Empty;
-                _view.ObjectField.tooltip = _model.stringValue;
-                _model.serializedObject.ApplyModifiedProperties();
+                UpdateModel(string.Empty);
 
                 return;
             }
 
             var instance = SceneAssetDataContainer.Instance;
 
-            if (instance == null)
+            if (instance == null) // todo: delete when system transition to SceneElements is completed 
             {
                 instance = (SceneAssetDataContainer)ResourcesSolver.EnsureAssetExistence(
                     typeof(SceneAssetDataContainer), out _);
             }
 
-            Debug.LogError("Fill addressable ID");
+            Debug.LogError("Fill addressable ID"); // todo: delete when system transition to SceneElements is completed 
             var assetPath = AssetDatabase.GetAssetPath(targetAsSceneAsset);
             var key = AssetDatabase.AssetPathToGUID(assetPath);
             if (!instance.Contains(key))
@@ -143,12 +138,17 @@ namespace Ludwell.Scene.Editor
                 AssetDatabase.SaveAssetIfDirty(instance);
             }
 
-            _model.stringValue = key;
-            _view.ObjectField.tooltip = _model.stringValue;
-            _model.serializedObject.ApplyModifiedProperties();
+            UpdateModel(key);
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         }
-        
+
+        private void UpdateModel(string value)
+        {
+            _model.stringValue = value;
+            _view.ObjectField.tooltip = _model.stringValue;
+            _model.serializedObject.ApplyModifiedProperties();
+        }
+
         private void AddToDrawers(AttachToPanelEvent evt)
         {
             _controllers.Add(this);
@@ -158,7 +158,7 @@ namespace Ludwell.Scene.Editor
         {
             _controllers.Remove(this);
         }
-        
+
         private void Dispose(DetachFromPanelEvent evt)
         {
             RemoveFromDrawers();
