@@ -21,7 +21,7 @@
     background-image: resource('Sprites/icon_add-build-settings');
 }
 
-ObjectField {
+#scene-asset-reference {
     margin-top: 1px;
     margin-right: -2px;
     margin-bottom: 1px;
@@ -30,7 +30,7 @@ ObjectField {
     justify-content: space-between;
 }
 
-ObjectField > Label {
+#scene-asset-reference > Label {
     margin-top: 0;
     margin-right: 2px;
     margin-bottom: 0;
@@ -39,10 +39,11 @@ ObjectField > Label {
     padding-right: 2px;
     padding-bottom: 0;
     padding-left: 1px;
+    flex-grow: 1;
     min-width: 119.8px;
 }
 
-ObjectField > VisualElement {
+#scene-asset-reference > VisualElement {
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
@@ -51,6 +52,6 @@ ObjectField > VisualElement {
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
-    overflow: hidden;
-    max-width: 50%;
+    flex-basis: 58%;
+    max-width: 58%;
 }
