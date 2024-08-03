@@ -12,7 +12,7 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneAssetReferenceController : VisualElement, IDisposable
     {
-        private static List<SceneAssetReferenceController> _controllers = new();
+        private static HashSet<SceneAssetReferenceController> _controllers = new();
         
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
