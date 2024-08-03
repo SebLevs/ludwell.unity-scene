@@ -16,7 +16,7 @@ namespace Ludwell.Scene.Editor
             var root = new SceneAssetReferenceController(serializedProperty);
             root.SetObjectFieldLabel(property.displayName);
 
-            var data = SceneAssetDataContainer.Instance.GetValue(serializedProperty.stringValue);
+            var data = SceneAssetDataContainer.Instance.GetData(serializedProperty.stringValue);
             if (data != null)
             {
                 root.SetObjectFieldValue(AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path));

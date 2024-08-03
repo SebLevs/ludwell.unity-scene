@@ -12,14 +12,7 @@ namespace Ludwell.Scene
         /// </summary>
         [SerializeField] private string Key;
 
-        public bool IsKeyEmpty => string.IsNullOrEmpty(Key);
-
-        public bool IsValid => SceneAssetDataContainer.Instance.Contains(Key);
-
-        public void SetKey(string key)
-        {
-            Key = key;
-        }
+        public bool IsValid => string.IsNullOrEmpty(Key) && SceneAssetDataContainer.Instance.Contains(Key);
 
         public SceneAssetData Data()
         {

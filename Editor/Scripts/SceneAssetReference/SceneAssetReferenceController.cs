@@ -44,7 +44,6 @@ namespace Ludwell.Scene.Editor
         {
             foreach (var controller in _controllers)
             {
-                Debug.LogError("update");
                 controller.SolveButtonVisibleState(null);
             }
         }
@@ -78,7 +77,7 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var data = SceneAssetDataContainer.Instance.GetValue(_model.stringValue);
+            var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
 
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
@@ -93,7 +92,7 @@ namespace Ludwell.Scene.Editor
 
         private void AddToBuildSettings()
         {
-            var data = SceneAssetDataContainer.Instance.GetValue(_model.stringValue);
+            var data = SceneAssetDataContainer.Instance.GetData(_model.stringValue);
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
 

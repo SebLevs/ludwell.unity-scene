@@ -52,7 +52,7 @@ namespace Ludwell.Scene
             }
         }
 
-        public SceneAssetData GetValue(string key)
+        public SceneAssetData GetData(string key)
         {
             foreach (var sceneAssetDataBinder in _dataBinders)
             {
