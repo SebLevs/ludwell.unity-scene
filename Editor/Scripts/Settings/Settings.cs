@@ -6,7 +6,6 @@ namespace Ludwell.Scene.Editor
 {
     public class Settings : ScriptableObject
     {
-        // public static readonly string GenerateSceneDataKey = "GenerateSceneData";
     }
 
     [CustomEditor(typeof(Settings))]
@@ -34,7 +33,7 @@ namespace Ludwell.Scene.Editor
             if (GUILayout.Button($"Repopulate {nameof(SceneAssetDataBinders)}"))
             {
                 ResourcesLocator.GetSceneAssetDataBinders().Elements.Clear();
-                SceneAssetSolver.PopulateSceneAssetDataBinders();
+                DataSolver.PopulateSceneAssetDataBinders();
                 ResourcesLocator.SaveSceneAssetDataBindersDelayed();
             }
 

@@ -8,14 +8,8 @@ using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    [InitializeOnLoad]
-    public static class SceneAssetSolver
+    public static class DataSolver
     {
-        static SceneAssetSolver()
-        {
-            // PopulateElements();
-        }
-
         public static void CreateSceneAssetAtPath()
         {
             var absolutePath = EditorUtility.SaveFilePanel(
@@ -75,7 +69,6 @@ namespace Ludwell.Scene.Editor
 
             if (!hasSolved) return;
 
-            Debug.LogError("PopulateSceneAssetDataBinders");
             Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveSceneAssetDataBindersDelayed();
         }
@@ -104,7 +97,6 @@ namespace Ludwell.Scene.Editor
             }
 
             if (!hasSolved) return;
-            Debug.LogError("RemoveAllInvalidSceneAssetDataBinders");
 
             Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveSceneAssetDataBindersDelayed();
@@ -129,7 +121,6 @@ namespace Ludwell.Scene.Editor
             }
 
             if (!hasSolved) return;
-            Debug.LogError("SolveTagBindings");
 
             Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveSceneAssetDataBindersDelayed();

@@ -26,12 +26,12 @@ namespace Ludwell.Scene.Editor
                 var importedAsset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(asset);
                 if (importedAsset is Tags)
                 {
-                    SceneAssetSolver.SolveTagBindings();
+                    DataSolver.SolveTagBindings();
                     continue;
                 }
 
                 if (importedAsset is not SceneAssetDataBinders) continue;
-                SceneAssetSolver.SolveSceneAssetDataBinders();
+                DataSolver.SolveSceneAssetDataBinders();
             }
         }
     }

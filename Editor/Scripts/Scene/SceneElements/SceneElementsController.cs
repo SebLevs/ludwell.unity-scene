@@ -41,7 +41,7 @@ namespace Ludwell.Scene.Editor
             _root = parent.Q(nameof(SceneElementsView));
             _view = new SceneElementsView(_root);
             _view.CloseAllButton.clicked += CloseAll;
-            _view.AddButton.clicked += SceneAssetSolver.CreateSceneAssetAtPath;
+            _view.AddButton.clicked += DataSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked += DeleteSelection;
 
             _listView = _root.Q<ListView>();
@@ -70,7 +70,7 @@ namespace Ludwell.Scene.Editor
         public void Dispose()
         {
             _view.CloseAllButton.clicked -= CloseAll;
-            _view.AddButton.clicked -= SceneAssetSolver.CreateSceneAssetAtPath;
+            _view.AddButton.clicked -= DataSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked -= DeleteSelection;
             _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 

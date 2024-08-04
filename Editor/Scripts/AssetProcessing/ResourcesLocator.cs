@@ -11,15 +11,13 @@ namespace Ludwell.Scene.Editor
         private static DelayedEditorUpdateAction _delayedSaveSceneAssetDataBinders;
 
         private static Tags _tags;
-        private static DelayedEditorUpdateAction _delayedSaveTags;
 
         private static DelayedEditorUpdateAction _delayedSaveSceneAssetDataBindersAndTags;
 
         public static Settings GetSceneDataManagerSettings()
         {
             if (_toolkitSettings) return _toolkitSettings;
-            _toolkitSettings = (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings),
-                out var _);
+            _toolkitSettings = (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings), out _);
             return _toolkitSettings;
         }
 
@@ -80,7 +78,7 @@ namespace Ludwell.Scene.Editor
                     out var existed);
             if (!existed)
             {
-                SceneAssetSolver.PopulateSceneAssetDataBinders();
+                DataSolver.PopulateSceneAssetDataBinders();
             }
         }
 

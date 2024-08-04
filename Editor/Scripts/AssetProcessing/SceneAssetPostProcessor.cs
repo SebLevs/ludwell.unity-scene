@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using Ludwell.Architecture;
 using UnityEditor;
-using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
@@ -39,8 +38,6 @@ namespace Ludwell.Scene.Editor
             {
                 if (!deleted[index].EndsWith(".unity")) continue;
 
-                Debug.LogError("SolveDeleted");
-                
                 hasSolved = true;
                 ResourcesLocator.GetSceneAssetDataBinders().Remove(AssetDatabase.AssetPathToGUID(deleted[index]));
             }
@@ -61,10 +58,8 @@ namespace Ludwell.Scene.Editor
             {
                 if (!movedAssets[index].EndsWith(".unity")) continue;
 
-                Debug.LogError("SolveMoved");
-
                 hasSolved = true;
-                
+
                 var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataBinders();
 
                 var guid = AssetDatabase.AssetPathToGUID(movedAssets[index]);
@@ -89,12 +84,10 @@ namespace Ludwell.Scene.Editor
             foreach (var path in importedAssets)
             {
                 if (!path.EndsWith(".unity")) continue;
-                
-                Debug.LogError("SolveImported");
-                
+
                 hasSolved = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
-                SceneAssetSolver.AddSceneAssetDataBinderFromGuid(guid);
+                DataSolver.AddSceneAssetDataBinderFromGuid(guid);
             }
 
             _isHandlingImported = false;
