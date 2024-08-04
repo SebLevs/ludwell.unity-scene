@@ -15,13 +15,18 @@ namespace Ludwell.Scene.Editor
         private readonly string UssPath =
             Path.Combine("UI", nameof(SceneAssetReferenceView), "Uss_" + nameof(SceneAssetReferenceView));
 
+        private const string BuildSettingsButtonName = "build-settings";
+        private const string SelectInWindowButtonName = "select-in-window";
+
         private ThemeManagerEditor _themeManagerEditor;
 
         private readonly Label _objectFieldLabel;
 
-        public Button BuildSettingsButton { get; }
-
         public ObjectField ObjectField { get; }
+        
+        public Button BuildSettingsButton { get; }
+        
+        public Button SelectInWindowButton { get; }
 
         public SceneAssetReferenceView(VisualElement root)
         {
@@ -31,7 +36,8 @@ namespace Ludwell.Scene.Editor
             ObjectField = root.Q<ObjectField>();
             _objectFieldLabel = ObjectField.Q<Label>();
 
-            BuildSettingsButton = root.Q<Button>();
+            BuildSettingsButton = root.Q<Button>(BuildSettingsButtonName);
+            SelectInWindowButton = root.Q<Button>(SelectInWindowButtonName);
 
             root.RegisterCallback<DetachFromPanelEvent>(Dispose);
             root.RegisterCallback<AttachToPanelEvent>(CacheThemeManager);
@@ -44,14 +50,24 @@ namespace Ludwell.Scene.Editor
             _themeManagerEditor.Dispose();
         }
 
-        public void ShowButton()
+        public void ShowBuildSettingsButton()
         {
             BuildSettingsButton.style.display = DisplayStyle.Flex;
         }
 
-        public void HideButton()
+        public void HideBuildSettingsButton()
         {
             BuildSettingsButton.style.display = DisplayStyle.None;
+        }
+        
+        public void ShowSelectInWindowButton()
+        {
+            SelectInWindowButton.style.display = DisplayStyle.Flex;
+        }
+
+        public void HideSelectInWindowButton()
+        {
+            SelectInWindowButton.style.display = DisplayStyle.None;
         }
 
         public void SetObjectFieldLabel(string value)

@@ -1,33 +1,27 @@
 #parent {
     flex-direction: row;
     width: 100%;
-}
-
-#build-settings {
-    width: 16px;
-    height: 16px;
-    align-self: center;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    padding-left: 2px;
     margin-top: 0;
     margin-right: 0;
     margin-bottom: 0;
-    margin-left: 4px;
-}
-
-#build-settings > #icon {
-    background-image: resource('Sprites/icon_add-build-settings');
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 #scene-asset-reference {
+    flex-grow: 1;
+    justify-content: space-between;
     margin-top: 1px;
     margin-right: -2px;
     margin-bottom: 1px;
     margin-left: 3px;
-    flex-grow: 1;
-    justify-content: space-between;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 #scene-asset-reference > Label {
@@ -54,4 +48,26 @@
     padding-left: 0;
     flex-basis: 58%;
     max-width: 58%;
+}
+
+.button-with-icon {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    margin-top: 0;
+    margin-right: 4px;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+#build-settings > #icon {
+    background-image: resource('Sprites/icon_add-build-settings');
+}
+
+#select-in-window > #icon {
+    background-image: resource('Sprites/icon_settings');
 }

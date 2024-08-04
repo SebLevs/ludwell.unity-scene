@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -22,7 +23,13 @@ namespace Ludwell.Scene.Editor
             _model = model;
 
             _view = new SceneAssetReferenceView(this);
-            _view.HideButton();
+            _view.HideBuildSettingsButton();
+            _view.HideSelectInWindowButton();
+
+            this.Q<ObjectField>().Insert(1, _view.BuildSettingsButton);
+            this.Q<ObjectField>().Insert(1, _view.SelectInWindowButton);
+
+            _view.SelectInWindowButton.clicked += SelectInWindow;
 
             RegisterCallback<DetachFromPanelEvent>(Dispose);
             RegisterCallback<AttachToPanelEvent>(AddToDrawers);
@@ -31,7 +38,7 @@ namespace Ludwell.Scene.Editor
             if (data != null)
             {
                 _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
-                if (!Application.isPlaying) SolveButtonVisibleState(null);
+                if (!Application.isPlaying) SolveButtonsVisibleState(null);
             }
             else if (!string.IsNullOrEmpty(_model.stringValue))
             {
@@ -40,7 +47,7 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.ObjectField.tooltip = _model.stringValue;
-            _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
+            _view.ObjectField.RegisterValueChangedCallback(SolveButtonsVisibleState);
 
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
@@ -48,15 +55,15 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
             _view.ObjectField.RegisterValueChangedCallback(OnValueChanged);
 
-            _view.ObjectField.UnregisterValueChangedCallback(SolveButtonVisibleState);
-            _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
+            _view.ObjectField.UnregisterValueChangedCallback(SolveButtonsVisibleState);
+            _view.ObjectField.RegisterValueChangedCallback(SolveButtonsVisibleState);
         }
 
         public static void SolveHelpBoxes()
         {
             foreach (var controller in _controllers)
             {
-                controller.SolveButtonVisibleState(null);
+                controller.SolveButtonsVisibleState(null);
             }
         }
 
@@ -67,14 +74,17 @@ namespace Ludwell.Scene.Editor
             _view.SetObjectFieldLabel(value);
         }
 
-        private void SolveButtonVisibleState(ChangeEvent<Object> _)
+        private void SolveButtonsVisibleState(ChangeEvent<Object> _)
         {
             if (Application.isPlaying) return;
             if (string.IsNullOrEmpty(_model.stringValue))
             {
-                _view.HideButton();
+                _view.HideBuildSettingsButton();
+                _view.HideSelectInWindowButton();
                 return;
             }
+
+            _view.ShowSelectInWindowButton();
 
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
 
@@ -82,11 +92,11 @@ namespace Ludwell.Scene.Editor
             if (!isInBuildSetting)
             {
                 Debug.LogError("todo: if scene asset is addressable, do not show the panel");
-                _view.ShowButton();
+                _view.ShowBuildSettingsButton();
                 return;
             }
 
-            _view.HideButton();
+            _view.HideBuildSettingsButton();
         }
 
         private void AddToBuildSettings()
@@ -124,6 +134,16 @@ namespace Ludwell.Scene.Editor
             _model.serializedObject.ApplyModifiedProperties();
         }
 
+        private void SelectInWindow()
+        {
+            var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders()
+                .GetBinderFromId(_model.stringValue);
+            var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
+            var window = SceneManagerToolkitWindow.GetWindow<SceneManagerToolkitWindow>();
+            window.Focus();
+            window.SceneElementsController.ScrollToItemIndex(index);
+        }
+
         private void AddToDrawers(AttachToPanelEvent evt)
         {
             _controllers.Add(this);
@@ -137,6 +157,7 @@ namespace Ludwell.Scene.Editor
         private void Dispose(DetachFromPanelEvent evt)
         {
             RemoveFromDrawers();
+            _view.SelectInWindowButton.clicked -= SelectInWindow;
             _view.Dispose(null);
         }
     }
