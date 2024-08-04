@@ -4,7 +4,6 @@ using Ludwell.Architecture;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
 {
@@ -94,7 +93,6 @@ namespace Ludwell.Scene.Editor
                 ID = guid,
                 Data = new SceneAssetData
                 {
-                    BuildIndex = SceneUtility.GetBuildIndexByScenePath(assetPath),
                     Name = sceneData.name,
                     Path = assetPath,
                     AddressableID = "TO BE FILLED"

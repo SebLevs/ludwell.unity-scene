@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataModificationProcessor : AssetModificationProcessor
+    public class SceneAssetModificationProcessor : AssetModificationProcessor
     {
         private static bool _isHandling;
 

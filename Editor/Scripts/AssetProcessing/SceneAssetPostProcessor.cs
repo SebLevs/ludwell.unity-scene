@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneDataPostProcessor : AssetPostprocessor
+    public class SceneAssetPostProcessor : AssetPostprocessor
     {
         private static bool _isHandlingMove;
         private static bool _isHandlingImport;

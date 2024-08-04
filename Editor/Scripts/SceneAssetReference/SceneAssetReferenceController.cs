@@ -31,12 +31,12 @@ namespace Ludwell.Scene.Editor
             if (data != null)
             {
                 _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
-                SolveButtonVisibleState(null);
+                if (!Application.isPlaying) SolveButtonVisibleState(null);
             }
             else if (!string.IsNullOrEmpty(_model.stringValue))
             {
                 _model.stringValue = string.Empty;
-                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+                if (!Application.isPlaying) EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
             }
 
             _view.ObjectField.tooltip = _model.stringValue;
@@ -52,7 +52,7 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.RegisterValueChangedCallback(SolveButtonVisibleState);
         }
 
-        public static void OnBuildSettingsChangedSolveHelpBoxes()
+        public static void SolveHelpBoxes()
         {
             foreach (var controller in _controllers)
             {
@@ -69,6 +69,7 @@ namespace Ludwell.Scene.Editor
 
         private void SolveButtonVisibleState(ChangeEvent<Object> _)
         {
+            if (Application.isPlaying) return;
             if (string.IsNullOrEmpty(_model.stringValue))
             {
                 _view.HideButton();
