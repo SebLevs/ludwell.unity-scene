@@ -31,11 +31,11 @@ namespace Ludwell.Scene.Editor
 
             GUILayout.Space(2);
 
-            if (GUILayout.Button("Repopulate SceneAsset list"))
+            if (GUILayout.Button($"Repopulate {nameof(SceneAssetDataBinders)}"))
             {
-                ResourcesLocator.GetTags().Elements.Clear();
                 ResourcesLocator.GetSceneAssetDataBinders().Elements.Clear();
                 SceneAssetSolver.PopulateSceneAssetDataBinders();
+                ResourcesLocator.SaveSceneAssetDataBindersDelayed();
             }
 
             EditorPainter.DrawSeparatorLine();
