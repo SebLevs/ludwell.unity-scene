@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace Ludwell.Scene
@@ -35,29 +36,38 @@ namespace Ludwell.Scene
         {
             foreach (var binder in Elements)
             {
-                if (string.Equals(id, binder.ID, StringComparison.InvariantCulture)) return true;
+                if (string.Equals(id, binder.GUID, StringComparison.InvariantCulture)) return true;
             }
 
             return false;
         }
 
-        public void Add(SceneAssetDataBinder newBinder)
+        public bool Add(string guid, string assetName, string path, string addressableID = "NA")
         {
-            foreach (var binder in Elements)
+            if (ContainsWithId(guid)) return false;
+            Debug.LogError("TODO: Setup addressable ID");
+            Debug.LogError($"add for | {assetName} | {guid} | {path} | {addressableID}");
+            var newBinder = new SceneAssetDataBinder
             {
-                if (!string.Equals(newBinder.ID, binder.ID, StringComparison.InvariantCulture)) continue;
-                return;
-            }
+                GUID = guid,
+                Data = new SceneAssetData
+                {
+                    Name = assetName,
+                    Path = path,
+                    AddressableID = addressableID
+                }
+            };
 
             Elements.Add(newBinder);
             Elements.Sort();
+            return true;
         }
 
         public void Remove(string id)
         {
             foreach (var binder in Elements)
             {
-                if (!string.Equals(id, binder.ID, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(id, binder.GUID, StringComparison.InvariantCulture)) continue;
                 Elements.Remove(binder);
                 return;
             }
@@ -67,7 +77,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
                 return sceneAssetDataBinder;
             }
 
@@ -78,7 +88,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
                 binder = sceneAssetDataBinder;
                 return true;
             }
@@ -115,7 +125,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
                 return sceneAssetDataBinder.Data;
             }
 
@@ -126,7 +136,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.ID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
                 data = sceneAssetDataBinder.Data;
                 return true;
             }

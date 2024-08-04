@@ -41,7 +41,7 @@ namespace Ludwell.Scene.Editor
             _root = parent.Q(nameof(SceneElementsView));
             _view = new SceneElementsView(_root);
             _view.CloseAllButton.clicked += CloseAll;
-            _view.AddButton.clicked += SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.AddButton.clicked += SceneAssetSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked += DeleteSelection;
 
             _listView = _root.Q<ListView>();
@@ -70,7 +70,7 @@ namespace Ludwell.Scene.Editor
         public void Dispose()
         {
             _view.CloseAllButton.clicked -= CloseAll;
-            _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.AddButton.clicked -= SceneAssetSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked -= DeleteSelection;
             _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 
@@ -224,7 +224,7 @@ namespace Ludwell.Scene.Editor
             if (_sceneAssetDataBinders == null || _sceneAssetDataBinders.Elements == null) return;
             foreach (var item in _listViewHandler.Data)
             {
-                var id = item.ID;
+                var id = item.GUID;
                 SessionState.SetBool(id, false);
             }
 

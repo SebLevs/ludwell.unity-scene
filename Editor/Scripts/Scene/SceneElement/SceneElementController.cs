@@ -152,7 +152,7 @@ namespace Ludwell.Scene.Editor
 
         private void SetFoldoutValueFromSavedState()
         {
-            var id = _model.ID;
+            var id = _model.GUID;
             var oldState = SessionState.GetBool(id, false);
             SetOpenState(oldState);
         }
@@ -166,7 +166,7 @@ namespace Ludwell.Scene.Editor
         private void SetLoadButtonState()
         {
             if (!EditorApplication.isPlaying) return;
-            if (SessionState.GetString(CurrentActiveScene, string.Empty) != _model.ID)
+            if (SessionState.GetString(CurrentActiveScene, string.Empty) != _model.GUID)
             {
                 _view.SwitchLoadButtonState(false);
                 return;
@@ -304,7 +304,7 @@ namespace Ludwell.Scene.Editor
 
         private void LoadScene()
         {
-            SessionState.SetString(CurrentActiveScene, _model.ID);
+            SessionState.SetString(CurrentActiveScene, _model.GUID);
             SceneManagerHelper.LoadScene(_model);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
         }
@@ -315,7 +315,7 @@ namespace Ludwell.Scene.Editor
             EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
 
             var prefActiveSceneID = SessionState.GetString(CurrentActiveScene, string.Empty);
-            var modelSceneID = _model.ID;
+            var modelSceneID = _model.GUID;
             if (prefActiveSceneID == modelSceneID) SessionState.EraseInt(CurrentActiveScene);
             _view.SwitchLoadButtonState(false);
         }
@@ -345,7 +345,7 @@ namespace Ludwell.Scene.Editor
 
         private void SessionStateCacheFoldoutValue(ClickEvent _)
         {
-            var id = _model.ID;
+            var id = _model.GUID;
             SessionState.SetBool(id, _foldout.IsOpen);
         }
     }

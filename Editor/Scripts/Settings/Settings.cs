@@ -35,7 +35,7 @@ namespace Ludwell.Scene.Editor
             {
                 ResourcesLocator.GetTags().Elements.Clear();
                 ResourcesLocator.GetSceneAssetDataBinders().Elements.Clear();
-                SceneDataGenerator.PopulateQuickLoadElements();
+                SceneAssetSolver.PopulateSceneAssetDataBinders();
             }
 
             EditorPainter.DrawSeparatorLine();

@@ -8,7 +8,7 @@ namespace Ludwell.Scene.Editor
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var serializedProperty = property.FindPropertyRelative("Key");
+            var serializedProperty = property.FindPropertyRelative("_guid");
             var root = new SceneAssetReferenceController(serializedProperty);
             root.SetObjectFieldLabel(property.displayName);
 

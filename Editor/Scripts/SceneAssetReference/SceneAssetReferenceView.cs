@@ -19,7 +19,7 @@ namespace Ludwell.Scene.Editor
 
         private readonly Label _objectFieldLabel;
 
-        public Button BuildSettingsButton { get; private set; }
+        public Button BuildSettingsButton { get; }
 
         public ObjectField ObjectField { get; }
 

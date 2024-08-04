@@ -1,15 +1,13 @@
 using System;
 using Ludwell.UIToolkitElements;
-using UnityEngine;
 
 namespace Ludwell.Scene
 {
     [Serializable]
     public class SceneAssetDataBinder : TagSubscriberWithTags, IListable, IComparable
     {
-        /// <summary> AssetPathToGUID </summary>
-        [field: SerializeField]
-        public string ID { get; set; }
+        /// <summary>The GUID of the SceneAsset.</summary>
+        public string GUID;
 
         public SceneAssetData Data;
 

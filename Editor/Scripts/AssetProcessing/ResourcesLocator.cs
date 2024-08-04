@@ -37,7 +37,7 @@ namespace Ludwell.Scene.Editor
 
         public static void SaveSceneAssetDataBinders()
         {
-            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
+            ContainersPostProcessor.IsImportCauseInternal = true;
             CacheSceneAssetDataBinders();
             EditorUtility.SetDirty(_sceneAssetDataBinders);
             AssetDatabase.SaveAssetIfDirty(_sceneAssetDataBinders);
@@ -52,7 +52,7 @@ namespace Ludwell.Scene.Editor
 
         public static void SaveTags()
         {
-            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
+            ContainersPostProcessor.IsImportCauseInternal = true;
             CacheTags();
             EditorUtility.SetDirty(_tags);
             AssetDatabase.SaveAssetIfDirty(_tags);
@@ -60,6 +60,7 @@ namespace Ludwell.Scene.Editor
 
         private static void SaveSceneAssetDataBindersAndTags()
         {
+            ContainersPostProcessor.IsImportCauseInternal = true;
             SaveSceneAssetDataBinders();
             SaveTags();
         }
@@ -79,7 +80,7 @@ namespace Ludwell.Scene.Editor
                     out var existed);
             if (!existed)
             {
-                SceneDataGenerator.PopulateQuickLoadElements();
+                SceneAssetSolver.PopulateSceneAssetDataBinders();
             }
         }
 
