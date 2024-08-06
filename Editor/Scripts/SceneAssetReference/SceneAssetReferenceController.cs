@@ -105,7 +105,6 @@ namespace Ludwell.Scene.Editor
         {
             if (_view.ObjectField.value != null) return;
             if (_view.AreButtonsHidden()) return; 
-            Debug.LogError("WAS NULLASLDKALKDQKWELK");
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
         }
