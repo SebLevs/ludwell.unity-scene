@@ -14,7 +14,7 @@ namespace Ludwell.Scene.Editor
 
         private static void SceneListChangedCallback()
         {
-            SceneAssetReferenceController.SolveHelpBoxes();
+            SceneAssetReferenceController.SolveButtonsVisibleState();
             Signals.Dispatch<UISignals.RefreshView>();
         }
     }

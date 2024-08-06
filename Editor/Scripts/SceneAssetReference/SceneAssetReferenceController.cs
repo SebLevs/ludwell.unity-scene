@@ -61,7 +61,7 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.RegisterValueChangedCallback(SolveButtonsVisibleState);
         }
 
-        public static void SolveHelpBoxes()
+        public static void SolveButtonsVisibleState()
         {
             foreach (var controller in _controllers)
             {
