@@ -1,55 +1,3 @@
-#parent {
-    flex-direction: row;
-    width: 100%;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-}
-
-#scene-asset-reference {
-    flex-grow: 1;
-    justify-content: space-between;
-    margin-top: 1px;
-    margin-right: -2px;
-    margin-bottom: 1px;
-    margin-left: 3px;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-}
-
-#scene-asset-reference > Label {
-    margin-top: 0;
-    margin-right: 2px;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 0;
-    padding-left: 1px;
-    flex-grow: 1;
-    min-width: 119.8px;
-}
-
-#scene-asset-reference > VisualElement {
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    flex-basis: 58%;
-    max-width: 58%;
-}
-
 .button-with-icon {
     width: 16px;
     height: 16px;
@@ -64,10 +12,36 @@
     margin-left: 0;
 }
 
-#build-settings > #icon {
-    background-image: resource('Sprites/icon_add-build-settings');
+#select-in-window {
+    position: absolute;
+    right: 0;
+    margin-top: 0;
+    margin-right: 2px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
 }
 
 #select-in-window > #icon {
     background-image: resource('Sprites/icon_settings');
+}
+
+#build-settings {
+    position: absolute;
+    right: 20px;
+    margin-top: 0;
+    margin-right: 2px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+}
+
+#build-settings > #icon {
+    background-image: resource('Sprites/icon_add-build-settings');
 }

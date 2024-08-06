@@ -23,9 +23,9 @@ namespace Ludwell.Scene.Editor
         private readonly Label _objectFieldLabel;
 
         public ObjectField ObjectField { get; }
-        
+
         public Button BuildSettingsButton { get; }
-        
+
         public Button SelectInWindowButton { get; }
 
         public SceneAssetReferenceView(VisualElement root)
@@ -34,6 +34,8 @@ namespace Ludwell.Scene.Editor
             root.AddStyleFromUss(UssPath);
 
             ObjectField = root.Q<ObjectField>();
+            ObjectField.AddToClassList(ObjectField.alignedFieldUssClassName);
+
             _objectFieldLabel = ObjectField.Q<Label>();
 
             BuildSettingsButton = root.Q<Button>(BuildSettingsButtonName);
@@ -59,7 +61,7 @@ namespace Ludwell.Scene.Editor
         {
             BuildSettingsButton.style.display = DisplayStyle.None;
         }
-        
+
         public void ShowSelectInWindowButton()
         {
             SelectInWindowButton.style.display = DisplayStyle.Flex;

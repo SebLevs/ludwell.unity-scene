@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ludwell.UIToolkitUtilities;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -26,8 +26,8 @@ namespace Ludwell.Scene.Editor
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
 
-            this.Q<ObjectField>().Insert(1, _view.BuildSettingsButton);
-            this.Q<ObjectField>().Insert(1, _view.SelectInWindowButton);
+            _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
+            _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.SelectInWindowButton);
 
             _view.SelectInWindowButton.clicked += SelectInWindow;
 

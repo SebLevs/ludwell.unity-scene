@@ -2,10 +2,10 @@
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Resources/UI/SceneAssetReferenceView/Uss_SceneAssetReferenceView.uss?fileID=7433441132597879392&amp;guid=b1ab718f2ebbf094f97ad15b770c8819&amp;type=3#Uss_SceneAssetReferenceView" />
     <ui:VisualElement name="parent">
         <uie:ObjectField label="Scene" name="scene-asset-reference" type="UnityEditor.SceneAsset, UnityEditor.CoreModule" />
-        <ui:Button display-tooltip-when-elided="true" name="build-settings" tooltip="Add to Build Settings" class="button-with-icon">
+        <ui:Button display-tooltip-when-elided="true" name="select-in-window" tooltip="Select in Scene Manager Toolkit window" class="button-with-icon">
             <ui:VisualElement name="icon" style="flex-grow: 1;" />
         </ui:Button>
-        <ui:Button display-tooltip-when-elided="true" name="select-in-window" tooltip="Select in Scene Manager Toolkit window" class="button-with-icon">
+        <ui:Button display-tooltip-when-elided="true" name="build-settings" tooltip="Add to Build Settings" class="button-with-icon">
             <ui:VisualElement name="icon" style="flex-grow: 1;" />
         </ui:Button>
     </ui:VisualElement>
