@@ -25,6 +25,8 @@ namespace Ludwell.Scene.Editor
             _view = new SceneAssetReferenceView(this);
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
+            
+            EditorApplication.update += SolveButtonOnMissingReference;
 
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.SelectInWindowButton);
@@ -99,6 +101,15 @@ namespace Ludwell.Scene.Editor
             _view.HideBuildSettingsButton();
         }
 
+        private void SolveButtonOnMissingReference()
+        {
+            if (_view.ObjectField.value != null) return;
+            if (_view.AreButtonsHidden()) return; 
+            Debug.LogError("WAS NULLASLDKALKDQKWELK");
+            _view.HideBuildSettingsButton();
+            _view.HideSelectInWindowButton();
+        }
+
         private void AddToBuildSettings()
         {
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
@@ -157,6 +168,7 @@ namespace Ludwell.Scene.Editor
         private void Dispose(DetachFromPanelEvent evt)
         {
             RemoveFromDrawers();
+            EditorApplication.update -= SolveButtonOnMissingReference;
             _view.SelectInWindowButton.clicked -= SelectInWindow;
             _view.Dispose(null);
         }

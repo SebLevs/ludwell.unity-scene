@@ -51,6 +51,12 @@ namespace Ludwell.Scene.Editor
         {
             _themeManagerEditor.Dispose();
         }
+        
+        public bool AreButtonsHidden()
+        {
+            return BuildSettingsButton.style.display == DisplayStyle.None &&
+                   SelectInWindowButton.style.display == DisplayStyle.None;
+        }
 
         public void ShowBuildSettingsButton()
         {
