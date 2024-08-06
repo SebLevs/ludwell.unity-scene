@@ -91,7 +91,7 @@ namespace Ludwell.Scene.Editor
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
             {
-                Debug.LogError("todo: if scene asset is addressable, do not show the panel");
+                Debug.LogError("todo: if scene asset is addressable, do not show the button");
                 _view.ShowBuildSettingsButton();
                 return;
             }
@@ -139,7 +139,7 @@ namespace Ludwell.Scene.Editor
             var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders()
                 .GetBinderFromId(_model.stringValue);
             var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
-            var window = SceneManagerToolkitWindow.GetWindow<SceneManagerToolkitWindow>();
+            var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
             window.Focus();
             window.SceneElementsController.ScrollToItemIndex(index);
         }
