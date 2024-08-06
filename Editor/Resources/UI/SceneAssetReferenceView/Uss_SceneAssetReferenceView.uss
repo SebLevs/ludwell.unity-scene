@@ -45,3 +45,7 @@
 #build-settings > #icon {
     background-image: resource('Sprites/icon_add-build-settings');
 }
+
+Label {
+    flex-direction: row;
+}
