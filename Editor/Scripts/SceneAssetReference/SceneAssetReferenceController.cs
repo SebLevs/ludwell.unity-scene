@@ -25,7 +25,7 @@ namespace Ludwell.Scene.Editor
             _view = new SceneAssetReferenceView(this);
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
-            
+
             EditorApplication.update += SolveButtonOnMissingReference;
 
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
@@ -33,39 +33,32 @@ namespace Ludwell.Scene.Editor
 
             _view.SelectInWindowButton.clicked += SelectInWindow;
 
-            RegisterCallback<DetachFromPanelEvent>(Dispose);
             RegisterCallback<AttachToPanelEvent>(AddToDrawers);
+            RegisterCallback<DetachFromPanelEvent>(Dispose);
 
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
             if (data != null)
             {
                 _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
-                if (!Application.isPlaying) SolveButtonsVisibleState(null);
+                if (!Application.isPlaying) SolveBuildSettingsButton(null);
             }
-            else if (!string.IsNullOrEmpty(_model.stringValue))
-            {
-                _model.stringValue = string.Empty;
-                if (!Application.isPlaying) EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-            }
-
-            _view.ObjectField.tooltip = _model.stringValue;
-            _view.ObjectField.RegisterValueChangedCallback(SolveButtonsVisibleState);
 
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
 
-            _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
             _view.ObjectField.RegisterValueChangedCallback(OnValueChanged);
+            _view.ObjectField.RegisterValueChangedCallback(SolveBuildSettingsButton);
+            _view.ObjectField.RegisterValueChangedCallback(SolveSelectInWindowButton);
 
-            _view.ObjectField.UnregisterValueChangedCallback(SolveButtonsVisibleState);
-            _view.ObjectField.RegisterValueChangedCallback(SolveButtonsVisibleState);
+            SolveBuildSettingsButton(null);
+            SolveSelectInWindowButton(null);
         }
 
         public static void SolveButtonsVisibleState()
         {
             foreach (var controller in _controllers)
             {
-                controller.SolveButtonsVisibleState(null);
+                controller.SolveBuildSettingsButton(null);
             }
         }
 
@@ -76,17 +69,13 @@ namespace Ludwell.Scene.Editor
             _view.SetObjectFieldLabel(value);
         }
 
-        private void SolveButtonsVisibleState(ChangeEvent<Object> _)
+        private void SolveBuildSettingsButton(ChangeEvent<Object> _)
         {
-            if (Application.isPlaying) return;
-            if (string.IsNullOrEmpty(_model.stringValue))
+            if (Application.isPlaying || _view.ObjectField.value == null)
             {
                 _view.HideBuildSettingsButton();
-                _view.HideSelectInWindowButton();
                 return;
             }
-
-            _view.ShowSelectInWindowButton();
 
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
 
@@ -101,10 +90,21 @@ namespace Ludwell.Scene.Editor
             _view.HideBuildSettingsButton();
         }
 
+        private void SolveSelectInWindowButton(ChangeEvent<Object> _)
+        {
+            if (_view.ObjectField.value == null)
+            {
+                _view.HideSelectInWindowButton();
+                return;
+            }
+
+            _view.ShowSelectInWindowButton();
+        }
+
         private void SolveButtonOnMissingReference()
         {
             if (_view.ObjectField.value != null) return;
-            if (_view.AreButtonsHidden()) return; 
+            if (_view.AreButtonsHidden()) return;
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
         }
@@ -127,7 +127,6 @@ namespace Ludwell.Scene.Editor
                 }
 
                 UpdateModel(string.Empty);
-
                 return;
             }
 
@@ -167,8 +166,15 @@ namespace Ludwell.Scene.Editor
         private void Dispose(DetachFromPanelEvent evt)
         {
             RemoveFromDrawers();
+
             EditorApplication.update -= SolveButtonOnMissingReference;
+
             _view.SelectInWindowButton.clicked -= SelectInWindow;
+
+            _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
+            _view.ObjectField.UnregisterValueChangedCallback(SolveBuildSettingsButton);
+            _view.ObjectField.UnregisterValueChangedCallback(SolveSelectInWindowButton);
+
             _view.Dispose(null);
         }
     }
