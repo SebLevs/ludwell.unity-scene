@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Ludwell.UIToolkitUtilities;
 using UnityEditor;
@@ -13,10 +14,13 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneAssetReferenceController : VisualElement, IDisposable
     {
-        private static HashSet<SceneAssetReferenceController> _controllers = new();
+        private static readonly HashSet<SceneAssetReferenceController> _controllers = new();
+        private static string _lastCopy;
 
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
+
+        private ContextualMenuManipulator _contextualMenuManipulator;
 
         public SceneAssetReferenceController(SerializedProperty model)
         {
@@ -52,6 +56,10 @@ namespace Ludwell.Scene.Editor
 
             SolveBuildSettingsButton(null);
             SolveSelectInWindowButton(null);
+
+            _contextualMenuManipulator = BuildContextualMenuManipulator();
+            _view.ObjectField.AddManipulator(_contextualMenuManipulator);
+            RegisterCallback<KeyDownEvent>(ExecuteKeyEvents);
         }
 
         public static void SolveButtonsVisibleState()
@@ -66,7 +74,13 @@ namespace Ludwell.Scene.Editor
 
         public void SetObjectFieldLabel(string value)
         {
-            _view.SetObjectFieldLabel(value);
+            _view.ObjectFieldLabel.text = value;
+        }
+
+        private static bool IsCopyBufferPath()
+        {
+            var extension = Path.GetExtension(EditorGUIUtility.systemCopyBuffer);
+            return string.Equals(extension, ".unity");
         }
 
         private void SolveBuildSettingsButton(ChangeEvent<Object> _)
@@ -139,7 +153,6 @@ namespace Ludwell.Scene.Editor
         private void UpdateModel(string value)
         {
             _model.stringValue = value;
-            _view.ObjectField.tooltip = _model.stringValue;
             _model.serializedObject.ApplyModifiedProperties();
         }
 
@@ -151,6 +164,104 @@ namespace Ludwell.Scene.Editor
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
             window.Focus();
             window.SceneElementsController.ScrollToItemIndex(index);
+        }
+
+        private ContextualMenuManipulator BuildContextualMenuManipulator()
+        {
+            return new ContextualMenuManipulator(evt =>
+            {
+                evt.menu.AppendAction("Copy Property Path", CopyPropertyPath);
+                evt.menu.AppendAction("Copy", CopyGuid, GetStatus());
+                evt.menu.AppendSeparator();
+                evt.menu.AppendAction("Copy Path", CopyPath, GetStatus());
+                evt.menu.AppendAction("Copy GUID", CopyGuid, GetStatus());
+                evt.menu.AppendAction("Paste", Paste, GetStatusFromBufferData());
+            });
+        }
+
+        private bool HasBinderAtValue()
+        {
+            return ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(_model.stringValue) == null;
+        }
+
+        private DropdownMenuAction.Status GetStatus()
+        {
+            return HasBinderAtValue() ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
+        }
+
+        private DropdownMenuAction.Status GetStatusFromBufferData()
+        {
+            var clipboardContent = EditorGUIUtility.systemCopyBuffer;
+
+            if (string.IsNullOrEmpty(clipboardContent)) return DropdownMenuAction.Status.Disabled;
+
+            SceneAsset sceneAsset;
+
+            if (IsCopyBufferPath())
+            {
+                sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
+            }
+            else
+            {
+                var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
+                sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+            }
+
+            return sceneAsset == null ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
+        }
+
+        private void CopyPropertyPath(DropdownMenuAction _)
+        {
+            EditorGUIUtility.systemCopyBuffer = _view.ObjectFieldLabel.text;
+        }
+
+        private void CopyPath(DropdownMenuAction _)
+        {
+            var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_model.stringValue);
+            EditorGUIUtility.systemCopyBuffer = data.Path;
+        }
+
+        private void CopyGuid(DropdownMenuAction _)
+        {
+            EditorGUIUtility.systemCopyBuffer = _model.stringValue;
+        }
+
+        private void Paste(DropdownMenuAction _)
+        {
+            var clipboardContent = EditorGUIUtility.systemCopyBuffer;
+
+            if (string.IsNullOrEmpty(clipboardContent)) return;
+
+            if (IsCopyBufferPath())
+            {
+                _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
+                return;
+            }
+
+            var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
+            _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+        }
+
+        private void ExecuteKeyEvents(KeyDownEvent evt)
+        {
+            switch (evt.keyCode)
+            {
+                case KeyCode.C when evt.ctrlKey:
+                    EditorGUIUtility.systemCopyBuffer = _model.stringValue;
+                    _lastCopy = _model.stringValue;
+                    break;
+                case KeyCode.V when evt.ctrlKey:
+                    var path = AssetDatabase.GUIDToAssetPath(_lastCopy);
+                    var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+                    if (!sceneAsset) return;
+                    _view.ObjectField.value = sceneAsset;
+                    break;
+                case KeyCode.Delete or KeyCode.Backspace:
+                    if (_view.ObjectField == null) break;
+                    _view.ObjectField.value = null;
+                    _model.stringValue = string.Empty;
+                    break;
+            }
         }
 
         private void AddToDrawers(AttachToPanelEvent evt)
@@ -165,6 +276,7 @@ namespace Ludwell.Scene.Editor
 
         private void Dispose(DetachFromPanelEvent evt)
         {
+            _lastCopy = string.Empty;
             RemoveFromDrawers();
 
             EditorApplication.update -= SolveButtonOnMissingReference;
@@ -174,6 +286,10 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
             _view.ObjectField.UnregisterValueChangedCallback(SolveBuildSettingsButton);
             _view.ObjectField.UnregisterValueChangedCallback(SolveSelectInWindowButton);
+
+            _view.ObjectField.RemoveManipulator(_contextualMenuManipulator);
+            _contextualMenuManipulator = null;
+            UnregisterCallback<KeyDownEvent>(ExecuteKeyEvents);
 
             _view.Dispose(null);
         }

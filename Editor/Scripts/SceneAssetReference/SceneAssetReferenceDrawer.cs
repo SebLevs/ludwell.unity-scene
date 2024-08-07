@@ -12,6 +12,13 @@ namespace Ludwell.Scene.Editor
             var serializedProperty = property.FindPropertyRelative("_guid");
             var root = new SceneAssetReferenceController(serializedProperty);
 
+            SetDisplayName(property, root);
+
+            return root;
+        }
+
+        private static void SetDisplayName(SerializedProperty property, SceneAssetReferenceController root)
+        {
             var displayName = property.displayName;
 
             var match = Regex.Match(property.propertyPath, @"\[(\d+)\]");
@@ -20,10 +27,8 @@ namespace Ludwell.Scene.Editor
                 var index = match.Groups[1].Value;
                 displayName = $"Element {index}";
             }
-
+            
             root.SetObjectFieldLabel(displayName);
-
-            return root;
         }
     }
 }

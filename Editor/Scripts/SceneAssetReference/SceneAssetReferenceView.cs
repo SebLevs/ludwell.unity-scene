@@ -9,6 +9,8 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneAssetReferenceView : IDisposable
     {
+        public Label ObjectFieldLabel;
+
         private readonly string UxmlPath =
             Path.Combine("UI", nameof(SceneAssetReferenceView), "Uxml_" + nameof(SceneAssetReferenceView));
 
@@ -19,8 +21,6 @@ namespace Ludwell.Scene.Editor
         private const string SelectInWindowButtonName = "select-in-window";
 
         private ThemeManagerEditor _themeManagerEditor;
-
-        private readonly Label _objectFieldLabel;
 
         public ObjectField ObjectField { get; }
 
@@ -36,7 +36,7 @@ namespace Ludwell.Scene.Editor
             ObjectField = root.Q<ObjectField>();
             ObjectField.AddToClassList(ObjectField.alignedFieldUssClassName);
 
-            _objectFieldLabel = ObjectField.Q<Label>();
+            ObjectFieldLabel = ObjectField.Q<Label>();
 
             BuildSettingsButton = root.Q<Button>(BuildSettingsButtonName);
             SelectInWindowButton = root.Q<Button>(SelectInWindowButtonName);
@@ -76,11 +76,6 @@ namespace Ludwell.Scene.Editor
         public void HideSelectInWindowButton()
         {
             SelectInWindowButton.style.display = DisplayStyle.None;
-        }
-
-        public void SetObjectFieldLabel(string value)
-        {
-            _objectFieldLabel.text = value;
         }
 
         private void CacheThemeManager(AttachToPanelEvent evt)
