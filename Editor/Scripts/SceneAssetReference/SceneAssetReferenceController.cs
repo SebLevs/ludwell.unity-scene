@@ -15,7 +15,7 @@ namespace Ludwell.Scene.Editor
     public class SceneAssetReferenceController : VisualElement, IDisposable
     {
         private static readonly HashSet<SceneAssetReferenceController> _controllers = new();
-        private static string _lastCopy;
+        private static string _keyDownCopyBuffer;
 
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
@@ -248,10 +248,10 @@ namespace Ludwell.Scene.Editor
             {
                 case KeyCode.C when evt.ctrlKey:
                     EditorGUIUtility.systemCopyBuffer = _model.stringValue;
-                    _lastCopy = _model.stringValue;
+                    _keyDownCopyBuffer = _model.stringValue;
                     break;
                 case KeyCode.V when evt.ctrlKey:
-                    var path = AssetDatabase.GUIDToAssetPath(_lastCopy);
+                    var path = AssetDatabase.GUIDToAssetPath(_keyDownCopyBuffer);
                     var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
                     if (!sceneAsset) return;
                     _view.ObjectField.value = sceneAsset;
@@ -276,7 +276,7 @@ namespace Ludwell.Scene.Editor
 
         private void Dispose(DetachFromPanelEvent evt)
         {
-            _lastCopy = string.Empty;
+            _keyDownCopyBuffer = string.Empty;
             RemoveFromDrawers();
 
             EditorApplication.update -= SolveButtonOnMissingReference;
