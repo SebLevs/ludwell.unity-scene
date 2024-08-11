@@ -7,92 +7,85 @@ namespace Ludwell.Scene.Editor
     {
         private static Settings _toolkitSettings;
 
-        private static SceneManagerElements _sceneManagerElements;
-        private static DelayedEditorUpdateAction _delayedSaveQuickLoadElements;
+        private static SceneAssetDataBinders _sceneAssetDataBinders;
+        private static DelayedEditorUpdateAction _delayedSaveSceneAssetDataBinders;
 
-        private static TagContainer _tagContainer;
-        private static DelayedEditorUpdateAction _delayedSaveTagContainer;
-        
-        private static DelayedEditorUpdateAction _delayedSaveQuickLoadElementsAndTagContainer;
+        private static Tags _tags;
 
-        public static Settings GetSceneDataManagerSettings() 
+        private static DelayedEditorUpdateAction _delayedSaveSceneAssetDataBindersAndTags;
+
+        public static Settings GetSceneDataManagerSettings()
         {
             if (_toolkitSettings) return _toolkitSettings;
-            _toolkitSettings = (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings),
-                out var _);
+            _toolkitSettings = (Settings)ResourcesSolver.EnsureAssetExistence(typeof(Settings), out _);
             return _toolkitSettings;
         }
 
-        public static SceneManagerElements GetQuickLoadElements()
+        public static SceneAssetDataBinders GetSceneAssetDataBinders()
         {
-            CacheQuickLoadData();
-            return _sceneManagerElements;
+            CacheSceneAssetDataBinders();
+            return _sceneAssetDataBinders;
         }
 
-        public static TagContainer GetTagContainer()
+        public static Tags GetTags()
         {
-            CacheTagContainer();
-            return _tagContainer;
+            CacheTags();
+            return _tags;
         }
 
-        public static void SaveQuickLoadElements()
+        public static void SaveSceneAssetDataBinders()
         {
-            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
-            CacheQuickLoadData();
-            EditorUtility.SetDirty(_sceneManagerElements);
-            AssetDatabase.SaveAssetIfDirty(_sceneManagerElements);
+            ContainersPostProcessor.IsImportCauseInternal = true;
+            CacheSceneAssetDataBinders();
+            EditorUtility.SetDirty(_sceneAssetDataBinders);
+            AssetDatabase.SaveAssetIfDirty(_sceneAssetDataBinders);
             AssetDatabase.Refresh();
         }
 
-        public static void SaveQuickLoadElementsDelayed()
+        public static void SaveSceneAssetDataBindersDelayed()
         {
-            _delayedSaveQuickLoadElements ??= new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElements);
-            _delayedSaveQuickLoadElements.StartOrRefresh();
+            _delayedSaveSceneAssetDataBinders ??= new DelayedEditorUpdateAction(0.5f, SaveSceneAssetDataBinders);
+            _delayedSaveSceneAssetDataBinders.StartOrRefresh();
         }
 
-        public static void SaveTagContainer()
+        public static void SaveTags()
         {
-            ExternalAssetChangeProcessor.IsImportCauseInternal = true;
-            CacheTagContainer();
-            EditorUtility.SetDirty(_tagContainer);
-            AssetDatabase.SaveAssetIfDirty(_tagContainer);
-        }
-        
-        public static void SaveTagContainerDelayed()
-        {
-            _delayedSaveTagContainer ??= new DelayedEditorUpdateAction(0.5f, SaveTagContainer);
-            _delayedSaveTagContainer.StartOrRefresh();
+            ContainersPostProcessor.IsImportCauseInternal = true;
+            CacheTags();
+            EditorUtility.SetDirty(_tags);
+            AssetDatabase.SaveAssetIfDirty(_tags);
         }
 
-        private static void SaveQuickLoadElementsAndTagContainer()
+        private static void SaveSceneAssetDataBindersAndTags()
         {
-            SaveQuickLoadElements();
-            SaveTagContainer();
-        }
-        
-        
-        public static void SaveQuickLoadElementsAndTagContainerDelayed()
-        {
-            _delayedSaveQuickLoadElementsAndTagContainer ??=
-                new DelayedEditorUpdateAction(0.5f, SaveQuickLoadElementsAndTagContainer);
-            _delayedSaveQuickLoadElementsAndTagContainer.StartOrRefresh();
+            ContainersPostProcessor.IsImportCauseInternal = true;
+            SaveSceneAssetDataBinders();
+            SaveTags();
         }
 
-        private static void CacheQuickLoadData()
+        public static void SaveSceneAssetDataBindersAndTagsDelayed()
         {
-            if (_sceneManagerElements) return;
-            _sceneManagerElements =
-                (SceneManagerElements)ResourcesSolver.EnsureAssetExistence(typeof(SceneManagerElements), out var existed);
+            _delayedSaveSceneAssetDataBindersAndTags ??=
+                new DelayedEditorUpdateAction(0.5f, SaveSceneAssetDataBindersAndTags);
+            _delayedSaveSceneAssetDataBindersAndTags.StartOrRefresh();
+        }
+
+        private static void CacheSceneAssetDataBinders()
+        {
+            if (_sceneAssetDataBinders) return;
+            _sceneAssetDataBinders =
+                (SceneAssetDataBinders)ResourcesSolver.EnsureAssetExistence(typeof(SceneAssetDataBinders),
+                    out var existed);
             if (!existed)
             {
-                SceneDataGenerator.PopulateQuickLoadElements();
+                DataSolver.PopulateSceneAssetDataBinders();
             }
         }
 
-        private static void CacheTagContainer()
+        private static void CacheTags()
         {
-            if (_tagContainer) return;
-            _tagContainer = (TagContainer)ResourcesSolver.EnsureAssetExistence(typeof(TagContainer), out _);
+            if (_tags) return;
+            _tags = (Tags)ResourcesSolver.EnsureAssetExistence(typeof(Tags), out _);
         }
     }
 }

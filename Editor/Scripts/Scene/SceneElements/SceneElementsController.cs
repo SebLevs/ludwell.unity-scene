@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Ludwell.Architecture;
 using Ludwell.MoreInformation.Editor;
+using Ludwell.UIToolkitElements;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
@@ -21,8 +22,8 @@ namespace Ludwell.Scene.Editor
         private const string TagIconName = "icon_tag";
         private const string HierarchyIconName = "icon_hierarchy";
 
-        private readonly SceneManagerElements _sceneManagerElements;
-        private ListViewHandler<SceneElementController, SceneManagerElementData> _listViewHandler;
+        private readonly SceneAssetDataBinders _sceneAssetDataBinders;
+        private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
         private readonly VisualElement _root;
         private readonly SceneElementsView _view;
@@ -30,7 +31,7 @@ namespace Ludwell.Scene.Editor
         private readonly DropdownSearchField _dropdownSearchField;
 
         private readonly MoreInformationController _moreInformationController;
-        
+
         private ListingStrategy _hierarchyListingStrategy;
 
         private SceneElementsListViewRefresh _sceneElementsListViewRefresh;
@@ -40,17 +41,17 @@ namespace Ludwell.Scene.Editor
             _root = parent.Q(nameof(SceneElementsView));
             _view = new SceneElementsView(_root);
             _view.CloseAllButton.clicked += CloseAll;
-            _view.AddButton.clicked += SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.AddButton.clicked += DataSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked += DeleteSelection;
 
             _listView = _root.Q<ListView>();
             _dropdownSearchField = _root.Q<DropdownSearchField>();
-            
+
             _moreInformationController = new MoreInformationController(_root);
             _view.MoreInformationButton.clicked += _moreInformationController.Show;
             _moreInformationController.Hide();
 
-            _sceneManagerElements = ResourcesLocator.GetQuickLoadElements();
+            _sceneAssetDataBinders = SceneAssetDataBinders.Instance;
 
             InitializeListViewHandler(_root.Q<ListView>());
             InitializeSearchField(_root, _root.Q<DropdownSearchField>());
@@ -65,20 +66,31 @@ namespace Ludwell.Scene.Editor
             OnShow = AddRefreshViewSignal;
             OnHide = RemoveRefreshViewSignal;
         }
-        
+
         public void Dispose()
         {
             _view.CloseAllButton.clicked -= CloseAll;
-            _view.AddButton.clicked -= SceneDataGenerator.CreateSceneAssetAtPath;
+            _view.AddButton.clicked -= DataSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked -= DeleteSelection;
             _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 
             _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            
+
             _moreInformationController.Dispose();
         }
 
         public void ScrollToItemIndex(int index)
+        {
+            var focusController = _root.focusController;
+            var focusedElement = focusController?.focusedElement;
+            focusedElement?.Blur();
+
+            _listViewHandler.ListView.ScrollToItem(index);
+            _listViewHandler.ListView.SetSelection(index);
+            _listViewHandler.GetVisualElementAt(index)?.Focus();
+        }
+
+        public void ScrollToItemIndexWithTextField(int index)
         {
             var focusController = _root.focusController;
             var focusedElement = focusController?.focusedElement;
@@ -94,7 +106,7 @@ namespace Ludwell.Scene.Editor
             if (_dropdownSearchField.RebuildActiveListing()) return;
             _listViewHandler.ForceRebuild();
         }
-        
+
         protected override void Show(ViewArgs args)
         {
             _view.Show();
@@ -191,13 +203,13 @@ namespace Ludwell.Scene.Editor
             {
                 var lastData = _listViewHandler.GetLastData();
 
-                var sceneDataPath = AssetDatabase.GetAssetPath(lastData.SceneData);
-                if (lastData.IsOutsideAssetsFolder)
+                if (EditorSceneManagerHelper.IsPathOutsideAssets(lastData.Data.Path))
                 {
-                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {sceneDataPath}");
+                    Debug.LogWarning(
+                        $"Suspicious deletion | Path was outside the Assets folder | {lastData.Data.Path}");
                 }
 
-                AssetDatabase.DeleteAsset(sceneDataPath);
+                AssetDatabase.DeleteAsset(lastData.Data.Path);
 
                 _listView.ClearSelection();
                 return;
@@ -205,14 +217,14 @@ namespace Ludwell.Scene.Editor
 
             for (var i = arrayOfElements.Length - 1; i >= 0; i--)
             {
-                var sceneDataPath = AssetDatabase.GetAssetPath(arrayOfElements[i].SceneData);
+                var path = arrayOfElements[i].Data.Path;
 
-                if (arrayOfElements[i].IsOutsideAssetsFolder)
+                if (EditorSceneManagerHelper.IsPathOutsideAssets(arrayOfElements[i].Data.Path))
                 {
-                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {sceneDataPath}");
+                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {path}");
                 }
 
-                AssetDatabase.DeleteAsset(sceneDataPath);
+                AssetDatabase.DeleteAsset(path);
             }
 
             _listView.ClearSelection();
@@ -220,10 +232,10 @@ namespace Ludwell.Scene.Editor
 
         private void CloseAll()
         {
-            if (_sceneManagerElements == null || _sceneManagerElements.Elements == null) return;
+            if (_sceneAssetDataBinders == null || _sceneAssetDataBinders.Elements == null) return;
             foreach (var item in _listViewHandler.Data)
             {
-                var id = item.SceneData.GetInstanceID().ToString();
+                var id = item.GUID;
                 SessionState.SetBool(id, false);
             }
 
@@ -236,19 +248,21 @@ namespace Ludwell.Scene.Editor
         private void InitializeListViewHandler(ListView listView)
         {
             _listViewHandler =
-                new ListViewHandler<SceneElementController, SceneManagerElementData>(listView,
-                    _sceneManagerElements.Elements);
+                new ListViewHandler<SceneElementController, SceneAssetDataBinder>(listView,
+                    _sceneAssetDataBinders.Elements);
         }
-        
+
 
         private void InitializeSearchField(VisualElement root, DropdownSearchField dropdownSearchField)
         {
             dropdownSearchField.BindToListView(_listViewHandler.ListView);
 
-            var tagSearchIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), TagIconName));
+            var tagSearchIcon =
+                Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), TagIconName));
             var searchListingStrategy = new ListingStrategy(TagListingStrategyName, tagSearchIcon, ListTag);
 
-            var hierarchyListingIcon = Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), HierarchyIconName));
+            var hierarchyListingIcon =
+                Resources.Load<Texture2D>(Path.Combine("Sprites", nameof(DropdownSearchField), HierarchyIconName));
             _hierarchyListingStrategy =
                 new ListingStrategy("loaded scenes", hierarchyListingIcon, ListHierarchy, true);
 
@@ -277,7 +291,7 @@ namespace Ludwell.Scene.Editor
 
             foreach (var data in boundItemSource)
             {
-                foreach (var tag in (data as SceneManagerElementData).Tags)
+                foreach (var tag in (data as SceneAssetDataBinder).Tags)
                 {
                     if (!string.Equals(tag.ID, searchFieldValue, StringComparison.InvariantCultureIgnoreCase)) continue;
                     filteredList.Add(data as IListable);
@@ -298,23 +312,21 @@ namespace Ludwell.Scene.Editor
                 scenesInHierarchy.Add(SceneManager.GetSceneAt(i));
             }
 
-            var itemSourceAsData = boundItemSource.Cast<SceneManagerElementData>();
+            var itemSourceAsData = boundItemSource.Cast<SceneAssetDataBinder>();
 
             foreach (var sceneInHierarchy in scenesInHierarchy)
             {
-                foreach (var quickLoadElementData in itemSourceAsData)
+                foreach (var sceneAssetDataBinder in itemSourceAsData)
                 {
-                    var sceneAssetPath =
-                        EditorSceneManagerHelper.GetSceneAssetPath(quickLoadElementData.SceneData);
-                    if (!sceneInHierarchy.path.Contains(sceneAssetPath)) continue;
+                    if (!sceneInHierarchy.path.Contains(sceneAssetDataBinder.Data.Path)) continue;
                     if (string.IsNullOrEmpty(searchFieldValue) || string.IsNullOrWhiteSpace(searchFieldValue))
                     {
-                        filteredList.Add(quickLoadElementData);
+                        filteredList.Add(sceneAssetDataBinder);
                         break;
                     }
 
-                    if (!quickLoadElementData.SceneData.Name.Contains(searchFieldValue)) continue;
-                    filteredList.Add(quickLoadElementData);
+                    if (!sceneAssetDataBinder.Data.Name.Contains(searchFieldValue)) continue;
+                    filteredList.Add(sceneAssetDataBinder);
                     break;
                 }
             }

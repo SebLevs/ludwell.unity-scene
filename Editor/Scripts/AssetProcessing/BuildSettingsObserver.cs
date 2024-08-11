@@ -6,19 +6,15 @@ namespace Ludwell.Scene.Editor
     [InitializeOnLoad]
     public class BuildSettingsObserver
     {
-        private static int _buildSettingsCount;
-
         static BuildSettingsObserver()
         {
-            _buildSettingsCount = EditorBuildSettings.scenes.Length;
-            EditorApplication.update += Update;
+            EditorBuildSettings.sceneListChanged -= SceneListChangedCallback;
+            EditorBuildSettings.sceneListChanged += SceneListChangedCallback;
         }
 
-        private static void Update()
+        private static void SceneListChangedCallback()
         {
-            if (_buildSettingsCount == EditorBuildSettings.scenes.Length) return;
-            _buildSettingsCount = EditorBuildSettings.scenes.Length;
-
+            SceneAssetReferenceController.SolveButtonsVisibleState();
             Signals.Dispatch<UISignals.RefreshView>();
         }
     }

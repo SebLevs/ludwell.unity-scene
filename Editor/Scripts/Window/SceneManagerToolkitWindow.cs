@@ -14,8 +14,8 @@ namespace Ludwell.Scene.Editor
         [SerializeField] private StyleSheet _darkTheme;
         [SerializeField] private StyleSheet _lightTheme;
 
-        private TagsManagerController _tagsManagerController;
-        private SceneElementsController _sceneElementsController;
+        public TagsManagerController TagsManagerController { get; private set; }
+        public SceneElementsController SceneElementsController { get; private set; }
 
         private ThemeManagerEditor _themeManagerEditor;
 
@@ -33,9 +33,9 @@ namespace Ludwell.Scene.Editor
 
             _themeManagerEditor = new ThemeManagerEditor(rootVisualElement, _darkTheme, _lightTheme);
 
-            _tagsManagerController = new TagsManagerController(rootVisualElement);
+            TagsManagerController = new TagsManagerController(rootVisualElement);
 
-            _sceneElementsController = new SceneElementsController(rootVisualElement);
+            SceneElementsController = new SceneElementsController(rootVisualElement);
 
             rootVisualElement.Q<ViewManager>().TransitionToFirstViewOfType<SceneElementsController>();
 
@@ -66,8 +66,8 @@ namespace Ludwell.Scene.Editor
             _disposer.Clear();
             _disposer = null;
             _themeManagerEditor = null;
-            _tagsManagerController = null;
-            _sceneElementsController = null;
+            TagsManagerController = null;
+            SceneElementsController = null;
 
             Signals.Clear<UISignals.RefreshView>();
         }
@@ -75,8 +75,8 @@ namespace Ludwell.Scene.Editor
         private void Dispose()
         {
             _themeManagerEditor?.Dispose();
-            _tagsManagerController?.Dispose();
-            _sceneElementsController?.Dispose();
+            TagsManagerController?.Dispose();
+            SceneElementsController?.Dispose();
             _disposer.Dispose();
         }
     }

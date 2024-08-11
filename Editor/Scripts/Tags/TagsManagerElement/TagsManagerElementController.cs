@@ -74,7 +74,7 @@ namespace Ludwell.Scene.Editor
 
             if (!isTextFieldValid && !isModelNameValid)
             {
-                ResourcesLocator.GetTagContainer().Remove(_model);
+                ResourcesLocator.GetTags().Remove(_model);
                 Signals.Dispatch<UISignals.RefreshView>();
                 return;
             }
@@ -87,11 +87,11 @@ namespace Ludwell.Scene.Editor
 
             if (_model.ID == _view.TextField.value) return;
 
-            if (ResourcesLocator.GetTagContainer().ContainsTagWithName(_view.TextField.value))
+            if (ResourcesLocator.GetTags().ContainsTagWithName(_view.TextField.value))
             {
                 _view.TextField.value = _model.ID;
 
-                if (!isModelNameValid) ResourcesLocator.GetTagContainer().Remove(_model);
+                if (!isModelNameValid) ResourcesLocator.GetTags().Remove(_model);
                 Signals.Dispatch<UISignals.RefreshView>();
                 return;
             }
@@ -109,13 +109,13 @@ namespace Ludwell.Scene.Editor
         private void UpdateAssetName()
         {
             _model.ID = _view.TextField.value;
-            ResourcesLocator.GetTagContainer().Tags.Sort();
+            ResourcesLocator.GetTags().Elements.Sort();
             Signals.Dispatch<UISignals.RefreshView>();
 
-            var index = ResourcesLocator.GetTagContainer().Tags.FindIndex(x => x == _model);
+            var index = ResourcesLocator.GetTags().Elements.FindIndex(x => x == _model);
             var tagsManagerController = Services.Get<TagsManagerController>();
             tagsManagerController.ScrollToItemIndex(index);
-            ResourcesLocator.SaveTagContainer();
+            ResourcesLocator.SaveTags();
         }
 
         private void ExecuteOnAdd()

@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -11,13 +12,13 @@ namespace Ludwell.UIToolkitUtilities
 
             updateDelegate = () =>
             {
-                EditorApplication.update -= updateDelegate;
+                EditorApplication.delayCall -= updateDelegate;
                 element.Focus();
                 var textLength = element.text.Length;
                 element.SelectRange(textLength, textLength);
             };
 
-            EditorApplication.update += updateDelegate;
+            EditorApplication.delayCall += updateDelegate;
         }
     }
 }

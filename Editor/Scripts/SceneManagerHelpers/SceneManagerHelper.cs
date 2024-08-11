@@ -5,11 +5,11 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneManagerHelper
     {
-        private static SceneData _sceneData;
+        private static SceneAssetDataBinder _sceneAssetDataBinder;
 
-        public static void LoadScene(SceneData sceneData)
+        public static void LoadScene(SceneAssetDataBinder sceneData)
         {
-            _sceneData = sceneData;
+            _sceneAssetDataBinder = sceneData;
             if (EditorApplication.isPlaying)
             {
                 EditorApplication.playModeStateChanged += OnEnteredEditModeLoadScene;
@@ -29,10 +29,9 @@ namespace Ludwell.Scene.Editor
 
         private static void LoadScene()
         {
-            var path = EditorSceneManagerHelper.GetSceneAssetPath(_sceneData);
-            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByPath(path))
+            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByPath(_sceneAssetDataBinder.Data.Path))
             {
-                EditorSceneManagerHelper.OpenScene(_sceneData);
+                EditorSceneManagerHelper.OpenScene(_sceneAssetDataBinder.Data.Path);
             }
 
             EditorApplication.EnterPlaymode();

@@ -27,7 +27,7 @@ namespace Ludwell.Scene.Editor
         private readonly TagsManagerView _view;
         private readonly TagsShelfController _tagsShelfController;
 
-        private readonly TagContainer _tagContainer;
+        private readonly Tags _tags;
 
         private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
 
@@ -40,7 +40,7 @@ namespace Ludwell.Scene.Editor
 
             _tagsShelfController = new TagsShelfController(_root, ReturnToPreviousView);
 
-            _tagContainer = ResourcesLocator.GetTagContainer();
+            _tags = ResourcesLocator.GetTags();
 
             SetViewReturnIconTooltip();
 
@@ -82,7 +82,7 @@ namespace Ludwell.Scene.Editor
             Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
             var tagsManagerViewArgs = (TagsManagerViewArgs)args;
             _view.Show();
-            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.ID);
+            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.GetTagSubscriberWithTagID());
             BuildTagsController(tagsManagerViewArgs.TagSubscriberWithTags);
         }
 
@@ -125,7 +125,7 @@ namespace Ludwell.Scene.Editor
             _listViewHandler =
                 new ListViewHandler<TagsManagerElementController, Tag>(
                     _root.Q<ListView>(TagElementsContainerName),
-                    ResourcesLocator.GetTagContainer().Tags);
+                    ResourcesLocator.GetTags().Elements);
 
             _listViewHandler.OnItemMade += OnItemMadeRegisterEvents;
             _listViewHandler.ListView.itemsRemoved += HandleItemsRemoved;
@@ -139,7 +139,7 @@ namespace Ludwell.Scene.Editor
 
         private void HandleItemsRemoved(IEnumerable<int> enumerable)
         {
-            var quickLoadElementData = ResourcesLocator.GetQuickLoadElements().Elements;
+            var dataBinders = SceneAssetDataBinders.Instance.Elements.ToList();
 
             var itemsSource = _listViewHandler.ListView.itemsSource;
             var removedIndexes = enumerable.ToList();
@@ -148,15 +148,15 @@ namespace Ludwell.Scene.Editor
             {
                 var tag = (Tag)itemsSource[index];
                 _tagsShelfController.Remove(tag);
-                foreach (var element in quickLoadElementData)
+                foreach (var element in dataBinders)
                 {
                     if (!element.Tags.Contains(tag)) continue;
                     element.Tags.Remove(tag);
-                    ResourcesLocator.SaveQuickLoadElementsDelayed();
+                    ResourcesLocator.SaveSceneAssetDataBindersDelayed();
                 }
             }
 
-            ResourcesLocator.SaveTagContainer();
+            ResourcesLocator.SaveTags();
         }
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)

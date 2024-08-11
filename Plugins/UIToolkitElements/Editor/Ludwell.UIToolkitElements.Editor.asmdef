@@ -2,7 +2,8 @@
     "name": "Ludwell.UIToolkitElements.Editor",
     "rootNamespace": "Ludwell.UIToolkitElements.Editor",
     "references": [
-        "GUID:e5c5263d642932149a4d3efaecc00d0a"
+        "GUID:e5c5263d642932149a4d3efaecc00d0a",
+        "GUID:50129677db3d6ec45b31cdd637fd8972"
     ],
     "includePlatforms": [
         "Editor"
