@@ -15,7 +15,7 @@ namespace Ludwell.Scene.Editor
     public class SceneAssetReferenceController : VisualElement, IDisposable
     {
         private static readonly HashSet<SceneAssetReferenceController> _controllers = new();
-        private static string _keyDownCopyBuffer;
+        private static string _copyBuffer;
 
         private readonly SceneAssetReferenceView _view;
         private readonly SerializedProperty _model;
@@ -79,8 +79,7 @@ namespace Ludwell.Scene.Editor
 
         private static bool IsCopyBufferPath()
         {
-            var extension = Path.GetExtension(EditorGUIUtility.systemCopyBuffer);
-            return string.Equals(extension, ".unity");
+            return EditorGUIUtility.systemCopyBuffer.Contains(".unity");
         }
 
         private void SolveBuildSettingsButton(ChangeEvent<Object> _)
@@ -219,11 +218,13 @@ namespace Ludwell.Scene.Editor
         {
             var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_model.stringValue);
             EditorGUIUtility.systemCopyBuffer = data.Path;
+            _copyBuffer = _model.stringValue;
         }
 
         private void CopyGuid(DropdownMenuAction _)
         {
             EditorGUIUtility.systemCopyBuffer = _model.stringValue;
+            _copyBuffer = _model.stringValue;
         }
 
         private void Paste(DropdownMenuAction _)
@@ -248,10 +249,10 @@ namespace Ludwell.Scene.Editor
             {
                 case KeyCode.C when evt.ctrlKey:
                     EditorGUIUtility.systemCopyBuffer = _model.stringValue;
-                    _keyDownCopyBuffer = _model.stringValue;
+                    _copyBuffer = _model.stringValue;
                     break;
                 case KeyCode.V when evt.ctrlKey:
-                    var path = AssetDatabase.GUIDToAssetPath(_keyDownCopyBuffer);
+                    var path = AssetDatabase.GUIDToAssetPath(_copyBuffer);
                     var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
                     if (!sceneAsset) return;
                     _view.ObjectField.value = sceneAsset;
@@ -276,7 +277,7 @@ namespace Ludwell.Scene.Editor
 
         private void Dispose(DetachFromPanelEvent evt)
         {
-            _keyDownCopyBuffer = string.Empty;
+            _copyBuffer = string.Empty;
             RemoveFromDrawers();
 
             EditorApplication.update -= SolveButtonOnMissingReference;
