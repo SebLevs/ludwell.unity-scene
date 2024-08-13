@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 
@@ -86,22 +85,41 @@ namespace Ludwell.Scene.Editor
             };
         }
 
-        public static string GetAddressableIDForSceneAsset(Object sceneAsset)
+        public static void SolveBindersAddressableID()
+        {
+#if USE_ADDRESSABLES_EDITOR
+            foreach (var binder in ResourcesLocator.GetSceneAssetDataBinders().Elements)
+            {
+                var address = GetAddressableIDForGUID(binder.GUID);
+                binder.Data.AddressableID = address;
+            }
+#endif
+        }
+
+        public static string GetAddressableIDForObject(Object obj)
         {
 #if USE_ADDRESSABLES_EDITOR
             var settings = AddressableAssetSettingsDefaultObject.Settings;
-            if (settings == null)
-            {
-                Debug.LogError("Addressable Asset Settings not found.");
-                return SceneAssetDataBinders.NotAddressableName;
-            }
+            if (settings == null) return SceneAssetDataBinders.NotAddressableName;
 
-            var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sceneAsset));
+            var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
             var entry = settings.FindAssetEntry(guid);
 
-            if (entry == null) return SceneAssetDataBinders.NotAddressableName;
-            Debug.LogWarning("Scene asset is addressable.");
-            return entry.address;
+            return entry == null ? SceneAssetDataBinders.NotAddressableName : entry.address;
+#else
+            return SceneAssetDataBinders.NotAddressableName;
+#endif
+        }
+
+        public static string GetAddressableIDForGUID(string guid)
+        {
+#if USE_ADDRESSABLES_EDITOR
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings == null) return SceneAssetDataBinders.NotAddressableName;
+
+            var entry = settings.FindAssetEntry(guid);
+
+            return entry == null ? SceneAssetDataBinders.NotAddressableName : entry.address;
 #else
             Debug.LogError("Addressables package is not installed.");
             return SceneAssetDataBinders.NotAddressableName;

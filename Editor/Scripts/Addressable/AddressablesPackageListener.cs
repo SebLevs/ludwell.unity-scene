@@ -20,14 +20,16 @@ namespace Ludwell.Scene.Editor
             foreach (var package in args.added)
             {
                 if (package.name != AddressablesPackageName) continue;
-                OnInstallAddressablesPackage();
+#if USE_ADDRESSABLES_EDITOR
+            AddressablesProcessor.SolveBindersAddressableID();
+#endif
                 return;
             }
 
             foreach (var package in args.removed)
             {
                 if (package.name != AddressablesPackageName) continue;
-                OnUninstallAddressablesPackage();
+                ResourcesLocator.GetSceneAssetDataBinders().ResetAddresses();
                 return;
             }
         }
@@ -35,6 +37,10 @@ namespace Ludwell.Scene.Editor
         private static void OnInstallAddressablesPackage()
         {
             Debug.LogError("todo: set any data as scriptable is their respective scene asset is an addressable");
+#if USE_ADDRESSABLES_EDITOR
+            AddressablesProcessor.SolveBindersAddressableID();
+#endif
+
         }
 
         private static void OnUninstallAddressablesPackage()

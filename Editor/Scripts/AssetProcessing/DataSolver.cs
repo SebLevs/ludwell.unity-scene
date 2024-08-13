@@ -82,9 +82,9 @@ namespace Ludwell.Scene.Editor
             var address = SceneAssetDataBinders.NotAddressableName;
 #if USE_ADDRESSABLES_EDITOR
             Debug.LogError("handle addressable");
-            address = AddressablesProcessor.GetAddressableIDForSceneAsset(sceneAsset);
+            address = AddressablesProcessor.GetAddressableIDForGUID(guid);
 #endif
-
+            
             var hasAdded = instance.Add(guid, sceneAsset.name, assetPath, address);
 
             return hasAdded;
