@@ -8,7 +8,8 @@
         "GUID:fbd850241e7a2ad448c381c50b5da8aa",
         "GUID:724c589468d85e94a9775795439d4e82",
         "GUID:e5c5263d642932149a4d3efaecc00d0a",
-        "GUID:50129677db3d6ec45b31cdd637fd8972"
+        "GUID:50129677db3d6ec45b31cdd637fd8972",
+        "GUID:69448af7b92c7f342b298e06a37122aa"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,6 +20,12 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "USE_ADDRESSABLES_EDITOR"
+        }
+    ],
     "noEngineReferences": false
 }

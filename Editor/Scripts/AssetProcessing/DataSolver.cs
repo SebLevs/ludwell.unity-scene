@@ -78,7 +78,14 @@ namespace Ludwell.Scene.Editor
             var instance = SceneAssetDataBinders.Instance;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
             var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
-            var hasAdded = instance.Add(guid, sceneAsset.name, assetPath, "TO BE FILLED");
+
+            var address = SceneAssetDataBinders.NotAddressableName;
+#if USE_ADDRESSABLES_EDITOR
+            Debug.LogError("handle addressable");
+            address = AddressablesProcessor.GetAddressableIDForSceneAsset(sceneAsset);
+#endif
+
+            var hasAdded = instance.Add(guid, sceneAsset.name, assetPath, address);
 
             return hasAdded;
         }
@@ -88,7 +95,7 @@ namespace Ludwell.Scene.Editor
             var binders = ResourcesLocator.GetSceneAssetDataBinders();
             var assetGuids = AssetDatabase.FindAssets("t:SceneAsset");
             var hasSolved = false;
-            
+
             for (var i = binders.Elements.Count - 1; i >= 0; i--)
             {
                 if (assetGuids.Contains(binders.Elements[i].GUID)) continue;
@@ -101,7 +108,7 @@ namespace Ludwell.Scene.Editor
             Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveSceneAssetDataBindersDelayed();
         }
-        
+
         public static void SolveTagBindings()
         {
             var dataBinders = ResourcesLocator.GetSceneAssetDataBinders().Elements;
@@ -125,7 +132,7 @@ namespace Ludwell.Scene.Editor
             Signals.Dispatch<UISignals.RefreshView>();
             ResourcesLocator.SaveSceneAssetDataBindersDelayed();
         }
-        
+
         public static void SolveSceneAssetDataBinders()
         {
             PopulateSceneAssetDataBinders();

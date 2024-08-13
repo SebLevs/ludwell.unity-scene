@@ -30,7 +30,7 @@ namespace Ludwell.Scene.Editor
         {
             { nameof(Settings), (typeof(Settings), EditorPath) },
             { nameof(Tags), (typeof(Tags), RuntimePath) },
-            { nameof(SceneAssetDataBinders), (typeof(SceneAssetDataBinders), RuntimePath)}
+            { nameof(SceneAssetDataBinders), (typeof(SceneAssetDataBinders), RuntimePath) }
         };
 
         static ResourcesSolver()

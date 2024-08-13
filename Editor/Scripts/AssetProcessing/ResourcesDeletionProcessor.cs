@@ -20,6 +20,8 @@ namespace Ludwell.Scene.Editor
                 return AssetDeleteResult.DidDelete;
             }
 
+            if (!Directory.Exists(assetPath)) return AssetDeleteResult.DidNotDelete;
+
             var guids = AssetDatabase.FindAssets($"t:{nameof(ScriptableObject)}", new[] { assetPath });
 
             if (guids.Length == 0)
@@ -32,7 +34,7 @@ namespace Ludwell.Scene.Editor
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var fileName = Path.GetFileNameWithoutExtension(path);
                 if (!ResourcesSolver.ScriptableAssets.ContainsKey(fileName)) continue;
-                Debug.LogWarning($"Suspicious action | Asset is required | {fileName}");
+                Debug.LogWarning($"Suspicious action | Path contains required assets | {assetPath}");
                 return AssetDeleteResult.DidDelete;
             }
 

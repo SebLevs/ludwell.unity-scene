@@ -6,6 +6,8 @@ namespace Ludwell.Scene
 {
     public class SceneAssetDataBinders : ScriptableObject
     {
+        public const string NotAddressableName = "NA";
+
         private static SceneAssetDataBinders _instance;
 
         public List<SceneAssetDataBinder> Elements = new();
@@ -17,6 +19,14 @@ namespace Ludwell.Scene
                 if (_instance != null) return _instance;
                 _instance = Resources.Load<SceneAssetDataBinders>(nameof(SceneAssetDataBinders));
                 return _instance;
+            }
+        }
+
+        public void ResetAddresses()
+        {
+            foreach (var binder in Elements)
+            {
+                binder.Data.AddressableID = NotAddressableName;
             }
         }
 
@@ -41,11 +51,9 @@ namespace Ludwell.Scene
             return false;
         }
 
-        public bool Add(string guid, string assetName, string path, string addressableID = "NA")
+        public bool Add(string guid, string assetName, string path, string addressableID = NotAddressableName)
         {
             if (ContainsWithId(guid)) return false;
-            Debug.LogError("TODO: Setup addressable ID");
-            Debug.LogError($"add for | {assetName} | {guid} | {path} | {addressableID}");
             var newBinder = new SceneAssetDataBinder
             {
                 GUID = guid,
