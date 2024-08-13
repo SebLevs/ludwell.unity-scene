@@ -6,7 +6,6 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using Object = UnityEngine.Object;
 
-
 namespace Ludwell.Scene.Editor
 {
     [InitializeOnLoad]
@@ -87,18 +86,15 @@ namespace Ludwell.Scene.Editor
 
         public static void SolveBindersAddressableID()
         {
-#if USE_ADDRESSABLES_EDITOR
             foreach (var binder in ResourcesLocator.GetSceneAssetDataBinders().Elements)
             {
                 var address = GetAddressableIDForGUID(binder.GUID);
                 binder.Data.AddressableID = address;
             }
-#endif
         }
 
         public static string GetAddressableIDForObject(Object obj)
         {
-#if USE_ADDRESSABLES_EDITOR
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null) return SceneAssetDataBinders.NotAddressableName;
 
@@ -106,24 +102,16 @@ namespace Ludwell.Scene.Editor
             var entry = settings.FindAssetEntry(guid);
 
             return entry == null ? SceneAssetDataBinders.NotAddressableName : entry.address;
-#else
-            return SceneAssetDataBinders.NotAddressableName;
-#endif
         }
 
         public static string GetAddressableIDForGUID(string guid)
         {
-#if USE_ADDRESSABLES_EDITOR
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null) return SceneAssetDataBinders.NotAddressableName;
 
             var entry = settings.FindAssetEntry(guid);
 
             return entry == null ? SceneAssetDataBinders.NotAddressableName : entry.address;
-#else
-            Debug.LogError("Addressables package is not installed.");
-            return SceneAssetDataBinders.NotAddressableName;
-#endif
         }
     }
 }
