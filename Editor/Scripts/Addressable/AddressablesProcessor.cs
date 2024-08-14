@@ -1,9 +1,12 @@
 #if USE_ADDRESSABLES_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Ludwell.Architecture;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene.Editor
@@ -15,6 +18,13 @@ namespace Ludwell.Scene.Editor
         {
             AddressableAssetSettingsDefaultObject.Settings.OnModification -= SubscribeToAddressableChange;
             AddressableAssetSettingsDefaultObject.Settings.OnModification += SubscribeToAddressableChange;
+
+            Signals.Add<UISignals.RefreshView>(DispatchRefreshViewSignal);
+        }
+
+        private static void DispatchRefreshViewSignal()
+        {
+            Debug.LogError("how many time is the dispatch called when removing or adding in bulk?");
         }
 
         private static void SubscribeToAddressableChange(AddressableAssetSettings addressableAssetSettings,
@@ -48,6 +58,8 @@ namespace Ludwell.Scene.Editor
                 UpdateBinder(modificationEvent, binder, entry);
             }
 
+            Signals.Dispatch<UISignals.RefreshView>();
+
             return true;
         }
 
@@ -56,15 +68,18 @@ namespace Ludwell.Scene.Editor
         {
             if (parameter is not AddressableAssetEntry entry || !entry.AssetPath.Contains(".unity")) return false;
 
+
             var sceneAssetDataBinders = ResourcesLocator.GetSceneAssetDataBinders();
 
             var guid = entry.guid;
 
             var binder = sceneAssetDataBinders.GetBinderFromId(guid);
 
-            if (binder == null) return true;
+            if (binder == null) return false;
 
             UpdateBinder(modificationEvent, binder, entry);
+            Debug.LogError("todo: prevent adding a selection to refresh N times the editor window list view");
+            Signals.Dispatch<UISignals.RefreshView>();
 
             return true;
         }
@@ -112,6 +127,30 @@ namespace Ludwell.Scene.Editor
             var entry = settings.FindAssetEntry(guid);
 
             return entry == null ? SceneAssetDataBinders.NotAddressableName : entry.address;
+        }
+
+        public static void AddToAddressables(string guid)
+        {
+            var defaultSettings = AddressableAssetSettingsDefaultObject.Settings;
+            var defaultGroup = defaultSettings.DefaultGroup;
+            defaultSettings.CreateOrMoveEntry(guid, defaultGroup);
+        }
+
+        public static void RemoveFromAddressables(string address)
+        {
+            var defaultSettings = AddressableAssetSettingsDefaultObject.Settings;
+
+            for (var groupIndex = defaultSettings.groups.Count - 1; groupIndex >= 0; groupIndex--)
+            {
+                var group = defaultSettings.groups[groupIndex];
+                for (var entryIndex = group.entries.Count - 1; entryIndex >= 0; entryIndex--)
+                {
+                    var entry = group.entries.ToList()[entryIndex];
+                    if (!string.Equals(entry.address, address, StringComparison.InvariantCulture)) continue;
+                    group.RemoveAssetEntry(entry);
+                    return;
+                }
+            }
         }
     }
 }

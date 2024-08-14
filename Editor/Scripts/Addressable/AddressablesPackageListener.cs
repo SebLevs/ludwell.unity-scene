@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEditor.PackageManager;
-using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
@@ -32,20 +31,6 @@ namespace Ludwell.Scene.Editor
                 ResourcesLocator.GetSceneAssetDataBinders().ResetAddresses();
                 return;
             }
-        }
-
-        private static void OnInstallAddressablesPackage()
-        {
-            Debug.LogError("todo: set any data as scriptable is their respective scene asset is an addressable");
-#if USE_ADDRESSABLES_EDITOR
-            AddressablesProcessor.SolveBindersAddressableID();
-#endif
-
-        }
-
-        private static void OnUninstallAddressablesPackage()
-        {
-            ResourcesLocator.GetSceneAssetDataBinders().ResetAddresses();
         }
     }
 }

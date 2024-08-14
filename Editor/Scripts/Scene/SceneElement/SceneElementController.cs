@@ -39,6 +39,7 @@ namespace Ludwell.Scene.Editor
             _view.PingButton.clicked += SelectSceneDataInProject;
             _view.DirectoryChangeButton.clicked += ChangeFolder;
             InitializeBuildSettingsButton();
+            InitializeAddressablesButton();
 
             _foldout = new FoldoutController(this, false);
             _foldout.SetOnPreventHeaderClick(target => target is Button);
@@ -96,6 +97,7 @@ namespace Ludwell.Scene.Editor
             SetLoadButtonState();
             _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
             SolveBuildSettingsButton();
+            SolveAddressablesButton();
         }
 
         public void AddToBuildSettings()
@@ -116,6 +118,20 @@ namespace Ludwell.Scene.Editor
         public void RemoveSceneAdditive()
         {
             EditorSceneManagerHelper.RemoveSceneAdditive(_model.Data.Path);
+        }
+
+        public void AddToAddressables()
+        {
+#if USE_ADDRESSABLES_EDITOR
+            AddressablesProcessor.AddToAddressables(_model.GUID);
+#endif
+        }
+
+        public void RemoveFromAddressables()
+        {
+#if USE_ADDRESSABLES_EDITOR
+            AddressablesProcessor.RemoveFromAddressables(_model.Data.AddressableID);
+#endif
         }
 
         private void SolveSetActiveButton()
@@ -148,6 +164,23 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.SwitchBuildSettingsButtonState(false);
+        }
+
+        private void SolveAddressablesButton()
+        {
+#if USE_ADDRESSABLES_EDITOR
+            _view.SetAddressablesButtonEnable(true);
+            if (_model.Data.IsAddressable)
+            {
+                _view.SwitchAddressablesButtonState(true);
+                return;
+            }
+
+            _view.SwitchAddressablesButtonState(false);
+#else
+            _view.SetAddressablesButtonEnable(false);
+            _view.SetAddressableButtonTooltipWithoutPackage();
+#endif
         }
 
         private void SetFoldoutValueFromSavedState()
@@ -193,6 +226,21 @@ namespace Ludwell.Scene.Editor
                 RemoveSceneAdditive);
 
             _view.OpenAdditiveButton.Initialize(stateOne, stateTwo);
+        }
+
+        private void InitializeAddressablesButton()
+        {
+            var stateOne = new DualStateButtonState(
+                _view.AddressablesButton,
+                Resources.Load<Sprite>(SpritesPath.AddToAddressables),
+                AddToAddressables);
+
+            var stateTwo = new DualStateButtonState(
+                _view.AddressablesButton,
+                Resources.Load<Sprite>(SpritesPath.RemoveFromAddressables),
+                RemoveFromAddressables);
+
+            _view.AddressablesButton.Initialize(stateOne, stateTwo);
         }
 
         private void InitializeLoadButton()
@@ -288,7 +336,8 @@ namespace Ludwell.Scene.Editor
 
         private bool CanRenameAsset()
         {
-            var assetPath = Path.Combine(Path.GetDirectoryName(_model.Data.Path) ?? string.Empty, _foldout.Title + ".unity");
+            var assetPath = Path.Combine(Path.GetDirectoryName(_model.Data.Path) ?? string.Empty,
+                _foldout.Title + ".unity");
             var asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
 
             if (!asset) return true;
