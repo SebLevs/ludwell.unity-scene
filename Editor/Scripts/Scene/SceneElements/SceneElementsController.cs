@@ -134,50 +134,6 @@ namespace Ludwell.Scene.Editor
             return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
         }
 
-        private void OpenSelectionAdditive(DropdownMenuAction _)
-        {
-            var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
-            foreach (var quickLoadElementController in quickLoadElementControllers)
-            {
-                quickLoadElementController.OpenSceneAdditive();
-            }
-        }
-
-        private void RemoveSelectionAdditive(DropdownMenuAction _)
-        {
-            var quickLoadElementControllers = GetVisualElementsWithoutActiveScene();
-            if (quickLoadElementControllers.Count == 1) return;
-            foreach (var quickLoadElementController in quickLoadElementControllers)
-            {
-                if (SceneManager.sceneCount == 1) return;
-                quickLoadElementController.RemoveSceneAdditive();
-            }
-        }
-
-        private void AddSelectionToBuildSettings(DropdownMenuAction _)
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var quickLoadElementControllers =
-                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
-            if (!quickLoadElementControllers.Any()) return;
-            foreach (var quickLoadElementController in quickLoadElementControllers)
-            {
-                quickLoadElementController.AddToBuildSettings();
-            }
-        }
-
-        private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var quickLoadElementControllers =
-                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
-            if (!quickLoadElementControllers.Any()) return;
-            foreach (var quickLoadElementController in quickLoadElementControllers)
-            {
-                quickLoadElementController.RemoveFromBuildSettings();
-            }
-        }
-
         private void InitializeContextMenuManipulator()
         {
             _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
@@ -189,7 +145,75 @@ namespace Ludwell.Scene.Editor
                 context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings, status);
                 context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
                     status);
+                context.menu.AppendSeparator();
+                context.menu.AppendAction("Add selection to addressable default group", AddSelectionToAddressables,
+                    status);
+                context.menu.AppendAction("Remove selection from addressables", RemoveSelectionFromAddressables,
+                    status);
             }));
+        }
+
+        private void OpenSelectionAdditive(DropdownMenuAction _)
+        {
+            var controllers = GetVisualElementsWithoutActiveScene();
+            foreach (var controller in controllers)
+            {
+                controller.OpenSceneAdditive();
+            }
+        }
+
+        private void RemoveSelectionAdditive(DropdownMenuAction _)
+        {
+            var controllers = GetVisualElementsWithoutActiveScene();
+            if (controllers.Count == 1) return;
+            foreach (var controller in controllers)
+            {
+                if (SceneManager.sceneCount == 1) return;
+                controller.RemoveSceneAdditive();
+            }
+        }
+
+        private void AddSelectionToBuildSettings(DropdownMenuAction _)
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            if (!controllers.Any()) return;
+            foreach (var controller in controllers)
+            {
+                controller.AddToBuildSettings();
+            }
+        }
+
+        private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            var controllers =
+                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            if (!controllers.Any()) return;
+            foreach (var controller in controllers)
+            {
+                controller.RemoveFromBuildSettings();
+            }
+        }
+
+        private void AddSelectionToAddressables(DropdownMenuAction _)
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            foreach (var controller in controllers)
+            {
+                controller.AddToAddressables();
+            }
+        }
+
+        private void RemoveSelectionFromAddressables(DropdownMenuAction _)
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            foreach (var controller in controllers)
+            {
+                controller.RemoveFromAddressables();
+            }
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>

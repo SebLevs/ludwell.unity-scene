@@ -9,7 +9,11 @@
                     <ui:VisualElement name="top" class="header-section__row header-section__row__left">
                         <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__set-active" tooltip="Set active scene" class="ButtonWithIcon" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="bottom" class="header-section__row header-section__row__left" />
+                    <ui:VisualElement name="bottom" class="header-section__row header-section__row__left">
+                        <ui:VisualElement name="warning-icon" class="ButtonWithIcon">
+                            <ui:VisualElement tooltip="This asset is located outside the Assets folder" name="icon__package-scene" class="icon__bottom-row" style="background-image: resource(&apos;Sprites/icon_asset-outside-assets&apos;);" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="content__center">
                     <ui:VisualElement name="content__center-top">
@@ -30,9 +34,7 @@
                         <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__build-settings" class="ButtonWithIcon" />
                     </ui:VisualElement>
                     <ui:VisualElement name="bottom" class="header-section__row header-section__row__right">
-                        <ui:VisualElement name="warning-icon" class="ButtonWithIcon">
-                            <ui:VisualElement tooltip="This asset is located outside the Assets folder" name="icon__package-scene" />
-                        </ui:VisualElement>
+                        <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__addressables" class="ButtonWithIcon" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

@@ -1,7 +1,9 @@
 {
     "name": "ludwell.scene",
     "rootNamespace": "Ludwell.Scene",
-    "references": ["GUID:50129677db3d6ec45b31cdd637fd8972"],
+    "references": [
+        "GUID:50129677db3d6ec45b31cdd637fd8972"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
