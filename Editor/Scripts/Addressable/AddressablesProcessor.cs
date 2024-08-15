@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ludwell.Architecture;
+using Ludwell.EditorUtilities;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene.Editor
@@ -14,17 +14,14 @@ namespace Ludwell.Scene.Editor
     [InitializeOnLoad]
     public class AddressablesProcessor
     {
+        private static DelayedEditorUpdateAction _delayedRefreshViewDispatch;
+
         static AddressablesProcessor()
         {
+            _delayedRefreshViewDispatch = new DelayedEditorUpdateAction(0, Signals.Dispatch<UISignals.RefreshView>);
+
             AddressableAssetSettingsDefaultObject.Settings.OnModification -= SubscribeToAddressableChange;
             AddressableAssetSettingsDefaultObject.Settings.OnModification += SubscribeToAddressableChange;
-
-            Signals.Add<UISignals.RefreshView>(DispatchRefreshViewSignal);
-        }
-
-        private static void DispatchRefreshViewSignal()
-        {
-            Debug.LogError("how many time is the dispatch called when removing or adding in bulk?");
         }
 
         private static void SubscribeToAddressableChange(AddressableAssetSettings addressableAssetSettings,
@@ -58,7 +55,7 @@ namespace Ludwell.Scene.Editor
                 UpdateBinder(modificationEvent, binder, entry);
             }
 
-            Signals.Dispatch<UISignals.RefreshView>();
+            _delayedRefreshViewDispatch.StartOrRefresh();
 
             return true;
         }
@@ -78,8 +75,7 @@ namespace Ludwell.Scene.Editor
             if (binder == null) return false;
 
             UpdateBinder(modificationEvent, binder, entry);
-            Debug.LogError("todo: prevent adding a selection to refresh N times the editor window list view");
-            Signals.Dispatch<UISignals.RefreshView>();
+            _delayedRefreshViewDispatch.StartOrRefresh();
 
             return true;
         }
