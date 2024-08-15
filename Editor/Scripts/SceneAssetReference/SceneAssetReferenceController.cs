@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ludwell.UIToolkitUtilities;
+using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -161,7 +162,14 @@ namespace Ludwell.Scene.Editor
             var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
             window.Focus();
-            window.SceneElementsController.ScrollToItemIndex(index);
+
+            var viewManager = window.rootVisualElement.Q<ViewManager>();
+            viewManager.TransitionToFirstViewOfType<SceneElementsController>();
+
+            window.rootVisualElement.schedule.Execute(() =>
+            {
+                window.SceneElementsController.ScrollToItemIndex(index);
+            });
         }
 
         private ContextualMenuManipulator BuildContextualMenuManipulator()
