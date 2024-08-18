@@ -1,5 +1,6 @@
 using Ludwell.Architecture;
 using UnityEditor;
+using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
@@ -14,6 +15,7 @@ namespace Ludwell.Scene.Editor
 
         private static void SceneListChangedCallback()
         {
+            Debug.LogError("todo: make it so it is only called once when called through a chunk");
             SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
             Signals.Dispatch<UISignals.RefreshView>();
         }

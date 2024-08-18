@@ -180,7 +180,11 @@ namespace Ludwell.Scene.Editor
 
         private void SolveEnabledInBuildSettingsButton()
         {
-            _view.SetEnabledInBuildSettingsButtonEnable(!EditorApplication.isPlaying);
+            var isInBuildSettings = EditorSceneManagerHelper.IsSceneInBuildSettings(_model.Data.Path);
+
+            var isPlaying = EditorApplication.isPlaying;
+            _view.SetEnabledInBuildSettingsButtonEnable(!(isPlaying || _model.Data.IsAddressable) && isInBuildSettings);
+
             if (EditorSceneManagerHelper.IsSceneEnabledInBuildSettings(_model.Data.Path))
             {
                 _view.SwitchEnabledInBuildSettingsButtonState(true);

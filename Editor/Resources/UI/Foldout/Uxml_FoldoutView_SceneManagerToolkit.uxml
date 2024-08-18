@@ -32,6 +32,7 @@
                 <ui:VisualElement name="content__right">
                     <ui:VisualElement name="top" class="header-section__row header-section__row__right">
                         <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__build-settings" class="ButtonWithIcon" />
+                        <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__build-settings__enabled" class="ButtonWithIcon" />
                     </ui:VisualElement>
                     <ui:VisualElement name="bottom" class="header-section__row header-section__row__right">
