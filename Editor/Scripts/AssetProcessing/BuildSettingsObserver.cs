@@ -1,21 +1,23 @@
 using Ludwell.Architecture;
+using Ludwell.EditorUtilities;
 using UnityEditor;
-using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
     [InitializeOnLoad]
     public class BuildSettingsObserver
     {
+        private static DelayedEditorUpdateAction _delayedSceneListChangedCallback;
+
         static BuildSettingsObserver()
         {
-            EditorBuildSettings.sceneListChanged -= SceneListChangedCallback;
-            EditorBuildSettings.sceneListChanged += SceneListChangedCallback;
+            _delayedSceneListChangedCallback = new DelayedEditorUpdateAction(0, SceneListChangedCallback);
+            EditorBuildSettings.sceneListChanged -= _delayedSceneListChangedCallback.StartOrRefresh;
+            EditorBuildSettings.sceneListChanged += _delayedSceneListChangedCallback.StartOrRefresh;
         }
 
         private static void SceneListChangedCallback()
         {
-            Debug.LogError("todo: make it so it is only called once when called through a chunk");
             SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
             Signals.Dispatch<UISignals.RefreshView>();
         }
