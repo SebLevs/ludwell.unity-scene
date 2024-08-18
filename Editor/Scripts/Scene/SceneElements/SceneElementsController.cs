@@ -130,8 +130,14 @@ namespace Ludwell.Scene.Editor
         {
             Signals.Remove<UISignals.RefreshView>(RebuildActiveListing);
         }
+        
+        private SceneElementController[] GetSceneElementControllers()
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            return enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+        }
 
-        private List<SceneElementController> GetVisualElementsWithoutActiveScene()
+        private List<SceneElementController> GetSceneElementControllersWithoutActiveScene()
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
@@ -162,7 +168,7 @@ namespace Ludwell.Scene.Editor
 
         private void OpenSelectionAdditive(DropdownMenuAction _)
         {
-            var controllers = GetVisualElementsWithoutActiveScene();
+            var controllers = GetSceneElementControllersWithoutActiveScene();
             foreach (var controller in controllers)
             {
                 controller.OpenSceneAdditive();
@@ -171,7 +177,7 @@ namespace Ludwell.Scene.Editor
 
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
-            var controllers = GetVisualElementsWithoutActiveScene();
+            var controllers = GetSceneElementControllersWithoutActiveScene();
             if (controllers.Count == 1) return;
             foreach (var controller in controllers)
             {
@@ -182,8 +188,7 @@ namespace Ludwell.Scene.Editor
 
         private void AddSelectionToBuildSettings(DropdownMenuAction _)
         {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            var controllers = GetSceneElementControllers();
             if (!controllers.Any()) return;
             foreach (var controller in controllers)
             {
@@ -193,9 +198,7 @@ namespace Ludwell.Scene.Editor
 
         private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
         {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers =
-                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            var controllers = GetSceneElementControllers();
             if (!controllers.Any()) return;
             foreach (var controller in controllers)
             {
@@ -205,9 +208,7 @@ namespace Ludwell.Scene.Editor
 
         private void EnableSelectionInBuildSettings(DropdownMenuAction _)
         {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers =
-                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            var controllers = GetSceneElementControllers();
             if (!controllers.Any()) return;
             foreach (var controller in controllers)
             {

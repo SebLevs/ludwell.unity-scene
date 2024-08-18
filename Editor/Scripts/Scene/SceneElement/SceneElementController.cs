@@ -114,13 +114,11 @@ namespace Ludwell.Scene.Editor
 
         public void EnableInBuildSettings()
         {
-            Debug.LogError("todo: make context menu action");
             EditorSceneManagerHelper.EnableSceneInBuildSettings(_model.Data.Path, true);
         }
 
         public void DisableInBuildSettings()
         {
-            Debug.LogError("todo: make context menu action");
             EditorSceneManagerHelper.EnableSceneInBuildSettings(_model.Data.Path, false);
         }
 
