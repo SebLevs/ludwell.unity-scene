@@ -88,15 +88,15 @@ namespace Ludwell.Scene.Editor
 
         private void SolveBuildSettingsButton(ChangeEvent<Object> _)
         {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
-
-            if (data.IsAddressable)
+            if (Application.isPlaying || _view.ObjectField.value == null)
             {
                 _view.HideBuildSettingsButton();
                 return;
             }
             
-            if (Application.isPlaying || _view.ObjectField.value == null)
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
+
+            if (data.IsAddressable)
             {
                 _view.HideBuildSettingsButton();
                 return;
