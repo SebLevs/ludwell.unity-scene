@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene
 {
@@ -12,9 +13,10 @@ namespace Ludwell.Scene
         /// </summary>
         [SerializeField] private string _guid;
 
-        [SerializeField] private UnityEngine.Object _sceneAsset; 
+        /// <summary> Required for the property drawer binding. </summary>
+        [SerializeField] private Object _sceneAsset;
 
-        public bool IsValid => string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
+        public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
 
         public SceneAssetData Data()
         {

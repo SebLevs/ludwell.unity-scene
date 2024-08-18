@@ -4,10 +4,8 @@ using System.Linq;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -22,14 +20,14 @@ namespace Ludwell.Scene.Editor
         private readonly SerializedProperty _objectProperty;
         private readonly SerializedProperty _guidProperty;
 
-        // private ContextualMenuManipulator _contextualMenuManipulator;
+        private ContextualMenuManipulator _contextualMenuManipulator;
 
         public SceneAssetReferenceController(SerializedProperty objectProperty, SerializedProperty guidProperty)
         {
             _view = new SceneAssetReferenceView(this);
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
-            
+
             _objectProperty = objectProperty;
             _view.ObjectField.BindProperty(_objectProperty);
             _guidProperty = guidProperty;
@@ -61,8 +59,8 @@ namespace Ludwell.Scene.Editor
             SolveBuildSettingsButton(null);
             SolveSelectInWindowButton(null);
 
-            // _contextualMenuManipulator = BuildContextualMenuManipulator();
-            // _view.ObjectField.AddManipulator(_contextualMenuManipulator);
+            _contextualMenuManipulator = BuildContextualMenuManipulator();
+            _view.ObjectField.AddManipulator(_contextualMenuManipulator);
             RegisterCallback<KeyDownEvent>(ExecuteKeyEvents);
         }
 
@@ -81,10 +79,10 @@ namespace Ludwell.Scene.Editor
             _view.ObjectFieldLabel.text = value;
         }
 
-        // private static bool IsCopyBufferPath()
-        // {
-        //     return EditorGUIUtility.systemCopyBuffer.Contains(".unity");
-        // }
+        private static bool IsCopyBufferASceneAssetPath()
+        {
+            return EditorGUIUtility.systemCopyBuffer.Contains(".unity");
+        }
 
         private void SolveBuildSettingsButton(ChangeEvent<Object> _)
         {
@@ -93,7 +91,7 @@ namespace Ludwell.Scene.Editor
                 _view.HideBuildSettingsButton();
                 return;
             }
-            
+
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
 
             if (data.IsAddressable)
@@ -108,6 +106,7 @@ namespace Ludwell.Scene.Editor
                 _view.ShowBuildSettingsButton();
                 return;
             }
+
             _view.HideBuildSettingsButton();
         }
 
@@ -166,84 +165,84 @@ namespace Ludwell.Scene.Editor
             });
         }
 
-        // private ContextualMenuManipulator BuildContextualMenuManipulator()
-        // {
-        //     return new ContextualMenuManipulator(evt =>
-        //     {
-        //         evt.menu.AppendAction("Copy Property Path", CopyPropertyPath);
-        //         evt.menu.AppendAction("Copy", CopyGuid, GetStatus());
-        //         evt.menu.AppendSeparator();
-        //         evt.menu.AppendAction("Copy Path", CopyPath, GetStatus());
-        //         evt.menu.AppendAction("Copy GUID", CopyGuid, GetStatus());
-        //         evt.menu.AppendAction("Paste", Paste, GetStatusFromBufferData());
-        //     });
-        // }
-        //
-        // private bool HasBinderAtValue()
-        // {
-        //     return ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(_guidProperty.stringValue) == null;
-        // }
-        //
-        // private DropdownMenuAction.Status GetStatus()
-        // {
-        //     return HasBinderAtValue() ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
-        // }
-        //
-        // private DropdownMenuAction.Status GetStatusFromBufferData()
-        // {
-        //     var clipboardContent = EditorGUIUtility.systemCopyBuffer;
-        //
-        //     if (string.IsNullOrEmpty(clipboardContent)) return DropdownMenuAction.Status.Disabled;
-        //
-        //     SceneAsset sceneAsset;
-        //
-        //     if (IsCopyBufferPath())
-        //     {
-        //         sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
-        //     }
-        //     else
-        //     {
-        //         var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
-        //         sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
-        //     }
-        //
-        //     return sceneAsset == null ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
-        // }
-        //
-        // private void CopyPropertyPath(DropdownMenuAction _)
-        // {
-        //     EditorGUIUtility.systemCopyBuffer = _view.ObjectFieldLabel.text;
-        // }
-        //
-        // private void CopyPath(DropdownMenuAction _)
-        // {
-        //     var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_guidProperty.stringValue);
-        //     EditorGUIUtility.systemCopyBuffer = data.Path;
-        //     _copyBuffer = _guidProperty.stringValue;
-        // }
-        //
-        // private void CopyGuid(DropdownMenuAction _)
-        // {
-        //     EditorGUIUtility.systemCopyBuffer = _guidProperty.stringValue;
-        //     _copyBuffer = _guidProperty.stringValue;
-        // }
-        //
-        // private void Paste(DropdownMenuAction _)
-        // {
-        //     var clipboardContent = EditorGUIUtility.systemCopyBuffer;
-        //
-        //     if (string.IsNullOrEmpty(clipboardContent)) return;
-        //
-        //     if (IsCopyBufferPath())
-        //     {
-        //         _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
-        //         return;
-        //     }
-        //
-        //     var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
-        //     _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
-        // }
-        //
+        private ContextualMenuManipulator BuildContextualMenuManipulator()
+        {
+            return new ContextualMenuManipulator(evt =>
+            {
+                evt.menu.AppendAction("Copy Property Path", CopyPropertyPath);
+                evt.menu.AppendAction("Copy", CopyGuid, GetStatus());
+                evt.menu.AppendSeparator();
+                evt.menu.AppendAction("Copy Path", CopyPath, GetStatus());
+                evt.menu.AppendAction("Copy GUID", CopyGuid, GetStatus());
+                evt.menu.AppendAction("Paste", Paste, GetStatusFromBufferData());
+            });
+        }
+
+        private bool HasBinderAtValue()
+        {
+            return ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(_guidProperty.stringValue) == null;
+        }
+
+        private DropdownMenuAction.Status GetStatus()
+        {
+            return HasBinderAtValue() ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
+        }
+
+        private DropdownMenuAction.Status GetStatusFromBufferData()
+        {
+            var clipboardContent = EditorGUIUtility.systemCopyBuffer;
+
+            if (string.IsNullOrEmpty(clipboardContent)) return DropdownMenuAction.Status.Disabled;
+
+            SceneAsset sceneAsset;
+
+            if (IsCopyBufferASceneAssetPath())
+            {
+                sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
+            }
+            else
+            {
+                var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
+                sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+            }
+
+            return sceneAsset == null ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
+        }
+
+        private void CopyPropertyPath(DropdownMenuAction _)
+        {
+            EditorGUIUtility.systemCopyBuffer = _view.ObjectFieldLabel.text;
+        }
+
+        private void CopyPath(DropdownMenuAction _)
+        {
+            var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_guidProperty.stringValue);
+            EditorGUIUtility.systemCopyBuffer = data.Path;
+            _copyBuffer = _guidProperty.stringValue;
+        }
+
+        private void CopyGuid(DropdownMenuAction _)
+        {
+            EditorGUIUtility.systemCopyBuffer = _guidProperty.stringValue;
+            _copyBuffer = _guidProperty.stringValue;
+        }
+
+        private void Paste(DropdownMenuAction _)
+        {
+            var clipboardContent = EditorGUIUtility.systemCopyBuffer;
+
+            if (string.IsNullOrEmpty(clipboardContent)) return;
+
+            if (IsCopyBufferASceneAssetPath())
+            {
+                _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
+                return;
+            }
+
+            var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
+            _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+        }
+
         private void ExecuteKeyEvents(KeyDownEvent evt)
         {
             switch (evt.keyCode)
@@ -278,7 +277,7 @@ namespace Ludwell.Scene.Editor
 
         private void Dispose(DetachFromPanelEvent evt)
         {
-            // _copyBuffer = string.Empty;
+            _copyBuffer = string.Empty;
             RemoveFromDrawers();
 
             EditorApplication.update -= SolveButtonOnMissingReference;
@@ -289,9 +288,9 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.UnregisterValueChangedCallback(SolveBuildSettingsButton);
             _view.ObjectField.UnregisterValueChangedCallback(SolveSelectInWindowButton);
 
-            // _view.ObjectField.RemoveManipulator(_contextualMenuManipulator);
-            // _contextualMenuManipulator = null;
-            // UnregisterCallback<KeyDownEvent>(ExecuteKeyEvents);
+            _view.ObjectField.RemoveManipulator(_contextualMenuManipulator);
+            _contextualMenuManipulator = null;
+            UnregisterCallback<KeyDownEvent>(ExecuteKeyEvents);
 
             _view.Dispose(null);
         }

@@ -12,7 +12,7 @@ namespace Ludwell.Scene.Editor
         {
             EditorGUILayout.PropertyField(property);
         }
-        
+
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var objectProperty = property.FindPropertyRelative("_sceneAsset");
@@ -34,7 +34,7 @@ namespace Ludwell.Scene.Editor
                 var index = match.Groups[1].Value;
                 displayName = $"Element {index}";
             }
-            
+
             root.SetObjectFieldLabel(displayName);
         }
     }
