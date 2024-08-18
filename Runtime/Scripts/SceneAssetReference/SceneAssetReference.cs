@@ -7,10 +7,12 @@ namespace Ludwell.Scene
     public class SceneAssetReference
     {
         /// <summary>
-        /// The SceneAsset path GUID.<br/>
+        /// The SceneAsset GUID.<br/>
         /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
         /// </summary>
         [SerializeField] private string _guid;
+
+        [SerializeField] private UnityEngine.Object _sceneAsset; 
 
         public bool IsValid => string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
 

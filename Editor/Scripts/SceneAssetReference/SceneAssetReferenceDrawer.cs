@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
@@ -7,10 +8,16 @@ namespace Ludwell.Scene.Editor
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUILayout.PropertyField(property);
+        }
+        
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var serializedProperty = property.FindPropertyRelative("_guid");
-            var root = new SceneAssetReferenceController(serializedProperty);
+            var objectProperty = property.FindPropertyRelative("_sceneAsset");
+            var guidProperty = property.FindPropertyRelative("_guid");
+            var root = new SceneAssetReferenceController(objectProperty, guidProperty);
 
             SetDisplayName(property, root);
 
