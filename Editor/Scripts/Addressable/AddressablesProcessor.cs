@@ -56,6 +56,7 @@ namespace Ludwell.Scene.Editor
             }
 
             _delayedRefreshViewDispatch.StartOrRefresh();
+            SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
 
             return true;
         }
@@ -76,6 +77,7 @@ namespace Ludwell.Scene.Editor
 
             UpdateBinder(modificationEvent, binder, entry);
             _delayedRefreshViewDispatch.StartOrRefresh();
+            SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
 
             return true;
         }

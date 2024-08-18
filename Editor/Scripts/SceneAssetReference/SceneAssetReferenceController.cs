@@ -60,7 +60,7 @@ namespace Ludwell.Scene.Editor
             RegisterCallback<KeyDownEvent>(ExecuteKeyEvents);
         }
 
-        public static void SolveButtonsVisibleState()
+        public static void SolveAllBuildSettingsButtonVisibleState()
         {
             foreach (var controller in _controllers)
             {
