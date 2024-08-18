@@ -32,7 +32,7 @@ namespace Ludwell.Scene.Editor
             _view.ObjectField.BindProperty(_objectProperty);
             _guidProperty = guidProperty;
 
-            EditorApplication.update += SolveButtonOnMissingReference;
+            EditorApplication.update += SolveButtonsOnMissingReference;
 
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.SelectInWindowButton);
@@ -43,11 +43,7 @@ namespace Ludwell.Scene.Editor
             RegisterCallback<DetachFromPanelEvent>(Dispose);
 
             var sceneAsset = _objectProperty.objectReferenceValue as SceneAsset;
-            if (sceneAsset != null)
-            {
-                _view.ObjectField.value = sceneAsset;
-                if (!Application.isPlaying) SolveBuildSettingsButton(null);
-            }
+            if (sceneAsset != null) _view.ObjectField.value = sceneAsset;
 
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
@@ -121,7 +117,7 @@ namespace Ludwell.Scene.Editor
             _view.ShowSelectInWindowButton();
         }
 
-        private void SolveButtonOnMissingReference()
+        private void SolveButtonsOnMissingReference()
         {
             if (_view.ObjectField.value != null) return;
             if (_view.AreButtonsHidden()) return;
@@ -280,7 +276,7 @@ namespace Ludwell.Scene.Editor
             _copyBuffer = string.Empty;
             RemoveFromDrawers();
 
-            EditorApplication.update -= SolveButtonOnMissingReference;
+            EditorApplication.update -= SolveButtonsOnMissingReference;
 
             _view.SelectInWindowButton.clicked -= SelectInWindow;
 
