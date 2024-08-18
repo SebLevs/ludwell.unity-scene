@@ -15,12 +15,8 @@ namespace Ludwell.Scene.Editor
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var objectProperty = property.FindPropertyRelative("_sceneAsset");
-            var guidProperty = property.FindPropertyRelative("_guid");
-            var root = new SceneAssetReferenceController(objectProperty, guidProperty);
-
+            var root = new SceneAssetReferenceController(property);
             SetDisplayName(property, root);
-
             return root;
         }
 

@@ -130,8 +130,14 @@ namespace Ludwell.Scene.Editor
         {
             Signals.Remove<UISignals.RefreshView>(RebuildActiveListing);
         }
+        
+        private SceneElementController[] GetSceneElementControllers()
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            return enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+        }
 
-        private List<SceneElementController> GetVisualElementsWithoutActiveScene()
+        private List<SceneElementController> GetSceneElementControllersWithoutActiveScene()
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
@@ -148,6 +154,10 @@ namespace Ludwell.Scene.Editor
                 context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings, status);
                 context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
                     status);
+                context.menu.AppendAction("Enable selection to in build settings", EnableSelectionInBuildSettings,
+                    status);
+                context.menu.AppendAction("Disable selection to in build settings", DisableSelectionInBuildSettings,
+                    status);
                 context.menu.AppendSeparator();
                 context.menu.AppendAction("Add selection to addressable default group", AddSelectionToAddressables,
                     status);
@@ -158,7 +168,7 @@ namespace Ludwell.Scene.Editor
 
         private void OpenSelectionAdditive(DropdownMenuAction _)
         {
-            var controllers = GetVisualElementsWithoutActiveScene();
+            var controllers = GetSceneElementControllersWithoutActiveScene();
             foreach (var controller in controllers)
             {
                 controller.OpenSceneAdditive();
@@ -167,7 +177,7 @@ namespace Ludwell.Scene.Editor
 
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
-            var controllers = GetVisualElementsWithoutActiveScene();
+            var controllers = GetSceneElementControllersWithoutActiveScene();
             if (controllers.Count == 1) return;
             foreach (var controller in controllers)
             {
@@ -178,8 +188,7 @@ namespace Ludwell.Scene.Editor
 
         private void AddSelectionToBuildSettings(DropdownMenuAction _)
         {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            var controllers = GetSceneElementControllers();
             if (!controllers.Any()) return;
             foreach (var controller in controllers)
             {
@@ -189,13 +198,33 @@ namespace Ludwell.Scene.Editor
 
         private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
         {
+            var controllers = GetSceneElementControllers();
+            if (!controllers.Any()) return;
+            foreach (var controller in controllers)
+            {
+                controller.RemoveFromBuildSettings();
+            }
+        }
+
+        private void EnableSelectionInBuildSettings(DropdownMenuAction _)
+        {
+            var controllers = GetSceneElementControllers();
+            if (!controllers.Any()) return;
+            foreach (var controller in controllers)
+            {
+                controller.EnableInBuildSettings();
+            }
+        }
+
+        private void DisableSelectionInBuildSettings(DropdownMenuAction _)
+        {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
             var controllers =
                 enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
             if (!controllers.Any()) return;
             foreach (var controller in controllers)
             {
-                controller.RemoveFromBuildSettings();
+                controller.DisableInBuildSettings();
             }
         }
 
