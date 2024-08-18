@@ -88,27 +88,27 @@ namespace Ludwell.Scene.Editor
 
         private void SolveBuildSettingsButton(ChangeEvent<Object> _)
         {
-#if USE_ADDRESSABLES_EDITOR
-            _view.HideBuildSettingsButton();
-#else
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
+
+            if (data.IsAddressable)
+            {
+                _view.HideBuildSettingsButton();
+                return;
+            }
+            
             if (Application.isPlaying || _view.ObjectField.value == null)
             {
                 _view.HideBuildSettingsButton();
                 return;
             }
 
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
-
-
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
             {
-                Debug.LogError("todo: if scene asset is addressable, do not show the button");
                 _view.ShowBuildSettingsButton();
                 return;
             }
             _view.HideBuildSettingsButton();
-#endif
         }
 
         private void SolveSelectInWindowButton(ChangeEvent<Object> _)
