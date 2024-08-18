@@ -39,7 +39,7 @@ namespace Ludwell.Scene.Editor
             _view.PingButton.clicked += SelectSceneDataInProject;
             _view.DirectoryChangeButton.clicked += ChangeFolder;
             InitializeBuildSettingsButton();
-            InitializeEnalbedInBuildSettingsButton();
+            InitializeEnabledInBuildSettingsButton();
             InitializeAddressablesButton();
 
             _foldout = new FoldoutController(this, false);
@@ -345,7 +345,7 @@ namespace Ludwell.Scene.Editor
             _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
-        private void InitializeEnalbedInBuildSettingsButton()
+        private void InitializeEnabledInBuildSettingsButton()
         {
             var stateOne = new DualStateButtonState(
                 _view.EnabledInBuildSettingsButton,

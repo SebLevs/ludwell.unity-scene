@@ -5,7 +5,10 @@
         <ui:Button display-tooltip-when-elided="true" name="select-in-window" tooltip="Select in Scene Manager Toolkit window" class="button-with-icon">
             <ui:VisualElement name="icon" style="flex-grow: 1;" />
         </ui:Button>
-        <ui:Button display-tooltip-when-elided="true" name="build-settings" tooltip="Add to Build Settings" class="button-with-icon">
+        <ui:Button display-tooltip-when-elided="true" name="button__build-settings" tooltip="Add to Build Settings" class="button-with-icon">
+            <ui:VisualElement name="icon" style="flex-grow: 1;" />
+        </ui:Button>
+        <ui:Button display-tooltip-when-elided="true" name="button__build-settings__enabled" class="button-with-icon">
             <ui:VisualElement name="icon" style="flex-grow: 1;" />
         </ui:Button>
     </ui:VisualElement>

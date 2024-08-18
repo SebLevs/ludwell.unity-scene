@@ -17,7 +17,8 @@ namespace Ludwell.Scene.Editor
         private readonly string UssPath =
             Path.Combine("UI", nameof(SceneAssetReferenceView), "Uss_" + nameof(SceneAssetReferenceView));
 
-        private const string BuildSettingsButtonName = "build-settings";
+        // private const string BuildSettingsButtonName = "build-settings";
+        // private const string EnableInBuildSettingsButtonName = "build-settings__enabled";
         private const string SelectInWindowButtonName = "select-in-window";
 
         private ThemeManagerEditor _themeManagerEditor;
@@ -25,6 +26,7 @@ namespace Ludwell.Scene.Editor
         public ObjectField ObjectField { get; }
 
         public Button BuildSettingsButton { get; }
+        public Button EnableInBuildSettingsButton { get; }
 
         public Button SelectInWindowButton { get; }
 
@@ -38,7 +40,10 @@ namespace Ludwell.Scene.Editor
 
             ObjectFieldLabel = ObjectField.Q<Label>();
 
-            BuildSettingsButton = root.Q<Button>(BuildSettingsButtonName);
+            BuildSettingsButton = root.Q<Button>(SceneElementView.BuildSettingsButtonName);
+            BuildSettingsButton.tooltip = SceneElementView.AddBuildSettingsTooltip;
+            EnableInBuildSettingsButton = root.Q<Button>(SceneElementView.EnabledInBuildSettingsButtonName);
+            EnableInBuildSettingsButton.tooltip = SceneElementView.EnableInBuildSettingsTooltip;
             SelectInWindowButton = root.Q<Button>(SelectInWindowButtonName);
 
             root.RegisterCallback<DetachFromPanelEvent>(Dispose);
@@ -66,6 +71,16 @@ namespace Ludwell.Scene.Editor
         public void HideBuildSettingsButton()
         {
             BuildSettingsButton.style.display = DisplayStyle.None;
+        }
+
+        public void ShowEnableInBuildSettingsButton()
+        {
+            EnableInBuildSettingsButton.style.display = DisplayStyle.Flex;
+        }
+
+        public void HideEnableInBuildSettingsButton()
+        {
+            EnableInBuildSettingsButton.style.display = DisplayStyle.None;
         }
 
         public void ShowSelectInWindowButton()

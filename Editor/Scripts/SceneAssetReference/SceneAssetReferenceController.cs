@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
@@ -28,13 +27,15 @@ namespace Ludwell.Scene.Editor
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
 
-            
+
             _objectProperty = rootProperty.FindPropertyRelative("_sceneAsset");
             _view.ObjectField.BindProperty(_objectProperty);
             _guidProperty = rootProperty.FindPropertyRelative("_guid");
 
             EditorApplication.update += SolveButtonsOnMissingReference;
 
+            _view.ObjectField.FindFirstChildWhereNameContains(string.Empty)
+                .Insert(0, _view.EnableInBuildSettingsButton);
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.SelectInWindowButton);
 
@@ -49,11 +50,16 @@ namespace Ludwell.Scene.Editor
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
 
+            _view.EnableInBuildSettingsButton.clicked -= EnableInBuildSettings;
+            _view.EnableInBuildSettingsButton.clicked += EnableInBuildSettings;
+
             _view.ObjectField.RegisterValueChangedCallback(OnValueChanged);
             _view.ObjectField.RegisterValueChangedCallback(SolveBuildSettingsButton);
+            _view.ObjectField.RegisterValueChangedCallback(SolveEnableInBuildSettingsButton);
             _view.ObjectField.RegisterValueChangedCallback(SolveSelectInWindowButton);
 
             SolveBuildSettingsButton(null);
+            SolveEnableInBuildSettingsButton(null);
             SolveSelectInWindowButton(null);
 
             _contextualMenuManipulator = BuildContextualMenuManipulator();
@@ -66,6 +72,11 @@ namespace Ludwell.Scene.Editor
             foreach (var controller in _controllers)
             {
                 controller.SolveBuildSettingsButton(null);
+            }
+
+            foreach (var controller in _controllers)
+            {
+                controller.SolveEnableInBuildSettingsButton(null);
             }
         }
 
@@ -97,7 +108,7 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
+            var isInBuildSetting = EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
             if (!isInBuildSetting)
             {
                 _view.ShowBuildSettingsButton();
@@ -105,6 +116,27 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.HideBuildSettingsButton();
+        }
+
+        private void SolveEnableInBuildSettingsButton(ChangeEvent<Object> _)
+        {
+            if (Application.isPlaying || _view.ObjectField.value == null)
+            {
+                _view.HideEnableInBuildSettingsButton();
+                return;
+            }
+
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
+            var isInBuildSetting = EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
+            var isEnabled = EditorSceneManagerHelper.IsSceneEnabledInBuildSettings(data.Path);
+
+            if (!data.IsAddressable && isInBuildSetting && !isEnabled)
+            {
+                _view.ShowEnableInBuildSettingsButton();
+                return;
+            }
+
+            _view.HideEnableInBuildSettingsButton();
         }
 
         private void SolveSelectInWindowButton(ChangeEvent<Object> _)
@@ -130,6 +162,12 @@ namespace Ludwell.Scene.Editor
         {
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
+        }
+
+        private void EnableInBuildSettings()
+        {
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
+            EditorSceneManagerHelper.EnableSceneInBuildSettings(data.Path, true);
         }
 
         private void OnValueChanged(ChangeEvent<Object> evt)
@@ -283,6 +321,7 @@ namespace Ludwell.Scene.Editor
 
             _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
             _view.ObjectField.UnregisterValueChangedCallback(SolveBuildSettingsButton);
+            _view.ObjectField.UnregisterValueChangedCallback(SolveEnableInBuildSettingsButton);
             _view.ObjectField.UnregisterValueChangedCallback(SolveSelectInWindowButton);
 
             _view.ObjectField.RemoveManipulator(_contextualMenuManipulator);

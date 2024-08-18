@@ -10,11 +10,11 @@ namespace Ludwell.Scene.Editor
         private readonly string UxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
         private readonly string UssPath = FoldoutView.UssPath + "_SceneManagerToolkit";
 
-        private const string RemoveBuildSettingsTooltip = "Remove from build settings";
         private const string OpenAdditiveTooltip = "Open additive";
         private const string RemoveAdditiveTooltip = "Remove additive";
-        private const string AddBuildSettingsTooltip = "Add to build settings";
-        private const string EnableInBuildSettingsTooltip = "Enable in build settings";
+        public const string AddBuildSettingsTooltip = "Add to build settings";
+        private const string RemoveBuildSettingsTooltip = "Remove from build settings";
+        public const string EnableInBuildSettingsTooltip = "Enable in build settings";
         private const string DisableInBuildSettingsTooltip = "Disable in build settings";
         private const string AddtoAddressablesTooltip = "Add to default addressable group";
         private const string RemoveFromAddressablesTooltip = "Remove from addressables";
@@ -26,8 +26,8 @@ namespace Ludwell.Scene.Editor
         private const string LoadButtonName = "button__load";
         private const string PingButtonName = "button__ping";
         private const string DirectoryChangeButtonName = "button__directory-path";
-        private const string BuildSettingsButtonName = "button__build-settings";
-        private const string EnabledInBuildSettingsButtonName = "button__build-settings__enabled";
+        public const string BuildSettingsButtonName = "button__build-settings";
+        public const string EnabledInBuildSettingsButtonName = "button__build-settings__enabled";
         private const string AddressablesButtonName = "button__addressables";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
