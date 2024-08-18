@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.Scene.Editor
@@ -52,6 +53,19 @@ namespace Ludwell.Scene.Editor
 
             return false;
         }
+        
+        public static bool IsSceneEnabledInBuildSettings(string path)
+        {
+            var buildScenes = EditorBuildSettings.scenes;
+
+            foreach (var buildScene in buildScenes)
+            {
+                if (!string.Equals(buildScene.path, path)) continue;
+                return buildScene.enabled;
+            }
+
+            return false;
+        }
 
         public static void AddSceneToBuildSettings(string path)
         {
@@ -72,6 +86,19 @@ namespace Ludwell.Scene.Editor
 
                 ArrayUtility.RemoveAt(ref buildSettingsScenes, i);
                 EditorBuildSettings.scenes = buildSettingsScenes;
+                break;
+            }
+        }
+
+        public static void EnableSceneInBuildSettings(string path, bool state)
+        {
+            var buildScenes = EditorBuildSettings.scenes;
+
+            foreach (var buildScene in buildScenes)
+            {
+                if (!string.Equals(buildScene.path, path)) continue;
+                buildScene.enabled = state;
+                EditorBuildSettings.scenes = buildScenes;
                 break;
             }
         }

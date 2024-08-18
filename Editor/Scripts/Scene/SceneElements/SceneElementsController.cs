@@ -148,6 +148,10 @@ namespace Ludwell.Scene.Editor
                 context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings, status);
                 context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
                     status);
+                context.menu.AppendAction("Enable selection to in build settings", EnableSelectionInBuildSettings,
+                    status);
+                context.menu.AppendAction("Disable selection to in build settings", DisableSelectionInBuildSettings,
+                    status);
                 context.menu.AppendSeparator();
                 context.menu.AppendAction("Add selection to addressable default group", AddSelectionToAddressables,
                     status);
@@ -196,6 +200,30 @@ namespace Ludwell.Scene.Editor
             foreach (var controller in controllers)
             {
                 controller.RemoveFromBuildSettings();
+            }
+        }
+
+        private void EnableSelectionInBuildSettings(DropdownMenuAction _)
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            var controllers =
+                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            if (!controllers.Any()) return;
+            foreach (var controller in controllers)
+            {
+                controller.EnableInBuildSettings();
+            }
+        }
+
+        private void DisableSelectionInBuildSettings(DropdownMenuAction _)
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+            var controllers =
+                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
+            if (!controllers.Any()) return;
+            foreach (var controller in controllers)
+            {
+                controller.DisableInBuildSettings();
             }
         }
 

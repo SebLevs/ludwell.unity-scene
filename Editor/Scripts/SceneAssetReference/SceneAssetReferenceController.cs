@@ -22,15 +22,16 @@ namespace Ludwell.Scene.Editor
 
         private ContextualMenuManipulator _contextualMenuManipulator;
 
-        public SceneAssetReferenceController(SerializedProperty objectProperty, SerializedProperty guidProperty)
+        public SceneAssetReferenceController(SerializedProperty rootProperty)
         {
             _view = new SceneAssetReferenceView(this);
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
 
-            _objectProperty = objectProperty;
+            
+            _objectProperty = rootProperty.FindPropertyRelative("_sceneAsset");
             _view.ObjectField.BindProperty(_objectProperty);
-            _guidProperty = guidProperty;
+            _guidProperty = rootProperty.FindPropertyRelative("_guid");
 
             EditorApplication.update += SolveButtonsOnMissingReference;
 

@@ -10,21 +10,24 @@ namespace Ludwell.Scene.Editor
         private readonly string UxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
         private readonly string UssPath = FoldoutView.UssPath + "_SceneManagerToolkit";
 
-        private const string AddBuildSettingsTooltip = "Add to build settings";
         private const string RemoveBuildSettingsTooltip = "Remove from build settings";
         private const string OpenAdditiveTooltip = "Open additive";
         private const string RemoveAdditiveTooltip = "Remove additive";
+        private const string AddBuildSettingsTooltip = "Add to build settings";
+        private const string EnableInBuildSettingsTooltip = "Enable in build settings";
+        private const string DisableInBuildSettingsTooltip = "Disable in build settings";
         private const string AddtoAddressablesTooltip = "Add to default addressable group";
         private const string RemoveFromAddressablesTooltip = "Remove from addressables";
         private const string AddressablesNotInstalledTooltip = "Addressables package not installed";
 
         private const string SetActiveButtonName = "button__set-active";
-        private const string BuildSettingsButtonName = "button__build-settings";
         private const string OpenSceneAdditiveButtonName = "button__open-additive";
         private const string OpenSceneButtonName = "button__open";
         private const string LoadButtonName = "button__load";
         private const string PingButtonName = "button__ping";
         private const string DirectoryChangeButtonName = "button__directory-path";
+        private const string BuildSettingsButtonName = "button__build-settings";
+        private const string EnabledInBuildSettingsButtonName = "button__build-settings__enabled";
         private const string AddressablesButtonName = "button__addressables";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
@@ -39,6 +42,7 @@ namespace Ludwell.Scene.Editor
         public ButtonWithIcon PingButton { get; private set; }
         public ButtonWithIcon DirectoryChangeButton { get; }
         public DualStateButton BuildSettingsButton { get; }
+        public DualStateButton EnabledInBuildSettingsButton { get; }
         public DualStateButton AddressablesButton { get; }
 
         public void SetSetActiveButtonEnable(bool state) => SetActiveButton.SetEnabled(state);
@@ -50,6 +54,8 @@ namespace Ludwell.Scene.Editor
         public void SetDirectoryChangeButtonEnable(bool state) => DirectoryChangeButton.SetEnabled(state);
 
         public void SetBuildSettingsButtonButtonEnable(bool state) => BuildSettingsButton.SetEnabled(state);
+
+        public void SetEnabledInBuildSettingsButtonEnable(bool state) => EnabledInBuildSettingsButton.SetEnabled(state);
 
         public void SetAddressablesButtonEnable(bool state) => AddressablesButton.SetEnabled(state);
 
@@ -71,6 +77,7 @@ namespace Ludwell.Scene.Editor
             PingButton = _root.Q<ButtonWithIcon>(PingButtonName);
             DirectoryChangeButton = _root.Q<ButtonWithIcon>(DirectoryChangeButtonName);
             BuildSettingsButton = _root.Q<DualStateButton>(BuildSettingsButtonName);
+            EnabledInBuildSettingsButton = _root.Q<DualStateButton>(EnabledInBuildSettingsButtonName);
             AddressablesButton = _root.Q<DualStateButton>(AddressablesButtonName);
 
             _iconAssetOutsideAssets = _root.Q<VisualElement>(IconAssetOutsideAssetsName);
@@ -83,12 +90,6 @@ namespace Ludwell.Scene.Editor
             LoadButton.Dispose();
         }
 
-        public void SwitchBuildSettingsButtonState(bool state)
-        {
-            BuildSettingsButton.SwitchState(state ? BuildSettingsButton.StateTwo : BuildSettingsButton.StateOne);
-            BuildSettingsButton.tooltip = state ? RemoveBuildSettingsTooltip : AddBuildSettingsTooltip;
-        }
-
         public void SwitchOpenAdditiveButtonState(bool state)
         {
             OpenAdditiveButton.SwitchState(state ? OpenAdditiveButton.StateTwo : OpenAdditiveButton.StateOne);
@@ -99,6 +100,20 @@ namespace Ludwell.Scene.Editor
         {
             AddressablesButton.SwitchState(state ? AddressablesButton.StateTwo : AddressablesButton.StateOne);
             AddressablesButton.tooltip = state ? RemoveFromAddressablesTooltip : AddtoAddressablesTooltip;
+        }
+
+        public void SwitchBuildSettingsButtonState(bool state)
+        {
+            BuildSettingsButton.SwitchState(state ? BuildSettingsButton.StateTwo : BuildSettingsButton.StateOne);
+            BuildSettingsButton.tooltip = state ? RemoveBuildSettingsTooltip : AddBuildSettingsTooltip;
+        }
+
+        public void SwitchEnabledInBuildSettingsButtonState(bool state)
+        {
+            EnabledInBuildSettingsButton.SwitchState(state
+                ? EnabledInBuildSettingsButton.StateTwo
+                : EnabledInBuildSettingsButton.StateOne);
+            EnabledInBuildSettingsButton.tooltip = state ? DisableInBuildSettingsTooltip : EnableInBuildSettingsTooltip;
         }
 
         public void SetAddressableButtonTooltipWithoutPackage()

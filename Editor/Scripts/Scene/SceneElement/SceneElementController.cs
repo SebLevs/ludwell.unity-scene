@@ -39,6 +39,7 @@ namespace Ludwell.Scene.Editor
             _view.PingButton.clicked += SelectSceneDataInProject;
             _view.DirectoryChangeButton.clicked += ChangeFolder;
             InitializeBuildSettingsButton();
+            InitializeEnalbedInBuildSettingsButton();
             InitializeAddressablesButton();
 
             _foldout = new FoldoutController(this, false);
@@ -97,6 +98,7 @@ namespace Ludwell.Scene.Editor
             SetLoadButtonState();
             _view.SetDirectoryChangeButtonEnable(!EditorApplication.isPlaying);
             SolveBuildSettingsButton();
+            SolveEnabledInBuildSettingsButton();
             SolveAddressablesButton();
         }
 
@@ -108,6 +110,18 @@ namespace Ludwell.Scene.Editor
         public void RemoveFromBuildSettings()
         {
             EditorSceneManagerHelper.RemoveSceneFromBuildSettings(_model.Data.Path);
+        }
+
+        public void EnableInBuildSettings()
+        {
+            Debug.LogError("todo: make context menu action");
+            EditorSceneManagerHelper.EnableSceneInBuildSettings(_model.Data.Path, true);
+        }
+
+        public void DisableInBuildSettings()
+        {
+            Debug.LogError("todo: make context menu action");
+            EditorSceneManagerHelper.EnableSceneInBuildSettings(_model.Data.Path, false);
         }
 
         public void OpenSceneAdditive()
@@ -164,6 +178,18 @@ namespace Ludwell.Scene.Editor
             }
 
             _view.SwitchBuildSettingsButtonState(false);
+        }
+
+        private void SolveEnabledInBuildSettingsButton()
+        {
+            _view.SetEnabledInBuildSettingsButtonEnable(!EditorApplication.isPlaying);
+            if (EditorSceneManagerHelper.IsSceneEnabledInBuildSettings(_model.Data.Path))
+            {
+                _view.SwitchEnabledInBuildSettingsButtonState(true);
+                return;
+            }
+
+            _view.SwitchEnabledInBuildSettingsButtonState(false);
         }
 
         private void SolveAddressablesButton()
@@ -315,6 +341,21 @@ namespace Ludwell.Scene.Editor
                 RemoveFromBuildSettings);
 
             _view.BuildSettingsButton.Initialize(stateOne, stateTwo);
+        }
+
+        private void InitializeEnalbedInBuildSettingsButton()
+        {
+            var stateOne = new DualStateButtonState(
+                _view.EnabledInBuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.EnableInBuildSettings),
+                EnableInBuildSettings);
+
+            var stateTwo = new DualStateButtonState(
+                _view.EnabledInBuildSettingsButton,
+                Resources.Load<Sprite>(SpritesPath.DisableInBuildSettings),
+                DisableInBuildSettings);
+
+            _view.EnabledInBuildSettingsButton.Initialize(stateOne, stateTwo);
         }
 
         private void RenameAsset(BlurEvent evt)
