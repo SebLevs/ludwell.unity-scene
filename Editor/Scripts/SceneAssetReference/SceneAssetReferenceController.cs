@@ -4,9 +4,8 @@ using System.Linq;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
-using UnityEditor.SceneManagement;
+using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -18,19 +17,22 @@ namespace Ludwell.Scene.Editor
         private static string _copyBuffer;
 
         private readonly SceneAssetReferenceView _view;
-        private readonly SerializedProperty _model;
+        private readonly SerializedProperty _objectProperty;
+        private readonly SerializedProperty _guidProperty;
 
         private ContextualMenuManipulator _contextualMenuManipulator;
 
-        public SceneAssetReferenceController(SerializedProperty model)
+        public SceneAssetReferenceController(SerializedProperty objectProperty, SerializedProperty guidProperty)
         {
-            _model = model;
-
             _view = new SceneAssetReferenceView(this);
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
 
-            EditorApplication.update += SolveButtonOnMissingReference;
+            _objectProperty = objectProperty;
+            _view.ObjectField.BindProperty(_objectProperty);
+            _guidProperty = guidProperty;
+
+            EditorApplication.update += SolveButtonsOnMissingReference;
 
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
             _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.SelectInWindowButton);
@@ -40,12 +42,8 @@ namespace Ludwell.Scene.Editor
             RegisterCallback<AttachToPanelEvent>(AddToDrawers);
             RegisterCallback<DetachFromPanelEvent>(Dispose);
 
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
-            if (data != null)
-            {
-                _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(data.Path);
-                if (!Application.isPlaying) SolveBuildSettingsButton(null);
-            }
+            var sceneAsset = _objectProperty.objectReferenceValue as SceneAsset;
+            if (sceneAsset != null) _view.ObjectField.value = sceneAsset;
 
             _view.BuildSettingsButton.clicked -= AddToBuildSettings;
             _view.BuildSettingsButton.clicked += AddToBuildSettings;
@@ -62,7 +60,7 @@ namespace Ludwell.Scene.Editor
             RegisterCallback<KeyDownEvent>(ExecuteKeyEvents);
         }
 
-        public static void SolveButtonsVisibleState()
+        public static void SolveAllBuildSettingsButtonVisibleState()
         {
             foreach (var controller in _controllers)
             {
@@ -77,7 +75,7 @@ namespace Ludwell.Scene.Editor
             _view.ObjectFieldLabel.text = value;
         }
 
-        private static bool IsCopyBufferPath()
+        private static bool IsCopyBufferASceneAssetPath()
         {
             return EditorGUIUtility.systemCopyBuffer.Contains(".unity");
         }
@@ -90,12 +88,17 @@ namespace Ludwell.Scene.Editor
                 return;
             }
 
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
+
+            if (data.IsAddressable)
+            {
+                _view.HideBuildSettingsButton();
+                return;
+            }
 
             var isInBuildSetting = EditorBuildSettings.scenes.Any(scene => scene.path == data.Path);
             if (!isInBuildSetting)
             {
-                Debug.LogError("todo: if scene asset is addressable, do not show the button");
                 _view.ShowBuildSettingsButton();
                 return;
             }
@@ -114,7 +117,7 @@ namespace Ludwell.Scene.Editor
             _view.ShowSelectInWindowButton();
         }
 
-        private void SolveButtonOnMissingReference()
+        private void SolveButtonsOnMissingReference()
         {
             if (_view.ObjectField.value != null) return;
             if (_view.AreButtonsHidden()) return;
@@ -124,41 +127,27 @@ namespace Ludwell.Scene.Editor
 
         private void AddToBuildSettings()
         {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_model.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
 
         private void OnValueChanged(ChangeEvent<Object> evt)
         {
-            var targetAsSceneAsset = evt.newValue as SceneAsset;
-
-            if (targetAsSceneAsset == null)
-            {
-                if (!string.IsNullOrEmpty(_model.stringValue))
-                {
-                    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-                }
-
-                UpdateModel(string.Empty);
-                return;
-            }
-
-            var assetPath = AssetDatabase.GetAssetPath(targetAsSceneAsset);
+            var assetPath = AssetDatabase.GetAssetPath(_objectProperty.objectReferenceValue);
             var key = AssetDatabase.AssetPathToGUID(assetPath);
-            UpdateModel(key);
-            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            UpdateGuid(key);
         }
 
-        private void UpdateModel(string value)
+        private void UpdateGuid(string value)
         {
-            _model.stringValue = value;
-            _model.serializedObject.ApplyModifiedProperties();
+            _guidProperty.stringValue = value;
+            _guidProperty.serializedObject.ApplyModifiedProperties();
         }
 
         private void SelectInWindow()
         {
             var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders()
-                .GetBinderFromId(_model.stringValue);
+                .GetBinderFromId(_guidProperty.stringValue);
             var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
             window.Focus();
@@ -187,7 +176,7 @@ namespace Ludwell.Scene.Editor
 
         private bool HasBinderAtValue()
         {
-            return ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(_model.stringValue) == null;
+            return ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(_guidProperty.stringValue) == null;
         }
 
         private DropdownMenuAction.Status GetStatus()
@@ -203,7 +192,7 @@ namespace Ludwell.Scene.Editor
 
             SceneAsset sceneAsset;
 
-            if (IsCopyBufferPath())
+            if (IsCopyBufferASceneAssetPath())
             {
                 sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
             }
@@ -223,15 +212,15 @@ namespace Ludwell.Scene.Editor
 
         private void CopyPath(DropdownMenuAction _)
         {
-            var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_model.stringValue);
+            var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_guidProperty.stringValue);
             EditorGUIUtility.systemCopyBuffer = data.Path;
-            _copyBuffer = _model.stringValue;
+            _copyBuffer = _guidProperty.stringValue;
         }
 
         private void CopyGuid(DropdownMenuAction _)
         {
-            EditorGUIUtility.systemCopyBuffer = _model.stringValue;
-            _copyBuffer = _model.stringValue;
+            EditorGUIUtility.systemCopyBuffer = _guidProperty.stringValue;
+            _copyBuffer = _guidProperty.stringValue;
         }
 
         private void Paste(DropdownMenuAction _)
@@ -240,7 +229,7 @@ namespace Ludwell.Scene.Editor
 
             if (string.IsNullOrEmpty(clipboardContent)) return;
 
-            if (IsCopyBufferPath())
+            if (IsCopyBufferASceneAssetPath())
             {
                 _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
                 return;
@@ -255,8 +244,8 @@ namespace Ludwell.Scene.Editor
             switch (evt.keyCode)
             {
                 case KeyCode.C when evt.ctrlKey:
-                    EditorGUIUtility.systemCopyBuffer = _model.stringValue;
-                    _copyBuffer = _model.stringValue;
+                    EditorGUIUtility.systemCopyBuffer = _guidProperty.stringValue;
+                    _copyBuffer = _guidProperty.stringValue;
                     break;
                 case KeyCode.V when evt.ctrlKey:
                     var path = AssetDatabase.GUIDToAssetPath(_copyBuffer);
@@ -267,7 +256,7 @@ namespace Ludwell.Scene.Editor
                 case KeyCode.Delete or KeyCode.Backspace:
                     if (_view.ObjectField == null) break;
                     _view.ObjectField.value = null;
-                    _model.stringValue = string.Empty;
+                    _guidProperty.stringValue = string.Empty;
                     break;
             }
         }
@@ -287,7 +276,7 @@ namespace Ludwell.Scene.Editor
             _copyBuffer = string.Empty;
             RemoveFromDrawers();
 
-            EditorApplication.update -= SolveButtonOnMissingReference;
+            EditorApplication.update -= SolveButtonsOnMissingReference;
 
             _view.SelectInWindowButton.clicked -= SelectInWindow;
 
