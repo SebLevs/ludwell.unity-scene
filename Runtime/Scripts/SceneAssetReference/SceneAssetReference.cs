@@ -1,6 +1,8 @@
 using System;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Ludwell.Scene
 {
@@ -8,10 +10,10 @@ namespace Ludwell.Scene
     public partial class SceneAssetReference
     {
         /// <summary> Required for the property drawer binding. </summary>
-        public SceneAsset _reference;
+        [SerializeField] private SceneAsset _reference;
     }
 #endif
-    
+
     [Serializable]
     public partial class SceneAssetReference
     {
@@ -19,8 +21,8 @@ namespace Ludwell.Scene
         /// The SceneAsset GUID.<br/>
         /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
         /// </summary>
-        public string _guid;
-        
+        [SerializeField] private string _guid;
+
         public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
 
         public SceneAssetData Data()

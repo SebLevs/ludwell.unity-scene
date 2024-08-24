@@ -10,13 +10,22 @@ namespace Ludwell.Scene.Editor
     {
         private const string SceneAssetPropertyName = "_reference";
         private const string GuidPropertyName = "_guid";
-        
+
         private const string SelectInWindowButtonTooltip = "Select in Scene Manager Toolkit window";
         private const string AddToBuildSettingsButtonTooltip = "Add to Build Settings";
         private const string EnableInBuildSettingsButtonTooltip = "Enable in Build Settings";
 
         private readonly SerializedProperty _reference;
         private readonly SerializedProperty _guid;
+
+        private string ThemedIconSelectInWindow =>
+            EditorGUIUtility.isProSkin ? SpritesPath.Settings : SpritesPath.SettingsDark;
+
+        private string ThemedIconAddToBuildSettingsIcon =>
+            EditorGUIUtility.isProSkin ? SpritesPath.AddToBuildSettings : SpritesPath.AddToBuildSettingsDark;
+
+        private string ThemedIconEnableInBuildSettingsIcon =>
+            EditorGUIUtility.isProSkin ? SpritesPath.EnableInBuildSettings : SpritesPath.EnableInBuildSettingsDark;
 
         public SceneAssetReferenceDrawerController(Rect content, SerializedProperty rootProperty)
         {
@@ -37,8 +46,10 @@ namespace Ludwell.Scene.Editor
                 buttonCount++;
 
                 rect.x = content.x - EditorButton.Size;
-                new EditorButton(rect, () => SelectInWindow(_guid)).WithIcon(SpritesPath.Settings)
-                    .WithTooltip(SelectInWindowButtonTooltip).Build();
+                new EditorButton(rect, () => SelectInWindow(_guid))
+                    .WithIcon(ThemedIconSelectInWindow)
+                    .WithTooltip(SelectInWindowButtonTooltip)
+                    .Build();
             }
 
             if (CanAddToBuildSettings(_reference, _guid))
@@ -46,8 +57,10 @@ namespace Ludwell.Scene.Editor
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
 
-                new EditorButton(rect, () => AddToBuildSettings(_guid)).WithIcon(SpritesPath.AddBuildSettings)
-                    .WithTooltip(AddToBuildSettingsButtonTooltip).Build();
+                new EditorButton(rect, () => AddToBuildSettings(_guid))
+                    .WithIcon(ThemedIconAddToBuildSettingsIcon)
+                    .WithTooltip(AddToBuildSettingsButtonTooltip)
+                    .Build();
             }
 
             if (CanEnableInBuildSettings(_reference, _guid))
@@ -56,7 +69,8 @@ namespace Ludwell.Scene.Editor
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
 
                 new EditorButton(rect, () => EnableInBuildSettings(_guid))
-                    .WithIcon(SpritesPath.EnableInBuildSettings).WithTooltip(EnableInBuildSettingsButtonTooltip)
+                    .WithIcon(ThemedIconEnableInBuildSettingsIcon)
+                    .WithTooltip(EnableInBuildSettingsButtonTooltip)
                     .Build();
             }
         }

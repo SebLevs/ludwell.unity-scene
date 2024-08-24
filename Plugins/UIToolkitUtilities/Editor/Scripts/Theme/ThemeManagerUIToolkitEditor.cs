@@ -4,13 +4,13 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.UIToolkitUtilities.Editor
 {
-    public class ThemeManagerEditor : IDisposable
+    public class ThemeManagerUIToolkitEditor : IDisposable
     {
         private VisualElement _root;
         private StyleSheet _darkTheme;
         private StyleSheet _lightTheme;
 
-        public ThemeManagerEditor(VisualElement element, StyleSheet darkTheme, StyleSheet lightTheme)
+        public ThemeManagerUIToolkitEditor(VisualElement element, StyleSheet darkTheme, StyleSheet lightTheme)
         {
             _root = element;
             _root.styleSheets.Add(DefaultThemes.GetThemedClass());

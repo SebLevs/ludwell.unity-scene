@@ -21,7 +21,7 @@ namespace Ludwell.Scene.Editor
         // private const string EnableInBuildSettingsButtonName = "build-settings__enabled";
         private const string SelectInWindowButtonName = "select-in-window";
 
-        private ThemeManagerEditor _themeManagerEditor;
+        private ThemeManagerUIToolkitEditor _themeManagerUIToolkitEditor;
 
         public ObjectField ObjectField { get; }
 
@@ -54,7 +54,7 @@ namespace Ludwell.Scene.Editor
 
         public void Dispose(DetachFromPanelEvent _)
         {
-            _themeManagerEditor.Dispose();
+            _themeManagerUIToolkitEditor.Dispose();
         }
 
         public bool AreButtonsHidden()
@@ -97,7 +97,7 @@ namespace Ludwell.Scene.Editor
         {
             var lightTheme = DefaultThemes.GetLightThemeStyleSheet();
             var darkTheme = DefaultThemes.GetDarkThemeStyleSheet();
-            _themeManagerEditor = new ThemeManagerEditor(evt.target as VisualElement, darkTheme, lightTheme);
+            _themeManagerUIToolkitEditor = new ThemeManagerUIToolkitEditor(evt.target as VisualElement, darkTheme, lightTheme);
         }
     }
 }

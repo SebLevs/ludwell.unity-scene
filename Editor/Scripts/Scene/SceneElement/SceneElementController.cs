@@ -334,7 +334,7 @@ namespace Ludwell.Scene.Editor
         {
             var stateOne = new DualStateButtonState(
                 _view.BuildSettingsButton,
-                Resources.Load<Sprite>(SpritesPath.AddBuildSettings),
+                Resources.Load<Sprite>(SpritesPath.AddToBuildSettings),
                 AddToBuildSettings);
 
             var stateTwo = new DualStateButtonState(
