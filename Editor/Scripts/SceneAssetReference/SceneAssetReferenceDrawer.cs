@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,7 +37,17 @@ namespace Ludwell.Scene.Editor
 
             EditorGUI.EndProperty();
         }
+        
+        public static void RepaintInspectorWindows()
+        {
+            var inspectorWindows = Resources.FindObjectsOfTypeAll<EditorWindow>()
+                .Where(w => w.GetType().Name == "InspectorWindow" || w.GetType().Name == "PropertyEditor");
 
+            foreach (var window in inspectorWindows)
+            {
+                window.Repaint();
+            }
+        }
 
         // DO NOT DELETE: UI TOOLKIT VERSION
         // public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

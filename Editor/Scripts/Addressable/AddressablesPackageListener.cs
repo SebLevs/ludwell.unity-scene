@@ -21,7 +21,7 @@ namespace Ludwell.Scene.Editor
                 if (package.name != AddressablesPackageName) continue;
 #if USE_ADDRESSABLES_EDITOR
                 AddressablesProcessor.SolveBindersAddressableID();
-                SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
+                SceneAssetReferenceDrawer.RepaintInspectorWindows();
 #endif
                 return;
             }
@@ -30,7 +30,7 @@ namespace Ludwell.Scene.Editor
             {
                 if (package.name != AddressablesPackageName) continue;
                 ResourcesLocator.GetSceneAssetDataBinders().ResetAddresses();
-                SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
+                SceneAssetReferenceDrawer.RepaintInspectorWindows();
                 return;
             }
         }

@@ -18,7 +18,7 @@ namespace Ludwell.Scene.Editor
 
         private static void SceneListChangedCallback()
         {
-            SceneAssetReferenceController.SolveAllBuildSettingsButtonVisibleState();
+            SceneAssetReferenceDrawer.RepaintInspectorWindows();
             Signals.Dispatch<UISignals.RefreshView>();
         }
     }
