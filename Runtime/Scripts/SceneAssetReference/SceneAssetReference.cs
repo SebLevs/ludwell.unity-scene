@@ -8,7 +8,7 @@ namespace Ludwell.Scene
     public partial class SceneAssetReference
     {
         /// <summary> Required for the property drawer binding. </summary>
-        public SceneAsset _sceneAsset;
+        public SceneAsset _reference;
     }
 #endif
     
