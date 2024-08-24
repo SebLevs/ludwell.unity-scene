@@ -10,7 +10,6 @@ namespace Ludwell.Scene.Editor
         private const string GuidPropertyName = "_guid";
         private const string SceneAssetPropertyName = "_reference";
 
-        // DO NOT DELETE: This works from the old ways
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
