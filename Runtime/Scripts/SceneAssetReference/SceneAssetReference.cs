@@ -4,19 +4,6 @@ using UnityEngine;
 
 namespace Ludwell.Scene
 {
-    // [Serializable]
-    // public class Foo
-    // {
-    //     /// <summary>
-    //     /// The SceneAsset GUID.<br/>
-    //     /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
-    //     /// </summary>
-    //     public string _guidoo;
-    //     
-    //     /// <summary> Required for the property drawer binding. </summary>
-    //     public Object _sceneAsset;
-    // }
-    
 #if UNITY_EDITOR
     public partial class SceneAssetReference
     {

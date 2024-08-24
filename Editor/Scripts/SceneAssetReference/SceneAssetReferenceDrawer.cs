@@ -8,80 +8,133 @@ namespace Ludwell.Scene.Editor
 {
     public class InspectorButton
     {
-        public const float Size = 16f;
-        private const float _iconSize = 8f;
         private Rect _rect;
+        public const float Size = 16f;
 
         private Action _behaviour;
+
+        private GUIContent _content;
+
+        private float _iconSize = 8f;
+        private Texture2D _icon;
 
         public InspectorButton(Rect position, Action behaviour)
         {
             _rect = new Rect(position.x, position.y, Size, Size);
+
             _behaviour = behaviour;
-            if (GUI.Button(_rect, string.Empty))
-            {
-                behaviour?.Invoke();
-            }
+
+            _content = new GUIContent();
         }
 
-        public void WithIcon(string path, float iconSize = _iconSize)
+        public InspectorButton WithIcon(string path, float iconSize = -1)
         {
-            var buttonTexture = Resources.Load<Texture2D>(path);
-            var textureRect = new Rect(
-                _rect.x + (_rect.width - iconSize) / 2,
-                _rect.y + (_rect.height - iconSize) / 2,
-                iconSize,
-                iconSize
-            );
-            GUI.DrawTexture(textureRect, buttonTexture);
+            _icon = Resources.Load<Texture2D>(path);
+            _iconSize = iconSize < 0 ? _iconSize : iconSize;
+            return this;
+        }
+
+        public InspectorButton WithTooltip(string tooltip)
+        {
+            _content.tooltip = tooltip;
+            return this;
+        }
+
+        public void Build()
+        {
+            if (GUI.Button(_rect, _content))
+            {
+                _behaviour?.Invoke();
+            }
+
+            if (_icon)
+            {
+                var xPosition = _rect.x + (_rect.width - _iconSize) * 0.5f;
+                var yPosition = _rect.y + (_rect.height - _iconSize) * 0.5f;
+                var textureRect = new Rect(xPosition, yPosition, _iconSize, _iconSize);
+                GUI.DrawTexture(textureRect, _icon);
+            }
         }
     }
 
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
-        // DO NOT DELETE: This kindof works from the old ways
+        private const string GuidPropertyName = "_guid";
+        private const string SceneAssetPropertyName = "_sceneAsset";
+
+        private const string SelectInWindowButtonTooltip = "Select in Scene Manager Toolkit window";
+        private const string AddToBuildSettingsButtonTooltip = "Add to Build Settings";
+        private const string EnableInBuildSettingsButtonTooltip = "Enable in Build Settings";
+
+        // DO NOT DELETE: This works from the old ways
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
 
-            var sceneReference = fieldInfo.GetValue(property.serializedObject.targetObject) as SceneAssetReference;
-            var guidProp = property.FindPropertyRelative("_guid");
-            var sceneAssetProp = property.FindPropertyRelative("_sceneAsset");
+            var guidProperty = property.FindPropertyRelative(GuidPropertyName);
+            var referenceProperty = property.FindPropertyRelative(SceneAssetPropertyName);
 
             var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
             var buttonCount = 0;
             // Buttons
-            if (sceneReference?._sceneAsset)
+            if (referenceProperty?.objectReferenceValue)
             {
                 buttonCount++;
                 var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
-                var settingsButtonPosition = new Rect(contentPosition.x, centeredY, InspectorButton.Size, InspectorButton.Size);
-                var settingsButton = new InspectorButton(settingsButtonPosition, () => SelectInWindow(guidProp));
-                settingsButton.WithIcon(SpritesPath.Settings);
+                var settingsButtonPosition = new Rect(contentPosition.x - InspectorButton.Size * buttonCount, centeredY,
+                    InspectorButton.Size, InspectorButton.Size);
+
+                var settingsButton = new InspectorButton(settingsButtonPosition, () => SelectInWindow(guidProperty));
+                settingsButton.WithIcon(SpritesPath.Settings).WithTooltip(SelectInWindowButtonTooltip).Build();
             }
 
-            var objectFieldRect = new Rect(contentPosition.x + InspectorButton.Size * buttonCount + 2, contentPosition.y,
-                contentPosition.width - InspectorButton.Size * buttonCount - 4, contentPosition.height);
-            EditorGUI.PropertyField(objectFieldRect, sceneAssetProp, GUIContent.none);
-
-            if (GUI.changed && sceneReference != null)
+            if (CanAddToBuildSettings(referenceProperty, guidProperty))
             {
-                // todo: in list and array, sceneReference is not registered properly?
-                sceneReference._sceneAsset = sceneAssetProp.objectReferenceValue as SceneAsset;
-                sceneReference._guid =
-                    AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sceneReference._sceneAsset));
-                guidProp.stringValue = sceneReference._guid;
+                buttonCount++;
+                var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
+                var settingsButtonPosition = new Rect(contentPosition.x - InspectorButton.Size * buttonCount - 2,
+                    centeredY,
+                    InspectorButton.Size, InspectorButton.Size);
+
+                var settingsButton =
+                    new InspectorButton(settingsButtonPosition, () => AddToBuildSettings(guidProperty));
+                settingsButton.WithIcon(SpritesPath.AddBuildSettings).WithTooltip(AddToBuildSettingsButtonTooltip)
+                    .Build();
+            }
+
+            if (CanEnableInBuildSettings(referenceProperty, guidProperty))
+            {
+                buttonCount++;
+                var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
+                var settingsButtonPosition = new Rect(contentPosition.x - InspectorButton.Size * buttonCount - 2,
+                    centeredY,
+                    InspectorButton.Size, InspectorButton.Size);
+
+                var settingsButton =
+                    new InspectorButton(settingsButtonPosition, () => EnableInBuildSettings(guidProperty));
+                settingsButton.WithIcon(SpritesPath.EnableInBuildSettings)
+                    .WithTooltip(EnableInBuildSettingsButtonTooltip).Build();
+            }
+
+            var objectFieldRect = new Rect(contentPosition.x + 2, contentPosition.y, contentPosition.width - 4,
+                contentPosition.height);
+            EditorGUI.PropertyField(objectFieldRect, referenceProperty, GUIContent.none);
+
+            if (GUI.changed && referenceProperty?.objectReferenceValue)
+            {
+                referenceProperty.objectReferenceValue = referenceProperty.objectReferenceValue as SceneAsset;
+                guidProperty.stringValue =
+                    AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(referenceProperty.objectReferenceValue));
             }
 
             EditorGUI.EndProperty();
         }
-        
+
         private void SelectInWindow(SerializedProperty guidProperty)
         {
-            var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders()
-                .GetBinderFromId(guidProperty.stringValue);
+            var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(guidProperty.stringValue);
             var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
             window.Focus();
@@ -93,6 +146,39 @@ namespace Ludwell.Scene.Editor
             {
                 window.SceneElementsController.ScrollToItemIndex(index);
             });
+        }
+
+        private void AddToBuildSettings(SerializedProperty guidProperty)
+        {
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
+        }
+
+        private void EnableInBuildSettings(SerializedProperty guidProperty)
+        {
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            EditorSceneManagerHelper.EnableSceneInBuildSettings(data.Path, true);
+        }
+
+        private bool CanAddToBuildSettings(SerializedProperty referenceProperty, SerializedProperty guidProperty)
+        {
+            if (Application.isPlaying || referenceProperty.objectReferenceValue == null) return false;
+
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            if (data.IsAddressable) return false;
+
+            return !EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
+        }
+
+        private bool CanEnableInBuildSettings(SerializedProperty referenceProperty, SerializedProperty guidProperty)
+        {
+            if (Application.isPlaying || referenceProperty.objectReferenceValue == null) return false;
+
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            var isInBuildSetting = EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
+            var isEnabled = EditorSceneManagerHelper.IsSceneEnabledInBuildSettings(data.Path);
+
+            return !data.IsAddressable && isInBuildSetting && !isEnabled;
         }
 
 
