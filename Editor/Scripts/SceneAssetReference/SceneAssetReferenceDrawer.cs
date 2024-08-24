@@ -19,18 +19,18 @@ namespace Ludwell.Scene.Editor
 
             var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
-            new SceneAssetReferenceDrawerController(contentPosition, referenceProperty, guidProperty);
+            new SceneAssetReferenceDrawerController(contentPosition, property);
 
             var objectFieldRect = new Rect(contentPosition.x + 2, contentPosition.y, contentPosition.width - 4,
                 contentPosition.height);
             EditorGUI.PropertyField(objectFieldRect, referenceProperty, GUIContent.none);
 
-            if (GUI.changed && referenceProperty?.objectReferenceValue)
+            if (GUI.changed)
             {
-                Debug.LogError(
-                    "Remove reference check in parameters so that the guid gets resetted properly if reference is null");
                 referenceProperty.objectReferenceValue = referenceProperty.objectReferenceValue as SceneAsset;
-                guidProperty.stringValue =
+                
+                guidProperty.stringValue = referenceProperty.objectReferenceValue == null ? 
+                    string.Empty : 
                     AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(referenceProperty.objectReferenceValue));
             }
 

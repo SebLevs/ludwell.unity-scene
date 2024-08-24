@@ -8,46 +8,54 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneAssetReferenceDrawerController
     {
+        private const string SceneAssetPropertyName = "_reference";
+        private const string GuidPropertyName = "_guid";
+        
         private const string SelectInWindowButtonTooltip = "Select in Scene Manager Toolkit window";
         private const string AddToBuildSettingsButtonTooltip = "Add to Build Settings";
         private const string EnableInBuildSettingsButtonTooltip = "Enable in Build Settings";
 
-        public SceneAssetReferenceDrawerController(Rect content, SerializedProperty reference, SerializedProperty guid)
+        private readonly SerializedProperty _reference;
+        private readonly SerializedProperty _guid;
+
+        public SceneAssetReferenceDrawerController(Rect content, SerializedProperty rootProperty)
         {
-            InitializeButtons(content, reference, guid);
+            _reference = rootProperty.FindPropertyRelative(SceneAssetPropertyName);
+            _guid = rootProperty.FindPropertyRelative(GuidPropertyName);
+            InitializeButtons(content);
         }
 
-        private void InitializeButtons(Rect content, SerializedProperty reference, SerializedProperty guid)
+        private void InitializeButtons(Rect content)
         {
             var centeredY = content.y + (content.height - EditorButton.Size) * 0.5f;
             var buttonCount = 0;
 
             var rect = new Rect(content.x - EditorButton.Size, centeredY, EditorButton.Size, EditorButton.Size);
 
-            if (reference?.objectReferenceValue)
+            if (_reference?.objectReferenceValue)
             {
                 buttonCount++;
 
                 rect.x = content.x - EditorButton.Size;
-                new EditorButton(rect, () => SelectInWindow(guid)).WithIcon(SpritesPath.Settings)
+                new EditorButton(rect, () => SelectInWindow(_guid)).WithIcon(SpritesPath.Settings)
                     .WithTooltip(SelectInWindowButtonTooltip).Build();
             }
 
-            if (CanAddToBuildSettings(reference, guid))
+            if (CanAddToBuildSettings(_reference, _guid))
             {
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
 
-                new EditorButton(rect, () => AddToBuildSettings(guid)).WithIcon(SpritesPath.AddBuildSettings)
+                new EditorButton(rect, () => AddToBuildSettings(_guid)).WithIcon(SpritesPath.AddBuildSettings)
                     .WithTooltip(AddToBuildSettingsButtonTooltip).Build();
             }
 
-            if (CanEnableInBuildSettings(reference, guid))
+            if (CanEnableInBuildSettings(_reference, _guid))
             {
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
 
-                new EditorButton(rect, () => EnableInBuildSettings(guid))
+                new EditorButton(rect, () => EnableInBuildSettings(_guid))
                     .WithIcon(SpritesPath.EnableInBuildSettings).WithTooltip(EnableInBuildSettingsButtonTooltip)
                     .Build();
             }
