@@ -38,7 +38,7 @@ namespace Ludwell.Scene.Editor
             ObjectField = root.Q<ObjectField>();
             ObjectField.AddToClassList(ObjectField.alignedFieldUssClassName);
 
-            ObjectFieldLabel = ObjectField.Q<Label>();
+            // ObjectFieldLabel = ObjectField.Q<Label>();
 
             BuildSettingsButton = root.Q<Button>(SceneElementView.BuildSettingsButtonName);
             BuildSettingsButton.tooltip = SceneElementView.AddBuildSettingsTooltip;

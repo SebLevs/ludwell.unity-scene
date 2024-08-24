@@ -15,5 +15,6 @@ namespace Ludwell.Scene.Editor
         public static readonly string DisableInBuildSettings = Path.Combine(SpritesName, "icon_disable-build-settings");
         public static readonly string AddToAddressables = Path.Combine(SpritesName, "icon_add-addressables");
         public static readonly string RemoveFromAddressables = Path.Combine(SpritesName, "icon_remove-addressables");
+        public static readonly string Settings = Path.Combine(SpritesName, "icon_settings");
     }
 }

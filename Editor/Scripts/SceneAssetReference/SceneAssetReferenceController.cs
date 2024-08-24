@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,6 +18,7 @@ namespace Ludwell.Scene.Editor
         private static string _copyBuffer;
 
         private readonly SceneAssetReferenceView _view;
+        private readonly SerializedProperty _rootProperty;
         private readonly SerializedProperty _objectProperty;
         private readonly SerializedProperty _guidProperty;
 
@@ -27,7 +30,7 @@ namespace Ludwell.Scene.Editor
             _view.HideBuildSettingsButton();
             _view.HideSelectInWindowButton();
 
-
+            _rootProperty = rootProperty;
             _objectProperty = rootProperty.FindPropertyRelative("_sceneAsset");
             _view.ObjectField.BindProperty(_objectProperty);
             _guidProperty = rootProperty.FindPropertyRelative("_guid");
@@ -62,8 +65,8 @@ namespace Ludwell.Scene.Editor
             SolveEnableInBuildSettingsButton(null);
             SolveSelectInWindowButton(null);
 
-            _contextualMenuManipulator = BuildContextualMenuManipulator();
-            _view.ObjectField.AddManipulator(_contextualMenuManipulator);
+            // _contextualMenuManipulator = BuildContextualMenuManipulator();
+            // _view.ObjectField.AddManipulator(_contextualMenuManipulator);
             RegisterCallback<KeyDownEvent>(ExecuteKeyEvents);
         }
 
@@ -172,8 +175,9 @@ namespace Ludwell.Scene.Editor
 
         private void OnValueChanged(ChangeEvent<Object> evt)
         {
-            var assetPath = AssetDatabase.GetAssetPath(_objectProperty.objectReferenceValue);
+            var assetPath = AssetDatabase.GetAssetPath(_view.ObjectField.value);
             var key = AssetDatabase.AssetPathToGUID(assetPath);
+            Debug.LogError($"guid property: {_guidProperty}");
             UpdateGuid(key);
         }
 
@@ -205,12 +209,18 @@ namespace Ludwell.Scene.Editor
             return new ContextualMenuManipulator(evt =>
             {
                 evt.menu.AppendAction("Copy Property Path", CopyPropertyPath);
+                evt.menu.AppendAction("Apply to Prefab: Foo", ApplyToPrefab);
                 evt.menu.AppendAction("Copy", CopyGuid, GetStatus());
                 evt.menu.AppendSeparator();
                 evt.menu.AppendAction("Copy Path", CopyPath, GetStatus());
                 evt.menu.AppendAction("Copy GUID", CopyGuid, GetStatus());
                 evt.menu.AppendAction("Paste", Paste, GetStatusFromBufferData());
             });
+        }
+
+        private void ApplyToPrefab(DropdownMenuAction obj)
+        {
+            Debug.LogError("implement");
         }
 
         private bool HasBinderAtValue()
