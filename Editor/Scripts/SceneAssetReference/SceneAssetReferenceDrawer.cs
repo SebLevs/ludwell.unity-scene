@@ -8,7 +8,7 @@ namespace Ludwell.Scene.Editor
 {
     public class InspectorButton
     {
-        public const float Size = 20f;
+        public const float Size = 16f;
         private const float _iconSize = 8f;
         private Rect _rect;
 
@@ -56,7 +56,9 @@ namespace Ludwell.Scene.Editor
             if (sceneReference?._sceneAsset)
             {
                 buttonCount++;
-                var settingsButton = new InspectorButton(contentPosition, () => SelectInWindow(guidProp));
+                var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
+                var settingsButtonPosition = new Rect(contentPosition.x, centeredY, InspectorButton.Size, InspectorButton.Size);
+                var settingsButton = new InspectorButton(settingsButtonPosition, () => SelectInWindow(guidProp));
                 settingsButton.WithIcon(SpritesPath.Settings);
             }
 
