@@ -1,4 +1,4 @@
-using System;
+using Ludwell.EditorUtilities.Editor;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -6,57 +6,6 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class InspectorButton
-    {
-        private Rect _rect;
-        public const float Size = 16f;
-
-        private Action _behaviour;
-
-        private GUIContent _content;
-
-        private float _iconSize = 8f;
-        private Texture2D _icon;
-
-        public InspectorButton(Rect position, Action behaviour)
-        {
-            _rect = new Rect(position.x, position.y, Size, Size);
-
-            _behaviour = behaviour;
-
-            _content = new GUIContent();
-        }
-
-        public InspectorButton WithIcon(string path, float iconSize = -1)
-        {
-            _icon = Resources.Load<Texture2D>(path);
-            _iconSize = iconSize < 0 ? _iconSize : iconSize;
-            return this;
-        }
-
-        public InspectorButton WithTooltip(string tooltip)
-        {
-            _content.tooltip = tooltip;
-            return this;
-        }
-
-        public void Build()
-        {
-            if (GUI.Button(_rect, _content))
-            {
-                _behaviour?.Invoke();
-            }
-
-            if (_icon)
-            {
-                var xPosition = _rect.x + (_rect.width - _iconSize) * 0.5f;
-                var yPosition = _rect.y + (_rect.height - _iconSize) * 0.5f;
-                var textureRect = new Rect(xPosition, yPosition, _iconSize, _iconSize);
-                GUI.DrawTexture(textureRect, _icon);
-            }
-        }
-    }
-
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
@@ -82,24 +31,24 @@ namespace Ludwell.Scene.Editor
             if (referenceProperty?.objectReferenceValue)
             {
                 buttonCount++;
-                var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
-                var settingsButtonPosition = new Rect(contentPosition.x - InspectorButton.Size * buttonCount, centeredY,
-                    InspectorButton.Size, InspectorButton.Size);
+                var centeredY = contentPosition.y + (contentPosition.height - EditorButton.Size) / 2;
+                var settingsButtonPosition = new Rect(contentPosition.x - EditorButton.Size * buttonCount, centeredY,
+                    EditorButton.Size, EditorButton.Size);
 
-                var settingsButton = new InspectorButton(settingsButtonPosition, () => SelectInWindow(guidProperty));
+                var settingsButton = new EditorButton(settingsButtonPosition, () => SelectInWindow(guidProperty));
                 settingsButton.WithIcon(SpritesPath.Settings).WithTooltip(SelectInWindowButtonTooltip).Build();
             }
 
             if (CanAddToBuildSettings(referenceProperty, guidProperty))
             {
                 buttonCount++;
-                var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
-                var settingsButtonPosition = new Rect(contentPosition.x - InspectorButton.Size * buttonCount - 2,
+                var centeredY = contentPosition.y + (contentPosition.height - EditorButton.Size) / 2;
+                var settingsButtonPosition = new Rect(contentPosition.x - EditorButton.Size * buttonCount - 2,
                     centeredY,
-                    InspectorButton.Size, InspectorButton.Size);
+                    EditorButton.Size, EditorButton.Size);
 
                 var settingsButton =
-                    new InspectorButton(settingsButtonPosition, () => AddToBuildSettings(guidProperty));
+                    new EditorButton(settingsButtonPosition, () => AddToBuildSettings(guidProperty));
                 settingsButton.WithIcon(SpritesPath.AddBuildSettings).WithTooltip(AddToBuildSettingsButtonTooltip)
                     .Build();
             }
@@ -107,13 +56,13 @@ namespace Ludwell.Scene.Editor
             if (CanEnableInBuildSettings(referenceProperty, guidProperty))
             {
                 buttonCount++;
-                var centeredY = contentPosition.y + (contentPosition.height - InspectorButton.Size) / 2;
-                var settingsButtonPosition = new Rect(contentPosition.x - InspectorButton.Size * buttonCount - 2,
+                var centeredY = contentPosition.y + (contentPosition.height - EditorButton.Size) / 2;
+                var settingsButtonPosition = new Rect(contentPosition.x - EditorButton.Size * buttonCount - 2,
                     centeredY,
-                    InspectorButton.Size, InspectorButton.Size);
+                    EditorButton.Size, EditorButton.Size);
 
                 var settingsButton =
-                    new InspectorButton(settingsButtonPosition, () => EnableInBuildSettings(guidProperty));
+                    new EditorButton(settingsButtonPosition, () => EnableInBuildSettings(guidProperty));
                 settingsButton.WithIcon(SpritesPath.EnableInBuildSettings)
                     .WithTooltip(EnableInBuildSettingsButtonTooltip).Build();
             }
