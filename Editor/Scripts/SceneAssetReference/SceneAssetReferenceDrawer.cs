@@ -10,7 +10,7 @@ namespace Ludwell.Scene.Editor
     {
         private const string GuidPropertyName = "_guid";
         private const string SceneAssetPropertyName = "_reference";
-
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -18,8 +18,8 @@ namespace Ludwell.Scene.Editor
             var guidProperty = property.FindPropertyRelative(GuidPropertyName);
             var referenceProperty = property.FindPropertyRelative(SceneAssetPropertyName);
 
-            var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
+            var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
+            
             var controller = new SceneAssetReferenceDrawerController(contentPosition, property);
 
             var positionX = contentPosition.x + EditorButton.Size + 2;
