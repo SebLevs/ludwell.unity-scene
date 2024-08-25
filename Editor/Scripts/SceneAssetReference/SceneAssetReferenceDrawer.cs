@@ -22,8 +22,9 @@ namespace Ludwell.Scene.Editor
 
             var controller = new SceneAssetReferenceDrawerController(contentPosition, property);
 
-            var objectFieldRect = new Rect(contentPosition.x + EditorButton.Size + 2, contentPosition.y, contentPosition.width - EditorButton.Size + 2,
-                contentPosition.height);
+            var positionX = contentPosition.x + EditorButton.Size + 2;
+            var width = contentPosition.width - EditorButton.Size - 4;
+            var objectFieldRect = new Rect(positionX, contentPosition.y, width, contentPosition.height);
             EditorGUI.PropertyField(objectFieldRect, referenceProperty, GUIContent.none);
 
             if (GUI.changed)
