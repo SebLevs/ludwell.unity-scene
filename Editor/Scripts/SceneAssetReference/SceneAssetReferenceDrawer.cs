@@ -1,37 +1,53 @@
-using System.Text.RegularExpressions;
+using System.Linq;
+using Ludwell.EditorUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
+        private const string GuidPropertyName = "_guid";
+        private const string SceneAssetPropertyName = "_reference";
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUILayout.PropertyField(property);
-        }
+            EditorGUI.BeginProperty(position, label, property);
 
-        public override VisualElement CreatePropertyGUI(SerializedProperty property)
-        {
-            var root = new SceneAssetReferenceController(property);
-            SetDisplayName(property, root);
-            return root;
-        }
+            var guidProperty = property.FindPropertyRelative(GuidPropertyName);
+            var referenceProperty = property.FindPropertyRelative(SceneAssetPropertyName);
 
-        private static void SetDisplayName(SerializedProperty property, SceneAssetReferenceController root)
-        {
-            var displayName = property.displayName;
+            var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
+            
+            var controller = new SceneAssetReferenceController(contentPosition, property);
 
-            var match = Regex.Match(property.propertyPath, @"\[(\d+)\]");
-            if (match.Success)
+            var positionX = contentPosition.x + EditorButton.Size + 4;
+            var width = contentPosition.width - EditorButton.Size - 5;
+            var objectFieldRect = new Rect(positionX, contentPosition.y, width, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(objectFieldRect, referenceProperty, GUIContent.none);
+
+            if (GUI.changed)
             {
-                var index = match.Groups[1].Value;
-                displayName = $"Element {index}";
+                referenceProperty.objectReferenceValue = referenceProperty.objectReferenceValue as SceneAsset;
+                
+                guidProperty.stringValue = referenceProperty.objectReferenceValue == null ? 
+                    string.Empty : 
+                    AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(referenceProperty.objectReferenceValue));
             }
 
-            root.SetObjectFieldLabel(displayName);
+            EditorGUI.EndProperty();
+        }
+        
+        public static void RepaintInspectorWindows()
+        {
+            var inspectorWindows = Resources.FindObjectsOfTypeAll<EditorWindow>()
+                .Where(w => w.GetType().Name == "InspectorWindow" || w.GetType().Name == "PropertyEditor");
+
+            foreach (var window in inspectorWindows)
+            {
+                window.Repaint();
+            }
         }
     }
 }

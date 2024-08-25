@@ -17,7 +17,7 @@ namespace Ludwell.Scene.Editor
         public TagsManagerController TagsManagerController { get; private set; }
         public SceneElementsController SceneElementsController { get; private set; }
 
-        private ThemeManagerEditor _themeManagerEditor;
+        private ThemeManagerUIToolkitEditor _themeManagerUIToolkitEditor;
 
         private Disposer _disposer;
 
@@ -31,7 +31,7 @@ namespace Ludwell.Scene.Editor
         {
             _visualTreeAsset.CloneTree(rootVisualElement);
 
-            _themeManagerEditor = new ThemeManagerEditor(rootVisualElement, _darkTheme, _lightTheme);
+            _themeManagerUIToolkitEditor = new ThemeManagerUIToolkitEditor(rootVisualElement, _darkTheme, _lightTheme);
 
             TagsManagerController = new TagsManagerController(rootVisualElement);
 
@@ -65,7 +65,7 @@ namespace Ludwell.Scene.Editor
 
             _disposer.Clear();
             _disposer = null;
-            _themeManagerEditor = null;
+            _themeManagerUIToolkitEditor = null;
             TagsManagerController = null;
             SceneElementsController = null;
 
@@ -74,7 +74,7 @@ namespace Ludwell.Scene.Editor
 
         private void Dispose()
         {
-            _themeManagerEditor?.Dispose();
+            _themeManagerUIToolkitEditor?.Dispose();
             TagsManagerController?.Dispose();
             SceneElementsController?.Dispose();
             _disposer.Dispose();

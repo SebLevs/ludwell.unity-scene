@@ -40,6 +40,28 @@ namespace Ludwell.Scene
 
             return -1;
         }
+        
+        public int IndexOf(SceneAssetData data)
+        {
+            for (var index = 0; index < Elements.Count; index++)
+            {
+                var binder = Elements[index];
+                if (data == binder.Data) return index;
+            }
+
+            return -1;
+        }
+        
+        public int IndexOfGuid(string guid)
+        {
+            for (var index = 0; index < Elements.Count; index++)
+            {
+                var binder = Elements[index];
+                if (string.Equals(guid, binder.GUID)) return index;
+            }
+
+            return -1;
+        }
 
         public bool ContainsWithId(string id)
         {

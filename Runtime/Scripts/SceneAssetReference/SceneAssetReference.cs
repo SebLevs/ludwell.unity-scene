@@ -1,20 +1,27 @@
 using System;
 using UnityEngine;
-using Object = UnityEngine.Object;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Ludwell.Scene
 {
+#if UNITY_EDITOR
+    public partial class SceneAssetReference
+    {
+        /// <summary> Required for the property drawer binding. </summary>
+        [SerializeField] private SceneAsset _reference;
+    }
+#endif
+
     [Serializable]
-    public class SceneAssetReference
+    public partial class SceneAssetReference
     {
         /// <summary>
         /// The SceneAsset GUID.<br/>
         /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
         /// </summary>
         [SerializeField] private string _guid;
-
-        /// <summary> Required for the property drawer binding. </summary>
-        [SerializeField] private Object _sceneAsset;
 
         public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
 
