@@ -1,201 +1,143 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ludwell.UIToolkitUtilities;
+using Ludwell.EditorUtilities.Editor;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneAssetReferenceController : VisualElement, IDisposable
+    public class SceneAssetReferenceController
     {
-        private static readonly HashSet<SceneAssetReferenceController> _controllers = new();
-        private static string _copyBuffer;
+        private const string GuidPropertyName = "_guid";
 
-        private readonly SceneAssetReferenceView _view;
-        private readonly SerializedProperty _rootProperty;
-        private readonly SerializedProperty _objectProperty;
-        private readonly SerializedProperty _guidProperty;
+        private const string SelectInWindowButtonTooltip = "Select in Scene Manager Toolkit window";
 
-        private ContextualMenuManipulator _contextualMenuManipulator;
+        private readonly SerializedProperty _guid;
 
-        public SceneAssetReferenceController(SerializedProperty rootProperty)
+        private string ThemedIconSelectInWindow =>
+            EditorGUIUtility.isProSkin ? SpritesPath.Settings : SpritesPath.SettingsDark;
+
+        private string ThemedIconAddToBuildSettings =>
+            EditorGUIUtility.isProSkin ? SpritesPath.AddToBuildSettings : SpritesPath.AddToBuildSettingsDark;
+
+        private string ThemedIconEnableInBuildSettings =>
+            EditorGUIUtility.isProSkin ? SpritesPath.EnableInBuildSettings : SpritesPath.EnableInBuildSettingsDark;
+
+        private string ThemedIconAddToAddressables =>
+            EditorGUIUtility.isProSkin ? SpritesPath.AddToAddressables : SpritesPath.AddToAddressablesDark;
+
+        private string ThemedIconRemoveFromAddressables =>
+            EditorGUIUtility.isProSkin ? SpritesPath.RemoveFromAddressables : SpritesPath.RemoveFromAddressablesDark;
+
+        public SceneAssetReferenceController(Rect content, SerializedProperty rootProperty)
         {
-            _view = new SceneAssetReferenceView(this);
-            _view.HideBuildSettingsButton();
-            _view.HideSelectInWindowButton();
-
-            _rootProperty = rootProperty;
-            _objectProperty = rootProperty.FindPropertyRelative("_sceneAsset");
-            _view.ObjectField.BindProperty(_objectProperty);
-            _guidProperty = rootProperty.FindPropertyRelative("_guid");
-
-            EditorApplication.update += SolveButtonsOnMissingReference;
-
-            _view.ObjectField.FindFirstChildWhereNameContains(string.Empty)
-                .Insert(0, _view.EnableInBuildSettingsButton);
-            _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.BuildSettingsButton);
-            _view.ObjectField.FindFirstChildWhereNameContains(string.Empty).Insert(0, _view.SelectInWindowButton);
-
-            _view.SelectInWindowButton.clicked += SelectInWindow;
-
-            RegisterCallback<AttachToPanelEvent>(AddToDrawers);
-            RegisterCallback<DetachFromPanelEvent>(Dispose);
-
-            var sceneAsset = _objectProperty.objectReferenceValue as SceneAsset;
-            if (sceneAsset != null) _view.ObjectField.value = sceneAsset;
-
-            _view.BuildSettingsButton.clicked -= AddToBuildSettings;
-            _view.BuildSettingsButton.clicked += AddToBuildSettings;
-
-            _view.EnableInBuildSettingsButton.clicked -= EnableInBuildSettings;
-            _view.EnableInBuildSettingsButton.clicked += EnableInBuildSettings;
-
-            _view.ObjectField.RegisterValueChangedCallback(OnValueChanged);
-            _view.ObjectField.RegisterValueChangedCallback(SolveBuildSettingsButton);
-            _view.ObjectField.RegisterValueChangedCallback(SolveEnableInBuildSettingsButton);
-            _view.ObjectField.RegisterValueChangedCallback(SolveSelectInWindowButton);
-
-            SolveBuildSettingsButton(null);
-            SolveEnableInBuildSettingsButton(null);
-            SolveSelectInWindowButton(null);
-
-            // _contextualMenuManipulator = BuildContextualMenuManipulator();
-            // _view.ObjectField.AddManipulator(_contextualMenuManipulator);
-            RegisterCallback<KeyDownEvent>(ExecuteKeyEvents);
+            _guid = rootProperty.FindPropertyRelative(GuidPropertyName);
+            InitializeButtons(content);
         }
 
-        public static void SolveAllBuildSettingsButtonVisibleState()
+        private void InitializeButtons(Rect content)
         {
-            foreach (var controller in _controllers)
+            var centeredY = content.y + (content.height - EditorButton.Size) * 0.5f;
+            var buttonCount = 0;
+
+            var rect = new Rect(content.x - EditorButton.Size, centeredY, EditorButton.Size, EditorButton.Size);
+            
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guid.stringValue);
+
+            rect.x += EditorButton.Size;
+            rect.width -= EditorButton.Size;
+            new EditorButton(rect, () => SelectInWindow(data))
+                .WithIcon(ThemedIconSelectInWindow)
+                .WithTooltip(SelectInWindowButtonTooltip)
+                .Build();
+
+            if (CanAddToBuildSettings(data))
             {
-                controller.SolveBuildSettingsButton(null);
+                buttonCount++;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
+
+                new EditorButton(rect, () => AddToBuildSettings(_guid))
+                    .WithIcon(ThemedIconAddToBuildSettings)
+                    .WithTooltip(SceneElementView.AddBuildSettingsTooltip)
+                    .Build();
             }
 
-            foreach (var controller in _controllers)
+            if (CanEnableInBuildSettings(data))
             {
-                controller.SolveEnableInBuildSettingsButton(null);
+                buttonCount++;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
+
+                new EditorButton(rect, () => EnableInBuildSettings(_guid))
+                    .WithIcon(ThemedIconEnableInBuildSettings)
+                    .WithTooltip(SceneElementView.EnableInBuildSettingsTooltip)
+                    .Build();
             }
+
+#if USE_ADDRESSABLES_EDITOR
+            if (CanAddToAddressables(data))
+            {
+                buttonCount++;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
+
+                new EditorButton(rect, () => AddToAddressables(_guid))
+                    .WithIcon(ThemedIconAddToAddressables)
+                    .WithTooltip(SceneElementView.AddtoAddressablesTooltip)
+                    .Build();
+            }
+            else if (CanRemoveFromAddressables(data))
+            {
+                buttonCount++;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
+
+                new EditorButton(rect, () => RemoveFromAddressables(_guid))
+                    .WithIcon(ThemedIconRemoveFromAddressables)
+                    .WithTooltip(SceneElementView.RemoveFromAddressablesTooltip)
+                    .Build();
+            }
+#endif
         }
 
-        public void Dispose() => Dispose(null);
-
-        public void SetObjectFieldLabel(string value)
+        private bool CanAddToBuildSettings(SceneAssetData data)
         {
-            _view.ObjectFieldLabel.text = value;
+            if (Application.isPlaying || data == null) return false;
+
+            return !EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
         }
 
-        private static bool IsCopyBufferASceneAssetPath()
+        private bool CanEnableInBuildSettings(SceneAssetData data)
         {
-            return EditorGUIUtility.systemCopyBuffer.Contains(".unity");
-        }
+            if (Application.isPlaying || data == null) return false;
 
-        private void SolveBuildSettingsButton(ChangeEvent<Object> _)
-        {
-            if (Application.isPlaying || _view.ObjectField.value == null)
-            {
-                _view.HideBuildSettingsButton();
-                return;
-            }
-
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
-
-            if (data.IsAddressable)
-            {
-                _view.HideBuildSettingsButton();
-                return;
-            }
-
-            var isInBuildSetting = EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
-            if (!isInBuildSetting)
-            {
-                _view.ShowBuildSettingsButton();
-                return;
-            }
-
-            _view.HideBuildSettingsButton();
-        }
-
-        private void SolveEnableInBuildSettingsButton(ChangeEvent<Object> _)
-        {
-            if (Application.isPlaying || _view.ObjectField.value == null)
-            {
-                _view.HideEnableInBuildSettingsButton();
-                return;
-            }
-
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
             var isInBuildSetting = EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
             var isEnabled = EditorSceneManagerHelper.IsSceneEnabledInBuildSettings(data.Path);
 
-            if (!data.IsAddressable && isInBuildSetting && !isEnabled)
-            {
-                _view.ShowEnableInBuildSettingsButton();
-                return;
-            }
-
-            _view.HideEnableInBuildSettingsButton();
+            return !data.IsAddressable && isInBuildSetting && !isEnabled;
         }
 
-        private void SolveSelectInWindowButton(ChangeEvent<Object> _)
+        private bool CanAddToAddressables(SceneAssetData data)
         {
-            if (_view.ObjectField.value == null)
-            {
-                _view.HideSelectInWindowButton();
-                return;
-            }
-
-            _view.ShowSelectInWindowButton();
+            return data is { IsAddressable: false };
         }
 
-        private void SolveButtonsOnMissingReference()
+        private bool CanRemoveFromAddressables(SceneAssetData data)
         {
-            if (_view.ObjectField.value != null) return;
-            if (_view.AreButtonsHidden()) return;
-            _view.HideBuildSettingsButton();
-            _view.HideSelectInWindowButton();
+            return data is { IsAddressable: true };
         }
 
-        private void AddToBuildSettings()
+        private void SelectInWindow(SceneAssetData data)
         {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
-            EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
-        }
-
-        private void EnableInBuildSettings()
-        {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guidProperty.stringValue);
-            EditorSceneManagerHelper.EnableSceneInBuildSettings(data.Path, true);
-        }
-
-        private void OnValueChanged(ChangeEvent<Object> evt)
-        {
-            var assetPath = AssetDatabase.GetAssetPath(_view.ObjectField.value);
-            var key = AssetDatabase.AssetPathToGUID(assetPath);
-            Debug.LogError($"guid property: {_guidProperty}");
-            UpdateGuid(key);
-        }
-
-        private void UpdateGuid(string value)
-        {
-            _guidProperty.stringValue = value;
-            _guidProperty.serializedObject.ApplyModifiedProperties();
-        }
-
-        private void SelectInWindow()
-        {
-            var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders()
-                .GetBinderFromId(_guidProperty.stringValue);
-            var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
+            var viewManager = window.rootVisualElement.Q<ViewManager>();
+            
+            if (data == null)
+            {
+                viewManager.TransitionToFirstViewOfType<SceneElementsController>();
+                return;
+            }
+            
+            var index = ResourcesLocator.GetSceneAssetDataBinders().IndexOf(data);
             window.Focus();
 
-            var viewManager = window.rootVisualElement.Q<ViewManager>();
             viewManager.TransitionToFirstViewOfType<SceneElementsController>();
 
             window.rootVisualElement.schedule.Execute(() =>
@@ -204,141 +146,29 @@ namespace Ludwell.Scene.Editor
             });
         }
 
-        private ContextualMenuManipulator BuildContextualMenuManipulator()
+        private void AddToBuildSettings(SerializedProperty guidProperty)
         {
-            return new ContextualMenuManipulator(evt =>
-            {
-                evt.menu.AppendAction("Copy Property Path", CopyPropertyPath);
-                evt.menu.AppendAction("Apply to Prefab: Foo", ApplyToPrefab);
-                evt.menu.AppendAction("Copy", CopyGuid, GetStatus());
-                evt.menu.AppendSeparator();
-                evt.menu.AppendAction("Copy Path", CopyPath, GetStatus());
-                evt.menu.AppendAction("Copy GUID", CopyGuid, GetStatus());
-                evt.menu.AppendAction("Paste", Paste, GetStatusFromBufferData());
-            });
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
 
-        private void ApplyToPrefab(DropdownMenuAction obj)
+        private void EnableInBuildSettings(SerializedProperty guidProperty)
         {
-            Debug.LogError("implement");
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            EditorSceneManagerHelper.EnableSceneInBuildSettings(data.Path, true);
         }
 
-        private bool HasBinderAtValue()
+#if USE_ADDRESSABLES_EDITOR
+        private void AddToAddressables(SerializedProperty guidProperty)
         {
-            return ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(_guidProperty.stringValue) == null;
+            AddressablesProcessor.AddToAddressables(guidProperty.stringValue);
         }
 
-        private DropdownMenuAction.Status GetStatus()
+        private void RemoveFromAddressables(SerializedProperty guidProperty)
         {
-            return HasBinderAtValue() ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            AddressablesProcessor.RemoveFromAddressables(data.AddressableID);
         }
-
-        private DropdownMenuAction.Status GetStatusFromBufferData()
-        {
-            var clipboardContent = EditorGUIUtility.systemCopyBuffer;
-
-            if (string.IsNullOrEmpty(clipboardContent)) return DropdownMenuAction.Status.Disabled;
-
-            SceneAsset sceneAsset;
-
-            if (IsCopyBufferASceneAssetPath())
-            {
-                sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
-            }
-            else
-            {
-                var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
-                sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
-            }
-
-            return sceneAsset == null ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal;
-        }
-
-        private void CopyPropertyPath(DropdownMenuAction _)
-        {
-            EditorGUIUtility.systemCopyBuffer = _view.ObjectFieldLabel.text;
-        }
-
-        private void CopyPath(DropdownMenuAction _)
-        {
-            var data = ResourcesLocator.GetSceneAssetDataBinders().GetDataFromId(_guidProperty.stringValue);
-            EditorGUIUtility.systemCopyBuffer = data.Path;
-            _copyBuffer = _guidProperty.stringValue;
-        }
-
-        private void CopyGuid(DropdownMenuAction _)
-        {
-            EditorGUIUtility.systemCopyBuffer = _guidProperty.stringValue;
-            _copyBuffer = _guidProperty.stringValue;
-        }
-
-        private void Paste(DropdownMenuAction _)
-        {
-            var clipboardContent = EditorGUIUtility.systemCopyBuffer;
-
-            if (string.IsNullOrEmpty(clipboardContent)) return;
-
-            if (IsCopyBufferASceneAssetPath())
-            {
-                _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(clipboardContent);
-                return;
-            }
-
-            var path = AssetDatabase.GUIDToAssetPath(clipboardContent);
-            _view.ObjectField.value = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
-        }
-
-        private void ExecuteKeyEvents(KeyDownEvent evt)
-        {
-            switch (evt.keyCode)
-            {
-                case KeyCode.C when evt.ctrlKey:
-                    EditorGUIUtility.systemCopyBuffer = _guidProperty.stringValue;
-                    _copyBuffer = _guidProperty.stringValue;
-                    break;
-                case KeyCode.V when evt.ctrlKey:
-                    var path = AssetDatabase.GUIDToAssetPath(_copyBuffer);
-                    var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
-                    if (!sceneAsset) return;
-                    _view.ObjectField.value = sceneAsset;
-                    break;
-                case KeyCode.Delete or KeyCode.Backspace:
-                    if (_view.ObjectField == null) break;
-                    _view.ObjectField.value = null;
-                    _guidProperty.stringValue = string.Empty;
-                    break;
-            }
-        }
-
-        private void AddToDrawers(AttachToPanelEvent evt)
-        {
-            _controllers.Add(this);
-        }
-
-        private void RemoveFromDrawers()
-        {
-            _controllers.Remove(this);
-        }
-
-        private void Dispose(DetachFromPanelEvent evt)
-        {
-            _copyBuffer = string.Empty;
-            RemoveFromDrawers();
-
-            EditorApplication.update -= SolveButtonsOnMissingReference;
-
-            _view.SelectInWindowButton.clicked -= SelectInWindow;
-
-            _view.ObjectField.UnregisterValueChangedCallback(OnValueChanged);
-            _view.ObjectField.UnregisterValueChangedCallback(SolveBuildSettingsButton);
-            _view.ObjectField.UnregisterValueChangedCallback(SolveEnableInBuildSettingsButton);
-            _view.ObjectField.UnregisterValueChangedCallback(SolveSelectInWindowButton);
-
-            _view.ObjectField.RemoveManipulator(_contextualMenuManipulator);
-            _contextualMenuManipulator = null;
-            UnregisterCallback<KeyDownEvent>(ExecuteKeyEvents);
-
-            _view.Dispose(null);
-        }
+#endif
     }
 }

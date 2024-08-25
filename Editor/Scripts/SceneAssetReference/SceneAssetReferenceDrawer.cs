@@ -20,7 +20,7 @@ namespace Ludwell.Scene.Editor
 
             var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
             
-            var controller = new SceneAssetReferenceDrawerController(contentPosition, property);
+            var controller = new SceneAssetReferenceController(contentPosition, property);
 
             var positionX = contentPosition.x + EditorButton.Size + 2;
             var width = contentPosition.width - EditorButton.Size - 4;
