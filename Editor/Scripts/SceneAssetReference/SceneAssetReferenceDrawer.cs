@@ -1,4 +1,5 @@
 using System.Linq;
+using Ludwell.EditorUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,9 +20,9 @@ namespace Ludwell.Scene.Editor
 
             var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
-            new SceneAssetReferenceDrawerController(contentPosition, property);
+            var controller = new SceneAssetReferenceDrawerController(contentPosition, property);
 
-            var objectFieldRect = new Rect(contentPosition.x + 2, contentPosition.y, contentPosition.width - 4,
+            var objectFieldRect = new Rect(contentPosition.x + EditorButton.Size + 2, contentPosition.y, contentPosition.width - EditorButton.Size + 2,
                 contentPosition.height);
             EditorGUI.PropertyField(objectFieldRect, referenceProperty, GUIContent.none);
 

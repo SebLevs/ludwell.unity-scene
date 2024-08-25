@@ -8,12 +8,10 @@ namespace Ludwell.Scene.Editor
 {
     public class SceneAssetReferenceDrawerController
     {
-        private const string SceneAssetPropertyName = "_reference";
         private const string GuidPropertyName = "_guid";
 
         private const string SelectInWindowButtonTooltip = "Select in Scene Manager Toolkit window";
 
-        private readonly SerializedProperty _reference;
         private readonly SerializedProperty _guid;
 
         private string ThemedIconSelectInWindow =>
@@ -33,7 +31,6 @@ namespace Ludwell.Scene.Editor
 
         public SceneAssetReferenceDrawerController(Rect content, SerializedProperty rootProperty)
         {
-            _reference = rootProperty.FindPropertyRelative(SceneAssetPropertyName);
             _guid = rootProperty.FindPropertyRelative(GuidPropertyName);
             InitializeButtons(content);
         }
@@ -47,21 +44,17 @@ namespace Ludwell.Scene.Editor
             
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_guid.stringValue);
 
-            if (_reference?.objectReferenceValue)
-            {
-                buttonCount++;
-
-                rect.x = content.x - EditorButton.Size;
-                new EditorButton(rect, () => SelectInWindow(_guid))
-                    .WithIcon(ThemedIconSelectInWindow)
-                    .WithTooltip(SelectInWindowButtonTooltip)
-                    .Build();
-            }
+            rect.x += EditorButton.Size;
+            rect.width -= EditorButton.Size;
+            new EditorButton(rect, () => SelectInWindow(data))
+                .WithIcon(ThemedIconSelectInWindow)
+                .WithTooltip(SelectInWindowButtonTooltip)
+                .Build();
 
             if (CanAddToBuildSettings(data))
             {
                 buttonCount++;
-                rect.x = content.x - EditorButton.Size * buttonCount - 2;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
 
                 new EditorButton(rect, () => AddToBuildSettings(_guid))
                     .WithIcon(ThemedIconAddToBuildSettings)
@@ -72,7 +65,7 @@ namespace Ludwell.Scene.Editor
             if (CanEnableInBuildSettings(data))
             {
                 buttonCount++;
-                rect.x = content.x - EditorButton.Size * buttonCount - 2;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
 
                 new EditorButton(rect, () => EnableInBuildSettings(_guid))
                     .WithIcon(ThemedIconEnableInBuildSettings)
@@ -84,7 +77,7 @@ namespace Ludwell.Scene.Editor
             if (CanAddToAddressables(data))
             {
                 buttonCount++;
-                rect.x = content.x - EditorButton.Size * buttonCount - 2;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
 
                 new EditorButton(rect, () => AddToAddressables(_guid))
                     .WithIcon(ThemedIconAddToAddressables)
@@ -94,7 +87,7 @@ namespace Ludwell.Scene.Editor
             else if (CanRemoveFromAddressables(data))
             {
                 buttonCount++;
-                rect.x = content.x - EditorButton.Size * buttonCount - 2;
+                rect.x = content.x - EditorButton.Size * buttonCount - buttonCount * 2;
 
                 new EditorButton(rect, () => RemoveFromAddressables(_guid))
                     .WithIcon(ThemedIconRemoveFromAddressables)
@@ -131,14 +124,20 @@ namespace Ludwell.Scene.Editor
             return data is { IsAddressable: true };
         }
 
-        private void SelectInWindow(SerializedProperty guidProperty)
+        private void SelectInWindow(SceneAssetData data)
         {
-            var binderToSelect = ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromId(guidProperty.stringValue);
-            var index = SceneAssetDataBinders.Instance.IndexOf(binderToSelect);
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
+            var viewManager = window.rootVisualElement.Q<ViewManager>();
+            
+            if (data == null)
+            {
+                viewManager.TransitionToFirstViewOfType<SceneElementsController>();
+                return;
+            }
+            
+            var index = ResourcesLocator.GetSceneAssetDataBinders().IndexOf(data);
             window.Focus();
 
-            var viewManager = window.rootVisualElement.Q<ViewManager>();
             viewManager.TransitionToFirstViewOfType<SceneElementsController>();
 
             window.rootVisualElement.schedule.Execute(() =>
@@ -165,7 +164,7 @@ namespace Ludwell.Scene.Editor
             AddressablesProcessor.AddToAddressables(guidProperty.stringValue);
         }
 
-        public void RemoveFromAddressables(SerializedProperty guidProperty)
+        private void RemoveFromAddressables(SerializedProperty guidProperty)
         {
             var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
             AddressablesProcessor.RemoveFromAddressables(data.AddressableID);
