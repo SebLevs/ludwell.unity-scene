@@ -44,7 +44,7 @@ namespace Ludwell.Scene.Editor
             
             var data = SceneAssetDataBinders.Instance.GetDataFromId(_guid.stringValue);
 
-            rect.x += EditorButton.Size;
+            rect.x += EditorButton.Size + 1;
             rect.width -= EditorButton.Size;
             new EditorButton(rect, () => SelectInWindow(data))
                 .WithIcon(ThemedIconSelectInWindow)
