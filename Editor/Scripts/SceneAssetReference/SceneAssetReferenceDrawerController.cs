@@ -44,6 +44,8 @@ namespace Ludwell.Scene.Editor
             var buttonCount = 0;
 
             var rect = new Rect(content.x - EditorButton.Size, centeredY, EditorButton.Size, EditorButton.Size);
+            
+            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guid.stringValue);
 
             if (_reference?.objectReferenceValue)
             {
@@ -56,7 +58,7 @@ namespace Ludwell.Scene.Editor
                     .Build();
             }
 
-            if (CanAddToBuildSettings(_reference, _guid))
+            if (CanAddToBuildSettings(data))
             {
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
@@ -67,7 +69,7 @@ namespace Ludwell.Scene.Editor
                     .Build();
             }
 
-            if (CanEnableInBuildSettings(_reference, _guid))
+            if (CanEnableInBuildSettings(data))
             {
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
@@ -79,7 +81,7 @@ namespace Ludwell.Scene.Editor
             }
 
 #if USE_ADDRESSABLES_EDITOR
-            if (CanAddToAddressables(_reference, _guid))
+            if (CanAddToAddressables(data))
             {
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
@@ -89,7 +91,7 @@ namespace Ludwell.Scene.Editor
                     .WithTooltip(SceneElementView.AddtoAddressablesTooltip)
                     .Build();
             }
-            else if (CanRemoveFromAddressables(_reference, _guid))
+            else if (CanRemoveFromAddressables(data))
             {
                 buttonCount++;
                 rect.x = content.x - EditorButton.Size * buttonCount - 2;
@@ -102,39 +104,31 @@ namespace Ludwell.Scene.Editor
 #endif
         }
 
-        private bool CanAddToBuildSettings(SerializedProperty referenceProperty, SerializedProperty guidProperty)
+        private bool CanAddToBuildSettings(SceneAssetData data)
         {
-            if (Application.isPlaying || referenceProperty.objectReferenceValue == null) return false;
+            if (Application.isPlaying || data == null) return false;
 
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
             return !EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
         }
 
-        private bool CanEnableInBuildSettings(SerializedProperty referenceProperty, SerializedProperty guidProperty)
+        private bool CanEnableInBuildSettings(SceneAssetData data)
         {
-            if (Application.isPlaying || referenceProperty.objectReferenceValue == null) return false;
+            if (Application.isPlaying || data == null) return false;
 
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
             var isInBuildSetting = EditorSceneManagerHelper.IsSceneInBuildSettings(data.Path);
             var isEnabled = EditorSceneManagerHelper.IsSceneEnabledInBuildSettings(data.Path);
 
             return !data.IsAddressable && isInBuildSetting && !isEnabled;
         }
 
-        private bool CanAddToAddressables(SerializedProperty referenceProperty, SerializedProperty guidProperty)
+        private bool CanAddToAddressables(SceneAssetData data)
         {
-            if (referenceProperty.objectReferenceValue == null) return false;
-
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
-            return !data.IsAddressable;
+            return data is { IsAddressable: false };
         }
 
-        private bool CanRemoveFromAddressables(SerializedProperty referenceProperty, SerializedProperty guidProperty)
+        private bool CanRemoveFromAddressables(SceneAssetData data)
         {
-            if (referenceProperty.objectReferenceValue == null) return false;
-
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
-            return data.IsAddressable;
+            return data is { IsAddressable: true };
         }
 
         private void SelectInWindow(SerializedProperty guidProperty)
