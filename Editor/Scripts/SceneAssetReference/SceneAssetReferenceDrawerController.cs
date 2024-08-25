@@ -25,11 +25,9 @@ namespace Ludwell.Scene.Editor
         private string ThemedIconEnableInBuildSettings =>
             EditorGUIUtility.isProSkin ? SpritesPath.EnableInBuildSettings : SpritesPath.EnableInBuildSettingsDark;
 
-        // todo: make dark version & change path of AddToAddressablesDark
         private string ThemedIconAddToAddressables =>
             EditorGUIUtility.isProSkin ? SpritesPath.AddToAddressables : SpritesPath.AddToAddressablesDark;
 
-        // todo: make dark version & change path of AddToAddressablesDark
         private string ThemedIconRemoveFromAddressables =>
             EditorGUIUtility.isProSkin ? SpritesPath.RemoveFromAddressables : SpritesPath.RemoveFromAddressablesDark;
 
