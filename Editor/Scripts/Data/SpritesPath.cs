@@ -2,9 +2,10 @@ using System.IO;
 
 namespace Ludwell.Scene.Editor
 {
-    public static class SpritesPath
+    internal static class SpritesPath
     {
-        private static string SpritesName = "Sprites";
+        private static readonly string SpritesName = "Sprites";
+        
         public static readonly string OpenAdditive = Path.Combine(SpritesName, "icon_open-additive");
         public static readonly string RemoveAdditive = Path.Combine(SpritesName, "icon_remove-additive");
         public static readonly string Load = Path.Combine(SpritesName, "icon_load");
@@ -20,5 +21,7 @@ namespace Ludwell.Scene.Editor
         public static readonly string SettingsDark = Path.Combine(SpritesName, "icon_settings-dark");
         public static readonly string AddToBuildSettingsDark = Path.Combine(SpritesName, "icon_add-build-settings-dark");
         public static readonly string EnableInBuildSettingsDark = Path.Combine(SpritesName, "icon_enable-build-settings-dark");
+        public static readonly string AddToAddressablesDark = Path.Combine(SpritesName, "icon_add-addressables");
+        public static readonly string RemoveFromAddressablesDark = Path.Combine(SpritesName, "icon_remove-addressables");
     }
 }

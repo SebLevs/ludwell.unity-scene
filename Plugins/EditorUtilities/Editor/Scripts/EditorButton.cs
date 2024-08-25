@@ -10,13 +10,13 @@ namespace Ludwell.EditorUtilities.Editor
     public class EditorButton
     {
         private Rect _rect;
-        public const float Size = 16f;
+        public const float Size = 18f;
 
         private readonly Action _behaviour;
 
         private readonly GUIContent _content;
 
-        private float _iconSize = 8f;
+        private float _iconSize = 10f;
         private Texture2D _icon;
 
         public EditorButton(Rect position, Action behaviour)
