@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitUtilities.Editor
 {
     /// <typeparam name="TVisualElement">
     /// The VisualElement must be a IListViewVisualElement, as it's methods are used for binding and setting data.
@@ -21,6 +21,8 @@ namespace Ludwell.Scene.Editor
 
         public ListView ListView { get; }
 
+        public VisualElement ContentContainer { get; }
+
         public IEnumerable<TVisualElement> VisualElements => _visibleElements.Values;
 
         public IEnumerable<TData> Data => (List<TData>)ListView.itemsSource;
@@ -28,6 +30,7 @@ namespace Ludwell.Scene.Editor
         public ListViewHandler(ListView listView, List<TData> data)
         {
             ListView = listView;
+            ContentContainer = ListView.Q<VisualElement>(UiToolkitNames.UnityContentContainer);
             ListView.itemsSource = data;
             ListView.makeItem = CreateElement;
             ListView.bindItem = OnElementScrollIntoView;
@@ -99,7 +102,7 @@ namespace Ludwell.Scene.Editor
         private void OnElementScrollIntoView(VisualElement element, int index)
         {
             var elementAsDataType = element as TVisualElement;
-            _visibleElements.Add(index, elementAsDataType);
+            _visibleElements.TryAdd(index, elementAsDataType);
 
             ListView.itemsSource[index] ??= new TData();
 

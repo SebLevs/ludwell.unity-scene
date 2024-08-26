@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ludwell.Architecture;
+using Ludwell.EditorUtilities;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,7 +32,7 @@ namespace Ludwell.Scene.Editor
         private readonly Tags _tags;
 
         private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
-
+        
         public TagsManagerController(VisualElement parent) : base(parent)
         {
             Services.Add<TagsManagerController>(this);
@@ -51,29 +53,42 @@ namespace Ludwell.Scene.Editor
 
         public void Dispose()
         {
+            Services.Remove<TagsManagerController>();
+            
             _tagsShelfController.Dispose();
 
             _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
 
             _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
             _listViewHandler.ListView.itemsRemoved -= HandleItemsRemoved;
+            _listViewHandler.ListView.ClearSelection();
 
             var listView = _listViewHandler.ListView;
 
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
 
         public void ScrollToItemIndex(int index)
         {
-            var focusController = _root.focusController;
-            var focusedElement = focusController?.focusedElement;
-            focusedElement?.Blur();
-
             _listViewHandler.ListView.ScrollToItem(index);
             _listViewHandler.ListView.SetSelection(index);
-            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
+
+            var container = _listViewHandler.ContentContainer;
+            foreach (var child in container.Children())
+            {
+                var elementController = child as TagsManagerElementController;
+
+                var elementAtIndex = _listViewHandler.ListView.itemsSource[index];
+
+                if (elementController == null ||
+                    !elementController.IsTextFieldValue((elementAtIndex as Tag).ID)) continue;
+
+                Debug.LogError($"{elementController.Q<TextField>().value} | {(elementAtIndex as Tag).ID}");
+                elementController.FocusTextField();
+                break;
+            }
         }
 
         protected override void Show(ViewArgs args)

@@ -88,7 +88,7 @@ namespace Ludwell.Scene.Editor
 
                 hasSolved = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
-                Debug.LogError("todo?: prevent addition if data already exists in binders? duplication bug?");
+                Debug.LogError("todo?: imported from scene save? prevent addition if data already exists in binders? duplication bug?");
                 DataSolver.AddSceneAssetDataBinderFromGuid(guid);
             }
 

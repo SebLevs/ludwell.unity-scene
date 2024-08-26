@@ -25,6 +25,8 @@ namespace Ludwell.Scene.Editor
 
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
 
+        public bool IsTextFieldValue(string value) => value == _foldout.TitleTextField.value;
+
         public void FocusTextField() => _foldout.FocusTextField();
 
         public bool IsActiveScene() => EditorSceneManagerHelper.IsActiveScene(_model.Data.Path);
