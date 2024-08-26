@@ -117,15 +117,14 @@ namespace Ludwell.Scene.Editor
             Signals.Dispatch<UISignals.RefreshView>();
 
             var index = ResourcesLocator.GetTags().Elements.FindIndex(x => Equals(x, _model));
-            SelectInWindow(index);
-            ResourcesLocator.SaveTags();
-        }
 
-        private void SelectInWindow(int index)
-        {
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
+            window.rootVisualElement.schedule.Execute(() =>
+            {
+                Services.Get<TagsManagerController>().ScrollToItemIndex(index);
+            });
 
-            window.rootVisualElement.schedule.Execute(() => { window.TagsManagerController.ScrollToItemIndex(index); });
+            ResourcesLocator.SaveTags();
         }
 
         private void ExecuteOnAdd()

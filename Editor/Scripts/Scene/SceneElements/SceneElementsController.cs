@@ -94,11 +94,10 @@ namespace Ludwell.Scene.Editor
 
                 var elementAtIndex = _listViewHandler.ListView.itemsSource[index];
 
-                if (elementController == null ||
-                    !elementController.IsTextFieldValue((elementAtIndex as SceneAssetDataBinder).Data.Name)) continue;
+                var binderData = (elementAtIndex as SceneAssetDataBinder).Data;
+                if (elementController == null || !elementController.IsTextFieldValue(binderData.Name)) continue;
 
-                Debug.LogError(
-                    $"{elementController.Q<TextField>().value} | {(elementAtIndex as SceneAssetDataBinder).Data.Name}");
+                Debug.LogError($"{elementController.Q<TextField>().value} | {binderData.Name}");
                 elementController.FocusTextField();
                 break;
             }
@@ -107,7 +106,6 @@ namespace Ludwell.Scene.Editor
         public void ScrollToItemIndexWithTextField(int index)
         {
             var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
-
             window.rootVisualElement.schedule.Execute(() => { ScrollToItemIndex(index); });
         }
 
