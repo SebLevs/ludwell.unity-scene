@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Ludwell.Scene
 {
     [Serializable]
-    public sealed class Tag : IComparable, IListable
+    public class Tag : IComparable, IListable
     {
         [field: SerializeField] public string ID { get; set; }
 

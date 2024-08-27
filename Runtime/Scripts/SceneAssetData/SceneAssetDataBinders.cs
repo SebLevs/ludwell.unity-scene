@@ -6,9 +6,9 @@ namespace Ludwell.Scene
 {
     public class SceneAssetDataBinders : ScriptableObject
     {
-        public const string NotAddressableName = "NA";
-
         private static SceneAssetDataBinders _instance;
+
+        public const string NotAddressableName = "NA";
 
         public List<SceneAssetDataBinder> Elements = new();
 
@@ -16,7 +16,7 @@ namespace Ludwell.Scene
         {
             get
             {
-                if (_instance != null) return _instance;
+                if (_instance) return _instance;
                 _instance = Resources.Load<SceneAssetDataBinders>(nameof(SceneAssetDataBinders));
                 return _instance;
             }
@@ -40,7 +40,7 @@ namespace Ludwell.Scene
 
             return -1;
         }
-        
+
         public int IndexOf(SceneAssetData data)
         {
             for (var index = 0; index < Elements.Count; index++)
@@ -51,7 +51,7 @@ namespace Ludwell.Scene
 
             return -1;
         }
-        
+
         public int IndexOfGuid(string guid)
         {
             for (var index = 0; index < Elements.Count; index++)
@@ -198,7 +198,7 @@ namespace Ludwell.Scene
             return false;
         }
 
-        /// <param name="tag">Parse <see cref="SceneAssetData"/> list for the specified tag. Case sensitive.</param>
+        /// <param name="tag">Parse <see cref="SceneAssetData"/> list for the specified tag. Case-sensitive.</param>
         /// <returns>Will return null if no <see cref="SceneAssetData"/> was found with specified <see cref="Tag"/>.</returns>
         public IEnumerable<SceneAssetData> GetDataWhereTag(string tag)
         {
