@@ -17,14 +17,13 @@ using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementsController : AViewable
+    internal class SceneElementsController : AViewable
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
         private const string HierarchyIconName = "icon_hierarchy";
 
         private readonly SceneAssetDataBinders _sceneAssetDataBinders;
-        private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
         private readonly VisualElement _root;
         private readonly SceneElementsView _view;
@@ -32,10 +31,12 @@ namespace Ludwell.Scene.Editor
         private readonly DropdownSearchField _dropdownSearchField;
 
         private readonly MoreInformationController _moreInformationController;
+        
+        private readonly SceneElementsListViewRefresh _sceneElementsListViewRefresh;
+        
+        private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
         private ListingStrategy _hierarchyListingStrategy;
-
-        private SceneElementsListViewRefresh _sceneElementsListViewRefresh;
 
         public SceneElementsController(VisualElement parent) : base(parent)
         {

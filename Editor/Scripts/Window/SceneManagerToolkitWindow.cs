@@ -7,31 +7,32 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneManagerToolkitWindow : EditorWindow
+    internal class SceneManagerToolkitWindow : EditorWindow
     {
         [SerializeField] private VisualTreeAsset _visualTreeAsset;
 
         [SerializeField] private StyleSheet _darkTheme;
         [SerializeField] private StyleSheet _lightTheme;
 
-        public TagsManagerController TagsManagerController { get; private set; }
-        public SceneElementsController SceneElementsController { get; private set; }
-
-        private const string _windowTitle = "Scene Manager Toolkit";
-
+        private const string WindowTitle = "Scene Manager Toolkit";
+        
         private ThemeManagerUIToolkitEditor _themeManagerUIToolkitEditor;
-
+        
         private Disposer _disposer;
+
+        public SceneElementsController SceneElementsController { get; private set; }
+        private TagsManagerController TagsManagerController { get; set; }
+
 
         [MenuItem("Tools/Ludwell Studio/Scene Manager Toolkit")]
         public static void OpenWindow()
         {
-            GetWindow<SceneManagerToolkitWindow>(title: _windowTitle);
+            GetWindow<SceneManagerToolkitWindow>(title: WindowTitle);
         }
 
         public void CreateGUI()
         {
-            titleContent = new GUIContent(_windowTitle);
+            titleContent = new GUIContent(WindowTitle);
 
             _visualTreeAsset.CloneTree(rootVisualElement);
 

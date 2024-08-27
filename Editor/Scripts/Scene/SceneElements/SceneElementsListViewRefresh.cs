@@ -8,7 +8,7 @@ using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementsListViewRefresh
+    internal class SceneElementsListViewRefresh
     {
         private readonly VisualElement _root;
 
@@ -49,7 +49,7 @@ namespace Ludwell.Scene.Editor
 
             _root.RegisterCallback<DetachFromPanelEvent>(Dispose);
         }
-        
+
         public void StartOrRefreshDelayedRebuild()
         {
             _delayedRebuild.StartOrRefresh();

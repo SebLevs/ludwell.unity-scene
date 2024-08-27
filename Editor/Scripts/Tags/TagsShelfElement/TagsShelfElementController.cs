@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsShelfElementController : VisualElement, IDisposable
+    internal class TagsShelfElementController : VisualElement, IDisposable
     {
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsShelfElementView), "Uxml_" + nameof(TagsShelfElementView));

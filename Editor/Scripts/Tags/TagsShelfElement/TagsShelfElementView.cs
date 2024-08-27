@@ -3,8 +3,12 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsShelfElementView : IDisposable
+    internal class TagsShelfElementView : IDisposable
     {
+        public Action OnRemoveButtonClicked;
+        public Action OnMainButtonClicked;
+        public Action OnSearchButtonClicked;
+
         private const string RemoveButtonName = "button-remove";
         private const string MainButtonName = "button-main";
         private const string SearchButtonName = "button-search";
@@ -13,13 +17,9 @@ namespace Ludwell.Scene.Editor
         private readonly Button _mainButton;
         private readonly Button _searchButton;
 
-        public Action OnRemoveButtonClicked;
-        public Action OnMainButtonClicked;
-        public Action OnSearchButtonClicked;
+        private readonly VisualElement _view;
 
         public string Value => _mainButton.text;
-
-        private VisualElement _view;
 
         public TagsShelfElementView(VisualElement view)
         {

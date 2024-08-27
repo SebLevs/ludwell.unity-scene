@@ -9,7 +9,7 @@ namespace Ludwell.Scene.Editor
     }
 
     [CustomEditor(typeof(Settings))]
-    public class SettingsEditor : UnityEditor.Editor
+    internal class SettingsEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Ludwell.Scene.Editor
 {
-    public static class DataSolver
+    internal static class DataSolver
     {
         public static void CreateSceneAssetAtPath()
         {

@@ -5,15 +5,13 @@ using UnityEditor;
 namespace Ludwell.Scene.Editor
 {
     [InitializeOnLoad]
-    public class BuildSettingsObserver
+    internal class BuildSettingsObserver
     {
-        private static DelayedEditorUpdateAction _delayedSceneListChangedCallback;
-
         static BuildSettingsObserver()
         {
-            _delayedSceneListChangedCallback = new DelayedEditorUpdateAction(0, SceneListChangedCallback);
-            EditorBuildSettings.sceneListChanged -= _delayedSceneListChangedCallback.StartOrRefresh;
-            EditorBuildSettings.sceneListChanged += _delayedSceneListChangedCallback.StartOrRefresh;
+            var delayedSceneListChangedCallback = new DelayedEditorUpdateAction(0, SceneListChangedCallback);
+            EditorBuildSettings.sceneListChanged -= delayedSceneListChangedCallback.StartOrRefresh;
+            EditorBuildSettings.sceneListChanged += delayedSceneListChangedCallback.StartOrRefresh;
         }
 
         private static void SceneListChangedCallback()

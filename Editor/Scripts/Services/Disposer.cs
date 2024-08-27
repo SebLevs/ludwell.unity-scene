@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Ludwell.Scene.Editor
 {
-    public class Disposer
+    internal class Disposer
     {
-        private HashSet<IDisposable> _disposables = new();
+        private readonly HashSet<IDisposable> _disposables = new();
 
         public void Add(IDisposable disposable)
         {

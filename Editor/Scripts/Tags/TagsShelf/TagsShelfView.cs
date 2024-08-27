@@ -4,18 +4,18 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class TagsShelfView
+    internal class TagsShelfView
     {
+        public Action OnOptionClicked;
+
         private const string AddButtonName = "tags__button-add";
         private const string TagsContainerName = "tags-container";
         private const string NotTaggedName = "not-tagged";
         private const string IconButtonName = "tags__button-add";
 
-        public Action OnOptionClicked;
-
-        private Button _optionsButton;
-        private ScrollView _container;
-        private Label _notTaggedLabel;
+        private readonly Button _optionsButton;
+        private readonly ScrollView _container;
+        private readonly Label _notTaggedLabel;
 
         private readonly VisualElement _root;
 
@@ -31,7 +31,7 @@ namespace Ludwell.Scene.Editor
             _container = _root.Q<ScrollView>(TagsContainerName);
             _notTaggedLabel = _root.Q<Label>(NotTaggedName);
         }
-        
+
         public void Dispose()
         {
             _optionsButton.clicked -= ExecuteOptionClicked;

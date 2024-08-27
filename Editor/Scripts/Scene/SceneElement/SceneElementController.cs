@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementController : VisualElement, IDisposable, IListViewVisualElement<SceneAssetDataBinder>
+    internal class SceneElementController : VisualElement, IDisposable, IListViewVisualElement<SceneAssetDataBinder>
     {
         private static SceneElementController _currentSceneElement;
 

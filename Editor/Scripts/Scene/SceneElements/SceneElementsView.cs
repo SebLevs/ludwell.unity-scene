@@ -2,7 +2,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.Scene.Editor
 {
-    public class SceneElementsView
+    internal class SceneElementsView
     {
         private const string CloseAllButtonName = "button__close-all";
         private const string AddButtonName = "add";
