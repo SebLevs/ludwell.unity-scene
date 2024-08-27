@@ -87,19 +87,10 @@ namespace Ludwell.Scene.Editor
             _listViewHandler.ListView.ScrollToItem(index);
             _listViewHandler.ListView.SetSelection(index);
 
-            var container = _listViewHandler.ContentContainer;
-            foreach (var child in container.Children())
-            {
-                var elementController = child as SceneElementController;
-
-                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
-
-                var binderData = (itemAtIndex as SceneAssetDataBinder).Data;
-                if (elementController == null || !elementController.IsTextFieldValue(binderData.Name)) continue;
-
-                elementController.FocusTextField();
-                break;
-            }
+            var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+            var dataName = ((SceneAssetDataBinder)itemAtIndex).Data.Name;
+            var element = _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(dataName));
+            element.FocusTextField();
         }
 
         public void ScrollToItemIndexWithTextField(int index)

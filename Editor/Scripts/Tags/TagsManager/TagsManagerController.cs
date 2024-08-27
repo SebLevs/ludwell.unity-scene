@@ -75,19 +75,10 @@ namespace Ludwell.Scene.Editor
 
             _listViewHandler.ListView.SetSelection(index);
 
-            var container = _listViewHandler.ContentContainer;
-            foreach (var child in container.Children())
-            {
-                var elementController = child as TagsManagerElementController;
-
-                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
-
-                var itemAsTag = itemAtIndex as Tag;
-                if (elementController == null || !elementController.IsTextFieldValue(itemAsTag.ID)) continue;
-
-                elementController.FocusTextField();
-                break;
-            }
+            var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+            var tagID = ((Tag)itemAtIndex).ID;
+            var element = _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(tagID));
+            element.FocusTextField();
         }
 
         protected override void Show(ViewArgs args)

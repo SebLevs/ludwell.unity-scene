@@ -381,8 +381,7 @@ namespace Ludwell.Scene.Editor
 
         private bool CanRenameAsset()
         {
-            var assetPath = Path.Combine(Path.GetDirectoryName(_model.Data.Path) ?? string.Empty,
-                _foldout.Title + ".unity");
+            var assetPath = Path.Combine(Path.GetDirectoryName(_model.Data.Path) ?? string.Empty, _foldout.Title + ".unity");
             var asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
 
             if (!asset) return true;

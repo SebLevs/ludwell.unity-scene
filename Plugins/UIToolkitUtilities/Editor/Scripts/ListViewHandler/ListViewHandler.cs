@@ -80,6 +80,24 @@ namespace Ludwell.UIToolkitUtilities.Editor
             return value;
         }
 
+        /// <summary>
+        /// Searches the visible visual elements only.
+        /// </summary>
+        /// <param name="condition">
+        /// Loop through the <see cref="TVisualElement"/> of the content container and pass it for conditional check.
+        /// </param>
+        public TVisualElement GetFirstVisualElementWhere(Func<TVisualElement, bool> condition)
+        {
+            foreach (var child in ContentContainer.Children())
+            {
+                if (child is not TVisualElement elementController || !condition(elementController)) continue;
+
+                return elementController;
+            }
+
+            return null;
+        }
+
         public void RemoveSelectedElement()
         {
             if (ListView.selectedItem == null) return;
