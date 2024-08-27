@@ -3,7 +3,6 @@ using System.IO;
 using Ludwell.Architecture;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -117,11 +116,7 @@ namespace Ludwell.Scene.Editor
 
             var index = ResourcesLocator.GetTags().Elements.FindIndex(x => Equals(x, _model));
 
-            var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
-            window.rootVisualElement.schedule.Execute(() =>
-            {
-                Services.Get<TagsManagerController>().ScrollToItemIndex(index);
-            });
+            schedule.Execute(() => { Services.Get<TagsManagerController>().ScrollToItemIndex(index); });
 
             ResourcesLocator.SaveTags();
         }

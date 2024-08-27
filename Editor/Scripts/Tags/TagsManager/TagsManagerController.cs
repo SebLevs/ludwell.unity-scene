@@ -77,8 +77,8 @@ namespace Ludwell.Scene.Editor
 
             var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
             var tagID = ((Tag)itemAtIndex).ID;
-            var element = _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(tagID));
-            element.FocusTextField();
+            var controller = _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(tagID));
+            controller.FocusTextField();
         }
 
         protected override void Show(ViewArgs args)

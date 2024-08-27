@@ -376,12 +376,13 @@ namespace Ludwell.Scene.Editor
 
             var index = SceneAssetDataBinders.Instance.IndexOf(_model);
             var sceneElementsController = Services.Get<SceneElementsController>();
-            sceneElementsController.ScrollToItemIndexWithTextField(index);
+            sceneElementsController.ScrollToItemIndex(index);
         }
 
         private bool CanRenameAsset()
         {
-            var assetPath = Path.Combine(Path.GetDirectoryName(_model.Data.Path) ?? string.Empty, _foldout.Title + ".unity");
+            var assetPath = Path.Combine(Path.GetDirectoryName(_model.Data.Path) ?? string.Empty,
+                _foldout.Title + ".unity");
             var asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
 
             if (!asset) return true;

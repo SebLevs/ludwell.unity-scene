@@ -7,6 +7,7 @@ using Ludwell.Architecture;
 using Ludwell.MoreInformation.Editor;
 using Ludwell.UIToolkitElements;
 using Ludwell.UIToolkitElements.Editor;
+using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -84,19 +85,17 @@ namespace Ludwell.Scene.Editor
 
         public void ScrollToItemIndex(int index)
         {
-            _listViewHandler.ListView.ScrollToItem(index);
-            _listViewHandler.ListView.SetSelection(index);
+            _root.Root().schedule.Execute(() =>
+            {
+                _listViewHandler.ListView.ScrollToItem(index);
+                _listViewHandler.ListView.SetSelection(index);
 
-            var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
-            var dataName = ((SceneAssetDataBinder)itemAtIndex).Data.Name;
-            var element = _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(dataName));
-            element.FocusTextField();
-        }
-
-        public void ScrollToItemIndexWithTextField(int index)
-        {
-            var window = EditorWindow.GetWindow<SceneManagerToolkitWindow>();
-            window.rootVisualElement.schedule.Execute(() => { ScrollToItemIndex(index); });
+                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+                var dataName = ((SceneAssetDataBinder)itemAtIndex).Data.Name;
+                var controller =
+                    _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(dataName));
+                controller.FocusTextField();
+            });
         }
 
         public void RebuildActiveListing()
