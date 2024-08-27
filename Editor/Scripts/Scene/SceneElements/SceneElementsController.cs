@@ -92,12 +92,11 @@ namespace Ludwell.Scene.Editor
             {
                 var elementController = child as SceneElementController;
 
-                var elementAtIndex = _listViewHandler.ListView.itemsSource[index];
+                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
 
-                var binderData = (elementAtIndex as SceneAssetDataBinder).Data;
+                var binderData = (itemAtIndex as SceneAssetDataBinder).Data;
                 if (elementController == null || !elementController.IsTextFieldValue(binderData.Name)) continue;
 
-                Debug.LogError($"{elementController.Q<TextField>().value} | {binderData.Name}");
                 elementController.FocusTextField();
                 break;
             }

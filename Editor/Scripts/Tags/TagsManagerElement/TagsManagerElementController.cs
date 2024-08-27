@@ -114,7 +114,6 @@ namespace Ludwell.Scene.Editor
         {
             _model.ID = _view.TextField.value;
             ResourcesLocator.GetTags().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
 
             var index = ResourcesLocator.GetTags().Elements.FindIndex(x => Equals(x, _model));
 

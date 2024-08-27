@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ludwell.Architecture;
-using Ludwell.EditorUtilities;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -32,7 +30,7 @@ namespace Ludwell.Scene.Editor
         private readonly Tags _tags;
 
         private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
-        
+
         public TagsManagerController(VisualElement parent) : base(parent)
         {
             Services.Add<TagsManagerController>(this);
@@ -54,7 +52,7 @@ namespace Ludwell.Scene.Editor
         public void Dispose()
         {
             Services.Remove<TagsManagerController>();
-            
+
             _tagsShelfController.Dispose();
 
             _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
@@ -73,6 +71,8 @@ namespace Ludwell.Scene.Editor
         public void ScrollToItemIndex(int index)
         {
             _listViewHandler.ListView.ScrollToItem(index);
+            Signals.Dispatch<UISignals.RefreshView>();
+
             _listViewHandler.ListView.SetSelection(index);
 
             var container = _listViewHandler.ContentContainer;
@@ -80,12 +80,11 @@ namespace Ludwell.Scene.Editor
             {
                 var elementController = child as TagsManagerElementController;
 
-                var elementAtIndex = _listViewHandler.ListView.itemsSource[index];
+                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
 
-                if (elementController == null ||
-                    !elementController.IsTextFieldValue((elementAtIndex as Tag).ID)) continue;
+                var itemAsTag = itemAtIndex as Tag;
+                if (elementController == null || !elementController.IsTextFieldValue(itemAsTag.ID)) continue;
 
-                Debug.LogError($"{elementController.Q<TextField>().value} | {(elementAtIndex as Tag).ID}");
                 elementController.FocusTextField();
                 break;
             }
