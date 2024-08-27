@@ -17,6 +17,8 @@ namespace Ludwell.Scene.Editor
         public TagsManagerController TagsManagerController { get; private set; }
         public SceneElementsController SceneElementsController { get; private set; }
 
+        private const string _windowTitle = "Scene Manager Toolkit";
+
         private ThemeManagerUIToolkitEditor _themeManagerUIToolkitEditor;
 
         private Disposer _disposer;
@@ -24,11 +26,13 @@ namespace Ludwell.Scene.Editor
         [MenuItem("Tools/Ludwell Studio/Scene Manager Toolkit")]
         public static void OpenWindow()
         {
-            GetWindow<SceneManagerToolkitWindow>(title: "Scene Manager Toolkit");
+            GetWindow<SceneManagerToolkitWindow>(title: _windowTitle);
         }
 
         public void CreateGUI()
         {
+            titleContent = new GUIContent(_windowTitle);
+
             _visualTreeAsset.CloneTree(rootVisualElement);
 
             _themeManagerUIToolkitEditor = new ThemeManagerUIToolkitEditor(rootVisualElement, _darkTheme, _lightTheme);
