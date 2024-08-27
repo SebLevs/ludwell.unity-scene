@@ -25,6 +25,8 @@ namespace Ludwell.Scene.Editor
 
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
 
+        public bool IsTextFieldValue(string value) => value == _foldout.TitleTextField.value;
+
         public void FocusTextField() => _foldout.FocusTextField();
 
         public bool IsActiveScene() => EditorSceneManagerHelper.IsActiveScene(_model.Data.Path);
@@ -373,8 +375,8 @@ namespace Ludwell.Scene.Editor
             AssetDatabase.RenameAsset(_model.Data.Path, _foldout.Title);
 
             var index = SceneAssetDataBinders.Instance.IndexOf(_model);
-            var quickLoadController = Services.Get<SceneElementsController>();
-            quickLoadController.ScrollToItemIndexWithTextField(index);
+            var sceneElementsController = Services.Get<SceneElementsController>();
+            sceneElementsController.ScrollToItemIndex(index);
         }
 
         private bool CanRenameAsset()

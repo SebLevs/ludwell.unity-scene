@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Template name="TagsShelfView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Tag/TagsShelfView/Uxml_TagsShelfView.uxml?fileID=9197481963319205126&amp;guid=b11f09c9737ee2b448c3a12d9e566bcf&amp;type=3#Uxml_TagsShelfView" />
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Tag/TagsManagerView/Uss_TagsManagerView.uss?fileID=7433441132597879392&amp;guid=ef63c7d559ab5e742a5b0cc03b5fade7&amp;type=3#Uss_TagsManagerView" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
+    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="TagsManager" focusable="true">
         <ui:Label text="Name of element with tags" display-tooltip-when-elided="false" name="reference-name" class="header-theme border-theme-bottom" />
         <ui:Instance template="TagsShelfView" name="TagsShelfView" />
@@ -9,7 +9,7 @@
             <Ludwell.UIToolkitElements.Editor.DropdownSearchField name="DropdownSearchField" class="list-view-theme" />
         </ui:VisualElement>
         <ui:VisualElement name="listview-container" class="listview-container">
-            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" virtualization-method="DynamicHeight" reorder-mode="Animated" name="tag-elements-container" selection-type="Multiple" />
+            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" reorder-mode="Animated" name="tag-elements-container" selection-type="Multiple" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

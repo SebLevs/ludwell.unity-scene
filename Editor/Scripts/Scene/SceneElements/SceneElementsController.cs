@@ -7,6 +7,7 @@ using Ludwell.Architecture;
 using Ludwell.MoreInformation.Editor;
 using Ludwell.UIToolkitElements;
 using Ludwell.UIToolkitElements.Editor;
+using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -69,11 +70,14 @@ namespace Ludwell.Scene.Editor
 
         public void Dispose()
         {
+            Services.Remove<SceneElementsController>();
+
             _view.CloseAllButton.clicked -= CloseAll;
             _view.AddButton.clicked -= DataSolver.CreateSceneAssetAtPath;
             _view.RemoveButton.clicked -= DeleteSelection;
             _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 
+            _listView.ClearSelection();
             _listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
 
             _moreInformationController.Dispose();
@@ -81,27 +85,17 @@ namespace Ludwell.Scene.Editor
 
         public void ScrollToItemIndex(int index)
         {
-            var focusController = _root.focusController;
-            var focusedElement = focusController?.focusedElement;
-            focusedElement?.Blur();
-
-            _listViewHandler.ListView.schedule.Execute(() =>
+            _root.Root().schedule.Execute(() =>
             {
                 _listViewHandler.ListView.ScrollToItem(index);
                 _listViewHandler.ListView.SetSelection(index);
-                _listViewHandler.GetVisualElementAt(index)?.Focus();
+
+                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+                var dataName = ((SceneAssetDataBinder)itemAtIndex).Data.Name;
+                var controller =
+                    _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(dataName));
+                controller.FocusTextField();
             });
-        }
-
-        public void ScrollToItemIndexWithTextField(int index)
-        {
-            var focusController = _root.focusController;
-            var focusedElement = focusController?.focusedElement;
-            focusedElement?.Blur();
-
-            _listViewHandler.ListView.ScrollToItem(index);
-            _listViewHandler.ListView.SetSelection(index);
-            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
         }
 
         public void RebuildActiveListing()
@@ -130,7 +124,7 @@ namespace Ludwell.Scene.Editor
         {
             Signals.Remove<UISignals.RefreshView>(RebuildActiveListing);
         }
-        
+
         private SceneElementController[] GetSceneElementControllers()
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();

@@ -51,29 +51,34 @@ namespace Ludwell.Scene.Editor
 
         public void Dispose()
         {
+            Services.Remove<TagsManagerController>();
+
             _tagsShelfController.Dispose();
 
             _root.Root().UnregisterCallback<KeyUpEvent>(OnKeyUpReturn);
 
             _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
             _listViewHandler.ListView.itemsRemoved -= HandleItemsRemoved;
+            _listViewHandler.ListView.ClearSelection();
 
             var listView = _listViewHandler.ListView;
 
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
         }
 
         public void ScrollToItemIndex(int index)
         {
-            var focusController = _root.focusController;
-            var focusedElement = focusController?.focusedElement;
-            focusedElement?.Blur();
-
             _listViewHandler.ListView.ScrollToItem(index);
+            Signals.Dispatch<UISignals.RefreshView>();
+
             _listViewHandler.ListView.SetSelection(index);
-            _listViewHandler.GetVisualElementAt(index)?.FocusTextField();
+
+            var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+            var tagID = ((Tag)itemAtIndex).ID;
+            var controller = _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(tagID));
+            controller.FocusTextField();
         }
 
         protected override void Show(ViewArgs args)

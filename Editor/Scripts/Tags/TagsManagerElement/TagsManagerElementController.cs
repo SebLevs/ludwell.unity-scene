@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Ludwell.Architecture;
 using Ludwell.UIToolkitUtilities;
+using Ludwell.UIToolkitUtilities.Editor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,6 +24,8 @@ namespace Ludwell.Scene.Editor
         private Tag _model;
 
         public void FocusTextField() => _view.FocusTextField();
+
+        public bool IsTextFieldValue(string value) => _view.TextField.value == value;
 
         public TagsManagerElementController()
         {
@@ -110,11 +113,11 @@ namespace Ludwell.Scene.Editor
         {
             _model.ID = _view.TextField.value;
             ResourcesLocator.GetTags().Elements.Sort();
-            Signals.Dispatch<UISignals.RefreshView>();
 
-            var index = ResourcesLocator.GetTags().Elements.FindIndex(x => x == _model);
-            var tagsManagerController = Services.Get<TagsManagerController>();
-            tagsManagerController.ScrollToItemIndex(index);
+            var index = ResourcesLocator.GetTags().Elements.FindIndex(x => Equals(x, _model));
+
+            schedule.Execute(() => { Services.Get<TagsManagerController>().ScrollToItemIndex(index); });
+
             ResourcesLocator.SaveTags();
         }
 

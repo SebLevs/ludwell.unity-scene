@@ -1,4 +1,4 @@
-namespace Ludwell.Scene.Editor
+namespace Ludwell.UIToolkitUtilities.Editor
 {
     public interface IListViewVisualElement<TData>
     {
