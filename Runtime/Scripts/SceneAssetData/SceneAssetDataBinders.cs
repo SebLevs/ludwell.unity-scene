@@ -10,7 +10,7 @@ namespace Ludwell.SceneManagerToolkit
 
         public const string NotAddressableName = "NA";
 
-        public List<SceneAssetDataBinder> Elements = new();
+        [HideInInspector] public List<SceneAssetDataBinder> Elements = new();
 
         public static SceneAssetDataBinders Instance
         {
