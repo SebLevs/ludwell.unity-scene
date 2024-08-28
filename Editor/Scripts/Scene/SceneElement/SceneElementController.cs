@@ -376,7 +376,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             var index = SceneAssetDataBinders.Instance.IndexOf(_model);
             var sceneElementsController = Services.Get<SceneElementsController>();
-            sceneElementsController.ScrollToItemIndex(index);
+            sceneElementsController.ScrollToItemIndexThenFocusTextField(index);
         }
 
         private bool CanRenameAsset()

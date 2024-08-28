@@ -32,9 +32,9 @@ namespace Ludwell.UIToolkitUtilities.Editor
 
         protected abstract void Hide();
 
-        protected void ReturnToPreviousView()
+        protected void ReturnToPreviousView(ViewArgs args = null)
         {
-            _manager.TransitionToPreviousView();
+            _manager.TransitionToPreviousView(args);
         }
     }
 }

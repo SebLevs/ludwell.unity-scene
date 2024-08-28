@@ -17,6 +17,16 @@ using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
 namespace Ludwell.SceneManagerToolkit.Editor
 {
+    internal class SceneElementsViewArgs : ViewArgs
+    {
+        public SceneElementsViewArgs(SceneAssetDataBinder binder)
+        {
+            Binder = binder;
+        }
+
+        public SceneAssetDataBinder Binder { get; }
+    }
+
     internal class SceneElementsController : AViewable
     {
         private const string TagListingStrategyName = "tag";
@@ -31,9 +41,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly DropdownSearchField _dropdownSearchField;
 
         private readonly MoreInformationController _moreInformationController;
-        
+
         private readonly SceneElementsListViewRefresh _sceneElementsListViewRefresh;
-        
+
         private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
         private ListingStrategy _hierarchyListingStrategy;
@@ -84,7 +94,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
             _moreInformationController.Dispose();
         }
 
-        public void ScrollToItemIndex(int index)
+        public void ScrollToItemIndexThenFocusTextField(int index)
         {
             _root.Root().schedule.Execute(() =>
             {
@@ -99,6 +109,20 @@ namespace Ludwell.SceneManagerToolkit.Editor
             });
         }
 
+        public void ScrollToItemIndex(int index)
+        {
+            _root.Root().schedule.Execute(() =>
+            {
+                _listViewHandler.ListView.ScrollToItem(index);
+                _listViewHandler.ListView.SetSelection(index);
+                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+                var dataName = ((SceneAssetDataBinder)itemAtIndex).Data.Name;
+                var controller =
+                    _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(dataName));
+                controller.Focus();
+            });
+        }
+
         public void RebuildActiveListing()
         {
             if (_dropdownSearchField.RebuildActiveListing()) return;
@@ -109,6 +133,14 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             _view.Show();
             _sceneElementsListViewRefresh.StartOrRefreshDelayedRebuild();
+
+            var sceneElementsViewArgs = args as SceneElementsViewArgs;
+            if (sceneElementsViewArgs?.Binder == null) return;
+            _root.schedule.Execute(() =>
+            {
+                var index = ResourcesLocator.GetSceneAssetDataBinders().IndexOf(sceneElementsViewArgs.Binder);
+                ScrollToItemIndex(index);
+            });
         }
 
         protected override void Hide()

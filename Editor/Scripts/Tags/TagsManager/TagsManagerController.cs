@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class TagsManagerViewArgs : ViewArgs
+    internal class TagsManagerViewArgs : ViewArgs
     {
         public TagsManagerViewArgs(TagSubscriberWithTags tagSubscriberWithTags)
         {
@@ -19,7 +19,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         public TagSubscriberWithTags TagSubscriberWithTags { get; }
     }
 
-    public class TagsManagerController : AViewable
+    internal class TagsManagerController : AViewable
     {
         private const string TagElementsContainerName = "tag-elements-container";
 
@@ -30,6 +30,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly Tags _tags;
 
         private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
+
+        private TagsManagerViewArgs _args;
 
         public TagsManagerController(VisualElement parent) : base(parent)
         {
@@ -86,10 +88,10 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             Signals.Add<UISignals.RefreshView>(_tagsShelfController.Populate);
             Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
-            var tagsManagerViewArgs = (TagsManagerViewArgs)args;
+            _args = (TagsManagerViewArgs)args;
             _view.Show();
-            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.GetTagSubscriberWithTagID());
-            BuildTagsController(tagsManagerViewArgs.TagSubscriberWithTags);
+            _view.SetReferenceText(_args.TagSubscriberWithTags.GetTagSubscriberWithTagID());
+            BuildTagsController(_args.TagSubscriberWithTags);
         }
 
         protected override void Hide()
@@ -123,7 +125,14 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private void OnKeyUpReturn(KeyUpEvent evt)
         {
             if (_root.style.display == DisplayStyle.None) return;
+            
             if (evt.keyCode == KeyCode.Escape && (evt.modifiers & EventModifiers.Control) != 0) ReturnToPreviousView();
+        }
+
+        private void ReturnToPreviousView()
+        {
+            var args = new SceneElementsViewArgs(_args.TagSubscriberWithTags as SceneAssetDataBinder);
+            ReturnToPreviousView(args);
         }
 
         private void InitializeListViewHandler()
