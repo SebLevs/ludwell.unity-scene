@@ -88,8 +88,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
                 hasSolved = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
-                Debug.LogError(
-                    "todo?: imported from scene save? prevent addition if data already exists in binders? duplication bug?");
+                
+                if (ResourcesLocator.GetSceneAssetDataBinders().ContainsWithId(guid)) return false;
                 DataSolver.AddSceneAssetDataBinderFromGuid(guid);
             }
 

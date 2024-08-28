@@ -77,15 +77,14 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             var instance = SceneAssetDataBinders.Instance;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            
             var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
 
             var address = SceneAssetDataBinders.NotAddressableName;
 #if USE_ADDRESSABLES_EDITOR
-            Debug.LogError("handle addressable being added to binders???");
             address = AddressablesProcessor.GetAddressableIDForGUID(guid);
 #endif
-
-            var hasAdded = instance.Add(guid, sceneAsset.name, assetPath, address);
+            var hasAdded = instance.TryAddUnique(guid, sceneAsset.name, assetPath, address);
 
             return hasAdded;
         }

@@ -73,7 +73,7 @@ namespace Ludwell.SceneManagerToolkit
             return false;
         }
 
-        public bool Add(string guid, string assetName, string path, string addressableID = NotAddressableName)
+        public bool TryAddUnique(string guid, string assetName, string path, string addressableID = NotAddressableName)
         {
             if (ContainsWithId(guid)) return false;
             var newBinder = new SceneAssetDataBinder
