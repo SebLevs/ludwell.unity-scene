@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using Ludwell.Architecture;
 using UnityEditor;
-using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneAssetPostProcessor : AssetPostprocessor
+    internal class SceneAssetPostProcessor : AssetPostprocessor
     {
         private static bool _isHandlingMoved;
         private static bool _isHandlingImported;
@@ -88,7 +87,8 @@ namespace Ludwell.Scene.Editor
 
                 hasSolved = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
-                Debug.LogError("todo?: imported from scene save? prevent addition if data already exists in binders? duplication bug?");
+
+                if (ResourcesLocator.GetSceneAssetDataBinders().ContainsWithId(guid)) return false;
                 DataSolver.AddSceneAssetDataBinderFromGuid(guid);
             }
 

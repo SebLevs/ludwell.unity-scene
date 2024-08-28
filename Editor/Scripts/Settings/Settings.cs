@@ -2,14 +2,14 @@ using Ludwell.EditorUtilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     public class Settings : ScriptableObject
     {
     }
 
     [CustomEditor(typeof(Settings))]
-    public class SettingsEditor : UnityEditor.Editor
+    internal class SettingsEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

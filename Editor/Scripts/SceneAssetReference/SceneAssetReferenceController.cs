@@ -4,9 +4,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneAssetReferenceController
+    internal class SceneAssetReferenceController
     {
         private const string GuidPropertyName = "_guid";
 
@@ -14,19 +14,19 @@ namespace Ludwell.Scene.Editor
 
         private readonly SerializedProperty _guid;
 
-        private string ThemedIconSelectInWindow =>
+        private static string ThemedIconSelectInWindow =>
             EditorGUIUtility.isProSkin ? SpritesPath.Settings : SpritesPath.SettingsDark;
 
-        private string ThemedIconAddToBuildSettings =>
+        private static string ThemedIconAddToBuildSettings =>
             EditorGUIUtility.isProSkin ? SpritesPath.AddToBuildSettings : SpritesPath.AddToBuildSettingsDark;
 
-        private string ThemedIconEnableInBuildSettings =>
+        private static string ThemedIconEnableInBuildSettings =>
             EditorGUIUtility.isProSkin ? SpritesPath.EnableInBuildSettings : SpritesPath.EnableInBuildSettingsDark;
 
-        private string ThemedIconAddToAddressables =>
+        private static string ThemedIconAddToAddressables =>
             EditorGUIUtility.isProSkin ? SpritesPath.AddToAddressables : SpritesPath.AddToAddressablesDark;
 
-        private string ThemedIconRemoveFromAddressables =>
+        private static string ThemedIconRemoveFromAddressables =>
             EditorGUIUtility.isProSkin ? SpritesPath.RemoveFromAddressables : SpritesPath.RemoveFromAddressablesDark;
 
         public SceneAssetReferenceController(Rect content, SerializedProperty rootProperty)

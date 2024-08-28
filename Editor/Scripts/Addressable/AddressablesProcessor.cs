@@ -9,16 +9,16 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using Object = UnityEngine.Object;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     [InitializeOnLoad]
-    public class AddressablesProcessor
+    internal class AddressablesProcessor
     {
-        private static DelayedEditorUpdateAction _delayedRefreshViewDispatch;
+        private static readonly DelayedEditorUpdateAction DelayedRefreshViewDispatch;
 
         static AddressablesProcessor()
         {
-            _delayedRefreshViewDispatch = new DelayedEditorUpdateAction(0, Signals.Dispatch<UISignals.RefreshView>);
+            DelayedRefreshViewDispatch = new DelayedEditorUpdateAction(0, Signals.Dispatch<UISignals.RefreshView>);
 
             AddressableAssetSettingsDefaultObject.Settings.OnModification -= SubscribeToAddressableChange;
             AddressableAssetSettingsDefaultObject.Settings.OnModification += SubscribeToAddressableChange;
@@ -55,7 +55,7 @@ namespace Ludwell.Scene.Editor
                 UpdateBinder(modificationEvent, binder, entry);
             }
 
-            _delayedRefreshViewDispatch.StartOrRefresh();
+            DelayedRefreshViewDispatch.StartOrRefresh();
             SceneAssetReferenceDrawer.RepaintInspectorWindows();
 
             return true;
@@ -76,7 +76,7 @@ namespace Ludwell.Scene.Editor
             if (binder == null) return false;
 
             UpdateBinder(modificationEvent, binder, entry);
-            _delayedRefreshViewDispatch.StartOrRefresh();
+            DelayedRefreshViewDispatch.StartOrRefresh();
             SceneAssetReferenceDrawer.RepaintInspectorWindows();
 
             return true;
@@ -101,7 +101,7 @@ namespace Ludwell.Scene.Editor
         {
             foreach (var binder in ResourcesLocator.GetSceneAssetDataBinders().Elements)
             {
-                var address = GetAddressableIDForGUID(binder.GUID);
+                var address = GetAddressableIDForGUID(binder.Data.GUID);
                 binder.Data.AddressableID = address;
             }
         }

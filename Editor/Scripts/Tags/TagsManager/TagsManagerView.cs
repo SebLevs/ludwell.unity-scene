@@ -1,6 +1,6 @@
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     public class TagsManagerView
     {

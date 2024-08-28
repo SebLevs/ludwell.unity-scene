@@ -15,16 +15,25 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneElementsController : AViewable
+    internal class SceneElementsViewArgs : ViewArgs
+    {
+        public SceneElementsViewArgs(SceneAssetDataBinder binder)
+        {
+            Binder = binder;
+        }
+
+        public SceneAssetDataBinder Binder { get; }
+    }
+
+    internal class SceneElementsController : AViewable
     {
         private const string TagListingStrategyName = "tag";
         private const string TagIconName = "icon_tag";
         private const string HierarchyIconName = "icon_hierarchy";
 
         private readonly SceneAssetDataBinders _sceneAssetDataBinders;
-        private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
         private readonly VisualElement _root;
         private readonly SceneElementsView _view;
@@ -33,9 +42,11 @@ namespace Ludwell.Scene.Editor
 
         private readonly MoreInformationController _moreInformationController;
 
-        private ListingStrategy _hierarchyListingStrategy;
+        private readonly SceneElementsListViewRefresh _sceneElementsListViewRefresh;
 
-        private SceneElementsListViewRefresh _sceneElementsListViewRefresh;
+        private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
+
+        private ListingStrategy _hierarchyListingStrategy;
 
         public SceneElementsController(VisualElement parent) : base(parent)
         {
@@ -62,7 +73,7 @@ namespace Ludwell.Scene.Editor
 
             Services.Add<SceneElementsController>(this);
 
-            InitializeContextMenuManipulator();
+            InitializeContextualMenuManipulator();
 
             OnShow = AddRefreshViewSignal;
             OnHide = RemoveRefreshViewSignal;
@@ -83,7 +94,7 @@ namespace Ludwell.Scene.Editor
             _moreInformationController.Dispose();
         }
 
-        public void ScrollToItemIndex(int index)
+        public void ScrollToItemIndexThenFocusTextField(int index)
         {
             _root.Root().schedule.Execute(() =>
             {
@@ -98,6 +109,20 @@ namespace Ludwell.Scene.Editor
             });
         }
 
+        public void ScrollToItemIndex(int index)
+        {
+            _root.Root().schedule.Execute(() =>
+            {
+                _listViewHandler.ListView.ScrollToItem(index);
+                _listViewHandler.ListView.SetSelection(index);
+                var itemAtIndex = _listViewHandler.ListView.itemsSource[index];
+                var dataName = ((SceneAssetDataBinder)itemAtIndex).Data.Name;
+                var controller =
+                    _listViewHandler.GetFirstVisualElementWhere(element => element.IsTextFieldValue(dataName));
+                controller.Focus();
+            });
+        }
+
         public void RebuildActiveListing()
         {
             if (_dropdownSearchField.RebuildActiveListing()) return;
@@ -108,6 +133,14 @@ namespace Ludwell.Scene.Editor
         {
             _view.Show();
             _sceneElementsListViewRefresh.StartOrRefreshDelayedRebuild();
+
+            var sceneElementsViewArgs = args as SceneElementsViewArgs;
+            if (sceneElementsViewArgs?.Binder == null) return;
+            _root.schedule.Execute(() =>
+            {
+                var index = ResourcesLocator.GetSceneAssetDataBinders().IndexOf(sceneElementsViewArgs.Binder);
+                ScrollToItemIndex(index);
+            });
         }
 
         protected override void Hide()
@@ -137,11 +170,13 @@ namespace Ludwell.Scene.Editor
             return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
         }
 
-        private void InitializeContextMenuManipulator()
+        private void InitializeContextualMenuManipulator()
         {
             _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
             {
-                Func<DropdownMenuAction, DropdownMenuAction.Status> status = DropdownMenuAction.AlwaysEnabled;
+                var status = !_listViewHandler.ListView.selectedIndices.Any()
+                    ? DropdownMenuAction.Status.Disabled
+                    : DropdownMenuAction.Status.Normal;
                 context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, status);
                 context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive, status);
                 context.menu.AppendSeparator();
@@ -172,7 +207,7 @@ namespace Ludwell.Scene.Editor
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
             var controllers = GetSceneElementControllersWithoutActiveScene();
-            if (controllers.Count == 1) return;
+            if (controllers.Count == 0) return;
             foreach (var controller in controllers)
             {
                 if (SceneManager.sceneCount == 1) return;
@@ -285,7 +320,7 @@ namespace Ludwell.Scene.Editor
             if (_sceneAssetDataBinders == null || _sceneAssetDataBinders.Elements == null) return;
             foreach (var item in _listViewHandler.Data)
             {
-                var id = item.GUID;
+                var id = item.Data.GUID;
                 SessionState.SetBool(id, false);
             }
 
@@ -301,7 +336,6 @@ namespace Ludwell.Scene.Editor
                 new ListViewHandler<SceneElementController, SceneAssetDataBinder>(listView,
                     _sceneAssetDataBinders.Elements);
         }
-
 
         private void InitializeSearchField(VisualElement root, DropdownSearchField dropdownSearchField)
         {

@@ -8,9 +8,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneElementController : VisualElement, IDisposable, IListViewVisualElement<SceneAssetDataBinder>
+    internal class SceneElementController : VisualElement, IDisposable, IListViewVisualElement<SceneAssetDataBinder>
     {
         private static SceneElementController _currentSceneElement;
 
@@ -137,7 +137,7 @@ namespace Ludwell.Scene.Editor
         public void AddToAddressables()
         {
 #if USE_ADDRESSABLES_EDITOR
-            AddressablesProcessor.AddToAddressables(_model.GUID);
+            AddressablesProcessor.AddToAddressables(_model.Data.GUID);
 #endif
         }
 
@@ -215,7 +215,7 @@ namespace Ludwell.Scene.Editor
 
         private void SetFoldoutValueFromSavedState()
         {
-            var id = _model.GUID;
+            var id = _model.Data.GUID;
             var oldState = SessionState.GetBool(id, false);
             SetOpenState(oldState);
         }
@@ -229,7 +229,7 @@ namespace Ludwell.Scene.Editor
         private void SetLoadButtonState()
         {
             if (!EditorApplication.isPlaying) return;
-            if (SessionState.GetString(CurrentActiveScene, string.Empty) != _model.GUID)
+            if (SessionState.GetString(CurrentActiveScene, string.Empty) != _model.Data.GUID)
             {
                 _view.SwitchLoadButtonState(false);
                 return;
@@ -376,7 +376,7 @@ namespace Ludwell.Scene.Editor
 
             var index = SceneAssetDataBinders.Instance.IndexOf(_model);
             var sceneElementsController = Services.Get<SceneElementsController>();
-            sceneElementsController.ScrollToItemIndex(index);
+            sceneElementsController.ScrollToItemIndexThenFocusTextField(index);
         }
 
         private bool CanRenameAsset()
@@ -398,7 +398,7 @@ namespace Ludwell.Scene.Editor
 
         private void LoadScene()
         {
-            SessionState.SetString(CurrentActiveScene, _model.GUID);
+            SessionState.SetString(CurrentActiveScene, _model.Data.GUID);
             SceneManagerHelper.LoadScene(_model);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
         }
@@ -409,7 +409,7 @@ namespace Ludwell.Scene.Editor
             EditorApplication.playModeStateChanged -= OnExitPlayModeSwitchToStateOne;
 
             var prefActiveSceneID = SessionState.GetString(CurrentActiveScene, string.Empty);
-            var modelSceneID = _model.GUID;
+            var modelSceneID = _model.Data.GUID;
             if (prefActiveSceneID == modelSceneID) SessionState.EraseInt(CurrentActiveScene);
             _view.SwitchLoadButtonState(false);
         }
@@ -439,7 +439,7 @@ namespace Ludwell.Scene.Editor
 
         private void SessionStateCacheFoldoutValue(ClickEvent _)
         {
-            var id = _model.GUID;
+            var id = _model.Data.GUID;
             SessionState.SetBool(id, _foldout.IsOpen);
         }
     }

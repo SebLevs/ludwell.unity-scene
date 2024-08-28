@@ -5,30 +5,35 @@ using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneManagerToolkitWindow : EditorWindow
+    internal class SceneManagerToolkitWindow : EditorWindow
     {
         [SerializeField] private VisualTreeAsset _visualTreeAsset;
 
         [SerializeField] private StyleSheet _darkTheme;
         [SerializeField] private StyleSheet _lightTheme;
 
-        public TagsManagerController TagsManagerController { get; private set; }
-        public SceneElementsController SceneElementsController { get; private set; }
-
+        private const string WindowTitle = "Scene Manager Toolkit";
+        
         private ThemeManagerUIToolkitEditor _themeManagerUIToolkitEditor;
-
+        
         private Disposer _disposer;
+
+        public SceneElementsController SceneElementsController { get; private set; }
+        private TagsManagerController TagsManagerController { get; set; }
+
 
         [MenuItem("Tools/Ludwell Studio/Scene Manager Toolkit")]
         public static void OpenWindow()
         {
-            GetWindow<SceneManagerToolkitWindow>(title: "Scene Manager Toolkit");
+            GetWindow<SceneManagerToolkitWindow>(title: WindowTitle);
         }
 
         public void CreateGUI()
         {
+            titleContent = new GUIContent(WindowTitle);
+
             _visualTreeAsset.CloneTree(rootVisualElement);
 
             _themeManagerUIToolkitEditor = new ThemeManagerUIToolkitEditor(rootVisualElement, _darkTheme, _lightTheme);

@@ -4,9 +4,9 @@ using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class TagsShelfElementController : VisualElement, IDisposable
+    internal class TagsShelfElementController : VisualElement, IDisposable
     {
         private static readonly string UxmlPath =
             Path.Combine("UI", nameof(TagsShelfElementView), "Uxml_" + nameof(TagsShelfElementView));

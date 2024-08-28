@@ -3,12 +3,12 @@ using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneElementView : IDisposable
+    internal class SceneElementView : IDisposable
     {
-        private readonly string UxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
-        private readonly string UssPath = FoldoutView.UssPath + "_SceneManagerToolkit";
+        private readonly string _uxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
+        private readonly string _ussPath = FoldoutView.UssPath + "_SceneManagerToolkit";
 
         private const string OpenAdditiveTooltip = "Open additive";
         private const string RemoveAdditiveTooltip = "Remove additive";
@@ -26,8 +26,8 @@ namespace Ludwell.Scene.Editor
         private const string LoadButtonName = "button__load";
         private const string PingButtonName = "button__ping";
         private const string DirectoryChangeButtonName = "button__directory-path";
-        internal const string BuildSettingsButtonName = "button__build-settings";
-        internal const string EnabledInBuildSettingsButtonName = "button__build-settings__enabled";
+        private const string BuildSettingsButtonName = "button__build-settings";
+        private const string EnabledInBuildSettingsButtonName = "button__build-settings__enabled";
         private const string AddressablesButtonName = "button__addressables";
         private const string IconAssetOutsideAssetsName = "icon__package-scene";
 
@@ -67,8 +67,8 @@ namespace Ludwell.Scene.Editor
         public SceneElementView(SceneElementController root)
         {
             _root = root;
-            _root.AddHierarchyFromUxml(UxmlPath);
-            _root.AddStyleFromUss(UssPath);
+            _root.AddHierarchyFromUxml(_uxmlPath);
+            _root.AddStyleFromUss(_ussPath);
 
             SetActiveButton = _root.Q<ButtonWithIcon>(SetActiveButtonName);
             OpenAdditiveButton = _root.Q<DualStateButton>(OpenSceneAdditiveButtonName);

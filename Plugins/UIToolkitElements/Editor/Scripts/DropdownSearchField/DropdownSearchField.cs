@@ -172,7 +172,9 @@ namespace Ludwell.UIToolkitElements.Editor
                 if (strategyName != _listingStrategies[index].Name) continue;
 
                 _listingStrategyIndex = index;
-                _searchIcon.style.backgroundImage = new StyleBackground(GetCurrentListingStrategy().Icon);
+                var currentListingStrategy = GetCurrentListingStrategy();
+                _searchIcon.style.backgroundImage = new StyleBackground(currentListingStrategy.Icon);
+                UpdateTooltip(currentListingStrategy);
                 ExecuteCurrentListingStrategy(listFromValue);
                 _searchField.value = listFromValue;
             }
@@ -240,6 +242,11 @@ namespace Ludwell.UIToolkitElements.Editor
             });
         }
 
+        private void UpdateTooltip(ListingStrategy listingStrategy)
+        {
+            _searchIcon.tooltip = "Search by " + listingStrategy.Name;
+        }
+
         private void ExecuteCurrentListingStrategy(string value)
         {
             _listView.itemsSource = GetCurrentListingStrategy().Execute(value, _baseItemsSource);
@@ -288,7 +295,7 @@ namespace Ludwell.UIToolkitElements.Editor
 
             var currentStrategy = GetCurrentListingStrategy();
             _searchIcon.style.backgroundImage = new StyleBackground(currentStrategy.Icon);
-            _searchIcon.tooltip = "Search by " + currentStrategy.Name;
+            UpdateTooltip(currentStrategy);
             return currentStrategy;
         }
 

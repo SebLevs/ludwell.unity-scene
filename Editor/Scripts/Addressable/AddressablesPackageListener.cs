@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEditor.PackageManager;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     [InitializeOnLoad]
     public class AddressablesPackageListener

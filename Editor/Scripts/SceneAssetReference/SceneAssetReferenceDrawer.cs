@@ -3,14 +3,14 @@ using Ludwell.EditorUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer
     {
         private const string GuidPropertyName = "_guid";
         private const string SceneAssetPropertyName = "_reference";
-        
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -19,7 +19,7 @@ namespace Ludwell.Scene.Editor
             var referenceProperty = property.FindPropertyRelative(SceneAssetPropertyName);
 
             var contentPosition = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Keyboard), label);
-            
+
             var controller = new SceneAssetReferenceController(contentPosition, property);
 
             var positionX = contentPosition.x + EditorButton.Size + 4;
@@ -30,15 +30,15 @@ namespace Ludwell.Scene.Editor
             if (GUI.changed)
             {
                 referenceProperty.objectReferenceValue = referenceProperty.objectReferenceValue as SceneAsset;
-                
-                guidProperty.stringValue = referenceProperty.objectReferenceValue == null ? 
-                    string.Empty : 
-                    AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(referenceProperty.objectReferenceValue));
+
+                guidProperty.stringValue = referenceProperty.objectReferenceValue == null
+                    ? string.Empty
+                    : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(referenceProperty.objectReferenceValue));
             }
 
             EditorGUI.EndProperty();
         }
-        
+
         public static void RepaintInspectorWindows()
         {
             var inspectorWindows = Resources.FindObjectsOfTypeAll<EditorWindow>()

@@ -7,9 +7,9 @@ using Ludwell.UIToolkitUtilities.Editor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class TagsManagerViewArgs : ViewArgs
+    internal class TagsManagerViewArgs : ViewArgs
     {
         public TagsManagerViewArgs(TagSubscriberWithTags tagSubscriberWithTags)
         {
@@ -19,7 +19,7 @@ namespace Ludwell.Scene.Editor
         public TagSubscriberWithTags TagSubscriberWithTags { get; }
     }
 
-    public class TagsManagerController : AViewable
+    internal class TagsManagerController : AViewable
     {
         private const string TagElementsContainerName = "tag-elements-container";
 
@@ -30,6 +30,8 @@ namespace Ludwell.Scene.Editor
         private readonly Tags _tags;
 
         private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
+
+        private TagsManagerViewArgs _args;
 
         public TagsManagerController(VisualElement parent) : base(parent)
         {
@@ -47,6 +49,7 @@ namespace Ludwell.Scene.Editor
             _root.Root().RegisterCallback<KeyUpEvent>(OnKeyUpReturn);
             InitializeListViewHandler();
             InitializeDropdownSearchField();
+            InitializeContextualMenuManipulator();
         }
 
         public void Dispose()
@@ -63,9 +66,9 @@ namespace Ludwell.Scene.Editor
 
             var listView = _listViewHandler.ListView;
 
-            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
-            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpDeleteSelection);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpBindSelection);
+            listView.UnregisterCallback<KeyUpEvent>(OnKeyUpUnbindSelection);
         }
 
         public void ScrollToItemIndex(int index)
@@ -85,10 +88,10 @@ namespace Ludwell.Scene.Editor
         {
             Signals.Add<UISignals.RefreshView>(_tagsShelfController.Populate);
             Signals.Add<UISignals.RefreshView>(_listViewHandler.ForceRebuild);
-            var tagsManagerViewArgs = (TagsManagerViewArgs)args;
+            _args = (TagsManagerViewArgs)args;
             _view.Show();
-            _view.SetReferenceText(tagsManagerViewArgs.TagSubscriberWithTags.GetTagSubscriberWithTagID());
-            BuildTagsController(tagsManagerViewArgs.TagSubscriberWithTags);
+            _view.SetReferenceText(_args.TagSubscriberWithTags.GetTagSubscriberWithTagID());
+            BuildTagsController(_args.TagSubscriberWithTags);
         }
 
         protected override void Hide()
@@ -122,7 +125,14 @@ namespace Ludwell.Scene.Editor
         private void OnKeyUpReturn(KeyUpEvent evt)
         {
             if (_root.style.display == DisplayStyle.None) return;
+
             if (evt.keyCode == KeyCode.Escape && (evt.modifiers & EventModifiers.Control) != 0) ReturnToPreviousView();
+        }
+
+        private void ReturnToPreviousView()
+        {
+            var args = new SceneElementsViewArgs(_args.TagSubscriberWithTags as SceneAssetDataBinder);
+            ReturnToPreviousView(args);
         }
 
         private void InitializeListViewHandler()
@@ -137,9 +147,9 @@ namespace Ludwell.Scene.Editor
 
             var listView = _listViewHandler.ListView;
 
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpAddSelected);
-            listView.RegisterCallback<KeyUpEvent>(OnKeyUpRemoveSelected);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpDeleteSelection);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpBindSelection);
+            listView.RegisterCallback<KeyUpEvent>(OnKeyUpUnbindSelection);
         }
 
         private void HandleItemsRemoved(IEnumerable<int> enumerable)
@@ -164,10 +174,14 @@ namespace Ludwell.Scene.Editor
             ResourcesLocator.SaveTags();
         }
 
-        private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
+        private void OnKeyUpDeleteSelection(KeyUpEvent keyUpEvent)
         {
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
+            DeleteSelection();
+        }
 
+        private void DeleteSelection()
+        {
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
 
@@ -176,12 +190,28 @@ namespace Ludwell.Scene.Editor
                 RemoveTagFromShelf(arrayOfElements[i]);
                 _listViewHandler.RemoveSelectedElement();
             }
+
+            _listViewHandler.ListView.ClearSelection();
         }
 
-        private void OnKeyUpAddSelected(KeyUpEvent keyUpEvent)
+        private void DeleteSelection(DropdownMenuAction dropdownMenuAction)
+        {
+            DeleteSelection();
+        }
+
+        private void OnKeyUpBindSelection(KeyUpEvent keyUpEvent)
         {
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Return)) return;
+            BindSelection();
+        }
 
+        private void BindSelection(DropdownMenuAction dropdownMenuAction)
+        {
+            BindSelection();
+        }
+
+        private void BindSelection()
+        {
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
 
@@ -191,16 +221,25 @@ namespace Ludwell.Scene.Editor
             }
         }
 
-        private void OnKeyUpRemoveSelected(KeyUpEvent keyUpEvent)
+        private void OnKeyUpUnbindSelection(KeyUpEvent keyUpEvent)
+        {
+            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
+            UnbindSelection();
+        }
+
+        private void UnbindSelection()
         {
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any()) return;
-            if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Backspace)) return;
-
             for (var i = arrayOfElements.Length - 1; i >= 0; i--)
             {
                 RemoveTagFromShelf(arrayOfElements[i]);
             }
+        }
+
+        private void UnbindSelection(DropdownMenuAction dropdownMenuAction)
+        {
+            UnbindSelection();
         }
 
         private void OnItemMadeRegisterEvents(TagsManagerElementController controller)
@@ -217,6 +256,20 @@ namespace Ludwell.Scene.Editor
             {
                 _listViewHandler.ListView.ScrollToItem(itemIndex);
             });
+        }
+
+        private void InitializeContextualMenuManipulator()
+        {
+            _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
+            {
+                var status = !_listViewHandler.ListView.selectedIndices.Any()
+                    ? DropdownMenuAction.Status.Disabled
+                    : DropdownMenuAction.Status.Normal;
+                context.menu.AppendAction("Bind selection", BindSelection, status);
+                context.menu.AppendAction("Unbind selection", UnbindSelection, status);
+                context.menu.AppendSeparator();
+                context.menu.AppendAction("Delete selection", DeleteSelection, status);
+            }));
         }
     }
 }

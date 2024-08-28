@@ -23,9 +23,9 @@ namespace Ludwell.UIToolkitElements.Editor
         private float _heightDifference = -1;
 
         private const float _maxHeight = 200;
-        
+
         private DropdownSearchField _owner;
-        
+
         public int Count => itemsSource.Count;
 
         public bool IsHidden => style.display == DisplayStyle.None;

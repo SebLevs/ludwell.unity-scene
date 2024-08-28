@@ -6,9 +6,9 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public static class DataSolver
+    internal static class DataSolver
     {
         public static void CreateSceneAssetAtPath()
         {
@@ -36,7 +36,7 @@ namespace Ludwell.Scene.Editor
                         continue;
 
                     ResourcesLocator.GetSceneAssetDataBinders()
-                        .Remove(sceneAssetDataContainer.Elements[index].GUID);
+                        .Remove(sceneAssetDataContainer.Elements[index].Data.GUID);
                 }
             }
             else
@@ -44,7 +44,7 @@ namespace Ludwell.Scene.Editor
                 var binder = ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromPath(absolutePath);
                 if (binder != null)
                 {
-                    ResourcesLocator.GetSceneAssetDataBinders().Remove(binder.GUID);
+                    ResourcesLocator.GetSceneAssetDataBinders().Remove(binder.Data.GUID);
                 }
             }
 
@@ -77,15 +77,14 @@ namespace Ludwell.Scene.Editor
         {
             var instance = SceneAssetDataBinders.Instance;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
+
             var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
 
             var address = SceneAssetDataBinders.NotAddressableName;
 #if USE_ADDRESSABLES_EDITOR
-            Debug.LogError("handle addressable being added to binders???");
             address = AddressablesProcessor.GetAddressableIDForGUID(guid);
 #endif
-
-            var hasAdded = instance.Add(guid, sceneAsset.name, assetPath, address);
+            var hasAdded = instance.TryAddUnique(guid, sceneAsset.name, assetPath, address);
 
             return hasAdded;
         }
@@ -98,8 +97,8 @@ namespace Ludwell.Scene.Editor
 
             for (var i = binders.Elements.Count - 1; i >= 0; i--)
             {
-                if (assetGuids.Contains(binders.Elements[i].GUID)) continue;
-                binders.Remove(binders.Elements[i].GUID);
+                if (assetGuids.Contains(binders.Elements[i].Data.GUID)) continue;
+                binders.Remove(binders.Elements[i].Data.GUID);
                 hasSolved = true;
             }
 

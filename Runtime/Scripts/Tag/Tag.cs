@@ -2,10 +2,10 @@ using System;
 using Ludwell.UIToolkitElements;
 using UnityEngine;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     [Serializable]
-    public sealed class Tag : IComparable, IListable
+    public class Tag : IComparable, IListable
     {
         [field: SerializeField] public string ID { get; set; }
 

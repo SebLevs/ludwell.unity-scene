@@ -1,6 +1,6 @@
 {
-    "name": "Editor",
-    "rootNamespace": "Ludwell.Scene.Editor",
+    "name": "Ludwell.SceneManagerToolkit.Editor",
+    "rootNamespace": "Ludwell.SceneManagerToolkit.Editor",
     "references": [
         "GUID:3ff281a81af69b744bec0f07c01af33f",
         "GUID:0aac39bf52affa64b9eb75938480a575",

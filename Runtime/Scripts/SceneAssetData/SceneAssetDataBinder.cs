@@ -1,14 +1,11 @@
 using System;
 using Ludwell.UIToolkitElements;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     [Serializable]
     public class SceneAssetDataBinder : TagSubscriberWithTags, IListable, IComparable
     {
-        /// <summary>The GUID of the SceneAsset.</summary>
-        public string GUID;
-
         public SceneAssetData Data;
 
         public override string GetTagSubscriberWithTagID() => Data.Name;

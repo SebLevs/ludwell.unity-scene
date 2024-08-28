@@ -14,12 +14,12 @@ namespace Ludwell.UIToolkitUtilities.Editor
         {
             return Resources.Load<StyleSheet>(UssThemedClass);
         }
-        
+
         public static StyleSheet GetDarkThemeStyleSheet()
         {
             return Resources.Load<StyleSheet>(UssPathDark);
         }
-        
+
         public static StyleSheet GetLightThemeStyleSheet()
         {
             return Resources.Load<StyleSheet>(UssPathLight);

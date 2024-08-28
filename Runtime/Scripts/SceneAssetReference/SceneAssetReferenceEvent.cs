@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     public class SceneAssetReferenceEvent : MonoBehaviour
     {

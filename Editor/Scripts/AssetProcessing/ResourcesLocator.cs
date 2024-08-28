@@ -1,7 +1,7 @@
 using Ludwell.EditorUtilities;
 using UnityEditor;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     public static class ResourcesLocator
     {

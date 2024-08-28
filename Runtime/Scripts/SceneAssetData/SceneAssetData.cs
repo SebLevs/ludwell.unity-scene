@@ -1,11 +1,12 @@
 using System;
 using UnityEngine.SceneManagement;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     [Serializable]
     public class SceneAssetData
     {
+        public string GUID;
         public string Name;
         public string Path;
         public string AddressableID;

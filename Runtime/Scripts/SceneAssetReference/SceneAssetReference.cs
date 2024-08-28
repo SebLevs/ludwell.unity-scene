@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
 #if UNITY_EDITOR
     public partial class SceneAssetReference
@@ -19,13 +20,23 @@ namespace Ludwell.Scene
     {
         /// <summary>
         /// The SceneAsset GUID.<br/>
-        /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
+        /// Used in <see cref="GetData"/> to return information about the referenced SceneAsset.
         /// </summary>
         [SerializeField] private string _guid;
 
         public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
 
-        public SceneAssetData Data()
+        public List<Tag> GetTags()
+        {
+            if (string.IsNullOrEmpty(_guid)) return null;
+
+            if (SceneAssetDataBinders.Instance.TryGetBinderFromId(_guid, out var binder)) return binder.Tags;
+
+            Debug.LogError($"No {nameof(SceneAssetDataBinder)} could be found from key: {_guid}");
+            return null;
+        }
+
+        public SceneAssetData GetData()
         {
             if (string.IsNullOrEmpty(_guid)) return null;
 
