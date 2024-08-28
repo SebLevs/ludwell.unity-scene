@@ -7,7 +7,7 @@ using Ludwell.UIToolkitUtilities.Editor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     public class TagsManagerViewArgs : ViewArgs
     {

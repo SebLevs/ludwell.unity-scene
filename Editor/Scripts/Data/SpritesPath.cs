@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal static class SpritesPath
     {

@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using SceneRuntime = UnityEngine.SceneManagement.Scene;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal class SceneElementsController : AViewable
     {

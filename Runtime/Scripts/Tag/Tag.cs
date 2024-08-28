@@ -2,7 +2,7 @@ using System;
 using Ludwell.UIToolkitElements;
 using UnityEngine;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     [Serializable]
     public class Tag : IComparable, IListable

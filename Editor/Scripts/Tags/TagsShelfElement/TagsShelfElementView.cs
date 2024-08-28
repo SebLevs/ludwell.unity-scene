@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal class TagsShelfElementView : IDisposable
     {

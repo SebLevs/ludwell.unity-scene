@@ -9,7 +9,7 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using Object = UnityEngine.Object;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     [InitializeOnLoad]
     internal class AddressablesProcessor

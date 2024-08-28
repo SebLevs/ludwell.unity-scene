@@ -3,7 +3,7 @@ using Ludwell.EditorUtilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     [CustomPropertyDrawer(typeof(SceneAssetReference))]
     public class SceneAssetReferenceDrawer : PropertyDrawer

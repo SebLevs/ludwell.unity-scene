@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal class Disposer
     {

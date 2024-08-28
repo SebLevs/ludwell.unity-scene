@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     public class SceneAssetDataBinders : ScriptableObject
     {

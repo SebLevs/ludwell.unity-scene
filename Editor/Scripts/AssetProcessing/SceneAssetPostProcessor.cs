@@ -4,7 +4,7 @@ using Ludwell.Architecture;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal class SceneAssetPostProcessor : AssetPostprocessor
     {

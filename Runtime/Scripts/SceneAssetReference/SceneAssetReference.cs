@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
 #if UNITY_EDITOR
     public partial class SceneAssetReference

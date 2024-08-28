@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     public class SceneManagerHelper
     {

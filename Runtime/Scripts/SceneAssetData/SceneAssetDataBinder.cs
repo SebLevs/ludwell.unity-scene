@@ -1,7 +1,7 @@
 using System;
 using Ludwell.UIToolkitElements;
 
-namespace Ludwell.Scene
+namespace Ludwell.SceneManagerToolkit
 {
     [Serializable]
     public class SceneAssetDataBinder : TagSubscriberWithTags, IListable, IComparable

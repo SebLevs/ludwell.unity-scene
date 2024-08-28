@@ -3,7 +3,7 @@ using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using UnityEngine.UIElements;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal class SceneElementView : IDisposable
     {

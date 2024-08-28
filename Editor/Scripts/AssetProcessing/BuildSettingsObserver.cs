@@ -2,7 +2,7 @@ using Ludwell.Architecture;
 using Ludwell.EditorUtilities;
 using UnityEditor;
 
-namespace Ludwell.Scene.Editor
+namespace Ludwell.SceneManagerToolkit.Editor
 {
     [InitializeOnLoad]
     internal class BuildSettingsObserver
