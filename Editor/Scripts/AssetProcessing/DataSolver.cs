@@ -77,7 +77,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             var instance = SceneAssetDataBinders.Instance;
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            
+
             var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
 
             var address = SceneAssetDataBinders.NotAddressableName;

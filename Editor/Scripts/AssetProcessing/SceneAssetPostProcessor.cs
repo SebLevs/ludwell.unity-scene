@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using Ludwell.Architecture;
 using UnityEditor;
-using UnityEngine;
 
 namespace Ludwell.SceneManagerToolkit.Editor
 {
@@ -88,7 +87,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
                 hasSolved = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
-                
+
                 if (ResourcesLocator.GetSceneAssetDataBinders().ContainsWithId(guid)) return false;
                 DataSolver.AddSceneAssetDataBinderFromGuid(guid);
             }
