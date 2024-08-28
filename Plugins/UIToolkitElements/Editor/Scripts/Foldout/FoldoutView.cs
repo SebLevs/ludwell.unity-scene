@@ -10,7 +10,7 @@ namespace Ludwell.UIToolkitElements.Editor
     {
         public static readonly string UxmlPath = Path.Combine("UI", "Foldout", "Uxml_" + nameof(FoldoutView));
         public static readonly string UssPath = Path.Combine("UI", "Foldout", "Uss_" + nameof(FoldoutView));
-        
+
         public static readonly string HeaderName = "header";
         public static readonly string ToggleIconName = "toggle-icon";
         public static readonly string TitleName = "title";
@@ -59,7 +59,7 @@ namespace Ludwell.UIToolkitElements.Editor
 
             _content = _root.Q<VisualElement>(ContentName);
         }
-        
+
         public void Dispose()
         {
             _header.UnregisterCallback<ClickEvent>(ExecuteHeaderClickedCallback);

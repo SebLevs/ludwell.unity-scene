@@ -52,7 +52,7 @@ namespace Ludwell.UIToolkitElements.Editor
             IsOpen = startOpen;
             _view.ToggleFoldoutStyle(startOpen);
         }
-        
+
         public void Dispose()
         {
             OnHeaderClickedCallback -= _view.ToggleFoldoutStyle;

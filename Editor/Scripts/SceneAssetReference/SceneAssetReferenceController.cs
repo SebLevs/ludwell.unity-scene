@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Ludwell.SceneManagerToolkit.Editor
 {
-    public class SceneAssetReferenceController
+    internal class SceneAssetReferenceController
     {
         private const string GuidPropertyName = "_guid";
 

@@ -125,7 +125,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private void OnKeyUpReturn(KeyUpEvent evt)
         {
             if (_root.style.display == DisplayStyle.None) return;
-            
+
             if (evt.keyCode == KeyCode.Escape && (evt.modifiers & EventModifiers.Control) != 0) ReturnToPreviousView();
         }
 

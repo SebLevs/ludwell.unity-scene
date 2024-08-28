@@ -241,7 +241,7 @@ namespace Ludwell.UIToolkitElements.Editor
                 ExecuteCurrentListingStrategy(evt.newValue);
             });
         }
-        
+
         private void UpdateTooltip(ListingStrategy listingStrategy)
         {
             _searchIcon.tooltip = "Search by " + listingStrategy.Name;
