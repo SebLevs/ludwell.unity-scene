@@ -6,9 +6,6 @@ namespace Ludwell.Scene
     [Serializable]
     public class SceneAssetDataBinder : TagSubscriberWithTags, IListable, IComparable
     {
-        /// <summary>The GUID of the SceneAsset.</summary>
-        public string GUID;
-
         public SceneAssetData Data;
 
         public override string GetTagSubscriberWithTagID() => Data.Name;

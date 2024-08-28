@@ -19,13 +19,13 @@ namespace Ludwell.Scene
     {
         /// <summary>
         /// The SceneAsset GUID.<br/>
-        /// Used in <see cref="Data"/> to return information about the referenced SceneAsset.
+        /// Used in <see cref="GetData"/> to return information about the referenced SceneAsset.
         /// </summary>
         [SerializeField] private string _guid;
 
         public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
 
-        public SceneAssetData Data()
+        public SceneAssetData GetData()
         {
             if (string.IsNullOrEmpty(_guid)) return null;
 

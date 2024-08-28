@@ -36,7 +36,7 @@ namespace Ludwell.Scene.Editor
                         continue;
 
                     ResourcesLocator.GetSceneAssetDataBinders()
-                        .Remove(sceneAssetDataContainer.Elements[index].GUID);
+                        .Remove(sceneAssetDataContainer.Elements[index].Data.GUID);
                 }
             }
             else
@@ -44,7 +44,7 @@ namespace Ludwell.Scene.Editor
                 var binder = ResourcesLocator.GetSceneAssetDataBinders().GetBinderFromPath(absolutePath);
                 if (binder != null)
                 {
-                    ResourcesLocator.GetSceneAssetDataBinders().Remove(binder.GUID);
+                    ResourcesLocator.GetSceneAssetDataBinders().Remove(binder.Data.GUID);
                 }
             }
 
@@ -98,8 +98,8 @@ namespace Ludwell.Scene.Editor
 
             for (var i = binders.Elements.Count - 1; i >= 0; i--)
             {
-                if (assetGuids.Contains(binders.Elements[i].GUID)) continue;
-                binders.Remove(binders.Elements[i].GUID);
+                if (assetGuids.Contains(binders.Elements[i].Data.GUID)) continue;
+                binders.Remove(binders.Elements[i].Data.GUID);
                 hasSolved = true;
             }
 

@@ -288,7 +288,7 @@ namespace Ludwell.Scene.Editor
             if (_sceneAssetDataBinders == null || _sceneAssetDataBinders.Elements == null) return;
             foreach (var item in _listViewHandler.Data)
             {
-                var id = item.GUID;
+                var id = item.Data.GUID;
                 SessionState.SetBool(id, false);
             }
 

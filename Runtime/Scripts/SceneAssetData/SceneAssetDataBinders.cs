@@ -57,7 +57,7 @@ namespace Ludwell.Scene
             for (var index = 0; index < Elements.Count; index++)
             {
                 var binder = Elements[index];
-                if (string.Equals(guid, binder.GUID)) return index;
+                if (string.Equals(guid, binder.Data.GUID)) return index;
             }
 
             return -1;
@@ -67,7 +67,7 @@ namespace Ludwell.Scene
         {
             foreach (var binder in Elements)
             {
-                if (string.Equals(id, binder.GUID, StringComparison.InvariantCulture)) return true;
+                if (string.Equals(id, binder.Data.GUID, StringComparison.InvariantCulture)) return true;
             }
 
             return false;
@@ -78,9 +78,9 @@ namespace Ludwell.Scene
             if (ContainsWithId(guid)) return false;
             var newBinder = new SceneAssetDataBinder
             {
-                GUID = guid,
                 Data = new SceneAssetData
                 {
+                    GUID = guid,
                     Name = assetName,
                     Path = path,
                     AddressableID = addressableID
@@ -96,7 +96,7 @@ namespace Ludwell.Scene
         {
             foreach (var binder in Elements)
             {
-                if (!string.Equals(id, binder.GUID, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(id, binder.Data.GUID, StringComparison.InvariantCulture)) continue;
                 Elements.Remove(binder);
                 return;
             }
@@ -106,7 +106,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
                 return sceneAssetDataBinder;
             }
 
@@ -117,7 +117,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
                 binder = sceneAssetDataBinder;
                 return true;
             }
@@ -154,7 +154,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
                 return sceneAssetDataBinder.Data;
             }
 
@@ -165,7 +165,7 @@ namespace Ludwell.Scene
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
                 data = sceneAssetDataBinder.Data;
                 return true;
             }
@@ -198,13 +198,16 @@ namespace Ludwell.Scene
             return false;
         }
 
-        /// <param name="tag">Parse <see cref="SceneAssetData"/> list for the specified tag. Case-sensitive.</param>
-        /// <returns>Will return null if no <see cref="SceneAssetData"/> was found with specified <see cref="Tag"/>.</returns>
+        /// <param name="tag">
+        /// Parse <see cref="SceneAssetData"/>s for the specified tag.<br/>
+        /// Not case-sensitive.
+        /// </param>
+        /// <returns>Will return null if no <see cref="SceneAssetData"/> is found with the specified <see cref="Tag"/>.</returns>
         public IEnumerable<SceneAssetData> GetDataWhereTag(string tag)
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!sceneAssetDataBinder.Tags.Exists(x => x.ID == tag)) continue;
+                if (!sceneAssetDataBinder.Tags.Exists(x => string.Equals(x.ID, tag, StringComparison.InvariantCultureIgnoreCase))) continue;
                 yield return sceneAssetDataBinder.Data;
             }
 

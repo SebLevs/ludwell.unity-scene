@@ -101,7 +101,7 @@ namespace Ludwell.Scene.Editor
         {
             foreach (var binder in ResourcesLocator.GetSceneAssetDataBinders().Elements)
             {
-                var address = GetAddressableIDForGUID(binder.GUID);
+                var address = GetAddressableIDForGUID(binder.Data.GUID);
                 binder.Data.AddressableID = address;
             }
         }
