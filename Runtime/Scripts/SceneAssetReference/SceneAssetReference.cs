@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,6 +25,16 @@ namespace Ludwell.SceneManagerToolkit
         [SerializeField] private string _guid;
 
         public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
+
+        public List<Tag> GetTags()
+        {
+            if (string.IsNullOrEmpty(_guid)) return null;
+
+            if (SceneAssetDataBinders.Instance.TryGetBinderFromId(_guid, out var binder)) return binder.Tags;
+
+            Debug.LogError($"No {nameof(SceneAssetDataBinder)} could be found from key: {_guid}");
+            return null;
+        }
 
         public SceneAssetData GetData()
         {
