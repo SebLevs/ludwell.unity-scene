@@ -28,8 +28,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         /// <param name="isRemove">Should the scene be removed from the hierarchy.</param>
         public static void CloseScene(string path, bool isRemove)
         {
-            if (!EditorSceneManager.GetSceneByPath(path).isLoaded) return;
             var scene = SceneManager.GetSceneByPath(path);
+            if (!scene.isLoaded) return;
             EditorSceneManager.CloseScene(scene, isRemove);
         }
 

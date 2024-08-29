@@ -10,6 +10,7 @@ using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -170,29 +171,111 @@ namespace Ludwell.SceneManagerToolkit.Editor
             return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
         }
 
+        private List<SceneElementController> GetSceneElementControllersInHierarchy()
+        {
+            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
+
+            List<SceneElementController> controllers = new();
+            foreach (var controller in enumerableSelection)
+            {
+                for (var i = 0; i < SceneManager.sceneCount; i++)
+                {
+                    var scene = EditorSceneManager.GetSceneAt(i);
+                    if (controller.Scene != scene) continue;
+                    controllers.Add(controller);
+                }
+            }
+
+            return controllers;
+        }
+
         private void InitializeContextualMenuManipulator()
         {
             _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
             {
-                var status = !_listViewHandler.ListView.selectedIndices.Any()
-                    ? DropdownMenuAction.Status.Disabled
-                    : DropdownMenuAction.Status.Normal;
-                context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, status);
-                context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive, status);
+                var controllers = GetSceneElementControllersInHierarchy();
+
+                var defaultValidation = _listViewHandler.ListView.selectedIndices.Any();
+                var onlyOneSceneInHierarchy = SceneManager.sceneCount == 1;
+                var selectionNotInHierarchy = controllers.Count == 0;
+
+                var defaultStatus =
+                    !defaultValidation
+                        ? DropdownMenuAction.Status.Disabled
+                        : DropdownMenuAction.Status.Normal;
+
+                var isCount = controllers.Count == SceneManager.sceneCount;
+                var destructiveStatus =
+                    onlyOneSceneInHierarchy || !defaultValidation || selectionNotInHierarchy || isCount
+                        ? DropdownMenuAction.Status.Disabled
+                        : DropdownMenuAction.Status.Normal;
+
+                context.menu.AppendAction("Load selection additively", LoadSelectionAdditive, defaultStatus);
+                context.menu.AppendAction("Unload selection additively", UnloadSelectionAdditive, destructiveStatus);
+                context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, defaultStatus);
+                context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive, destructiveStatus);
                 context.menu.AppendSeparator();
-                context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings, status);
+                context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings,
+                    defaultStatus);
                 context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
-                    status);
+                    defaultStatus);
                 context.menu.AppendAction("Enable selection to in build settings", EnableSelectionInBuildSettings,
-                    status);
+                    defaultStatus);
                 context.menu.AppendAction("Disable selection to in build settings", DisableSelectionInBuildSettings,
-                    status);
+                    defaultStatus);
                 context.menu.AppendSeparator();
                 context.menu.AppendAction("Add selection to addressable default group", AddSelectionToAddressables,
-                    status);
+                    defaultStatus);
                 context.menu.AppendAction("Remove selection from addressables", RemoveSelectionFromAddressables,
-                    status);
+                    defaultStatus);
             }));
+        }
+
+        private void LoadSelectionAdditive(DropdownMenuAction _)
+        {
+            if (SceneManager.sceneCount == 1) return;
+
+            var controllers = GetSceneElementControllersInHierarchy();
+
+            foreach (var controller in controllers)
+            {
+                controller.LoadSceneAdditive();
+            }
+        }
+
+        private void UnloadSelectionAdditive(DropdownMenuAction _)
+        {
+            var controllers = GetSceneElementControllersInHierarchy();
+
+            var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToList();
+
+            if (modifiedScenes.Count > 0)
+            {
+                var namesAsStrings = "";
+                foreach (var controller in modifiedScenes)
+                {
+                    namesAsStrings += controller.Scene.name + "\n";
+                }
+
+                if (!EditorUtility.DisplayDialog(
+                        "Scene(s) Have Been Modified",
+                        $"Do you want to save the changes you made in the scenes:\n{namesAsStrings}",
+                        "Save and Unload", "Cancel"))
+                {
+                    return;
+                }
+
+                foreach (var controller in modifiedScenes)
+                {
+                    var sceneReference = controller.Scene;
+                    if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
+                }
+            }
+
+            foreach (var controller in controllers)
+            {
+                controller.UnloadSceneAdditive();
+            }
         }
 
         private void OpenSelectionAdditive(DropdownMenuAction _)
@@ -206,11 +289,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
-            var controllers = GetSceneElementControllersWithoutActiveScene();
-            if (controllers.Count == 0) return;
+            var controllers = GetSceneElementControllersInHierarchy();
             foreach (var controller in controllers)
             {
-                if (SceneManager.sceneCount == 1) return;
                 controller.RemoveSceneAdditive();
             }
         }

@@ -23,6 +23,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly TagsShelfController _tagsShelfController;
         private ViewManager _viewManager;
 
+        public Scene Scene => SceneManager.GetSceneByPath(_model.Data.Path);
+
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
 
         public bool IsTextFieldValue(string value) => value == _foldout.TitleTextField.value;
@@ -170,7 +172,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             var isSceneLoaded = EditorSceneManagerHelper.IsSceneLoaded(_model.Data.Path);
             var isSceneUnloaded = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
-            _view.SetLoadAdditiveButtonEnable(isSceneLoaded || isSceneUnloaded);
+            _view.SetLoadAdditiveButtonEnable(!EditorApplication.isPlaying && (isSceneLoaded || isSceneUnloaded));
 
             var isSceneValid = EditorSceneManagerHelper.IsSceneValid(_model.Data.Path);
             _view.SwitchLoadAdditiveButtonState(isSceneLoaded && isSceneValid);
@@ -178,7 +180,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void SolveOpenAdditiveButton()
         {
-            _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying);
+            var isSceneUnloaded = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
+            _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying && !isSceneUnloaded);
 
             var sceneAsset = SceneManager.GetSceneByPath(_model.Data.Path);
 
