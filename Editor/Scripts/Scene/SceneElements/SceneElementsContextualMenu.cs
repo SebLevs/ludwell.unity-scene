@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ludwell.UIToolkitUtilities.Editor;
@@ -13,21 +12,23 @@ namespace Ludwell.SceneManagerToolkit.Editor
     {
         private readonly ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
 
-        public SceneElementsContextualMenu(ListViewHandler<SceneElementController, SceneAssetDataBinder> listViewHandler)
+        public SceneElementsContextualMenu(
+            ListViewHandler<SceneElementController, SceneAssetDataBinder> listViewHandler)
         {
             _listViewHandler = listViewHandler;
             InitializeContextualMenuManipulator();
         }
-        
+
         private void InitializeContextualMenuManipulator()
         {
             _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
             {
                 var controllers = GetSceneElementControllersInHierarchy();
 
-                var defaultValidation = _listViewHandler.ListView.selectedIndices.Any();
-                var onlyOneSceneInHierarchy = SceneManager.sceneCount == 1;
+                var defaultValidation =
+                    _listViewHandler.ListView.selectedIndices.Any() && !EditorApplication.isPlaying;
                 var selectionNotInHierarchy = controllers.Count == 0;
+                var onlyOneLoadedScene = EditorSceneManagerHelper.DoesHierarchyOnlyHasOneLoadedScene();
 
                 var defaultStatus =
                     !defaultValidation
@@ -35,8 +36,10 @@ namespace Ludwell.SceneManagerToolkit.Editor
                         : DropdownMenuAction.Status.Normal;
 
                 var isCount = controllers.Count == SceneManager.sceneCount;
+                var isActiveScene =
+                    controllers.Any() && controllers[0].Scene.path == SceneManager.GetActiveScene().path;
                 var destructiveStatus =
-                    onlyOneSceneInHierarchy || !defaultValidation || selectionNotInHierarchy || isCount
+                    !defaultValidation || (onlyOneLoadedScene && isActiveScene) || selectionNotInHierarchy || isCount
                         ? DropdownMenuAction.Status.Disabled
                         : DropdownMenuAction.Status.Normal;
 
@@ -60,7 +63,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
                     defaultStatus);
             }));
         }
-        
+
         private SceneElementController[] GetSceneElementControllers()
         {
             var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
@@ -85,7 +88,6 @@ namespace Ludwell.SceneManagerToolkit.Editor
             return controllers;
         }
 
-        
         private void LoadSelectionAdditive(DropdownMenuAction _)
         {
             if (SceneManager.sceneCount == 1) return;
@@ -102,30 +104,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             var controllers = GetSceneElementControllersInHierarchy();
 
-            var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToList();
+            var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToArray();
 
-            if (modifiedScenes.Count > 0)
-            {
-                var namesAsStrings = "";
-                foreach (var controller in modifiedScenes)
-                {
-                    namesAsStrings += controller.Scene.name + "\n";
-                }
-
-                if (!EditorUtility.DisplayDialog(
-                        "Scene(s) Have Been Modified",
-                        $"Do you want to save the changes you made in the scenes:\n{namesAsStrings}",
-                        "Save and Unload", "Cancel"))
-                {
-                    return;
-                }
-
-                foreach (var controller in modifiedScenes)
-                {
-                    var sceneReference = controller.Scene;
-                    if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
-                }
-            }
+            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogue(modifiedScenes)) return;
 
             foreach (var controller in controllers)
             {

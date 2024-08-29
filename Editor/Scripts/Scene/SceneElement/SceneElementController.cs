@@ -135,6 +135,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public void UnloadSceneAdditive()
         {
+            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogue(this))
+            {
+                SolveLoadAdditiveButton();
+                return;
+            }
+
             EditorSceneManagerHelper.CloseScene(_model.Data.Path, false);
         }
 
@@ -145,6 +151,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public void RemoveSceneAdditive()
         {
+            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogue(this))
+            {
+                SolveOpenAdditiveButton();
+                return;
+            }
+
             EditorSceneManagerHelper.RemoveSceneAdditive(_model.Data.Path);
         }
 
@@ -170,27 +182,34 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void SolveLoadAdditiveButton()
         {
+            var isPlaying = EditorApplication.isPlaying;
+            var onlyOneLoadedScene = EditorSceneManagerHelper.DoesHierarchyOnlyHasOneLoadedScene();
+            var isActiveScene = _model.Data.Path == SceneManager.GetActiveScene().path;
             var isSceneLoaded = EditorSceneManagerHelper.IsSceneLoaded(_model.Data.Path);
-            var isSceneUnloaded = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
-            _view.SetLoadAdditiveButtonEnable(!EditorApplication.isPlaying && (isSceneLoaded || isSceneUnloaded));
+            var isSceneUnloadedInHierarchy = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
 
-            var isSceneValid = EditorSceneManagerHelper.IsSceneValid(_model.Data.Path);
-            _view.SwitchLoadAdditiveButtonState(isSceneLoaded && isSceneValid);
+            var defaultEnabledState = !isPlaying && !(onlyOneLoadedScene && isActiveScene);
+            var specificEnabledState = isSceneLoaded || isSceneUnloadedInHierarchy;
+            _view.SetLoadAdditiveButtonEnable(defaultEnabledState && specificEnabledState);
+
+            var defaultState = isSceneLoaded && !isSceneUnloadedInHierarchy;
+            _view.SwitchLoadAdditiveButtonState(defaultState);
         }
 
         private void SolveOpenAdditiveButton()
         {
-            var isSceneUnloaded = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
-            _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying && !isSceneUnloaded);
+            var isPlaying = EditorApplication.isPlaying;
+            var onlyOneLoadedScene = EditorSceneManagerHelper.DoesHierarchyOnlyHasOneLoadedScene();
+            var isActiveScene = _model.Data.Path == SceneManager.GetActiveScene().path;
+            var isSceneLoaded = EditorSceneManagerHelper.IsSceneLoaded(_model.Data.Path);
+            var isSceneUnloadedInHierarchy = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
 
-            var sceneAsset = SceneManager.GetSceneByPath(_model.Data.Path);
+            var defaultEnabledState = !isPlaying && !(onlyOneLoadedScene && isActiveScene);
+            var specificEnabledState = true;
+            _view.SetOpenAdditiveButtonEnable(defaultEnabledState && specificEnabledState);
 
-            _view.SwitchOpenAdditiveButtonState(sceneAsset.isLoaded);
-            if (!sceneAsset.isLoaded) return;
-            if (_model.Data.Path == SceneManager.GetActiveScene().path && SceneManager.sceneCount == 1)
-            {
-                _view.SetOpenAdditiveButtonEnable(false);
-            }
+            var defaultState = isSceneLoaded || isSceneUnloadedInHierarchy;
+            _view.SwitchOpenAdditiveButtonState(defaultState);
         }
 
         private void SolveBuildSettingsButton()

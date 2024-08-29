@@ -130,5 +130,44 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath(path));
         }
+
+        public static bool DoesHierarchyOnlyHasOneLoadedScene()
+        {
+            var count = 0;
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = EditorSceneManager.GetSceneAt(i);
+                if (scene.isLoaded) count++;
+                if (count > 1) return false;
+            }
+
+            return true;
+        }
+
+        /// <param name="modifiedScenes">Were the SceneAssets saved</param>
+        internal static bool SaveSceneDialogue(params SceneElementController[] modifiedScenes)
+        {
+            var namesAsStrings = "";
+            foreach (var controller in modifiedScenes)
+            {
+                namesAsStrings += controller.Scene.name + "\n";
+            }
+
+            if (!EditorUtility.DisplayDialog(
+                    "Scene(s) Have Been Modified",
+                    $"Do you want to save the changes you made in the scenes:\n{namesAsStrings}",
+                    "Save and Unload", "Cancel"))
+            {
+                return false;
+            }
+
+            foreach (var controller in modifiedScenes)
+            {
+                var sceneReference = controller.Scene;
+                if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
+            }
+
+            return true;
+        }
     }
 }
