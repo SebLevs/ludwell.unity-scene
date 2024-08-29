@@ -10,6 +10,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly string _uxmlPath = FoldoutView.UxmlPath + "_SceneManagerToolkit";
         private readonly string _ussPath = FoldoutView.UssPath + "_SceneManagerToolkit";
 
+        private const string LoadAdditiveTooltip = "Load additive";
+        private const string UnloadAdditiveTooltip = "Unload additive";
         private const string OpenAdditiveTooltip = "Open additive";
         private const string RemoveAdditiveTooltip = "Remove additive";
         internal const string AddBuildSettingsTooltip = "Add to build settings";
@@ -21,6 +23,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private const string AddressablesNotInstalledTooltip = "Addressables package not installed";
 
         private const string SetActiveButtonName = "button__set-active";
+        private const string LoadAdditiveButtonName = "button__load-additive";
         private const string OpenSceneAdditiveButtonName = "button__open-additive";
         private const string OpenSceneButtonName = "button__open";
         private const string LoadButtonName = "button__load";
@@ -36,6 +39,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly SceneElementController _root;
 
         public ButtonWithIcon SetActiveButton { get; }
+        public DualStateButton LoadAdditiveButton { get; set; }
         public DualStateButton OpenAdditiveButton { get; }
         public ButtonWithIcon OpenButton { get; }
         public DualStateButton LoadButton { get; }
@@ -46,6 +50,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         public DualStateButton AddressablesButton { get; }
 
         public void SetSetActiveButtonEnable(bool state) => SetActiveButton.SetEnabled(state);
+
+        public void SetLoadAdditiveButtonEnable(bool state) => LoadAdditiveButton.SetEnabled(state);
 
         public void SetOpenAdditiveButtonEnable(bool state) => OpenAdditiveButton.SetEnabled(state);
 
@@ -71,6 +77,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
             _root.AddStyleFromUss(_ussPath);
 
             SetActiveButton = _root.Q<ButtonWithIcon>(SetActiveButtonName);
+            LoadAdditiveButton = _root.Q<DualStateButton>(LoadAdditiveButtonName);
             OpenAdditiveButton = _root.Q<DualStateButton>(OpenSceneAdditiveButtonName);
             OpenButton = _root.Q<ButtonWithIcon>(OpenSceneButtonName);
             LoadButton = _root.Q<DualStateButton>(LoadButtonName);
@@ -88,6 +95,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
             BuildSettingsButton.Dispose();
             OpenAdditiveButton.Dispose();
             LoadButton.Dispose();
+        }
+
+        public void SwitchLoadAdditiveButtonState(bool state)
+        {
+            LoadAdditiveButton.SwitchState(state ? LoadAdditiveButton.StateTwo : LoadAdditiveButton.StateOne);
+            LoadAdditiveButton.tooltip = state ? UnloadAdditiveTooltip : LoadAdditiveTooltip;
         }
 
         public void SwitchOpenAdditiveButtonState(bool state)

@@ -17,6 +17,8 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="content__center">
                     <ui:VisualElement name="content__center-top">
+                        <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__load-additive" class="ButtonWithIcon" />
+                        <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.UIToolkitElements.Editor.DualStateButton focusable="true" name="button__open-additive" class="ButtonWithIcon" />
                         <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.UIToolkitElements.Editor.ButtonWithIcon focusable="true" name="button__open" tooltip="Open" class="ButtonWithIcon" />

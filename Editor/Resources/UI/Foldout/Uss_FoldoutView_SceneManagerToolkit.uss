@@ -141,6 +141,10 @@
     background-image: resource('Sprites/icon_select');
 }
 
+#button__load-additive > #icon {
+    background-image: resource('Sprites/icon_open-additive');
+}
+
 #button__open-additive > #icon {
     background-image: resource('Sprites/icon_open-additive');
 }

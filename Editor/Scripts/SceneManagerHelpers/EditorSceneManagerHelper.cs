@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.SceneManagerToolkit.Editor
@@ -53,7 +52,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             return false;
         }
-        
+
         public static bool IsSceneEnabledInBuildSettings(string path)
         {
             var buildScenes = EditorBuildSettings.scenes;
@@ -111,6 +110,22 @@ namespace Ludwell.SceneManagerToolkit.Editor
         public static bool IsSceneLoaded(string path)
         {
             return EditorSceneManager.GetSceneByPath(path).isLoaded;
+        }
+
+        public static bool IsSceneUnloadedInHierarchy(string path)
+        {
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.path == path) return !scene.isLoaded;
+            }
+
+            return false;
+        }
+
+        public static bool IsSceneValid(string path)
+        {
+            return EditorSceneManager.GetSceneByPath(path).IsValid();
         }
 
         public static void SetActiveScene(string path)
