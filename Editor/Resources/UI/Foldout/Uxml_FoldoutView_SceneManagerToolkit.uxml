@@ -28,6 +28,8 @@
                         <Ludwell.UIToolkitElements.Editor.ButtonWithIcon focusable="true" name="button__ping" tooltip="Ping in Project" class="ButtonWithIcon" />
                         <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
                         <Ludwell.UIToolkitElements.Editor.ButtonWithIcon focusable="true" name="button__directory-path" tooltip="Move" class="ButtonWithIcon" />
+                        <ui:VisualElement name="SpaceBetween" style="width: 2px;" />
+                        <Ludwell.UIToolkitElements.Editor.ButtonWithIcon name="button__empty" picking-mode="Ignore" class="ButtonWithIcon" style="visibility: hidden;" />
                     </ui:VisualElement>
                     <ui:TextField picking-mode="Ignore" name="title" class="scene-data__unselected" />
                 </ui:VisualElement>
