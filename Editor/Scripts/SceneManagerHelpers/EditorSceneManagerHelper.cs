@@ -29,14 +29,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
         public static void CloseScene(string path, bool isRemove)
         {
             var scene = SceneManager.GetSceneByPath(path);
-            if (!scene.isLoaded) return;
             EditorSceneManager.CloseScene(scene, isRemove);
         }
 
         public static void RemoveSceneAdditive(string path)
         {
             var scene = SceneManager.GetSceneByPath(path);
-            if (!scene.isLoaded) return;
             EditorSceneManager.CloseScene(scene, true);
         }
 
