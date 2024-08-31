@@ -289,7 +289,6 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void InitializeLoadAdditiveButton()
         {
-            Debug.LogError("Change icons for LoadAdditive");
             var stateOne = new DualStateButtonState(
                 _view.LoadAdditiveButton,
                 Resources.Load<Sprite>(SpritesPath.LoadAdditive),

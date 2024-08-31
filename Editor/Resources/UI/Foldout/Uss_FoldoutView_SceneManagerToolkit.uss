@@ -142,7 +142,7 @@
 }
 
 #button__load-additive > #icon {
-    background-image: resource('Sprites/icon_open-additive');
+    background-image: resource('Sprites/icon_load-additive');
 }
 
 #button__open-additive > #icon {
