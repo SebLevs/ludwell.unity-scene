@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.SceneManagerToolkit.Editor
@@ -29,7 +28,6 @@ namespace Ludwell.SceneManagerToolkit.Editor
         /// <param name="isRemove">Should the scene be removed from the hierarchy.</param>
         public static void CloseScene(string path, bool isRemove)
         {
-            if (!EditorSceneManager.GetSceneByPath(path).isLoaded) return;
             var scene = SceneManager.GetSceneByPath(path);
             EditorSceneManager.CloseScene(scene, isRemove);
         }
@@ -37,7 +35,6 @@ namespace Ludwell.SceneManagerToolkit.Editor
         public static void RemoveSceneAdditive(string path)
         {
             var scene = SceneManager.GetSceneByPath(path);
-            if (!scene.isLoaded) return;
             EditorSceneManager.CloseScene(scene, true);
         }
 
@@ -53,7 +50,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             return false;
         }
-        
+
         public static bool IsSceneEnabledInBuildSettings(string path)
         {
             var buildScenes = EditorBuildSettings.scenes;
@@ -113,9 +110,64 @@ namespace Ludwell.SceneManagerToolkit.Editor
             return EditorSceneManager.GetSceneByPath(path).isLoaded;
         }
 
+        public static bool IsSceneUnloadedInHierarchy(string path)
+        {
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.path == path) return !scene.isLoaded;
+            }
+
+            return false;
+        }
+
+        public static bool IsSceneValid(string path)
+        {
+            return EditorSceneManager.GetSceneByPath(path).IsValid();
+        }
+
         public static void SetActiveScene(string path)
         {
             EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath(path));
+        }
+
+        public static bool DoesHierarchyOnlyHasOneLoadedScene()
+        {
+            var count = 0;
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = EditorSceneManager.GetSceneAt(i);
+                if (scene.isLoaded) count++;
+                if (count > 1) return false;
+            }
+
+            return true;
+        }
+
+        /// <param name="modifiedScenes">Were the SceneAssets saved</param>
+        internal static bool SaveSceneDialogue(params SceneElementController[] modifiedScenes)
+        {
+            var namesAsStrings = "";
+            foreach (var controller in modifiedScenes)
+            {
+                namesAsStrings += controller.Scene.name + "\n";
+            }
+
+            if (!EditorUtility.DisplayDialog(
+                    "Scene(s) Have Been Modified",
+                    $"Do you want to save the changes you made in the scenes:\n{namesAsStrings}",
+                    "Save and Unload", "Cancel"))
+            {
+                return false;
+            }
+
+            foreach (var controller in modifiedScenes)
+            {
+                var sceneReference = controller.Scene;
+                if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
+            }
+
+            return true;
         }
     }
 }

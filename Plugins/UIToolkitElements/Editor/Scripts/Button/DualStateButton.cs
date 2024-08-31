@@ -47,12 +47,12 @@ namespace Ludwell.UIToolkitElements.Editor
             _currentState.Enter();
         }
 
-        private void SwitchToStateOne()
+        public void SwitchToStateOne()
         {
             SwitchState(StateOne);
         }
 
-        private void SwitchToStateTwo()
+        public void SwitchToStateTwo()
         {
             SwitchState(StateTwo);
         }

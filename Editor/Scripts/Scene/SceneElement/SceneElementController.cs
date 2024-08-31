@@ -23,6 +23,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly TagsShelfController _tagsShelfController;
         private ViewManager _viewManager;
 
+        public Scene Scene => SceneManager.GetSceneByPath(_model.Data.Path);
+
         public void SetOpenState(bool state) => _foldout.IsOpen = state;
 
         public bool IsTextFieldValue(string value) => value == _foldout.TitleTextField.value;
@@ -35,6 +37,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             _view = new SceneElementView(this);
             _view.SetActiveButton.clicked += SetAsActiveScene;
+            InitializeLoadAdditiveButton();
             InitializeOpenAdditiveButton();
             _view.OpenButton.clicked += OpenScene;
             InitializeLoadButton();
@@ -95,6 +98,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
             SetTagsContainer();
 
             SolveSetActiveButton();
+            SolveLoadAdditiveButton();
             SolveOpenAdditiveButton();
             SolveOpenButton();
             SetLoadButtonState();
@@ -124,6 +128,22 @@ namespace Ludwell.SceneManagerToolkit.Editor
             EditorSceneManagerHelper.EnableSceneInBuildSettings(_model.Data.Path, false);
         }
 
+        public void LoadSceneAdditive()
+        {
+            EditorSceneManagerHelper.OpenSceneAdditive(_model.Data.Path);
+        }
+
+        public void UnloadSceneAdditive()
+        {
+            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogue(this))
+            {
+                SolveLoadAdditiveButton();
+                return;
+            }
+
+            EditorSceneManagerHelper.CloseScene(_model.Data.Path, false);
+        }
+
         public void OpenSceneAdditive()
         {
             EditorSceneManagerHelper.OpenSceneAdditive(_model.Data.Path);
@@ -131,6 +151,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public void RemoveSceneAdditive()
         {
+            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogue(this))
+            {
+                SolveOpenAdditiveButton();
+                return;
+            }
+
             EditorSceneManagerHelper.RemoveSceneAdditive(_model.Data.Path);
         }
 
@@ -154,18 +180,36 @@ namespace Ludwell.SceneManagerToolkit.Editor
             _view.SetSetActiveButtonEnable(isSceneLoaded && !IsActiveScene());
         }
 
+        private void SolveLoadAdditiveButton()
+        {
+            var isPlaying = EditorApplication.isPlaying;
+            var onlyOneLoadedScene = EditorSceneManagerHelper.DoesHierarchyOnlyHasOneLoadedScene();
+            var isActiveScene = _model.Data.Path == SceneManager.GetActiveScene().path;
+            var isSceneLoaded = EditorSceneManagerHelper.IsSceneLoaded(_model.Data.Path);
+            var isSceneUnloadedInHierarchy = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
+
+            var defaultEnabledState = !isPlaying && !(onlyOneLoadedScene && isActiveScene);
+            var specificEnabledState = isSceneLoaded || isSceneUnloadedInHierarchy;
+            _view.SetLoadAdditiveButtonEnable(defaultEnabledState && specificEnabledState);
+
+            var defaultState = isSceneLoaded && !isSceneUnloadedInHierarchy;
+            _view.SwitchLoadAdditiveButtonState(defaultState);
+        }
+
         private void SolveOpenAdditiveButton()
         {
-            _view.SetOpenAdditiveButtonEnable(!EditorApplication.isPlaying);
+            var isPlaying = EditorApplication.isPlaying;
+            var onlyOneLoadedScene = EditorSceneManagerHelper.DoesHierarchyOnlyHasOneLoadedScene();
+            var isActiveScene = _model.Data.Path == SceneManager.GetActiveScene().path;
+            var isSceneLoaded = EditorSceneManagerHelper.IsSceneLoaded(_model.Data.Path);
+            var isSceneUnloadedInHierarchy = EditorSceneManagerHelper.IsSceneUnloadedInHierarchy(_model.Data.Path);
 
-            var assetAtPath = SceneManager.GetSceneByPath(_model.Data.Path);
+            var defaultEnabledState = !isPlaying && !(onlyOneLoadedScene && isActiveScene);
+            var specificEnabledState = true;
+            _view.SetOpenAdditiveButtonEnable(defaultEnabledState && specificEnabledState);
 
-            _view.SwitchOpenAdditiveButtonState(assetAtPath.isLoaded);
-            if (!assetAtPath.isLoaded) return;
-            if (_model.Data.Path == SceneManager.GetActiveScene().path && SceneManager.sceneCount == 1)
-            {
-                _view.SetOpenAdditiveButtonEnable(false);
-            }
+            var defaultState = isSceneLoaded || isSceneUnloadedInHierarchy;
+            _view.SwitchOpenAdditiveButtonState(defaultState);
         }
 
         private void SolveBuildSettingsButton()
@@ -241,6 +285,21 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private void SetAsActiveScene()
         {
             EditorSceneManagerHelper.SetActiveScene(_model.Data.Path);
+        }
+
+        private void InitializeLoadAdditiveButton()
+        {
+            var stateOne = new DualStateButtonState(
+                _view.LoadAdditiveButton,
+                Resources.Load<Sprite>(SpritesPath.LoadAdditive),
+                LoadSceneAdditive);
+
+            var stateTwo = new DualStateButtonState(
+                _view.LoadAdditiveButton,
+                Resources.Load<Sprite>(SpritesPath.UnloadAdditive),
+                UnloadSceneAdditive);
+
+            _view.LoadAdditiveButton.Initialize(stateOne, stateTwo);
         }
 
         private void InitializeOpenAdditiveButton()

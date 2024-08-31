@@ -48,6 +48,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private ListingStrategy _hierarchyListingStrategy;
 
+        private SceneElementsContextualMenu _contextualMenu;
+
         public SceneElementsController(VisualElement parent) : base(parent)
         {
             _root = parent.Q(nameof(SceneElementsView));
@@ -73,10 +75,10 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             Services.Add<SceneElementsController>(this);
 
-            InitializeContextualMenuManipulator();
-
             OnShow = AddRefreshViewSignal;
             OnHide = RemoveRefreshViewSignal;
+
+            _contextualMenu = new SceneElementsContextualMenu(_listViewHandler);
         }
 
         public void Dispose()
@@ -156,125 +158,6 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private void RemoveRefreshViewSignal()
         {
             Signals.Remove<UISignals.RefreshView>(RebuildActiveListing);
-        }
-
-        private SceneElementController[] GetSceneElementControllers()
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            return enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
-        }
-
-        private List<SceneElementController> GetSceneElementControllersWithoutActiveScene()
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            return enumerableSelection as List<SceneElementController> ?? enumerableSelection.ToList();
-        }
-
-        private void InitializeContextualMenuManipulator()
-        {
-            _listViewHandler.ListView.AddManipulator(new ContextualMenuManipulator(context =>
-            {
-                var status = !_listViewHandler.ListView.selectedIndices.Any()
-                    ? DropdownMenuAction.Status.Disabled
-                    : DropdownMenuAction.Status.Normal;
-                context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, status);
-                context.menu.AppendAction("Remove selection additively", RemoveSelectionAdditive, status);
-                context.menu.AppendSeparator();
-                context.menu.AppendAction("Add selection to build settings", AddSelectionToBuildSettings, status);
-                context.menu.AppendAction("Remove selection from build settings", RemoveSelectionFromBuildSettings,
-                    status);
-                context.menu.AppendAction("Enable selection to in build settings", EnableSelectionInBuildSettings,
-                    status);
-                context.menu.AppendAction("Disable selection to in build settings", DisableSelectionInBuildSettings,
-                    status);
-                context.menu.AppendSeparator();
-                context.menu.AppendAction("Add selection to addressable default group", AddSelectionToAddressables,
-                    status);
-                context.menu.AppendAction("Remove selection from addressables", RemoveSelectionFromAddressables,
-                    status);
-            }));
-        }
-
-        private void OpenSelectionAdditive(DropdownMenuAction _)
-        {
-            var controllers = GetSceneElementControllersWithoutActiveScene();
-            foreach (var controller in controllers)
-            {
-                controller.OpenSceneAdditive();
-            }
-        }
-
-        private void RemoveSelectionAdditive(DropdownMenuAction _)
-        {
-            var controllers = GetSceneElementControllersWithoutActiveScene();
-            if (controllers.Count == 0) return;
-            foreach (var controller in controllers)
-            {
-                if (SceneManager.sceneCount == 1) return;
-                controller.RemoveSceneAdditive();
-            }
-        }
-
-        private void AddSelectionToBuildSettings(DropdownMenuAction _)
-        {
-            var controllers = GetSceneElementControllers();
-            if (!controllers.Any()) return;
-            foreach (var controller in controllers)
-            {
-                controller.AddToBuildSettings();
-            }
-        }
-
-        private void RemoveSelectionFromBuildSettings(DropdownMenuAction _)
-        {
-            var controllers = GetSceneElementControllers();
-            if (!controllers.Any()) return;
-            foreach (var controller in controllers)
-            {
-                controller.RemoveFromBuildSettings();
-            }
-        }
-
-        private void EnableSelectionInBuildSettings(DropdownMenuAction _)
-        {
-            var controllers = GetSceneElementControllers();
-            if (!controllers.Any()) return;
-            foreach (var controller in controllers)
-            {
-                controller.EnableInBuildSettings();
-            }
-        }
-
-        private void DisableSelectionInBuildSettings(DropdownMenuAction _)
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers =
-                enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
-            if (!controllers.Any()) return;
-            foreach (var controller in controllers)
-            {
-                controller.DisableInBuildSettings();
-            }
-        }
-
-        private void AddSelectionToAddressables(DropdownMenuAction _)
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
-            foreach (var controller in controllers)
-            {
-                controller.AddToAddressables();
-            }
-        }
-
-        private void RemoveSelectionFromAddressables(DropdownMenuAction _)
-        {
-            var enumerableSelection = _listViewHandler.GetSelectedVisualElements();
-            var controllers = enumerableSelection as SceneElementController[] ?? enumerableSelection.ToArray();
-            foreach (var controller in controllers)
-            {
-                controller.RemoveFromAddressables();
-            }
         }
 
         /// <summary> If no item is selected, deletes the last item. </summary>

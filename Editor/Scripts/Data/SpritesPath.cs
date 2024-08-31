@@ -4,8 +4,10 @@ namespace Ludwell.SceneManagerToolkit.Editor
 {
     internal static class SpritesPath
     {
-        private static readonly string SpritesName = "Sprites";
-        
+        private const string SpritesName = "Sprites";
+
+        public static readonly string LoadAdditive = Path.Combine(SpritesName, "icon_load-additive");
+        public static readonly string UnloadAdditive = Path.Combine(SpritesName, "icon_unload-additive");
         public static readonly string OpenAdditive = Path.Combine(SpritesName, "icon_open-additive");
         public static readonly string RemoveAdditive = Path.Combine(SpritesName, "icon_remove-additive");
         public static readonly string Load = Path.Combine(SpritesName, "icon_load");
