@@ -42,6 +42,7 @@
     flex-wrap: wrap;
     min-width: 40px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .header-icon {
