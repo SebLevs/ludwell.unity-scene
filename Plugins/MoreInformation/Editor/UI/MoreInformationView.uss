@@ -41,6 +41,7 @@
     justify-content: center;
     flex-wrap: wrap;
     min-width: 40px;
+    overflow: hidden;
 }
 
 .header-icon {
@@ -78,6 +79,7 @@
     margin-bottom: 0;
     margin-left: 0;
     flex-grow: 1;
+    overflow: hidden;
 }
 
 .icon-container {
