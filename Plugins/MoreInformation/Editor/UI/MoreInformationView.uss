@@ -147,6 +147,7 @@ Label {
     text-overflow: ellipsis;
     -unity-text-align: middle-center;
     overflow: hidden;
+    min-height: 20px;
 }
 
 .scale-animation {
