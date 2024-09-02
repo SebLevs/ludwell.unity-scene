@@ -9,7 +9,7 @@
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
                     </ui:VisualElement>
                     <ui:Label text="A Ludwell Studio tool" name="header" />
-                    <ui:VisualElement name="icon-container" class="icon-container header-icon" style="right: -40px; left: auto;">
+                    <ui:VisualElement name="icon-container" class="icon-container header-icon">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
