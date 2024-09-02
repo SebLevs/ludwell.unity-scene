@@ -78,6 +78,7 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
+    flex-grow: 1;
 }
 
 .icon-container {
@@ -116,8 +117,11 @@ Label {
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    white-space: normal;
-    align-self: center;
+    white-space: nowrap;
+    text-overflow: clip;
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 .scale-animation {
@@ -155,4 +159,8 @@ Label {
     padding-right: 2px;
     padding-bottom: 2px;
     padding-left: 2px;
+}
+
+.wrapped {
+    flex-wrap: wrap;
 }
