@@ -53,8 +53,7 @@
                 <ui:VisualElement name="space-between" class="vertical-separator" />
                 <ui:VisualElement name="rate-product" class="vertical-slide scale-animation rate-product secondary-theme">
                     <ui:VisualElement name="call-to-action" class="call-to-action call-to-action__feedback">
-                        <ui:Label text="Is this tool useful?" name="text" class="scale-animation" />
-                        <ui:Label text="Tell us why!" name="text" class="scale-animation" />
+                        <ui:Label text="Is this tool useful?\nTell us why!" name="text" class="scale-animation" />
                     </ui:VisualElement>
                     <ui:VisualElement name="stars" class="wrapped" style="flex-direction: row;">
                         <ui:VisualElement name="1" class="icon-container">
