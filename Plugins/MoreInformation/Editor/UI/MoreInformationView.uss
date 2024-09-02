@@ -48,8 +48,6 @@
 }
 
 .header > Label {
-    -unity-text-align: middle-center;
-    text-overflow: ellipsis;
     margin-left: 8px;
     margin-right: 8px;
 }
@@ -63,11 +61,11 @@
 }
 
 .vertical-slide {
-    width: 90%;
+    width: 100%;
     padding-top: 8px;
-    padding-right: 8px;
+    padding-right: 32px;
     padding-bottom: 8px;
-    padding-left: 8px;
+    padding-left: 32px;
     background-color: rgb(56, 56, 56);
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -85,7 +83,6 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    flex-grow: 1;
     overflow: hidden;
     flex-wrap: wrap;
     align-items: center;
@@ -102,10 +99,16 @@
     justify-content: center;
 }
 
-.icon__section {
+.icon__section__left {
     align-self: center;
     position: absolute;
     left: -15px;
+}
+
+.icon__section__right {
+    align-self: center;
+    position: absolute;
+    right: -15px;
 }
 
 .icon__no-tint {
@@ -116,6 +119,7 @@
 
 .icon__no-tint:hover {
     transition-duration: 0.02s;
+    scale: 1.1 1.1;
 }
 
 .call-to-action {
@@ -134,8 +138,9 @@ Label {
     margin-bottom: 0;
     margin-left: 0;
     white-space: nowrap;
-    text-overflow: clip;
+    text-overflow: ellipsis;
     -unity-text-align: middle-center;
+    overflow: hidden;
 }
 
 .scale-animation {
