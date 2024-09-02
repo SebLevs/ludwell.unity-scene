@@ -143,8 +143,8 @@ namespace Ludwell.MoreInformation.Editor
             foreach (var star in _stars)
             {
                 var icon = star.Children().First();
-                icon.style.width = _baseStarScale * 2;
-                icon.style.height = _baseStarScale * 2;
+                icon.style.width = _baseStarScale * 1.5f;
+                icon.style.height = _baseStarScale * 1.5f;
                 if (star == target) break;
             }
         }

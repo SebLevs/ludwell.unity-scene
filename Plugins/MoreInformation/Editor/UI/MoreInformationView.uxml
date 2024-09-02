@@ -77,19 +77,19 @@
                             <ui:Label text="Is this tool useful?\nTell us why!" name="text" class="scale-animation" />
                             <ui:VisualElement name="stars" class="wrapped" style="flex-direction: row;">
                                 <ui:VisualElement name="1" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="2" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="3" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="4" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="5" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
