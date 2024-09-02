@@ -36,10 +36,10 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__left" class="icon-container icon__section__left">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__right" class="icon-container icon__section__right">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
@@ -64,10 +64,10 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__left" class="icon-container icon__section icon__section__left">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__right" class="icon-container icon__section icon__section__right">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
