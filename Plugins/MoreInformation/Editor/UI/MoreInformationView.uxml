@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="MoreInformationView">
         <ui:VisualElement name="modal-overlay" class="modal-overlay">
-            <ui:VisualElement name="panel__more-information" class="panel__more-information primary-theme">
+            <ui:VisualElement name="panel__more-information" class="panel__more-information header-theme">
                 <ui:VisualElement name="header" class="header">
                     <ui:VisualElement name="icon-container" class="icon-container header-icon">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
