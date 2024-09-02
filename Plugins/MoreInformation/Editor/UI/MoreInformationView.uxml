@@ -16,7 +16,7 @@
                 <ui:VisualElement name="line-separator" class="line-separator" />
                 <ui:VisualElement name="space-between" class="vertical-separator" />
                 <ui:VisualElement name="about-company" class="vertical-slide scale-animation secondary-theme">
-                    <ui:VisualElement name="icon-container" class="icon-container">
+                    <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
@@ -25,7 +25,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
                 <ui:VisualElement name="documentation" class="vertical-slide scale-animation secondary-theme">
-                    <ui:VisualElement name="icon-container" class="icon-container">
+                    <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
@@ -34,7 +34,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
                 <ui:Button name="discord-server" class="vertical-slide scale-animation secondary-theme">
-                    <ui:VisualElement name="icon-container" class="icon-container">
+                    <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/discord_32_purple.png?fileID=2800000&amp;guid=e88f7f721eaaa174ea930f4a9e8c830c&amp;type=3#discord_32_purple&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
@@ -43,7 +43,7 @@
                 </ui:Button>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
                 <ui:VisualElement name="browse-products" class="vertical-slide scale-animation secondary-theme">
-                    <ui:VisualElement name="icon-container" class="icon-container">
+                    <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="call-to-action" class="call-to-action">
