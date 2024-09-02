@@ -98,7 +98,7 @@ namespace Ludwell.UIToolkitElements.Editor
         public void ToggleFoldoutStyle(bool value)
         {
             var borderTopWidth = value ? 1 : 0;
-            _root.Q(FooterName).style.borderTopWidth = borderTopWidth;
+            _root.Q(HeaderName).style.borderBottomWidth = borderTopWidth;
         }
 
         private void ExecuteHeaderClickedCallback(ClickEvent evt)

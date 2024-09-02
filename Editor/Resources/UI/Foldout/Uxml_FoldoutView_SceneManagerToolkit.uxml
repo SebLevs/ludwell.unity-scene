@@ -51,6 +51,5 @@
         <ui:VisualElement name="content" class="secondary-theme">
             <ui:Instance template="TagsShelfView" name="TagsShelfView" />
         </ui:VisualElement>
-        <ui:VisualElement name="footer" class="primary-theme" />
     </ui:VisualElement>
 </ui:UXML>
