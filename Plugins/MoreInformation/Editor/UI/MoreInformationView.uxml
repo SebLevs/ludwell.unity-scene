@@ -15,61 +15,71 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="line-separator" class="line-separator" />
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="about-company" class="vertical-slide scale-animation secondary-theme">
+                <ui:VisualElement name="section__about-company" class="section">
+                    <ui:VisualElement name="about-company" class="vertical-slide scale-animation secondary-theme">
+                        <ui:VisualElement name="call-to-action" class="call-to-action">
+                            <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" class="scale-animation" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                     <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label tabindex="-1" text="About Ludwell Studio" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text" class="scale-animation" />
-                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="documentation" class="vertical-slide scale-animation secondary-theme">
+                <ui:VisualElement name="section__documentation" class="section" style="background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement name="documentation" class="vertical-slide scale-animation secondary-theme">
+                        <ui:VisualElement name="call-to-action" class="call-to-action">
+                            <ui:Label text="Documentation" display-tooltip-when-elided="false" name="text" class="scale-animation" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                     <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Documentation" display-tooltip-when-elided="false" name="text" class="scale-animation" />
-                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:Button name="discord-server" class="vertical-slide scale-animation secondary-theme">
+                <ui:VisualElement name="section__discord-server" class="section" style="background-color: rgba(0, 0, 0, 0);">
+                    <ui:Button name="discord-server" class="vertical-slide scale-animation secondary-theme">
+                        <ui:VisualElement name="call-to-action" class="call-to-action">
+                            <ui:Label text="Join our Discord server" name="text" class="scale-animation" />
+                        </ui:VisualElement>
+                    </ui:Button>
                     <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/discord_32_purple.png?fileID=2800000&amp;guid=e88f7f721eaaa174ea930f4a9e8c830c&amp;type=3#discord_32_purple&apos;);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Join our Discord server" name="text" class="scale-animation" />
-                    </ui:VisualElement>
-                </ui:Button>
+                </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="browse-products" class="vertical-slide scale-animation secondary-theme">
+                <ui:VisualElement name="section__browse-products" class="section" style="background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement name="browse-products" class="vertical-slide scale-animation secondary-theme">
+                        <ui:VisualElement name="call-to-action" class="call-to-action">
+                            <ui:Label text="Browse our products" name="text" class="scale-animation" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
                     <ui:VisualElement name="icon-container" class="icon-container icon__section">
                         <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="call-to-action" class="call-to-action">
-                        <ui:Label text="Browse our products" name="text" class="scale-animation" />
-                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
-                <ui:VisualElement name="rate-product" class="vertical-slide scale-animation rate-product secondary-theme">
-                    <ui:VisualElement name="call-to-action" class="call-to-action call-to-action__feedback">
-                        <ui:Label text="Is this tool useful?\nTell us why!" name="text" class="scale-animation" />
-                    </ui:VisualElement>
-                    <ui:VisualElement name="stars" class="wrapped" style="flex-direction: row;">
-                        <ui:VisualElement name="1" class="icon-container">
-                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="2" class="icon-container">
-                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="3" class="icon-container">
-                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="4" class="icon-container">
-                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
-                        </ui:VisualElement>
-                        <ui:VisualElement name="5" class="icon-container">
-                            <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                <ui:VisualElement name="section__rate-product" class="section" style="background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement name="rate-product" class="vertical-slide scale-animation rate-product secondary-theme" style="flex-direction: column;">
+                        <ui:VisualElement name="call-to-action" class="call-to-action call-to-action__feedback">
+                            <ui:Label text="Is this tool useful?\nTell us why!" name="text" class="scale-animation" />
+                            <ui:VisualElement name="stars" class="wrapped" style="flex-direction: row;">
+                                <ui:VisualElement name="1" class="icon-container">
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="2" class="icon-container">
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="3" class="icon-container">
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="4" class="icon-container">
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                </ui:VisualElement>
+                                <ui:VisualElement name="5" class="icon-container">
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
