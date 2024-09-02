@@ -15,7 +15,6 @@ namespace Ludwell.UIToolkitElements.Editor
         public static readonly string ToggleIconName = "toggle-icon";
         public static readonly string TitleName = "title";
         public static readonly string ContentName = "content";
-        public static string FooterName = "footer";
 
         public Func<IEventHandler, bool> OnPreventHeaderClick;
         public Action<string> OnTitleValueChanged;
