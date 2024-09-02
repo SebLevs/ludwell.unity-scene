@@ -80,6 +80,7 @@
     margin-left: 0;
     flex-grow: 1;
     overflow: hidden;
+    justify-content: center;
 }
 
 .icon-container {
