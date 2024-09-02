@@ -124,11 +124,6 @@
     background-image: resource('Sprites/icon_more-information');
 }
 
-.icon__no-tint:hover {
-    transition-duration: 0.02s;
-    scale: 1.1 1.1;
-}
-
 .call-to-action {
     flex-grow: 1;
     justify-content: center;
@@ -162,6 +157,7 @@ Label {
 .line-separator {
     width: 80%;
     height: 1px;
+    margin-top: 8px;
     background-color: rgb(133, 133, 133);
 }
 
