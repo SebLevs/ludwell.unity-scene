@@ -34,10 +34,10 @@ namespace Ludwell.MoreInformation.Editor
         public void Dispose()
         {
             _view.AboutCompanyButton.UnregisterCallback<ClickEvent>(OpenCompanyWebsite);
-            _view.DocumentationButton.UnregisterCallback<ClickEvent>(OpenCompanyWebsite);
-            _view.DiscordServerButton.UnregisterCallback<ClickEvent>(OpenDocumentation);
-            _view.BrowseProductsButton.UnregisterCallback<ClickEvent>(OpenDiscordJoinLink);
-            _view.RateProductButton.UnregisterCallback<ClickEvent>(OpenCompanyAssetStorePage);
+            _view.DocumentationButton.UnregisterCallback<ClickEvent>(OpenDocumentation);
+            _view.DiscordServerButton.UnregisterCallback<ClickEvent>(OpenDiscordJoinLink);
+            _view.BrowseProductsButton.UnregisterCallback<ClickEvent>(OpenCompanyAssetStorePage);
+            _view.RateProductButton.UnregisterCallback<ClickEvent>(OpenProductAssetStorePage);
             _view.Dispose();
         }
 

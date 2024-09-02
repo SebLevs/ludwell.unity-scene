@@ -28,10 +28,10 @@
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    padding-left: 2px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
     align-items: center;
 }
 
@@ -39,33 +39,39 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 40px;
+    flex-wrap: wrap;
+    min-width: 40px;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .header-icon {
-    position: absolute;
-    left: -40px;
 }
 
 .header > Label {
-    -unity-text-align: middle-center;
-    text-overflow: ellipsis;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.section {
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: 80%;
+    flex-grow: 1;
 }
 
 .vertical-slide {
-    width: 90%;
-    height: 40px;
+    width: 100%;
     padding-top: 8px;
-    padding-right: 8px;
+    padding-right: 32px;
     padding-bottom: 8px;
-    padding-left: 8px;
-    flex-direction: row;
+    padding-left: 32px;
     background-color: rgb(56, 56, 56);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-    align-items: center;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
     border-top-width: 1px;
     border-right-width: 1px;
     border-bottom-width: 1px;
@@ -78,6 +84,9 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
+    overflow: hidden;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .icon-container {
@@ -91,20 +100,34 @@
     justify-content: center;
 }
 
-.icon__no-tint {
+.icon__section__left {
+    align-self: center;
+    position: absolute;
+    left: -15px;
+}
+
+.icon__section__right {
+    align-self: center;
+    position: absolute;
+    right: -15px;
+}
+
+.icon__no-tint__no-hover {
     width: 16px;
     height: 16px;
     background-image: resource('Sprites/icon_more-information');
 }
 
-.icon__no-tint:hover {
+.icon__no-tint {
     width: 32px;
     height: 32px;
-    transition-duration: 0.02s;
+    background-image: resource('Sprites/icon_more-information');
 }
 
 .call-to-action {
-    width: 100%;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 Label {
@@ -116,8 +139,11 @@ Label {
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    white-space: normal;
-    align-self: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -unity-text-align: middle-center;
+    overflow: hidden;
+    min-height: 20px;
 }
 
 .scale-animation {
@@ -131,6 +157,7 @@ Label {
 .line-separator {
     width: 80%;
     height: 1px;
+    margin-top: 8px;
     background-color: rgb(133, 133, 133);
 }
 
@@ -141,7 +168,6 @@ Label {
 
 .rate-product {
     flex-direction: column;
-    height: 100px;
 }
 
 .scale-animation__down {
@@ -155,4 +181,10 @@ Label {
     padding-right: 2px;
     padding-bottom: 2px;
     padding-left: 2px;
+}
+
+.wrapped {
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
 }

@@ -277,10 +277,3 @@
     padding-right: 4px;
     padding-left: 4px;
 }
-
-#root > #footer {
-    flex-direction: row;
-    height: 16px;
-    border-top-width: 1px;
-    border-top-color: rgb(0, 0, 0);
-}
