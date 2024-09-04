@@ -20,7 +20,7 @@ namespace Ludwell.SceneManagerToolkit
     {
         /// <summary>
         /// The SceneAsset GUID.<br/>
-        /// Used in <see cref="GetData"/> to return information about the referenced SceneAsset.
+        /// Used in the methods of this class to return information about the referenced SceneAsset.
         /// </summary>
         [SerializeField] private string _guid;
 
