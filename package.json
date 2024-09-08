@@ -1,8 +1,8 @@
 {
-  "name": "com.ludwell.scene",
+  "name": "com.ludwellstudio.com.ludwell.scene-manager-toolkit",
   "organizationName": "ludwell",
-  "version": "0.0.1",
-  "displayName": "Ludwell Scene",
+  "version": "1.0.0",
+  "displayName": "Ludwell Scene Manager Toolkit",
   "description": "Ludwell package for scene",
   "unity": "2022.2",
   "unityRelease": "0b5",
@@ -10,8 +10,6 @@
   "changelogUrl": "https://example.com/changelog.html",
   "licensesUrl": "https://example.com/licensing.html",
   "Type": "utility",
-  "dependencies": {
-  },
   "keywords": [
     "Ludwell",
     "Scene"
@@ -21,4 +19,4 @@
     "email": "ludwellstudio@gmail.com",
     "url": "https://www.google.com"
   }
-  }
+}
