@@ -1,9 +1,9 @@
 {
-  "name": "com.ludwellstudio.com.ludwell.scene-manager-toolkit",
+  "name": "com.ludwellstudio.scene-manager-toolkit",
   "organizationName": "ludwell",
   "version": "1.0.0",
-  "displayName": "Ludwell Scene Manager Toolkit",
-  "description": "Ludwell package for scene",
+  "displayName": "Ludwell Studio Scene Manager Toolkit",
+  "description": "Ludwell Studio package for scene management.",
   "unity": "2022.2",
   "unityRelease": "0b5",
   "documentationUrl": "https://example.com/",

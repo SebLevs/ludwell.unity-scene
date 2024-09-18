@@ -1,16 +1,16 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/UI/MoreInformationView.uss?fileID=7433441132597879392&amp;guid=9d96c491d5c568a44ac74a9ebca84449&amp;type=3#MoreInformationView" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/UI/MoreInformationView.uss?fileID=7433441132597879392&amp;guid=9d96c491d5c568a44ac74a9ebca84449&amp;type=3#MoreInformationView" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="MoreInformationView">
         <ui:VisualElement name="modal-overlay" class="modal-overlay">
             <ui:VisualElement name="panel__more-information" class="panel__more-information header-theme">
                 <ui:VisualElement name="header" class="header">
                     <ui:VisualElement name="icon-container" class="icon-container header-icon">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&quot;);" />
                     </ui:VisualElement>
                     <ui:Label text="A Ludwell Studio tool" name="header" />
                     <ui:VisualElement name="icon-container" class="icon-container header-icon">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="line-separator" class="line-separator" />
@@ -22,10 +22,10 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__left" class="icon-container icon__section__left">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__right" class="icon-container icon__section icon__section__right">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/Logo_Ludwell_64.png?fileID=2800000&amp;guid=5c4dab255adee854080e9a0ccb5ff579&amp;type=3#Logo_Ludwell_64&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
@@ -36,10 +36,10 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__left" class="icon-container icon__section__left">
-                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__right" class="icon-container icon__section__right">
-                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_documentation.png?fileID=2800000&amp;guid=b8716f773a9c7a44da0a36ff5c438498&amp;type=3#icon_documentation&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
@@ -50,10 +50,10 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__left" class="icon-container icon__section icon__section__left">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/discord_32_purple.png?fileID=2800000&amp;guid=e88f7f721eaaa174ea930f4a9e8c830c&amp;type=3#discord_32_purple&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/discord_32_purple.png?fileID=2800000&amp;guid=e88f7f721eaaa174ea930f4a9e8c830c&amp;type=3#discord_32_purple&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__right" class="icon-container icon__section icon__section__right">
-                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/discord_32_purple.png?fileID=2800000&amp;guid=e88f7f721eaaa174ea930f4a9e8c830c&amp;type=3#discord_32_purple&apos;);" />
+                        <ui:VisualElement name="icon__no-tint" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/discord_32_purple.png?fileID=2800000&amp;guid=e88f7f721eaaa174ea930f4a9e8c830c&amp;type=3#discord_32_purple&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
@@ -64,32 +64,32 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__left" class="icon-container icon__section icon__section__left">
-                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&quot;);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="icon-container__right" class="icon-container icon__section icon__section__right">
-                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&apos;);" />
+                        <ui:VisualElement name="icon" class="icon__no-tint" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_shop.png?fileID=2800000&amp;guid=921e8b1c2af863c4d92e5479ded358c1&amp;type=3#icon_shop&quot;);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="space-between" class="vertical-separator" />
                 <ui:VisualElement name="section__rate-product" class="section" style="background-color: rgba(0, 0, 0, 0);">
                     <ui:VisualElement name="rate-product" class="vertical-slide scale-animation rate-product secondary-theme" style="flex-direction: column;">
                         <ui:VisualElement name="call-to-action" class="call-to-action call-to-action__feedback">
-                            <ui:Label text="Is this tool useful?\nTell us why!" name="text" />
+                            <ui:Label text="Is this tool useful?&#10;Tell us why!" name="text" enable-rich-text="true" />
                             <ui:VisualElement name="stars" class="wrapped" style="flex-direction: row;">
                                 <ui:VisualElement name="1" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&quot;); -unity-background-image-tint-color: rgb(251, 214, 98);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="2" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&quot;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="3" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&quot;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="4" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&quot;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                                 <ui:VisualElement name="5" class="icon-container">
-                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&apos;project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&apos;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
+                                    <ui:VisualElement name="icon__no-tint" class="icon__no-tint__no-hover" style="background-image: url(&quot;project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/Sprites/icon_star.png?fileID=2800000&amp;guid=d4c0db344f5ec1048bab81aa4fc67666&amp;type=3#icon_star&quot;); -unity-background-image-tint-color: rgb(252, 215, 99);" />
                                 </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:VisualElement>
