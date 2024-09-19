@@ -15,9 +15,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
         [SerializeField] private StyleSheet _lightTheme;
 
         private const string WindowTitle = "Scene Manager Toolkit";
-        
+
         private ThemeManagerUIToolkitEditor _themeManagerUIToolkitEditor;
-        
+
         private Disposer _disposer;
 
         public SceneElementsController SceneElementsController { get; private set; }
@@ -54,7 +54,15 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             if (HasOpenInstances<SceneManagerToolkitWindow>())
             {
-                GetWindow<SceneManagerToolkitWindow>().Close();
+                var window = GetWindow<SceneManagerToolkitWindow>();
+                if (window.docked)
+                {
+                    window.ShowTab();
+                }
+                else
+                {
+                    window.Close();
+                }
             }
             else
             {
