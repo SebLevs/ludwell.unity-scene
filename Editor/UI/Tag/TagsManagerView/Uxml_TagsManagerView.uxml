@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Template name="TagsShelfView" src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/Tag/TagsShelfView/Uxml_TagsShelfView.uxml?fileID=9197481963319205126&amp;guid=b11f09c9737ee2b448c3a12d9e566bcf&amp;type=3#Uxml_TagsShelfView" />
+    <ui:Template name="buttons-row" src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/ListViewFooter/buttons-row.uxml?fileID=9197481963319205126&amp;guid=e114acfc346c07247ad56e3dacbd6817&amp;type=3#buttons-row" />
     <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/Tag/TagsManagerView/Uss_TagsManagerView.uss?fileID=7433441132597879392&amp;guid=ef63c7d559ab5e742a5b0cc03b5fade7&amp;type=3#Uss_TagsManagerView" />
     <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="TagsManager" focusable="true">
@@ -9,7 +10,8 @@
             <Ludwell.UIToolkitElements.Editor.DropdownSearchField name="DropdownSearchField" class="list-view-theme" />
         </ui:VisualElement>
         <ui:VisualElement name="listview-container" class="listview-container">
-            <ui:ListView focusable="true" show-add-remove-footer="true" show-border="true" reorder-mode="Animated" name="tag-elements-container" selection-type="Multiple" fixed-item-height="24" />
+            <ui:ListView focusable="true" show-border="false" reorder-mode="Animated" name="tag-elements-container" selection-type="Multiple" fixed-item-height="24" class="list-view-theme" />
+            <ui:Instance template="buttons-row" name="buttons-row" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

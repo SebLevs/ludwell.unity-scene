@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/UI/MoreInformationView.uss?fileID=7433441132597879392&amp;guid=9d96c491d5c568a44ac74a9ebca84449&amp;type=3#MoreInformationView" />
     <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="MoreInformationView">
