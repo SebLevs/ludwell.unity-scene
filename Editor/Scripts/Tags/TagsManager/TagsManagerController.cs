@@ -31,6 +31,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private ListViewHandler<TagsManagerElementController, Tag> _listViewHandler;
 
+        private readonly ListFooterController _listFooterController;
+
         private TagsManagerViewArgs _args;
 
         public TagsManagerController(VisualElement parent) : base(parent)
@@ -50,6 +52,10 @@ namespace Ludwell.SceneManagerToolkit.Editor
             InitializeListViewHandler();
             InitializeDropdownSearchField();
             InitializeContextualMenuManipulator();
+
+            _listFooterController = new ListFooterController(_root);
+            _listFooterController.SubscribeToAddButtonClicked(_listViewHandler.AddData);
+            _listFooterController.SubscribeToRemoveButtonClicked(DeleteSelection);
         }
 
         public void Dispose()
@@ -63,6 +69,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
             _listViewHandler.OnItemMade -= OnItemMadeRegisterEvents;
             _listViewHandler.ListView.itemsRemoved -= HandleItemsRemoved;
             _listViewHandler.ListView.ClearSelection();
+
+            _listFooterController.UnsubscribeFromAddButtonClicked(_listViewHandler.AddData);
+            _listFooterController.UnsubscribeFromRemoveButtonClicked(DeleteSelection);
 
             var listView = _listViewHandler.ListView;
 
@@ -182,16 +191,24 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void DeleteSelection()
         {
-            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
-            if (!arrayOfElements.Any()) return;
+            if (_listViewHandler.ListView.itemsSource.Count == 0) return;
 
-            for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
+            if (!arrayOfElements.Any())
             {
-                RemoveTagFromShelf(arrayOfElements[i]);
-                _listViewHandler.RemoveSelectedElement();
+                _listViewHandler.RemoveElement(_listViewHandler.GetLastData());
+            }
+            else
+            {
+                for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+                {
+                    RemoveTagFromShelf(arrayOfElements[i]);
+                    _listViewHandler.ListView.itemsSource.Remove(arrayOfElements[i]);
+                }
             }
 
             _listViewHandler.ListView.ClearSelection();
+            _listViewHandler.ForceRebuild();
         }
 
         private void DeleteSelection(DropdownMenuAction dropdownMenuAction)

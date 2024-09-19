@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Template name="MoreInformationView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/MoreInformation/Editor/UI/MoreInformationView.uxml?fileID=9197481963319205126&amp;guid=7ce4c3166204f6c449e81c3f7b045e68&amp;type=3#MoreInformationView" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Scene/SceneElementsView/SceneElementsView.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#SceneElementsView" />
+    <ui:Template name="buttons-row" src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/ListViewFooter/buttons-row.uxml?fileID=9197481963319205126&amp;guid=e114acfc346c07247ad56e3dacbd6817&amp;type=3#buttons-row" />
+    <ui:Template name="MoreInformationView" src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/MoreInformation/Editor/UI/MoreInformationView.uxml?fileID=9197481963319205126&amp;guid=7ce4c3166204f6c449e81c3f7b045e68&amp;type=3#MoreInformationView" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/Scene/SceneElementsView/SceneElementsView.uss?fileID=7433441132597879392&amp;guid=139bb93e05c9d8f41b9cdb02b0cc403c&amp;type=3#SceneElementsView" />
     <ui:VisualElement name="scene-loader__list" style="flex-grow: 1;">
         <ui:VisualElement name="header-content">
             <ui:VisualElement name="header__actions" class="toolbar-theme border-theme-bottom">
@@ -14,10 +15,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:ListView show-border="false" show-add-remove-footer="false" focusable="true" name="scenes__list" virtualization-method="DynamicHeight" show-bound-collection-size="true" selection-type="Multiple" class="list-view-theme" />
-        <ui:VisualElement name="buttons-row" class="toolbar-theme">
-            <ui:Button text="+" display-tooltip-when-elided="true" name="add" />
-            <ui:Button text="-" display-tooltip-when-elided="true" name="remove" />
-        </ui:VisualElement>
+        <ui:Instance template="buttons-row" name="buttons-row" />
         <ui:Instance template="MoreInformationView" name="MoreInformationView" />
     </ui:VisualElement>
 </ui:UXML>

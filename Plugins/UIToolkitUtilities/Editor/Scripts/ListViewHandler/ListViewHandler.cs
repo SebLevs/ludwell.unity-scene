@@ -98,6 +98,13 @@ namespace Ludwell.UIToolkitUtilities.Editor
             return null;
         }
 
+        public void AddData()
+        {
+            var newData = new TData();
+            ListView.itemsSource.Add(newData);
+            ForceRebuild();
+        }
+
         public void RemoveSelectedElement()
         {
             if (ListView.selectedItem == null) return;

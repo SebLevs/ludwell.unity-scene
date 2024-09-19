@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Template name="TagsShelfView" src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/Tag/TagsShelfView/Uxml_TagsShelfView.uxml?fileID=9197481963319205126&amp;guid=b11f09c9737ee2b448c3a12d9e566bcf&amp;type=3#Uxml_TagsShelfView" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Resources/UI/Foldout/Uss_FoldoutView_SceneManagerToolkit.uss?fileID=7433441132597879392&amp;guid=13a2aba7c0608354e995beb8e4743648&amp;type=3#Uss_FoldoutView_SceneManagerToolkit" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
+    <ui:Template name="TagsShelfView" src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/Tag/TagsShelfView/Uxml_TagsShelfView.uxml?fileID=9197481963319205126&amp;guid=b11f09c9737ee2b448c3a12d9e566bcf&amp;type=3#Uxml_TagsShelfView" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/Resources/UI/Foldout/Uss_FoldoutView_SceneManagerToolkit.uss?fileID=7433441132597879392&amp;guid=13a2aba7c0608354e995beb8e4743648&amp;type=3#Uss_FoldoutView_SceneManagerToolkit" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/UIToolkitUtilities/Editor/Resources/UI/Theme/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="root">
         <ui:VisualElement name="header">
             <ui:VisualElement name="header__container" picking-mode="Ignore" class="primary-theme">

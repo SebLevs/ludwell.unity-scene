@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Ludwell.SceneManagerToolkit.Editor
 {
@@ -28,6 +29,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             foreach (var package in args.removed)
             {
+                Debug.LogError(package.name);
+                
                 if (package.name != AddressablesPackageName) continue;
                 ResourcesLocator.GetSceneAssetDataBinders().ResetAddresses();
                 SceneAssetReferenceDrawer.RepaintInspectorWindows();

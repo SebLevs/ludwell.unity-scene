@@ -84,7 +84,7 @@
 }
 
 #root > #header > #toggle > #toggle-icon {
-    background-image: url("project://database/Assets/com.ludwell.scene-manager-toolkit/Plugins/UIToolkitElements/Editor/Sprites/icon_foldout-toggle.png?fileID=2800000&guid=e4314dc44fc6a3d42b0b9c0c60324c00&type=3#icon_foldout-toggle");
+    background-image: url("project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Plugins/UIToolkitElements/Editor/Sprites/icon_foldout-toggle.png?fileID=2800000&guid=e4314dc44fc6a3d42b0b9c0c60324c00&type=3#icon_foldout-toggle");
     width: 8px;
     height: 8px;
 }

@@ -100,9 +100,7 @@
 
 #listview-container > ListView > #unity-list-view__footer {
     flex-grow: 0;
-    flex-direction: row-reverse;
     width: 100%;
-    background-color: var(--secondary-theme-background-color);
     justify-content: center;
     padding-left: 0;
     padding-right: 0;

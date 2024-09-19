@@ -40,11 +40,13 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private readonly ListView _listView;
         private readonly DropdownSearchField _dropdownSearchField;
 
-        private readonly MoreInformationController _moreInformationController;
-
         private readonly SceneElementsListViewRefresh _sceneElementsListViewRefresh;
 
         private ListViewHandler<SceneElementController, SceneAssetDataBinder> _listViewHandler;
+
+        private readonly ListFooterController _listFooterController;
+
+        private readonly MoreInformationController _moreInformationController;
 
         private ListingStrategy _hierarchyListingStrategy;
 
@@ -55,11 +57,13 @@ namespace Ludwell.SceneManagerToolkit.Editor
             _root = parent.Q(nameof(SceneElementsView));
             _view = new SceneElementsView(_root);
             _view.CloseAllButton.clicked += CloseAll;
-            _view.AddButton.clicked += DataSolver.CreateSceneAssetAtPath;
-            _view.RemoveButton.clicked += DeleteSelection;
 
             _listView = _root.Q<ListView>();
             _dropdownSearchField = _root.Q<DropdownSearchField>();
+
+            _listFooterController = new ListFooterController(parent);
+            _listFooterController.SubscribeToAddButtonClicked(DataSolver.CreateSceneAssetAtPath);
+            _listFooterController.SubscribeToRemoveButtonClicked(DeleteSelection);
 
             _moreInformationController = new MoreInformationController(_root);
             _view.MoreInformationButton.clicked += _moreInformationController.Show;
@@ -86,8 +90,10 @@ namespace Ludwell.SceneManagerToolkit.Editor
             Services.Remove<SceneElementsController>();
 
             _view.CloseAllButton.clicked -= CloseAll;
-            _view.AddButton.clicked -= DataSolver.CreateSceneAssetAtPath;
-            _view.RemoveButton.clicked -= DeleteSelection;
+
+            _listFooterController.UnsubscribeFromAddButtonClicked(DataSolver.CreateSceneAssetAtPath);
+            _listFooterController.UnsubscribeFromRemoveButtonClicked(DeleteSelection);
+
             _view.MoreInformationButton.clicked -= _moreInformationController.Show;
 
             _listView.ClearSelection();
@@ -246,7 +252,6 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void OnKeyUpDeleteSelected(KeyUpEvent keyUpEvent)
         {
-            if (_listView.selectedItem == null) return;
             if (!((keyUpEvent.ctrlKey || keyUpEvent.commandKey) && keyUpEvent.keyCode == KeyCode.Delete)) return;
 
             DeleteSelection();

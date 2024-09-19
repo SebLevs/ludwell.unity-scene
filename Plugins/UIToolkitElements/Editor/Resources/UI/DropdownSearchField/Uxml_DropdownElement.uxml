@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/ludwell.unity-scene/Runtime/Resources/Uss/DropdownSearchField/dropdown__element.uss?fileID=7433441132597879392&amp;guid=8c796c414be2a4c4eb4edae455b80d10&amp;type=3#dropdown__element" />
+    <Style src="project://database/Packages/com.ludwellstudio.unity-scene/Runtime/Resources/Uss/DropdownSearchField/dropdown__element.uss?fileID=7433441132597879392&amp;guid=8c796c414be2a4c4eb4edae455b80d10&amp;type=3#dropdown__element" />
     <ui:Button text="Foo" name="dropdown__element" />
 </ui:UXML>

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Resources/UI/TagsShelfElementView/Uss_TagsShelfElementView.uss?fileID=7433441132597879392&amp;guid=799b1208613bc83458c83830f1a9c838&amp;type=3#Uss_TagsShelfElementView" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/Resources/UI/TagsShelfElementView/Uss_TagsShelfElementView.uss?fileID=7433441132597879392&amp;guid=799b1208613bc83458c83830f1a9c838&amp;type=3#Uss_TagsShelfElementView" />
     <ui:VisualElement name="tag">
         <ui:Button name="button-search" class="button">
             <ui:VisualElement name="icon" />

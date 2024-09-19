@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/Scripts/UI/TagsManager/TagsShelf/Uss_TagsShelfView.uss?fileID=7433441132597879392&amp;guid=14eab15702865374c8b6e134688e38ed&amp;type=3#Uss_TagsShelfView" />
-    <Style src="project://database/Assets/com.ludwell.scene-manager-toolkit/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/Scripts/UI/TagsManager/TagsShelf/Uss_TagsShelfView.uss?fileID=7433441132597879392&amp;guid=14eab15702865374c8b6e134688e38ed&amp;type=3#Uss_TagsShelfView" />
+    <Style src="project://database/Packages/com.ludwellstudio.scene-manager-toolkit/Editor/UI/themed-classes.uss?fileID=7433441132597879392&amp;guid=dbd924de29d05274599624a0bb938a25&amp;type=3#themed-classes" />
     <ui:VisualElement name="tags" class="secondary-theme" style="padding-top: 8px; padding-bottom: 8px;">
         <ui:Label tabindex="-1" text="Tags" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; margin-bottom: 2px; padding-left: 0; padding-right: 0;">
             <ui:Button name="tags__button-add" tooltip="Settings" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;">
