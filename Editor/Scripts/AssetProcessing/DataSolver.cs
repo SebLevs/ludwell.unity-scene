@@ -75,7 +75,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public static bool AddSceneAssetDataBinderFromGuid(string guid)
         {
-            var instance = SceneAssetDataBinders.Instance;
+            var binders = ResourcesLocator.GetSceneAssetDataBinders();
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
 
             var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
@@ -84,7 +84,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 #if USE_ADDRESSABLES_EDITOR
             address = AddressablesProcessor.GetAddressableIDForGUID(guid);
 #endif
-            var hasAdded = instance.TryAddUnique(guid, sceneAsset.name, assetPath, address);
+            var hasAdded = binders.TryAddUnique(guid, sceneAsset.name, assetPath, address);
 
             return hasAdded;
         }
