@@ -7,6 +7,7 @@ using Ludwell.EditorUtilities;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Ludwell.SceneManagerToolkit.Editor
@@ -20,8 +21,31 @@ namespace Ludwell.SceneManagerToolkit.Editor
         {
             DelayedRefreshViewDispatch = new DelayedEditorUpdateAction(0, Signals.Dispatch<UISignals.RefreshView>);
 
+            EnsureDefaultAddressablesSettingsExistence();
             AddressableAssetSettingsDefaultObject.Settings.OnModification -= SubscribeToAddressableChange;
             AddressableAssetSettingsDefaultObject.Settings.OnModification += SubscribeToAddressableChange;
+        }
+
+        private static AddressableAssetSettings EnsureDefaultAddressablesSettingsExistence()
+        {
+            if (AddressableAssetSettingsDefaultObject.Settings)
+                return AddressableAssetSettingsDefaultObject.Settings;
+
+            var settings = AddressableAssetSettings.Create(
+                AddressableAssetSettingsDefaultObject.kDefaultConfigFolder,
+                AddressableAssetSettingsDefaultObject.kDefaultConfigAssetName,
+                true,
+                true
+            );
+
+            AddressableAssetSettingsDefaultObject.Settings = settings;
+
+            AssetDatabase.SaveAssets();
+
+            Debug.Log("Ludwell Studio | Scene Manager Toolkit | " +
+                      "Missing required addressables asset settings were created.");
+
+            return AddressableAssetSettingsDefaultObject.Settings;
         }
 
         private static void SubscribeToAddressableChange(AddressableAssetSettings addressableAssetSettings,
@@ -108,7 +132,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public static string GetAddressableIDForObject(Object obj)
         {
-            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            var settings = EnsureDefaultAddressablesSettingsExistence();
             if (settings == null) return SceneAssetDataBinders.NotAddressableName;
 
             var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
@@ -119,7 +143,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public static string GetAddressableIDForGUID(string guid)
         {
-            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            var settings = EnsureDefaultAddressablesSettingsExistence();
             if (settings == null) return SceneAssetDataBinders.NotAddressableName;
 
             var entry = settings.FindAssetEntry(guid);
@@ -129,18 +153,18 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public static void AddToAddressables(string guid)
         {
-            var defaultSettings = AddressableAssetSettingsDefaultObject.Settings;
-            var defaultGroup = defaultSettings.DefaultGroup;
-            defaultSettings.CreateOrMoveEntry(guid, defaultGroup);
+            var settings = EnsureDefaultAddressablesSettingsExistence();
+            var defaultGroup = settings.DefaultGroup;
+            settings.CreateOrMoveEntry(guid, defaultGroup);
         }
 
         public static void RemoveFromAddressables(string address)
         {
-            var defaultSettings = AddressableAssetSettingsDefaultObject.Settings;
+            var settings = EnsureDefaultAddressablesSettingsExistence();
 
-            for (var groupIndex = defaultSettings.groups.Count - 1; groupIndex >= 0; groupIndex--)
+            for (var groupIndex = settings.groups.Count - 1; groupIndex >= 0; groupIndex--)
             {
-                var group = defaultSettings.groups[groupIndex];
+                var group = settings.groups[groupIndex];
                 for (var entryIndex = group.entries.Count - 1; entryIndex >= 0; entryIndex--)
                 {
                     var entry = group.entries.ToList()[entryIndex];
