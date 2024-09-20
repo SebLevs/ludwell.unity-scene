@@ -43,6 +43,11 @@ namespace Ludwell.SceneManagerToolkit.Editor
                         ? DropdownMenuAction.Status.Disabled
                         : DropdownMenuAction.Status.Normal;
 
+                var addressablesStatus = DropdownMenuAction.Status.Disabled;
+#if USE_ADDRESSABLES_EDITOR
+addressablesStatus = defaultStatus;
+#endif
+
                 context.menu.AppendAction("Load selection additively", LoadSelectionAdditive, defaultStatus);
                 context.menu.AppendAction("Unload selection additively", UnloadSelectionAdditive, destructiveStatus);
                 context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, defaultStatus);
@@ -58,9 +63,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
                     defaultStatus);
                 context.menu.AppendSeparator();
                 context.menu.AppendAction("Add selection to addressable default group", AddSelectionToAddressables,
-                    defaultStatus);
+                    addressablesStatus);
                 context.menu.AppendAction("Remove selection from addressables", RemoveSelectionFromAddressables,
-                    defaultStatus);
+                    addressablesStatus);
             }));
         }
 
@@ -106,11 +111,11 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToArray();
 
-            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogue(modifiedScenes)) return;
+            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogComplex(modifiedScenes)) return;
 
             foreach (var controller in controllers)
             {
-                controller.UnloadSceneAdditive();
+                EditorSceneManagerHelper.CloseScene(controller.Scene.path, false);
             }
         }
 
@@ -126,9 +131,13 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
             var controllers = GetSceneElementControllers();
+
+            var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToArray();
+            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogComplex(modifiedScenes)) return;
+
             foreach (var controller in controllers)
             {
-                controller.RemoveSceneAdditive();
+                EditorSceneManagerHelper.RemoveSceneAdditive(controller.Scene.path);
             }
         }
 
