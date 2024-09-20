@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.SceneManagerToolkit.Editor
@@ -144,6 +147,80 @@ namespace Ludwell.SceneManagerToolkit.Editor
             return true;
         }
 
+        public static IEnumerable<Scene> GetDirtyScenes()
+        {
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.isDirty)
+                {
+                    yield return scene;
+                }
+            }
+            
+            // var dirtyScenes = new List<Scene>();
+            // for (var i = 0; i < SceneManager.sceneCount; i++)
+            // {
+            //     var scene = SceneManager.GetSceneAt(i);
+            //     if (scene.isDirty)
+            //     {
+            //         dirtyScenes.Add(scene);
+            //     }
+            // }
+        }
+
+        /// <param name="modifiedScenes">Were the SceneAssets saved</param>
+        /// <returns>Returns false only if a cancellation occured.</returns>
+        internal static bool SaveDirtyScenesDialogComplex()
+        {
+            var dirtyScenes = GetDirtyScenes();
+
+            if (!dirtyScenes.Any()) return false;
+            
+            var namesAsStrings = "";
+            foreach (var scene in dirtyScenes)
+            {
+                namesAsStrings += scene.name + "\n";
+            }
+
+            var option = EditorUtility.DisplayDialogComplex(
+                "Scene(s) Have Been Modified",
+                "Do you want to save the changes you made in the scenes:" +
+                $"\n{namesAsStrings}\n" +
+                "Your changes will be lost if you don't save them.",
+                "Save",
+                "Don't Save",
+                "Cancel"
+            );
+
+            switch (option)
+            {
+                case 0:
+                    foreach (var scene in dirtyScenes)
+                    {
+                        var sceneReference = scene;
+                        if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
+                    }
+
+                    return true;
+                case 1:
+                    foreach (var scene in dirtyScenes)
+                    {
+                        var sceneReference = scene;
+                        if (sceneReference.isDirty)
+                        {
+                            EditorSceneManager.OpenScene(sceneReference.path, OpenSceneMode.AdditiveWithoutLoading);
+                        }
+                    }
+
+                    return true;
+                case 2:
+                    return false;
+            }
+
+            return false;
+        }
+
         /// <param name="modifiedScenes">Were the SceneAssets saved</param>
         /// <returns>Returns false only if a cancellation occured.</returns>
         internal static bool SaveSceneDialogComplex(params SceneElementController[] modifiedScenes)
@@ -156,7 +233,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             var option = EditorUtility.DisplayDialogComplex(
                 "Scene(s) Have Been Modified",
-                $"Do you want to save the changes you made in the scenes:" +
+                "Do you want to save the changes you made in the scenes:" +
                 $"\n{namesAsStrings}\n" +
                 "Your changes will be lost if you don't save them.",
                 "Save",

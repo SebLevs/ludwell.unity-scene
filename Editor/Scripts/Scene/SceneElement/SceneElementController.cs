@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Ludwell.UIToolkitElements.Editor;
 using Ludwell.UIToolkitUtilities;
 using Ludwell.UIToolkitUtilities.Editor;
@@ -457,6 +458,13 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void LoadScene()
         {
+            if (EditorSceneManagerHelper.GetDirtyScenes().Any() &&
+                !EditorSceneManagerHelper.SaveDirtyScenesDialogComplex())
+            {
+                _view.SwitchLoadButtonState(false);
+                return;
+            }
+
             SessionState.SetString(CurrentActiveScene, _model.Data.GUID);
             SceneManagerHelper.LoadScene(_model);
             EditorApplication.playModeStateChanged += OnExitPlayModeSwitchToStateOne;
@@ -475,6 +483,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void OpenScene()
         {
+            if (EditorSceneManagerHelper.GetDirtyScenes().Any() &&
+                !EditorSceneManagerHelper.SaveDirtyScenesDialogComplex())
+            {
+                return;
+            }
+
             if (_currentSceneElement != null)
             {
                 _currentSceneElement._view.SetOpenButtonEnable(true);

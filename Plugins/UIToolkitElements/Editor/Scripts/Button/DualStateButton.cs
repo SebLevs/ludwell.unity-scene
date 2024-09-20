@@ -17,10 +17,14 @@ namespace Ludwell.UIToolkitElements.Editor
         public void Initialize(DualStateButtonState one, DualStateButtonState two)
         {
             StateOne = one;
-            StateOne.OnClick += SwitchToStateTwo;
+            var oneAction = one.OnClick;
+            StateOne.OnClick = SwitchToStateTwo;
+            StateOne.OnClick += oneAction;
 
             StateTwo = two;
-            StateTwo.OnClick += SwitchToStateOne;
+            var twoAction = two.OnClick;
+            StateTwo.OnClick = SwitchToStateOne;
+            StateTwo.OnClick += twoAction;
 
             SwitchState(StateOne);
         }
