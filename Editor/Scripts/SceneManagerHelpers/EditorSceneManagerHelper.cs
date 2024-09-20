@@ -145,7 +145,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
         }
 
         /// <param name="modifiedScenes">Were the SceneAssets saved</param>
-        internal static bool SaveSceneDialogue(params SceneElementController[] modifiedScenes)
+        /// <returns>Returns false only if a cancellation occured.</returns>
+        internal static bool SaveSceneDialogComplex(params SceneElementController[] modifiedScenes)
         {
             var namesAsStrings = "";
             foreach (var controller in modifiedScenes)
@@ -153,21 +154,42 @@ namespace Ludwell.SceneManagerToolkit.Editor
                 namesAsStrings += controller.Scene.name + "\n";
             }
 
-            if (!EditorUtility.DisplayDialog(
-                    "Scene(s) Have Been Modified",
-                    $"Do you want to save the changes you made in the scenes:\n{namesAsStrings}",
-                    "Save and Unload", "Cancel"))
+            var option = EditorUtility.DisplayDialogComplex(
+                "Scene(s) Have Been Modified",
+                $"Do you want to save the changes you made in the scenes:" +
+                $"\n{namesAsStrings}\n" +
+                "Your changes will be lost if you don't save them.",
+                "Save",
+                "Don't Save",
+                "Cancel"
+            );
+
+            switch (option)
             {
-                return false;
+                case 0:
+                    foreach (var controller in modifiedScenes)
+                    {
+                        var sceneReference = controller.Scene;
+                        if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
+                    }
+
+                    return true;
+                case 1:
+                    foreach (var controller in modifiedScenes)
+                    {
+                        var sceneReference = controller.Scene;
+                        if (sceneReference.isDirty)
+                        {
+                            EditorSceneManager.OpenScene(sceneReference.path, OpenSceneMode.AdditiveWithoutLoading);
+                        }
+                    }
+
+                    return true;
+                case 2:
+                    return false;
             }
 
-            foreach (var controller in modifiedScenes)
-            {
-                var sceneReference = controller.Scene;
-                if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
-            }
-
-            return true;
+            return false;
         }
     }
 }

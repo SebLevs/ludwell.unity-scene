@@ -135,7 +135,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public void UnloadSceneAdditive()
         {
-            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogue(this))
+            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogComplex(this))
             {
                 SolveLoadAdditiveButton();
                 return;
@@ -151,7 +151,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         public void RemoveSceneAdditive()
         {
-            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogue(this))
+            if (Scene.isDirty && !EditorSceneManagerHelper.SaveSceneDialogComplex(this))
             {
                 SolveOpenAdditiveButton();
                 return;

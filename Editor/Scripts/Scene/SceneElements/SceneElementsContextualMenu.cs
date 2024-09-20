@@ -106,11 +106,11 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToArray();
 
-            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogue(modifiedScenes)) return;
+            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogComplex(modifiedScenes)) return;
 
             foreach (var controller in controllers)
             {
-                controller.UnloadSceneAdditive();
+                EditorSceneManagerHelper.CloseScene(controller.Scene.path, false);
             }
         }
 
@@ -126,9 +126,13 @@ namespace Ludwell.SceneManagerToolkit.Editor
         private void RemoveSelectionAdditive(DropdownMenuAction _)
         {
             var controllers = GetSceneElementControllers();
+
+            var modifiedScenes = controllers.Where(controller => controller.Scene.isDirty).ToArray();
+            if (modifiedScenes.Length > 0 && !EditorSceneManagerHelper.SaveSceneDialogComplex(modifiedScenes)) return;
+
             foreach (var controller in controllers)
             {
-                controller.RemoveSceneAdditive();
+                EditorSceneManagerHelper.RemoveSceneAdditive(controller.Scene.path);
             }
         }
 
