@@ -72,6 +72,16 @@ namespace Ludwell.SceneManagerToolkit
 
             return false;
         }
+        
+        public bool ContainsWithPath(string path)
+        {
+            foreach (var binder in Elements)
+            {
+                if (string.Equals(path, binder.Data.Path, StringComparison.InvariantCulture)) return true;
+            }
+
+            return false;
+        }
 
         public bool TryAddUnique(string guid, string assetName, string path, string addressableID = NotAddressableName)
         {

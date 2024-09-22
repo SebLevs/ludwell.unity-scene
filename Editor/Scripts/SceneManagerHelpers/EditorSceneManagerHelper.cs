@@ -198,18 +198,19 @@ namespace Ludwell.SceneManagerToolkit.Editor
                 case 0:
                     foreach (var scene in dirtyScenes)
                     {
-                        var sceneReference = scene;
-                        if (sceneReference.isDirty) EditorSceneManager.SaveScene(sceneReference);
+                        if (!ResourcesLocator.GetSceneAssetDataBinders().ContainsWithPath(scene.path)) continue;
+                        if (scene.isDirty) EditorSceneManager.SaveScene(scene);
                     }
 
                     return true;
                 case 1:
                     foreach (var scene in dirtyScenes)
                     {
-                        var sceneReference = scene;
-                        if (sceneReference.isDirty)
+                        if (!ResourcesLocator.GetSceneAssetDataBinders().ContainsWithPath(scene.path)) continue;
+
+                        if (scene.isDirty)
                         {
-                            EditorSceneManager.OpenScene(sceneReference.path, OpenSceneMode.AdditiveWithoutLoading);
+                            EditorSceneManager.OpenScene(scene.path, OpenSceneMode.AdditiveWithoutLoading);
                         }
                     }
 
