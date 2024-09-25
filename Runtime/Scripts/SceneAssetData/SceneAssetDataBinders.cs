@@ -72,7 +72,7 @@ namespace Ludwell.SceneManagerToolkit
 
             return false;
         }
-        
+
         public bool ContainsWithPath(string path)
         {
             foreach (var binder in Elements)
