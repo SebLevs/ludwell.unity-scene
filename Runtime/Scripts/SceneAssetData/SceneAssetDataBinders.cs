@@ -22,11 +22,41 @@ namespace Ludwell.SceneManagerToolkit
             }
         }
 
-        public void ResetAddresses()
+        internal void ResetAddresses()
         {
             foreach (var binder in Elements)
             {
                 binder.Data.AddressableID = NotAddressableName;
+            }
+        }
+
+        internal bool TryAddUnique(string guid, string assetName, string path,
+            string addressableID = NotAddressableName)
+        {
+            if (ContainsWithId(guid)) return false;
+            var newBinder = new SceneAssetDataBinder
+            {
+                Data = new SceneAssetData
+                {
+                    GUID = guid,
+                    Name = assetName,
+                    Path = path,
+                    AddressableID = addressableID
+                }
+            };
+
+            Elements.Add(newBinder);
+            Elements.Sort();
+            return true;
+        }
+
+        internal void Remove(string id)
+        {
+            foreach (var binder in Elements)
+            {
+                if (!string.Equals(id, binder.Data.GUID, StringComparison.InvariantCulture)) continue;
+                Elements.Remove(binder);
+                return;
             }
         }
 
@@ -81,35 +111,6 @@ namespace Ludwell.SceneManagerToolkit
             }
 
             return false;
-        }
-
-        public bool TryAddUnique(string guid, string assetName, string path, string addressableID = NotAddressableName)
-        {
-            if (ContainsWithId(guid)) return false;
-            var newBinder = new SceneAssetDataBinder
-            {
-                Data = new SceneAssetData
-                {
-                    GUID = guid,
-                    Name = assetName,
-                    Path = path,
-                    AddressableID = addressableID
-                }
-            };
-
-            Elements.Add(newBinder);
-            Elements.Sort();
-            return true;
-        }
-
-        public void Remove(string id)
-        {
-            foreach (var binder in Elements)
-            {
-                if (!string.Equals(id, binder.Data.GUID, StringComparison.InvariantCulture)) continue;
-                Elements.Remove(binder);
-                return;
-            }
         }
 
         public SceneAssetDataBinder GetBinderFromId(string id)
