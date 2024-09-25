@@ -15,8 +15,12 @@ namespace Ludwell.SceneManagerToolkit
     }
 #endif
 
+    /// <summary>
+    /// Provides access to the relevant data and tags of the referenced SceneAsset.<br/>
+    /// <remarks>Equality operates with <see cref="_guid"/></remarks>
+    /// </summary>
     [Serializable]
-    public partial class SceneAssetReference
+    public partial class SceneAssetReference : IEquatable<SceneAssetReference>
     {
         /// <summary>
         /// The SceneAsset GUID.<br/>
@@ -45,6 +49,37 @@ namespace Ludwell.SceneManagerToolkit
             if (!SceneAssetDataBinders.Instance.TryGetBinderFromGuid(_guid, out var data)) return null;
             _binderCache = data;
             return data;
+        }
+
+        public static bool operator ==(SceneAssetReference left, SceneAssetReference right)
+        {
+            if (left.IsEmpty || right.IsEmpty) return false;
+            return left.Guid == right.Guid;
+        }
+
+        public static bool operator !=(SceneAssetReference left, SceneAssetReference right)
+        {
+            if (left.IsEmpty || right.IsEmpty) return true;
+            return left.Guid != right.Guid;
+        }
+
+        public bool Equals(SceneAssetReference other)
+        {
+            if (other.IsEmpty) return false;
+            if (IsEmpty) return false;
+            return _guid == other._guid;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((SceneAssetReference)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return _guid != null ? _guid.GetHashCode() : 0;
         }
     }
 }
