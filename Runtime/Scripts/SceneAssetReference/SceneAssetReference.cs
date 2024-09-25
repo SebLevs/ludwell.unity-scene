@@ -24,26 +24,25 @@ namespace Ludwell.SceneManagerToolkit
         /// </summary>
         [SerializeField] private string _guid;
 
-        public bool IsValid => !string.IsNullOrEmpty(_guid) && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
+        private SceneAssetDataBinder _binderCache;
 
-        public List<Tag> GetTags()
+        public bool IsEmpty => string.IsNullOrEmpty(_guid);
+
+        public bool IsValid => !IsEmpty && SceneAssetDataBinders.Instance.ContainsWithGuid(_guid);
+
+        public SceneAssetData Data => CacheBinder() == null ? null : _binderCache.Data;
+
+        public List<Tag> Tags => CacheBinder() == null ? null : _binderCache.Tags;
+
+        private SceneAssetDataBinder CacheBinder()
         {
-            if (string.IsNullOrEmpty(_guid)) return null;
+            if (IsEmpty) return null;
 
-            if (SceneAssetDataBinders.Instance.TryGetBinderFromId(_guid, out var binder)) return binder.Tags;
+            if (_binderCache != null) return _binderCache;
 
-            Debug.LogError($"No {nameof(SceneAssetDataBinder)} could be found from key: {_guid}");
-            return null;
-        }
-
-        public SceneAssetData GetData()
-        {
-            if (string.IsNullOrEmpty(_guid)) return null;
-
-            if (SceneAssetDataBinders.Instance.TryGetDataFromId(_guid, out var data)) return data;
-
-            Debug.LogError($"No {nameof(SceneAssetData)} could be found from key: {_guid}");
-            return null;
+            if (!SceneAssetDataBinders.Instance.TryGetBinderFromGuid(_guid, out var data)) return null;
+            _binderCache = data;
+            return data;
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
                 var sceneAssetDataContainer = ResourcesLocator.GetSceneAssetDataBinders();
 
                 var guid = AssetDatabase.AssetPathToGUID(movedAssets[index]);
-                var binder = sceneAssetDataContainer.GetBinderFromId(guid);
+                var binder = sceneAssetDataContainer.GetBinderFromGuid(guid);
                 binder.Data.Name = Path.GetFileNameWithoutExtension(movedAssets[index]);
                 binder.Data.Path = movedAssets[index];
             }
@@ -88,7 +88,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
                 hasSolved = true;
                 var guid = AssetDatabase.AssetPathToGUID(path);
 
-                if (ResourcesLocator.GetSceneAssetDataBinders().ContainsWithId(guid)) return false;
+                if (ResourcesLocator.GetSceneAssetDataBinders().ContainsWithGuid(guid)) return false;
                 DataSolver.AddSceneAssetDataBinderFromGuid(guid);
             }
 

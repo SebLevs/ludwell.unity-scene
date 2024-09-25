@@ -72,7 +72,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
                 var guid = entry.guid;
 
-                var binder = sceneAssetDataBinders.GetBinderFromId(guid);
+                var binder = sceneAssetDataBinders.GetBinderFromGuid(guid);
 
                 if (binder == null) continue;
 
@@ -95,7 +95,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             var guid = entry.guid;
 
-            var binder = sceneAssetDataBinders.GetBinderFromId(guid);
+            var binder = sceneAssetDataBinders.GetBinderFromGuid(guid);
 
             if (binder == null) return false;
 

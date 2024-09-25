@@ -42,7 +42,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
             var rect = new Rect(content.x - EditorButton.Size, centeredY, EditorButton.Size, EditorButton.Size);
             
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(_guid.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromGuid(_guid.stringValue);
 
             rect.x += EditorButton.Size + 1;
             rect.width -= EditorButton.Size;
@@ -148,13 +148,13 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void AddToBuildSettings(SerializedProperty guidProperty)
         {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromGuid(guidProperty.stringValue);
             EditorSceneManagerHelper.AddSceneToBuildSettings(data.Path);
         }
 
         private void EnableInBuildSettings(SerializedProperty guidProperty)
         {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromGuid(guidProperty.stringValue);
             EditorSceneManagerHelper.EnableSceneInBuildSettings(data.Path, true);
         }
 
@@ -166,7 +166,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void RemoveFromAddressables(SerializedProperty guidProperty)
         {
-            var data = SceneAssetDataBinders.Instance.GetDataFromId(guidProperty.stringValue);
+            var data = SceneAssetDataBinders.Instance.GetDataFromGuid(guidProperty.stringValue);
             AddressablesProcessor.RemoveFromAddressables(data.AddressableID);
         }
 #endif
