@@ -22,7 +22,7 @@ namespace Ludwell.SceneManagerToolkit
             }
         }
 
-        internal void ResetAddresses()
+        public void ResetAddresses()
         {
             foreach (var binder in Elements)
             {
@@ -30,7 +30,7 @@ namespace Ludwell.SceneManagerToolkit
             }
         }
 
-        internal bool TryAddUnique(string guid, string assetName, string path,
+        public bool TryAddUnique(string guid, string assetName, string path,
             string addressableID = NotAddressableName)
         {
             if (ContainsWithGuid(guid)) return false;
@@ -50,7 +50,7 @@ namespace Ludwell.SceneManagerToolkit
             return true;
         }
 
-        internal void Remove(string guid)
+        public void Remove(string guid)
         {
             foreach (var binder in Elements)
             {

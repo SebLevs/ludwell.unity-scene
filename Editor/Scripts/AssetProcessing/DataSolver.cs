@@ -35,8 +35,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
                     if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    ResourcesLocator.GetSceneAssetDataBinders()
-                        .Remove(sceneAssetDataContainer.Elements[index].Data.GUID);
+                    ResourcesLocator.GetSceneAssetDataBinders().Remove(sceneAssetDataContainer.Elements[index].Data.GUID);
                 }
             }
             else

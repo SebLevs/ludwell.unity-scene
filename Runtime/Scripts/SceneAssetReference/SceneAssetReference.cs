@@ -30,6 +30,8 @@ namespace Ludwell.SceneManagerToolkit
 
         public bool IsValid => !IsEmpty && SceneAssetDataBinders.Instance.ContainsWithGuid(_guid);
 
+        public string Guid => _guid;
+
         public SceneAssetData Data => CacheBinder() == null ? null : _binderCache.Data;
 
         public List<Tag> Tags => CacheBinder() == null ? null : _binderCache.Tags;
