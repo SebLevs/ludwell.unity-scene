@@ -33,7 +33,7 @@ namespace Ludwell.SceneManagerToolkit
         internal bool TryAddUnique(string guid, string assetName, string path,
             string addressableID = NotAddressableName)
         {
-            if (ContainsWithId(guid)) return false;
+            if (ContainsWithGuid(guid)) return false;
             var newBinder = new SceneAssetDataBinder
             {
                 Data = new SceneAssetData
@@ -50,11 +50,11 @@ namespace Ludwell.SceneManagerToolkit
             return true;
         }
 
-        internal void Remove(string id)
+        internal void Remove(string guid)
         {
             foreach (var binder in Elements)
             {
-                if (!string.Equals(id, binder.Data.GUID, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(guid, binder.Data.GUID, StringComparison.InvariantCulture)) continue;
                 Elements.Remove(binder);
                 return;
             }
@@ -93,11 +93,11 @@ namespace Ludwell.SceneManagerToolkit
             return -1;
         }
 
-        public bool ContainsWithId(string id)
+        public bool ContainsWithGuid(string guid)
         {
             foreach (var binder in Elements)
             {
-                if (string.Equals(id, binder.Data.GUID, StringComparison.InvariantCulture)) return true;
+                if (string.Equals(guid, binder.Data.GUID, StringComparison.InvariantCulture)) return true;
             }
 
             return false;
@@ -113,22 +113,22 @@ namespace Ludwell.SceneManagerToolkit
             return false;
         }
 
-        public SceneAssetDataBinder GetBinderFromId(string id)
+        public SceneAssetDataBinder GetBinderFromGuid(string guid)
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, guid, StringComparison.InvariantCulture)) continue;
                 return sceneAssetDataBinder;
             }
 
             return null;
         }
 
-        public bool TryGetBinderFromId(string id, out SceneAssetDataBinder binder)
+        public bool TryGetBinderFromGuid(string guid, out SceneAssetDataBinder binder)
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, guid, StringComparison.InvariantCulture)) continue;
                 binder = sceneAssetDataBinder;
                 return true;
             }
@@ -161,22 +161,22 @@ namespace Ludwell.SceneManagerToolkit
             return false;
         }
 
-        public SceneAssetData GetDataFromId(string id)
+        public SceneAssetData GetDataFromGuid(string guid)
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, guid, StringComparison.InvariantCulture)) continue;
                 return sceneAssetDataBinder.Data;
             }
 
             return null;
         }
 
-        public bool TryGetDataFromId(string id, out SceneAssetData data)
+        public bool TryGetDataFromGuid(string guid, out SceneAssetData data)
         {
             foreach (var sceneAssetDataBinder in Elements)
             {
-                if (!string.Equals(sceneAssetDataBinder.Data.GUID, id, StringComparison.InvariantCulture)) continue;
+                if (!string.Equals(sceneAssetDataBinder.Data.GUID, guid, StringComparison.InvariantCulture)) continue;
                 data = sceneAssetDataBinder.Data;
                 return true;
             }

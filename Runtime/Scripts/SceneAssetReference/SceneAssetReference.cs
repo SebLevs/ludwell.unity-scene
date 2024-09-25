@@ -28,7 +28,7 @@ namespace Ludwell.SceneManagerToolkit
 
         public bool IsEmpty => string.IsNullOrEmpty(_guid);
 
-        public bool IsValid => !IsEmpty && SceneAssetDataBinders.Instance.ContainsWithId(_guid);
+        public bool IsValid => !IsEmpty && SceneAssetDataBinders.Instance.ContainsWithGuid(_guid);
 
         public SceneAssetData Data => CacheBinder() == null ? null : _binderCache.Data;
 
@@ -40,7 +40,7 @@ namespace Ludwell.SceneManagerToolkit
 
             if (_binderCache != null) return _binderCache;
 
-            if (!SceneAssetDataBinders.Instance.TryGetBinderFromId(_guid, out var data)) return null;
+            if (!SceneAssetDataBinders.Instance.TryGetBinderFromGuid(_guid, out var data)) return null;
             _binderCache = data;
             return data;
         }
