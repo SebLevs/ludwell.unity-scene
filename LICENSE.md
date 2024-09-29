@@ -23,7 +23,7 @@ This License Agreement ("Agreement") is a legal agreement between Ludwell Studio
 
    2.4. Transfer or assign the rights granted under this Agreement.
 
-   2.5. Use the Package in a way that breaches the Asset Store Terms of Service and EULA.
+   2.5. Use the Package in a way that breaches the Unity Asset Store Terms of Service and EULA.
 
 
 3. Ownership and Intellectual Property
@@ -76,7 +76,7 @@ This License Agreement ("Agreement") is a legal agreement between Ludwell Studio
 
 11. Compliance with Unity Asset Store Terms of Service and EULA
 
-    The Licensee must comply with the Asset Store Terms of Service and EULA in addition to this Agreement. In the event of any conflict between this Agreement and Unity’s terms, unless otherwise specified, Unity's terms shall prevail. For matters not addressed by Unity's terms, this Agreement will govern.
+    The Licensee must comply with Unity Asset Store Terms of Service and EULA in addition to this Agreement. In the event of any conflict between this Agreement and Unity’s terms, unless otherwise specified, Unity's terms shall prevail. For matters not addressed by Unity's terms, this Agreement will govern.
 
 
 12. Data Collection
@@ -91,6 +91,6 @@ This License Agreement ("Agreement") is a legal agreement between Ludwell Studio
 
 14. Refunds
 
-    Refund requests are governed by the Asset Store Terms of Service and EULA.
+    Refund requests are governed by the Unity Asset Store Terms of Service and EULA.
 
 By using the Package, you agree to be bound by the terms and conditions of this License Agreement. If you do not agree to these terms, you are not permitted to use the Package.
