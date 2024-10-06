@@ -25,7 +25,7 @@ namespace Ludwell.UIToolkitUtilities.Editor
 
         public IEnumerable<TVisualElement> VisualElements => _visibleElements.Values;
 
-        public IEnumerable<TData> Data => (List<TData>)ListView.itemsSource;
+        public IEnumerable<TData> Data => ListView.itemsSource.Cast<TData>();
 
         public ListViewHandler(ListView listView, List<TData> data)
         {
