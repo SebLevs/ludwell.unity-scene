@@ -4,7 +4,7 @@ namespace Ludwell.MoreInformation.Editor
 {
     internal class MoreInformationModel
     {
-        public const string CompanyWebsiteURL = "https://ludwellstudio.com";
+        public const string CompanyWebsiteURL = "https://ludwellstudio.com/scene-manager-toolkit";
 
         public readonly string ReadmeURL =
             Path.Combine("Packages", "com.ludwellstudio.com.ludwell.scene-manager-toolkit", "README.md");
