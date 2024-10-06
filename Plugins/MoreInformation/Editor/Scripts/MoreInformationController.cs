@@ -58,22 +58,22 @@ namespace Ludwell.MoreInformation.Editor
 
         private void OpenCompanyWebsite(ClickEvent _)
         {
-            Application.OpenURL(MoreInformationModel.DocumentationURL);
+            Application.OpenURL(MoreInformationModel.CompanyWebsiteURL);
         }
 
         private void OpenDiscordJoinLink(ClickEvent _)
         {
-            Application.OpenURL(MoreInformationModel.DocumentationURL);
+            Application.OpenURL(MoreInformationModel.DiscordJoinLinkURL);
         }
 
         private void OpenCompanyAssetStorePage(ClickEvent _)
         {
-            Application.OpenURL(MoreInformationModel.DocumentationURL);
+            Application.OpenURL(MoreInformationModel.LudwellAssetStorePageURL);
         }
 
         private void OpenProductAssetStorePage(ClickEvent _)
         {
-            Application.OpenURL(MoreInformationModel.DocumentationURL);
+            Application.OpenURL(MoreInformationModel.ProductAssetStorePageURL);
         }
     }
 }
