@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Ludwell.SceneManagerToolkit.Editor
@@ -157,26 +156,16 @@ namespace Ludwell.SceneManagerToolkit.Editor
                     yield return scene;
                 }
             }
-            
-            // var dirtyScenes = new List<Scene>();
-            // for (var i = 0; i < SceneManager.sceneCount; i++)
-            // {
-            //     var scene = SceneManager.GetSceneAt(i);
-            //     if (scene.isDirty)
-            //     {
-            //         dirtyScenes.Add(scene);
-            //     }
-            // }
         }
 
         /// <param name="modifiedScenes">Were the SceneAssets saved</param>
-        /// <returns>Returns false only if a cancellation occured.</returns>
+        /// <returns>Returns false only if there was no dirty scenes or if a cancellation occured.</returns>
         internal static bool SaveDirtyScenesDialogComplex()
         {
             var dirtyScenes = GetDirtyScenes();
 
             if (!dirtyScenes.Any()) return false;
-            
+
             var namesAsStrings = "";
             foreach (var scene in dirtyScenes)
             {

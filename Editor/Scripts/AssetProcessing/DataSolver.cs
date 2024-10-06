@@ -35,7 +35,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
                     if (!normalizedAbsolutePath.Equals(normalizedSceneAssetPath, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    ResourcesLocator.GetSceneAssetDataBinders().Remove(sceneAssetDataContainer.Elements[index].Data.GUID);
+                    ResourcesLocator.GetSceneAssetDataBinders()
+                        .Remove(sceneAssetDataContainer.Elements[index].Data.GUID);
                 }
             }
             else
@@ -47,7 +48,15 @@ namespace Ludwell.SceneManagerToolkit.Editor
                 }
             }
 
-            EditorSceneManager.SaveScene(EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects), absolutePath);
+            var anyDirtyScene = EditorSceneManagerHelper.GetDirtyScenes().Any();
+            if (anyDirtyScene)
+            {
+                var savedDirtyScenes = EditorSceneManagerHelper.SaveDirtyScenesDialogComplex();
+                if (!savedDirtyScenes) return;
+            }
+
+            var newScene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects);
+            EditorSceneManager.SaveScene(newScene, absolutePath);
 
             if (!absolutePath.Contains("/Assets/"))
             {
@@ -55,6 +64,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
             }
 
             AssetDatabase.Refresh();
+            EditorSceneManagerHelper.OpenScene(newScene.path);
         }
 
         public static void PopulateSceneAssetDataBinders()
