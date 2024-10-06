@@ -196,6 +196,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
             var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
             if (!arrayOfElements.Any())
             {
+                RemoveTagFromShelf(_listViewHandler.GetLastData());
                 _listViewHandler.RemoveElement(_listViewHandler.GetLastData());
             }
             else
