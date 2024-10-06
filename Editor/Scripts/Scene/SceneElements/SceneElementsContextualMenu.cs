@@ -3,6 +3,7 @@ using System.Linq;
 using Ludwell.UIToolkitUtilities.Editor;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -48,6 +49,8 @@ namespace Ludwell.SceneManagerToolkit.Editor
 addressablesStatus = defaultStatus;
 #endif
 
+                context.menu.AppendAction("Delete selection", DeleteSelection, defaultStatus);
+                context.menu.AppendSeparator();
                 context.menu.AppendAction("Load selection additively", LoadSelectionAdditive, defaultStatus);
                 context.menu.AppendAction("Unload selection additively", UnloadSelectionAdditive, destructiveStatus);
                 context.menu.AppendAction("Open selection additively", OpenSelectionAdditive, defaultStatus);
@@ -91,6 +94,28 @@ addressablesStatus = defaultStatus;
             }
 
             return controllers;
+        }
+
+        private void DeleteSelection(DropdownMenuAction _)
+        {
+            if (_listViewHandler.ListView.itemsSource.Count == 0) return;
+
+            var listView = _listViewHandler.ListView;
+            var arrayOfElements = _listViewHandler.GetSelectedData().ToArray();
+
+            for (var i = arrayOfElements.Length - 1; i >= 0; i--)
+            {
+                var path = arrayOfElements[i].Data.Path;
+
+                if (EditorSceneManagerHelper.IsPathOutsideAssets(arrayOfElements[i].Data.Path))
+                {
+                    Debug.LogWarning($"Suspicious deletion | Path was outside the Assets folder | {path}");
+                }
+
+                AssetDatabase.DeleteAsset(path);
+            }
+
+            listView.ClearSelection();
         }
 
         private void LoadSelectionAdditive(DropdownMenuAction _)
