@@ -458,8 +458,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void LoadScene()
         {
-            if (EditorSceneManagerHelper.GetDirtyScenes().Any() &&
-                !EditorSceneManagerHelper.SaveDirtyScenesDialogComplex())
+            var scenes = EditorSceneManagerHelper.GetDirtyScenes();
+            var scenesAsArray = scenes as Scene[] ?? scenes.ToArray();
+            if (scenesAsArray.Any() && !EditorSceneManagerHelper.SaveDirtyScenesDialogComplex(scenesAsArray))
             {
                 _view.SwitchLoadButtonState(false);
                 return;
@@ -483,8 +484,9 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
         private void OpenScene()
         {
-            if (EditorSceneManagerHelper.GetDirtyScenes().Any() &&
-                !EditorSceneManagerHelper.SaveDirtyScenesDialogComplex())
+            var dirtyScenes = EditorSceneManagerHelper.GetDirtyScenes();
+            var scenesAsArray = dirtyScenes as Scene[] ?? dirtyScenes.ToArray();
+            if (scenesAsArray.Any() && !EditorSceneManagerHelper.SaveDirtyScenesDialogComplex(scenesAsArray))
             {
                 return;
             }
