@@ -158,16 +158,42 @@ namespace Ludwell.SceneManagerToolkit.Editor
             }
         }
 
-        /// <param name="modifiedScenes">Were the SceneAssets saved</param>
-        /// <returns>Returns false only if there was no dirty scenes or if a cancellation occured.</returns>
-        internal static bool SaveDirtyScenesDialogComplex()
+        public static IEnumerable<Scene> GetDirtyScenesWhereExists()
         {
-            var dirtyScenes = GetDirtyScenes();
+            for (var i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.isDirty && DoesSceneExistInProject(scene.path))
+                {
+                    yield return scene;
+                }
+            }
+        }
 
-            if (!dirtyScenes.Any()) return false;
+        public static bool DoesSceneExistInProject(string path)
+        {
+            var guid = AssetDatabase.AssetPathToGUID(path);
+            var sceneGuids = AssetDatabase.FindAssets("t:Scene");
+            foreach (var sceneGuid in sceneGuids)
+            {
+                if (guid == sceneGuid)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <param name="scenes">Were the SceneAssets saved</param>
+        /// <returns>Returns false only if there was no dirty scenes or if a cancellation occured.</returns>
+        internal static bool SaveDirtyScenesDialogComplex(IEnumerable<Scene> scenes)
+        {
+            var scenesAsArray = scenes as Scene[] ?? scenes.ToArray();
+            if (!scenesAsArray.Any()) return false;
 
             var namesAsStrings = "";
-            foreach (var scene in dirtyScenes)
+            foreach (var scene in scenesAsArray)
             {
                 namesAsStrings += scene.name + "\n";
             }
@@ -185,7 +211,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
             switch (option)
             {
                 case 0:
-                    foreach (var scene in dirtyScenes)
+                    foreach (var scene in scenesAsArray)
                     {
                         if (!ResourcesLocator.GetSceneAssetDataBinders().ContainsWithPath(scene.path)) continue;
                         if (scene.isDirty) EditorSceneManager.SaveScene(scene);
@@ -193,7 +219,7 @@ namespace Ludwell.SceneManagerToolkit.Editor
 
                     return true;
                 case 1:
-                    foreach (var scene in dirtyScenes)
+                    foreach (var scene in scenesAsArray)
                     {
                         if (!ResourcesLocator.GetSceneAssetDataBinders().ContainsWithPath(scene.path)) continue;
 

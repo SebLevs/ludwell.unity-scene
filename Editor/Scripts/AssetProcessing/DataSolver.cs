@@ -5,6 +5,7 @@ using Ludwell.Architecture;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Ludwell.SceneManagerToolkit.Editor
 {
@@ -48,10 +49,12 @@ namespace Ludwell.SceneManagerToolkit.Editor
                 }
             }
 
-            var anyDirtyScene = EditorSceneManagerHelper.GetDirtyScenes().Any();
+            var existingDirtyScenes = EditorSceneManagerHelper.GetDirtyScenesWhereExists();
+            var dirtyScenes = existingDirtyScenes as Scene[] ?? existingDirtyScenes.ToArray();
+            var anyDirtyScene = dirtyScenes.Any();
             if (anyDirtyScene)
             {
-                var savedDirtyScenes = EditorSceneManagerHelper.SaveDirtyScenesDialogComplex();
+                var savedDirtyScenes = EditorSceneManagerHelper.SaveDirtyScenesDialogComplex(dirtyScenes);
                 if (!savedDirtyScenes) return;
             }
 
